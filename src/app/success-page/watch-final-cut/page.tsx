@@ -1,0 +1,25 @@
+"use client"
+import ServiceLayout from "@/components/Layouts/ServiceLayout";
+import SuccessTemplate from "@/components/SuccessTemplate/SuccessTemplate";
+import React from "react";
+
+type Props = {};
+
+const WatchFinalCutSuccessPage = (props: Props) => {
+  return (
+    <ServiceLayout>
+      <SuccessTemplate
+        darkBtnLink="/"
+        darkButtonContent="View on Dashboard"
+        lightBtnLink="/"
+        lightButtonContent="Take me home"
+        subTitle="When a killer shark unleashes chaos on a beach community off Cape Cod, it’s up to a local sheriff, a marine biologist."
+        titleLight="Order Confirmed"
+        titleBold="Watch the Final cut of my film"
+        width="w-[50rem]"
+      />
+    </ServiceLayout>
+  );
+};
+
+export default WatchFinalCutSuccessPage;

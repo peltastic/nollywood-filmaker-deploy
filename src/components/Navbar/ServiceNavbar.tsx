@@ -1,0 +1,122 @@
+import Image from "next/image";
+import React from "react";
+import Logo from "/public/assets/nav/logo.svg";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { HiBell } from "react-icons/hi";
+import { BsFillQuestionCircleFill } from "react-icons/bs";
+import { IoIosSettings } from "react-icons/io";
+import { FaCircleUser } from "react-icons/fa6";
+import TestImage from "/public/assets/test-avatar.png";
+import MenuComponent from "../Menu/MenuComponent";
+import { FiUser } from "react-icons/fi";
+import { CiSettings } from "react-icons/ci";
+import SettingsIconImg from "/public/assets/dashboard/settings-icon.svg";
+import ProfileIconImg from "/public/assets/dashboard/profile-icon.svg";
+import IssuesIcon from "/public/assets/dashboard/issues-icon.svg";
+import LoginIcon from "/public/assets/dashboard/login-icon.svg";
+
+type Props = {};
+
+const navLink = [
+  {
+    name: "Dashboard",
+    link: "/user/dashboard",
+  },
+  {
+    name: "Request history",
+    link: "/",
+  },
+  {
+    name: "Chats",
+    link: "/user/dashboard/chats",
+  },
+];
+const ServiceNavbar = (props: Props) => {
+  const pathname = usePathname();
+  return (
+    <nav className="flex items-center pt-2 text-black-1 border-b border-b-border-gray px-8">
+      <div className="">
+        <Image src={Logo} alt="logo" className="w-[6rem]" />
+      </div>
+      <ul className="flex mx-6 gap-2 text-[1rem]  mr-auto">
+        {navLink.map((el) => (
+          <li
+            key={el.name}
+            className={`${
+              el.link === pathname ? "border-b-4 border-black-3" : ""
+            }`}
+          >
+            <Link className="py-6 px-2 block" href={el.link}>
+              {el.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <div className="text-gray-5 gap-4 text-[1.6rem] ml-auto flex items-center">
+        <HiBell />
+        <BsFillQuestionCircleFill className="text-[1.4rem]" />
+        <IoIosSettings />
+        {/* <FaCircleUser /> */}
+        <MenuComponent
+          target={
+            <div>
+              <Image
+                src={TestImage}
+                alt="test-image"
+                className="mr-4 w-[2rem]"
+              />
+            </div>
+          }
+        >
+          <div className="bg-white w-[15rem]   py-3 text-gray-3">
+            <div className="flex items-center px-3">
+              <Image
+                src={TestImage}
+                alt="test-image"
+                className="mr-4 w-[3rem]"
+              />
+              <div className="text-[0.88rem]">
+                <h1 className="font-bold text-gray-3">Niyi Akinmolayan</h1>
+                <p className="text-gray-1">niyi@gmail.com</p>
+              </div>
+            </div>
+            <ul className="text-[0.88rem] mt-2 py-3 border-t border-b border-profile-menu-border">
+              <li className=" px-3">
+                <Link
+                  className="flex items-center"
+                  href={"/user/dashboard/profile/1"}
+                >
+                  <Image
+                    src={ProfileIconImg}
+                    alt="profile-icon"
+                    className="mr-3"
+                  />
+                  <p>View profile</p>
+                </Link>
+              </li>
+              <li className="flex items-center px-3 mt-4">
+                <Image
+                  src={SettingsIconImg}
+                  alt="setting-icon"
+                  className="mr-3"
+                />
+                <p>Settings</p>
+              </li>
+              <li className="flex items-center px-3 mt-4">
+                <Image src={IssuesIcon} alt="issues-icon" className="mr-3" />
+                <p>Issues</p>
+              </li>
+            </ul>
+            <div className="flex items-center text-[0.88rem] px-3 mt-4">
+              <Image src={LoginIcon} alt="login-icon" className="mr-3" />
+              <p>Log out</p>
+            </div>
+          </div>
+        </MenuComponent>
+      </div>
+    </nav>
+  );
+};
+
+export default ServiceNavbar;

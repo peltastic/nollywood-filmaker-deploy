@@ -1,0 +1,81 @@
+import { IDraftLegalDocumentState } from "@/app/services/draft-legal-documents/page";
+import UnstyledButton from "@/components/Button/UnstyledButton";
+import InputComponent from "@/components/Input/Input";
+import ServiceInfo from "@/components/ServiceInfo/ServiceInfo";
+import TextArea from "@/components/TextArea/TextArea";
+import { useRouter } from "next/navigation";
+import React from "react";
+import { FaArrowRight } from "react-icons/fa";
+
+type Props = {
+  disabled?: boolean;
+  data: IDraftLegalDocumentState;
+  setScriptProps: (key: string, value: string) => void;
+  proceed: () => void;
+};
+
+const DraftLegalDocumentsForm = ({
+  data,
+  proceed,
+  setScriptProps,
+  disabled,
+}: Props) => {
+    const router = useRouter()
+  return (
+    <div className="w-[80%]">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          proceed();
+        }}
+      >
+        <InputComponent
+          value={data.title}
+          label="Movie title"
+          placeholder="Text"
+          changed={(val) => setScriptProps("title", val)}
+          className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
+          type=""
+        />
+        <div className="mt-10">
+          <TextArea
+            changed={(val) => setScriptProps("production_company", val)}
+            value={data.production_company}
+            labelStyle2
+            className="h-[4rem] text-gray-6 text-[0.88rem] py-2 px-3"
+            label="Name of Production Company"
+          />
+        </div>
+        <div className="mt-10">
+          <TextArea
+            changed={(val) => setScriptProps("information", val)}
+            value={data.information}
+            labelStyle2
+            className="h-[4rem] text-gray-6 text-[0.88rem] py-2 px-3"
+            label="Share any relevant information for contracts"
+          />
+        </div>
+        <ServiceInfo content="Pitch deck Creation  can take between 1-2 weeks. You will be mailed with an editable pitch deck and a calendar to choose a chat date" />
+        <div className="w-full flex mt-14">
+          <UnstyledButton
+            type="button"
+            clicked={() => router.back()}
+            class="rounded-md px-4 transition-all hover:bg-gray-bg-1 border-stroke-2 border"
+          >
+            Back
+          </UnstyledButton>
+          <UnstyledButton
+            type="submit"
+            disabled={disabled}
+            class="flex py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
+          >
+            <p className="mr-2">Procced to payment</p>
+            <FaArrowRight className="text-[0.7rem]" />
+          </UnstyledButton>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default DraftLegalDocumentsForm;
