@@ -118,9 +118,18 @@ const ServiceNavbar = (props: Props) => {
                     <p>Settings</p>
                   </Link>
                 </li>
-                <li className="flex items-center px-3 mt-4">
-                  <Image src={IssuesIcon} alt="issues-icon" className="mr-3" />
-                  <p>Issues</p>
+                <li className=" px-3 mt-4">
+                  <Link
+                    className="flex items-center"
+                    href={"/user/dasboard/issues"}
+                  >
+                    <Image
+                      src={IssuesIcon}
+                      alt="issues-icon"
+                      className="mr-3"
+                    />
+                    <p>Issues</p>
+                  </Link>
                 </li>
               </ul>
               <div className="flex items-center text-[0.88rem] px-3 mt-4">
