@@ -48,7 +48,12 @@ const ContactUsForm = (props: Props) => {
             />
           </div>
           <div className="mt-9">
-            <TextArea label="Message" />
+            <TextArea
+              label="Message"
+              changed={() => {}}
+              placeholder=""
+              value=""
+            />
           </div>
           <div className="mt-6">
             <CheckboxComponent
