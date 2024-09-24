@@ -71,6 +71,7 @@ const CreatePitchForm = ({
         </div>
         <div className="mt-8">
           <TextArea
+          placeholder=""
             changed={(val) => setScriptProps("actors_in_mind", val)}
             value={data.actors_in_mind}
             labelStyle2
@@ -80,6 +81,7 @@ const CreatePitchForm = ({
         </div>
         <div className="mt-8">
           <TextArea
+          placeholder=""
             changed={(val) => setScriptProps("crew_in_mind", val)}
             value={data.crew_in_mind}
             labelStyle2
@@ -99,6 +101,7 @@ const CreatePitchForm = ({
         </div>
         <div className="mt-8">
           <TextArea
+          placeholder=""
             changed={(val) => setScriptProps("information", val)}
             value={data.information}
             labelStyle2

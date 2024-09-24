@@ -39,15 +39,17 @@ const DraftLegalDocumentsForm = ({
         />
         <div className="mt-10">
           <TextArea
-            changed={(val) => setScriptProps("production_company", val)}
-            value={data.production_company}
-            labelStyle2
-            className="h-[4rem] text-gray-6 text-[0.88rem] py-2 px-3"
-            label="Name of Production Company"
+          placeholder=""
+          changed={(val) => setScriptProps("production_company", val)}
+          value={data.production_company}
+          labelStyle2
+          className="h-[4rem] text-gray-6 text-[0.88rem] py-2 px-3"
+          label="Name of Production Company"
           />
         </div>
         <div className="mt-10">
           <TextArea
+            placeholder=""
             changed={(val) => setScriptProps("information", val)}
             value={data.information}
             labelStyle2

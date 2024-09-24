@@ -61,15 +61,17 @@ const MarketingBudgetForm = ({
         </div>
         <div className="mt-8">
           <TextArea
-            changed={(val) => setScriptProps("target_social", val)}
-            value={data.target_social}
-            labelStyle2
-            className="h-[4rem] text-gray-6 text-[0.88rem] py-2 px-3"
-            label="Target Social media platforms"
+          placeholder=""
+          changed={(val) => setScriptProps("target_social", val)}
+          value={data.target_social}
+          labelStyle2
+          className="h-[4rem] text-gray-6 text-[0.88rem] py-2 px-3"
+          label="Target Social media platforms"
           />
         </div>
         <div className="mt-8">
           <TextArea
+          placeholder=""
             changed={(val) => setScriptProps("target_ooh", val)}
             value={data.target_ooh}
             labelStyle2

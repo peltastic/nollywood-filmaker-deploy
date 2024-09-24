@@ -6,7 +6,7 @@ type Props = {
   labelStyle2?: boolean;
   value: string;
   changed: (value: string) => void;
-  placeholder: string;
+  placeholder?: string;
 };
 
 const TextArea = ({
