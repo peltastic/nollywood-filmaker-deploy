@@ -13,7 +13,7 @@ type Props = {};
 
 const TestimonialPage = (props: Props) => {
   return (
-    <HomeLayout hasFooter query={"/testimonial"}>
+    <HomeLayout hasFooter >
       <div className="absolute top-[10rem] left-[2rem]">
         <Image src={Vector1} alt="vector-1" />
       </div>
