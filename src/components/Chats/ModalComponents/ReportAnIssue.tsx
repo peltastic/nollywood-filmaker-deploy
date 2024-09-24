@@ -31,6 +31,7 @@ const ReportAnIssue = (props: Props) => {
         />
         <div className="mt-8">
           <TextArea
+          placeholder=""
             changed={() => {}}
             value={""}
             labelStyle2
