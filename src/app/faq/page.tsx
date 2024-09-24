@@ -54,7 +54,7 @@ type Props = {};
 const FAQPage = (props: Props) => {
   const [value, setValue] = useState<string | null>(null);
   return (
-    <HomeLayout hasFooter query={"/faq"}>
+    <HomeLayout hasFooter >
       <div className="absolute top-[10rem] left-[2rem]">
         <Image src={Vector1} alt="vector-1" />
       </div>
