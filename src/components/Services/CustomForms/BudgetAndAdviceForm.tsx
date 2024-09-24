@@ -46,6 +46,7 @@ const BudgetAndAdviceForm = ({
         />
         <div className="mt-10">
           <TextArea
+          placeholder=""
             changed={(val) => setScriptProps("logline", val)}
             value={data.logline}
             labelStyle2
@@ -88,6 +89,7 @@ const BudgetAndAdviceForm = ({
         </div>
         <div className="mt-10">
           <TextArea
+          placeholder=""
             changed={(val) => setScriptProps("concerns", val)}
             value={data.concerns}
             labelStyle2
