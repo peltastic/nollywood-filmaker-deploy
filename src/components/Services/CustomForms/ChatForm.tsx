@@ -42,6 +42,7 @@ const ChatForm = (props: Props) => {
           </div>
           <div className="mt-8">
             <TextArea
+            placeholder=""
               changed={(val) => props.setScriptProps("logline", val)}
               value={props.data.summary}
               labelStyle2
