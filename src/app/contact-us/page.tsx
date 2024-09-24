@@ -11,7 +11,7 @@ type Props = {};
 
 const ContactUsPage = (props: Props) => {
   return (
-    <HomeLayout hasFooter query="/contact-us">
+    <HomeLayout hasFooter >
       <div className="absolute top-[10rem] left-[2rem]">
         <Image src={Vector1} alt="vector-1" />
       </div>
