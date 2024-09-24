@@ -5,7 +5,10 @@ import { useRouter } from "next/navigation";
 import React from "react";
 
 type Props = {
-  successRoute: string
+  successRoute: string;
+  noCoupon?: boolean;
+  nextFunction?: () => void;
+  modalInfoStyle?: boolean
 };
 
 const TransferPayment = (props: Props) => {
@@ -27,33 +30,42 @@ const TransferPayment = (props: Props) => {
           // setShowAccNoInput(true);
         }}
       />
-      <div className="mt-20">
-        <label className="text-black-2 font-medium text-sm block mb-2">
-          Apply coupon code
-        </label>
-        <div className="flex">
-          <InputComponent
-            className="rounded-se-none rounded-ee-none w-full px-4 py-2 text-input-text-color"
-            changed={() => {}}
-            placeholder=""
-            type=""
-          />
-          <UnstyledButton
-            type="button"
-            class="font-medium border border-l-0 border-gray-2 rounded-se-md rounded-ee-md text-[0.88rem] px-4"
-          >
-            Apply
-          </UnstyledButton>
-        </div>
+      <div className="">
+        {props.noCoupon ? null : (
+          <div className="mt-20">
+            <label className="text-black-2 font-medium text-sm block mb-2">
+              Apply coupon code
+            </label>
+            <div className="flex">
+              <InputComponent
+                className="rounded-se-none rounded-ee-none w-full px-4 py-2 text-input-text-color"
+                changed={() => {}}
+                placeholder=""
+                type=""
+              />
+              <UnstyledButton
+                type="button"
+                class="font-medium border border-l-0 border-gray-2 rounded-se-md rounded-ee-md text-[0.88rem] px-4"
+              >
+                Apply
+              </UnstyledButton>
+            </div>
+          </div>
+        )}
         <UnstyledButton
-        clicked={() => router.push(props.successRoute)}
+          clicked={() => {
+            if (props.successRoute) {
+              return router.push(props.successRoute);
+            }
+            props.nextFunction && props.nextFunction();
+          }}
           // disabled={!(isValid && dirty)}
           type="submit"
           class="bg-black-2 disabled:bg-gray-2 w-full py-3 text-[1.13rem] font-bold rounded-sm mt-12 text-white"
         >
           Pay ₦100,000
         </UnstyledButton>
-        <p className="text-unchecked-gray text-[0.88rem] w-full mt-8">
+        <p className={`${props.modalInfoStyle ? "bg-stroke-4 text-black-3 border border-black-3 py-2 px-4 rounded-md" : "text-unchecked-gray"}  text-[0.88rem] w-full mt-8`}>
           Your personal data will be used to process your order, support your
           experience throughout this website, and for other purposes described
           in our privacy policy.

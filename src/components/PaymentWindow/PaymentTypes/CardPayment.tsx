@@ -5,7 +5,10 @@ import UnstyledButton from "@/components/Button/UnstyledButton";
 import { useRouter } from "next/navigation";
 
 type Props = {
-  successRoute: string;
+  successRoute?: string;
+  nextFunction?: () => void;
+  noCoupon?: boolean
+  modalInfoStyle?: boolean
 };
 
 const CardPayment = (props: Props) => {
@@ -46,17 +49,22 @@ const CardPayment = (props: Props) => {
             />
           </div>
           <UnstyledButton
-            clicked={() => router.push(props.successRoute)}
+            clicked={() => {
+              if (props.successRoute) {
+                return router.push(props.successRoute);
+              }
+              props.nextFunction && props.nextFunction();
+            }}
             type="submit"
             class="bg-black-2 disabled:bg-gray-2 bg- w-full py-3 text-[1.13rem] font-bold rounded-sm mt-12 text-white"
           >
             Confirm Payment
           </UnstyledButton>
-          <p className="text-unchecked-gray text-[0.88rem]  mt-8">
-            Your personal data will be used to process your order, support your
-            experience throughout this website, and for other purposes described
-            in our privacy policy.
-          </p>
+          <p className={`${props.modalInfoStyle ? "bg-stroke-4 text-black-3 border border-black-3 py-2 px-4 rounded-md" : "text-unchecked-gray"}  text-[0.88rem] w-full mt-8`}>
+          Your personal data will be used to process your order, support your
+          experience throughout this website, and for other purposes described
+          in our privacy policy.
+        </p>
           <UnstyledButton
             type="button"
             clicked={() => setIsPinForm(false)}
@@ -66,7 +74,7 @@ const CardPayment = (props: Props) => {
           </UnstyledButton>
         </div>
       ) : (
-        <CardPaymentForm showPinForm={() => setIsPinForm(true)} />
+        <CardPaymentForm modalInfoStyle={props.modalInfoStyle} noCoupon={props.noCoupon} showPinForm={() => setIsPinForm(true)} />
       )}
     </div>
   );

@@ -23,15 +23,17 @@ const Field = (props: FieldHookConfig<string> & OtherProps) => {
   return (
     <div className="w-full">
       <label className="">
-        <p
-          className={`${
-            props.labelColor || "text-gray-3"
-          }  font-medium text-[0.88rem] ${props.labelClass} ${
-            props.smallLabel ? "text-sm" : ""
-          }  mb-2`}
-        >
-          {props.label}
-        </p>
+        {props.label && (
+          <p
+            className={`${
+              props.labelColor || "text-gray-3"
+            }  font-medium text-[0.88rem] ${props.labelClass} ${
+              props.smallLabel ? "text-sm" : ""
+            }  mb-2`}
+          >
+            {props.label}
+          </p>
+        )}
 
         <div className="relative ">
           <input

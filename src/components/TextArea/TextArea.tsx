@@ -6,9 +6,17 @@ type Props = {
   labelStyle2?: boolean;
   value: string;
   changed: (value: string) => void;
+  placeholder: string;
 };
 
-const TextArea = ({ label, className, labelStyle2, value, changed }: Props) => {
+const TextArea = ({
+  label,
+  className,
+  labelStyle2,
+  value,
+  changed,
+  placeholder,
+}: Props) => {
   return (
     <div>
       <label
@@ -19,6 +27,7 @@ const TextArea = ({ label, className, labelStyle2, value, changed }: Props) => {
         {label}
       </label>
       <textarea
+        placeholder={placeholder}
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
           changed(e.target.value)
         }

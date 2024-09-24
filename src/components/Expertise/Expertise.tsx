@@ -3,6 +3,7 @@ import React from "react";
 type Props = {
   setExpertise: (value: string, type: "add" | "remove") => void;
   data: string[];
+  small?: boolean
 };
 
 const expertise = [
@@ -13,7 +14,7 @@ const expertise = [
   "Editor",
   "Writer",
 ];
-const Expertise = ({ data, setExpertise }: Props) => {
+const Expertise = ({ data, setExpertise, small }: Props) => {
   return (
     <div className="flex flex-wrap gap-y-6 gap-x-3">
       {expertise.map((el) => (
@@ -29,7 +30,7 @@ const Expertise = ({ data, setExpertise }: Props) => {
           }}
           className={`${
             data.includes(el) ? "border-black-2 border-2" : "border border-stroke-2"
-          } transition-all cursor-pointer text-[1.13rem] font-medium  flex items-center justify-center rounded-md  text-black-2 px-[3rem] h-[3.62rem]`}
+          } ${small ? "text-sm px-[2rem] h-[3rem]" : "px-[3rem] h-[3.62rem]"}  transition-all cursor-pointer text-[1.13rem] font-medium  flex items-center justify-center rounded-md  text-black-2 `}
           key={el}
         >
           {el}

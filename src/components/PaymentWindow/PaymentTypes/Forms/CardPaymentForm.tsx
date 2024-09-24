@@ -7,7 +7,9 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 type Props = {
-    showPinForm: () => void
+  showPinForm: () => void;
+  noCoupon?: boolean;
+  modalInfoStyle?: boolean
 };
 
 const CardPaymentForm = (props: Props) => {
@@ -23,7 +25,7 @@ const CardPaymentForm = (props: Props) => {
           //   coupon: "",
         }}
         onSubmit={() => {
-            props.showPinForm()
+          props.showPinForm();
         }}
       >
         {({ isValid, dirty }) => (
@@ -64,25 +66,27 @@ const CardPaymentForm = (props: Props) => {
                 }
               />
             </div>
-            <div className="mt-12">
-              <label className="text-gray-3 text-sm block mb-2">
-                Apply coupon code
-              </label>
-              <div className="flex">
-                <InputComponent
-                  className="rounded-se-none rounded-ee-none w-full px-4 py-2 text-input-text-color"
-                  changed={() => {}}
-                  placeholder=""
-                  type=""
-                />
-                <UnstyledButton
-                  type="button"
-                  class="font-medium border border-l-0 border-gray-2 rounded-se-md rounded-ee-md text-[0.88rem] px-4"
-                >
-                  Apply
-                </UnstyledButton>
+            {props.noCoupon ? null : (
+              <div className="mt-12">
+                <label className="text-gray-3 text-sm block mb-2">
+                  Apply coupon code
+                </label>
+                <div className="flex">
+                  <InputComponent
+                    className="rounded-se-none rounded-ee-none w-full px-4 py-2 text-input-text-color"
+                    changed={() => {}}
+                    placeholder=""
+                    type=""
+                  />
+                  <UnstyledButton
+                    type="button"
+                    class="font-medium border border-l-0 border-gray-2 rounded-se-md rounded-ee-md text-[0.88rem] px-4"
+                  >
+                    Apply
+                  </UnstyledButton>
+                </div>
               </div>
-            </div>
+            )}
             <UnstyledButton
               disabled={!(isValid && dirty)}
               type="submit"
@@ -90,11 +94,11 @@ const CardPaymentForm = (props: Props) => {
             >
               Pay ₦100,000
             </UnstyledButton>
-            <p className="text-unchecked-gray text-[0.88rem] w-[80%] mt-8">
-              Your personal data will be used to process your order, support
-              your experience throughout this website, and for other purposes
-              described in our privacy policy.
-            </p>
+            <p className={`${props.modalInfoStyle ? "bg-stroke-4 text-black-3 border border-black-3 py-2 px-4 rounded-md" : "text-unchecked-gray"}  text-[0.88rem] w-full mt-8`}>
+          Your personal data will be used to process your order, support your
+          experience throughout this website, and for other purposes described
+          in our privacy policy.
+        </p>
             <UnstyledButton
               type="button"
               clicked={() => router.back()}

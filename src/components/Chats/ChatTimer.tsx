@@ -1,7 +1,11 @@
+import { Modal } from "@mantine/core";
 import Image from "next/image";
 import React from "react";
 import Countdown, { CountdownRenderProps } from "react-countdown";
 import { BsFillStopwatchFill } from "react-icons/bs";
+import ModalComponent from "../Modal/Modal";
+import { useDisclosure } from "@mantine/hooks";
+import RateYourExperience from "./ModalComponents/RateYourExperience";
 
 type Props = {};
 
@@ -52,18 +56,30 @@ const timerRenderer = ({
 };
 
 const ChatTimer = (props: Props) => {
+  const [opened, { open, close }] = useDisclosure();
   return (
-    <div className="px-4 border-b border-b-stroke-8 pt-3 pb-6">
-      <div className="flex items-center py-6">
-        <h1 className=" text-[0.88rem] font-semibold mr-2">
-          Conversation Timer
-        </h1>
-        <div className="">
-          <BsFillStopwatchFill className="text-xl" />
+    <>
+      <ModalComponent
+      opened={opened}
+        onClose={close}
+        withCloseButton={false}
+        centered
+        size="xl"
+      >
+        <RateYourExperience close={close} />
+      </ModalComponent>
+      <div className="px-4 border-b border-b-stroke-8 pt-3 pb-6">
+        <div className="flex items-center py-6">
+          <h1 className=" text-[0.88rem] font-semibold mr-2">
+            Conversation Timer
+          </h1>
+          <div className="">
+            <BsFillStopwatchFill className="text-xl" />
+          </div>
         </div>
+        <Countdown date={Date.now() + 3600000} renderer={timerRenderer} />
       </div>
-      <Countdown date={Date.now() + 3600000} renderer={timerRenderer} />
-    </div>
+    </>
   );
 };
 

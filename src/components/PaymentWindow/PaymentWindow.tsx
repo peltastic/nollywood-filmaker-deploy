@@ -6,17 +6,25 @@ import BankPayment from "./PaymentTypes/BankPayment";
 import TransferPayment from "./PaymentTypes/TransferPayment";
 
 type Props = {
+  modal?: boolean;
   successRoute: string;
+  nextFunction?: () => void;
+  noCoupon?: boolean;
+  modalInfoStyle?: boolean;
 };
 
 const PaymentWindow = (props: Props) => {
   const [paymentType, setPaymentType] = useState<string>("card");
   return (
     <div className="w-full">
-      <h1 className="font-bold text-[1.5rem]">Payment</h1>
-      <h2 className="text-[1.13rem]">
-        Lorem ipsum dolor sit amet consectetur adipisc.
-      </h2>
+      {props.modal ? null : (
+        <>
+          <h1 className="font-bold text-[1.5rem]">Payment</h1>
+          <h2 className="text-[1.13rem]">
+            Lorem ipsum dolor sit amet consectetur adipisc.
+          </h2>
+        </>
+      )}
       <div className="mt-14">
         <h3 className="text-black-2 text-[1.13rem] font-semibold mb-4">
           Pay With:
@@ -29,13 +37,28 @@ const PaymentWindow = (props: Props) => {
       </div>
       <div className="mt-10">
         {paymentType === "card" && (
-          <CardPayment successRoute={props.successRoute} />
+          <CardPayment
+            nextFunction={props.nextFunction}
+            successRoute={props.successRoute}
+            noCoupon={props.noCoupon}
+            modalInfoStyle={props.modalInfoStyle}
+          />
         )}
         {paymentType === "bank" && (
-          <BankPayment successRoute={props.successRoute} />
+          <BankPayment
+            noCoupon={props.noCoupon}
+            modalInfoStyle={props.modalInfoStyle}
+            nextFunction={props.nextFunction}
+            successRoute={props.successRoute}
+          />
         )}
         {paymentType === "transfer" && (
-          <TransferPayment successRoute={props.successRoute} />
+          <TransferPayment
+            modalInfoStyle={props.modalInfoStyle}
+            noCoupon={props.noCoupon}
+            nextFunction={props.nextFunction}
+            successRoute={props.successRoute}
+          />
         )}
       </div>
     </div>

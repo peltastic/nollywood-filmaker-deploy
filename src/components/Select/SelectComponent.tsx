@@ -13,8 +13,9 @@ type Props = {
   placeholder: string;
   value?: string;
   setValueProps: (value: string | null, option?: ComboboxItem) => void;
-  size?: "lg" | "md" | "xl" | "xs"| "sm"
-  rounded?: "lg" | "md" | "xl" | "xs" | "sm"
+  size?: "lg" | "md" | "xl" | "xs" | "sm";
+  rounded?: "lg" | "md" | "xl" | "xs" | "sm";
+  largeLabel?: boolean;
 };
 
 const SelectComponent = (props: Props) => {
@@ -22,7 +23,11 @@ const SelectComponent = (props: Props) => {
   return (
     <div className="">
       {props.label && (
-        <label className="block mb-2 text-black-2 font-medium text-[0.88rem]">
+        <label
+          className={`block mb-2 text-black-2 font-medium ${
+            props.largeLabel ? "" : "text-[0.88rem]"
+          } `}
+        >
           {props.label}
         </label>
       )}

@@ -7,6 +7,10 @@ import { IoIosArrowDown } from "react-icons/io";
 import Link from "next/link";
 import ChatRoom from "../ChatRoom";
 import HamburgerIcon from "/public/assets/chats/hamburger.svg";
+import ModalComponent from "@/components/Modal/Modal";
+import { useDisclosure } from "@mantine/hooks";
+import RequestExtension from "../ModalComponents/RequestExtension";
+import ReportAnIssue from "../ModalComponents/ReportAnIssue";
 
 type Props = {
   open: () => void;
@@ -14,8 +18,29 @@ type Props = {
 };
 
 const CustomerChatMiddle = (props: Props) => {
+  const [opened, { open, close }] = useDisclosure();
+  const [reportModOpened, funcs] = useDisclosure()
   return (
     <>
+      <ModalComponent
+        onClose={close}
+        opened={opened}
+        centered
+        withCloseButton={false}
+        size="xl"
+      >
+        <RequestExtension close={close} />
+      </ModalComponent>
+      <ModalComponent
+        onClose={funcs.close}
+        opened={reportModOpened}
+        centered
+        withCloseButton={false}
+        size="xl"
+      >
+       <ReportAnIssue close={funcs.close} />
+      </ModalComponent>
+      
       <div className="bg-white border-r border-r-stroke-8 border-l border-l-stroke-8  h-full">
         <header className="flex items-center py-[1.4rem] px-6 border-b border-b-stroke-8">
           <div className="w-[2.5rem] mr-3 h-[2.5rem] rounded-full bg-black flex items-center justify-center">
@@ -40,7 +65,10 @@ const CustomerChatMiddle = (props: Props) => {
             >
               <div className="bg-white ">
                 <ul className="px-1 text-gray-6 text-[0.88rem]">
-                  <li className="py-2 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4">
+                  <li
+                    onClick={open}
+                    className="py-2 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
+                  >
                     Request an extension
                   </li>
                   <li className="py-2 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
@@ -48,14 +76,10 @@ const CustomerChatMiddle = (props: Props) => {
                       Export conversation
                     </Link>
                   </li>
-                  <li className="py-2 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
-                    <Link
-                      href={
-                        "/user/dashboard/order-details/1?page_type=download_files"
-                      }
-                    >
+                  <li onClick={funcs.open} className="py-2 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
+                 
                       Make a report
-                    </Link>
+                    
                   </li>
                 </ul>
               </div>

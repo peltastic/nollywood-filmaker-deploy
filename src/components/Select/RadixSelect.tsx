@@ -33,13 +33,13 @@ const RadixSelect = ({ data, changed }: Props) => {
         // position="popper"
         sticky="always"
         // align="center"
-         className="bg-white  rounded-md border border-stroke-3 mt-14 ">
+         className="bg-white  rounded-md border border-stroke-3 mt-14  ">
           <Select.Viewport>
             {data.map((el) => (
               <Select.Item
                 value={el.value}
                 key={el.value}
-                className="outline-none py-4 px-2 flex items-center"
+                className="outline-none py-4 px-2 flex items-center !z-[100] relative"
               >
                 <Select.ItemText className=" ">
                   <div className="flex text-[0.88rem] px-3 cursor-pointer">
