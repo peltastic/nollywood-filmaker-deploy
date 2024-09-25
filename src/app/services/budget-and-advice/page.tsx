@@ -36,7 +36,7 @@ const page = (props: Props) => {
     }
   }, []);
   return (
-    <ServiceLayout>
+    <ServiceLayout nonDashboard>
       <div className="flex items-start">
         <ServiceLeft
           title="Look at my budget"

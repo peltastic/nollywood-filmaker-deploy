@@ -26,7 +26,7 @@ const navLink = [
   },
   {
     name: "Request history",
-    link: "/",
+    link: "/user/dashboard/request-history",
   },
   {
     name: "Chats",

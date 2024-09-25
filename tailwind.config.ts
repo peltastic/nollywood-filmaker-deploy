@@ -9,6 +9,14 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        xs: "400px",
+        sm: "480px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1200px",
+        xxl: "1680px",
+      },
       colors: {
         "border-gray": "#E5E9EB",
         "black-1": "#252C32",

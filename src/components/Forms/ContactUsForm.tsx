@@ -10,7 +10,7 @@ type Props = {};
 
 const ContactUsForm = (props: Props) => {
   return (
-    <div className="mt-16 mb-28 w-[40%] mx-auto">
+    <div className="mt-16 mb-28 w-[40%] xxl:w-[50%] mx-auto">
       <Formik initialValues={{}} onSubmit={() => {}}>
         <Form>
           <div className="grid gap-10 grid-cols-2">

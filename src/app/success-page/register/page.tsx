@@ -15,7 +15,7 @@ const RegisterSuccessPage = (props: Props) => {
   return (
     <HomeLayout>
       <SuccessTemplate
-        darkBtnLink={`/services/${service || null}`}
+        darkBtnLink={`/services/${service}`}
         darkButtonContent="Proceed to services"
         lightBtnLink="/"
         lightButtonContent="Go to dashboard"

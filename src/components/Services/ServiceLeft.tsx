@@ -12,7 +12,7 @@ type Props = {
 
 const ServiceLeft = ({ body, title, image }: Props) => {
   return (
-    <section className="bg-gray-bg-3 w-[45%] py-[5rem]">
+    <section className="bg-gray-bg-3 w-[45%] py-[5rem] min-h-screen">
       <div className="bg-black-3 h-[3.8rem] flex justify-center items-center mx-auto w-[3.8rem] rounded-full">
         <p className="text-[1.5rem] font-bold text-white">NA</p>
       </div>

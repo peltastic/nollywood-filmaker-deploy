@@ -1,0 +1,26 @@
+.Header {
+  background: url("../../../public/assets/header/header-background.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: "top";
+}
+
+@media (max-width: 1200px) {
+  .Header {
+    background: linear-gradient(#11111182, #151515b0),
+      url("../../../public/assets/header/header-background.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: "top";
+  }
+}
+
+@media (max-width: 768px) {
+  .Header {
+    background: linear-gradient(#111111c1, #151515b0),
+      url("../../../public/assets/header/header-background.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 5%;
+  }
+}

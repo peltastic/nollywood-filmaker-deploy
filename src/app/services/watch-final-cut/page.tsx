@@ -44,7 +44,7 @@ const page = (props: Props) => {
     }
   }, []);
   return (
-    <ServiceLayout>
+    <ServiceLayout nonDashboard>
       <div className="flex items-start">
         <ServiceLeft
           title="Watch the final cut of my film"

@@ -9,9 +9,12 @@ type Props = {
 
 const HomeLayout = ({ children, hasFooter }: Props) => {
   return (
-    <div>
+    <div className="">
       <Navbar />
+      <div className="max-w-[1680px] mx-auto ">
+
       {children}
+      </div>
       {hasFooter ? <Footer /> : null}
     </div>
   );

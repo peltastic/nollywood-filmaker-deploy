@@ -39,7 +39,7 @@ const DraftLegalDocumentPage = (props: Props) => {
   }, []);
 
   return (
-    <ServiceLayout>
+    <ServiceLayout nonDashboard>
       <div className="flex items-start">
         <ServiceLeft
           title="Draft Legal Documents"
