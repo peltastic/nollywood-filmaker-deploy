@@ -14,18 +14,23 @@ const ChatsPage = (props: Props) => {
     <ServiceLayout>
       <DashboardBodyLayout>
         <section className="flex min-h-screen bg-white">
-          <section className="w-[30%]">
+          <section className="mx-auto w-full  chatbp:w-[30%]">
             <CustomerChatLeft />
           </section>
           <section
-            className={`${closeRight ? "w-[70%]" : "w-[43%]"} transition-all`}
+            className={`${
+              closeRight ? "w-[70%]" : "w-[43%]"
+            } transition-all hidden chatbp:block`}
           >
-            <CustomerChatMiddle opened={closeRight} open={() => setCloseRight(false)} />
+            <CustomerChatMiddle
+              opened={closeRight}
+              open={() => setCloseRight(false)}
+            />
           </section>
           <section
             className={`transition-all ${
-              closeRight ? "w-[0%] hidden" : "w-[27%]"
-            }  ml-3`}
+              closeRight ? "w-[0%] invisible " : "w-[27%] visible ml-3  "
+            }  hidden chatbp:block `}
           >
             <CustomerChatRight close={() => setCloseRight(true)} />
           </section>

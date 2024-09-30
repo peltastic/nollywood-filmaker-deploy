@@ -43,7 +43,7 @@ const ReadMyScriptPage = (props: Props) => {
   }, []);
   return (
     <ServiceLayout nonDashboard>
-      <div className="flex items-start">
+      <div className="flex flex-wrap items-start">
         <ServiceLeft
           title="Read my script"
           image={<Image src={ReadMyScriptImg} alt="read-my-script" />}
@@ -72,7 +72,7 @@ const ReadMyScriptPage = (props: Props) => {
           ]}
         />
         {search === "payment" ? (
-          <div className="w-[55%] text-black-2 px-[5rem] py-[5rem]">
+          <div className="w-full lg:w-[55%] text-black-2 px-[2rem] md:px-[5rem] py-[5rem]">
             <PaymentWindow successRoute="/success-page/read-my-script" />
           </div>
         ) : (

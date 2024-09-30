@@ -4,17 +4,18 @@ import InputComponent from "@/components/Input/Input";
 import SelectComponent from "@/components/Select/SelectComponent";
 import TextArea from "@/components/TextArea/TextArea";
 import { testSelectData } from "@/utils/constants/constants";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FaArrowRight } from "react-icons/fa";
 
 type Props = {
   data: IChatState;
   setScriptProps: (key: string, value: string) => void;
-  proceed: () => void;
   setPageProps: (val: string) => void;
 };
 
 const ChatForm = (props: Props) => {
+  const router = useRouter()
   return (
     <div>
       <h1 className="font-bold text-[1.5rem]">
@@ -27,7 +28,7 @@ const ChatForm = (props: Props) => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            props.proceed();
+            // props.proceed();
           }}
         >
           <div className="mt-8">
@@ -63,13 +64,13 @@ const ChatForm = (props: Props) => {
           <div className="w-full flex mt-14 mb-14">
             <UnstyledButton
               type="button"
-              clicked={() => props.setPageProps("2")}
+              clicked={() => router.back()}
               class="rounded-md px-4 transition-all hover:bg-gray-bg-1 border-stroke-2 border"
             >
               Back
             </UnstyledButton>
             <UnstyledButton
-              clicked={() => props.proceed()}
+              clicked={() => props.setPageProps("2") }
               type="submit"
               // disabled={disabled}
               class="flex py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"

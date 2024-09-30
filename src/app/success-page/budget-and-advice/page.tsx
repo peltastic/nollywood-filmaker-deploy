@@ -16,7 +16,7 @@ const BudgetAndAdvicepage = (props: Props) => {
       lightButtonContent="Take me home"
       titleLight="Order Confirmed"
       titleBold="Look at my Budget"
-      width='w-[35rem]'
+      width='w-[95%] sm:w-[90%] md:w-[35rem]'
     />
   </ServiceLayout>
   )

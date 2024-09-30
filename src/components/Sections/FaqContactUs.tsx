@@ -8,7 +8,7 @@ type Props = {};
 
 const FaqContactUs = (props: Props) => {
   return (
-    <section className="bg-gray-bg-1 py-14 mt-20 w-[85%] mx-auto mb-[5rem]">
+    <section className="bg-gray-bg-1 py-14 mt-20 w-full px-4 sm:px-0 sm:w-[85%] mx-auto mb-[5rem]">
       <div className="w-fit mx-auto">
         <Image src={Profiles} alt="profiles" className="w-[7rem]" />
       </div>

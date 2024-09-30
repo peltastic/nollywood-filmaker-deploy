@@ -45,7 +45,7 @@ const OrderDetailsPage = (props: Props) => {
     <ServiceLayout>
       <DashboardBodyLayout>
         <OrderDetailsHeader status="pending" statusValue="Pending" />
-        <div className="w-[82%] mx-auto">
+        <div className="w-[90%] lg:w-[82%] mx-auto">
           <OrderDetailsTop
             order_date="2024-06-29 10:21:54"
             order_no="O-NG240629806487"

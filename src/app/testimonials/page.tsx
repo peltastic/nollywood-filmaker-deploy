@@ -21,11 +21,11 @@ const TestimonialPage = (props: Props) => {
         subTitle="Here’s what people say about us   "
         title="Testimonials"
       />
-      <div className="px-[4rem] mt-[7rem] flex items-center">
-        <div className="w-[50%]">
+      <div className="px-[4rem] mt-[7rem] flex-wrap justify-center lg:flex-nowrap flex items-center">
+        <div className="w-[80%] lg:w-[50%]">
           <VideoBox />
         </div>
-        <div className="ml-[6rem] w-[50%]">
+        <div className="ml-0 lg:ml-[6rem] mt-10 lg:mt-0 w-[70%] lg:w-[50%]">
           <Rating defaultValue={5} color="rgba(0, 0, 0, 1)" />
           <p className="text-[1.5rem] font-bold mt-8">
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -38,7 +38,7 @@ const TestimonialPage = (props: Props) => {
           </div>
         </div>
       </div>
-      <div className="px-[4rem] mb-[10rem] gap-x-10 gap-y-20 mt-[11rem] grid grid-cols-2">
+      <div className="px-[4rem] mb-[10rem] gap-x-10 gap-y-20 mt-[11rem] mx-auto w-[80%] lg:w-auto grid lg:grid-cols-2">
         <TestimonalVideo />
         <TestimonalVideo />
         <TestimonalVideo />

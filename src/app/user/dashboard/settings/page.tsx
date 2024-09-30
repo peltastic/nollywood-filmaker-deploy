@@ -15,7 +15,7 @@ const SettingsPage = (props: Props) => {
   return (
     <ServiceLayout>
       <DashboardBodyLayout>
-        <div className="px-[5rem] mt-10">
+        <div className="px-4 md:px-[5rem] pt-[3rem] lg:pt-0 lg:mt-10">
           <h1 className="text-black-2 text-[1.5rem] font-bold">Settings</h1>
           <div className="mt-10">
             <Tabs color="#181818" defaultValue={"profile"}>

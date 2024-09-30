@@ -14,13 +14,13 @@ const times = [
 
 const CustomTime = (props: Props) => {
   return (
-    <div className="rounded-xl border-r border-b border-l w-[12rem] bg-calender-bg px-4 py-6">
+    <div className=" grid md:block grid-cols-2 sm:grid-cols-3  mid:grid-cols-4 gap-4 md:gap-0 rounded-xl border-r border-b border-l w-full md:w-[12rem] bg-calender-bg px-4 py-6 ">
       {times.map((el) => (
         <div
           key={el}
           className={`${
             el === "11:00 AM" ? "bg-black-2 text-white" : "text-black-2 bg-white"
-          }  text-[1.13rem] font-medium mx-auto  rounded-md py-3 px-3 mb-2`}
+          }  text-[1.13rem] font-medium mx-0 md:mx-auto  rounded-md py-3 px-3 mb-2`}
         >
           {el}
         </div>

@@ -10,9 +10,9 @@ type Props = {
 
 const Stepper = (props: Props) => {
   return (
-    <div className="flex gap-8 text-black-2">
+    <div className="flex flex-wrap gap-8 text-black-2">
       {props.data.map((el) => (
-        <div className="flex items-center " key={el.value}>
+        <div className="flex items-center w-full md:w-auto" key={el.value}>
           <div
             className={`${
               props.values === el.value ? "bg-black-2 text-white" : ""

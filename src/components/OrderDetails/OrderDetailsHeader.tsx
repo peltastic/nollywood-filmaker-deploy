@@ -23,17 +23,17 @@ const OrderDetailsHeader = ({ status, statusValue }: Props) => {
       : "bg-light-yellow text-dark-yellow";
   return (
     <div>
-      <header className="flex items-center">
-        <div className="flex items-center text-[1.5rem] mr-auto">
+      <header className="flex flex-wrap items-center px-8 chatbg:mx-0 py-10 chatbg:py-0 ">
+        <div className="flex items-center w-full md:w-auto text-[1.5rem] mr-auto">
           <div
             onClick={() => router.back()}
-            className="hover:bg-gray-bg-3 w-fit mr-8 transition-all cursor-pointer px-1 py-1 rounded-md"
+            className="hover:bg-gray-bg-3 w-fit mr-3 md:mr-8 transition-all cursor-pointer px-1 py-1 rounded-md"
           >
             <IoIosArrowBack className="text-gray-4 " />
           </div>
           <h1 className="text-black-2 font-bold">Order details</h1>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center ml-3 md:ml-0 mt-6 md:mt-0">
           <p className="text-[0.88rem] text-black-2 mr-2">Status:</p>
           <p
             className={`${statusClassname} font-medium, w-fit flex text-[0.75rem] items-center font-medium py-2 px-2 rounded-md`}

@@ -39,15 +39,15 @@ const Calendar: React.FC<Props> = ({ value = new Date(), onChange }) => {
   };
 
   return (
-    <div className="w-full rounded-xl border-r border-b border-l bg-calender-bg px-6 py-6">
-      <div className="flex justify-between items-center">
+    <div className="w-full rounded-xl border-r border-b border-l bg-calender-bg px-2 sm:px-6 py-6">
+      <div className="flex flex-wrap sm:justify-between items-center">
         <div
           onClick={prevMonth}
-          className="flex items-center justify-center bg-white h-[2.75rem] w-[2.75rem] rounded-full"
+          className="flex order-1 mr-2 sm:mr-0 items-center justify-center bg-white h-[2.75rem] w-[2.75rem] rounded-full"
         >
           <Image src={ArrowLeft} alt="arrow-left" />
         </div>
-        <div className="flex items-center">
+        <div className="flex order-3 md:order-2 mb-2 sm:mb-0 mt-4 sm:mt-0 items-center">
           <div className="bg-white rounded-md px-2 text-[1.5rem] flex items-end mr-2 font-bold py-2">
             <p className="">{format(value, "LLLL")}</p>
             <div className="mb-2">
@@ -63,7 +63,7 @@ const Calendar: React.FC<Props> = ({ value = new Date(), onChange }) => {
         </div>
         <div
           onClick={nextMonth}
-          className="flex items-center justify-center bg-white h-[2.75rem] w-[2.75rem] rounded-full"
+          className="flex order-2 md:order-3 mx-2  sm:mx-0 items-center justify-center bg-white h-[2.75rem] w-[2.75rem] rounded-full"
         >
           <Image src={ArrowRight} alt="arrow-right" />
         </div>

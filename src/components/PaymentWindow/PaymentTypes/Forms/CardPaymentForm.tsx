@@ -9,7 +9,7 @@ import React, { useState } from "react";
 type Props = {
   showPinForm: () => void;
   noCoupon?: boolean;
-  modalInfoStyle?: boolean
+  modalInfoStyle?: boolean;
 };
 
 const CardPaymentForm = (props: Props) => {
@@ -36,19 +36,21 @@ const CardPaymentForm = (props: Props) => {
               name="card"
               placeholder="1234  5678  9101  1121"
             />
-            <div className="grid grid-cols-2 gap-x-6 mt-6">
+            <div className="grid md:grid-cols-2 gap-x-6 mt-10 md:mt-6">
               <Field
                 classname="w-full"
                 label="Expiration Date"
                 name="expiration"
                 placeholder="MM/YY"
               />
-              <Field
-                classname="w-full"
-                label="CVV"
-                name="cvv"
-                placeholder="123"
-              />
+              <div className="mt-10 md:mt-0">
+                <Field
+                  classname="w-full"
+                  label="CVV"
+                  name="cvv"
+                  placeholder="123"
+                />
+              </div>
             </div>
             <div className="mt-8">
               <CheckboxComponent
@@ -94,11 +96,17 @@ const CardPaymentForm = (props: Props) => {
             >
               Pay ₦100,000
             </UnstyledButton>
-            <p className={`${props.modalInfoStyle ? "bg-stroke-4 text-black-3 border border-black-3 py-2 px-4 rounded-md" : "text-unchecked-gray"}  text-[0.88rem] w-full mt-8`}>
-          Your personal data will be used to process your order, support your
-          experience throughout this website, and for other purposes described
-          in our privacy policy.
-        </p>
+            <p
+              className={`${
+                props.modalInfoStyle
+                  ? "bg-stroke-4 text-black-3 border border-black-3 py-2 px-4 rounded-md"
+                  : "text-unchecked-gray"
+              }  text-[0.88rem] w-full mt-8`}
+            >
+              Your personal data will be used to process your order, support
+              your experience throughout this website, and for other purposes
+              described in our privacy policy.
+            </p>
             <UnstyledButton
               type="button"
               clicked={() => router.back()}

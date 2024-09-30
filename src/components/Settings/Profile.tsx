@@ -8,8 +8,8 @@ type Props = {};
 
 const ProfileSettings = (props: Props) => {
   return (
-    <div className="mt-10 flex gap-6">
-      <div className="w-[30%] ">
+    <div className="mt-10 flex flex-wrap lg:flex-nowrap gap-6">
+      <div className="w-full lg:w-[30%] ">
         <div className="w-full py-10 border border-stroke-10 bg-white rounded-xl">
           <div className="w-fit mx-auto">
             <Image src={TestImage} alt="test-image" />
@@ -27,7 +27,7 @@ const ProfileSettings = (props: Props) => {
           User since <span className="font-bold">Jan 12, 2022</span>
         </p>
       </div>
-      <div className="w-[70%] px-10 py-10 rounded-xl bg-white border border-stroke-10">
+      <div className="w-full lg:w-[70%] px-4 sm:px-10 py-10 rounded-xl bg-white border border-stroke-10">
         <ProfileSettingForm />
       </div>
     </div>

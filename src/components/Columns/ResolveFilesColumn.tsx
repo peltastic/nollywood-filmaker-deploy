@@ -30,7 +30,7 @@ export const resolve_files_columns: ColumnDef<IResolveFilesColumnData>[] = [
     header: () => <div className="">File name</div>,
     cell: ({ row }) => {
       return (
-        <div className={`$ py-4 flex items-center`}>
+        <div className={`$ py-4 flex items-center w-[20rem] xl:w-auto`}>
           <div className="bg-gray-bg-3 h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4">
             <Image src={FileImg} alt="file-img" />
           </div>
@@ -47,7 +47,7 @@ export const resolve_files_columns: ColumnDef<IResolveFilesColumnData>[] = [
     header: "File size",
     cell: ({ row }) => {
       return (
-        <div className={` py-6`}>
+        <div className={` py-6 w-[7rem] xl:w-auto`}>
           <p className="text-gray-1 text-[0.88rem] ">{row.getValue("size")}</p>
         </div>
       );
@@ -58,7 +58,9 @@ export const resolve_files_columns: ColumnDef<IResolveFilesColumnData>[] = [
     header: "Date uploaded",
     cell: ({ row }) => {
       return (
-        <p className="text-gray-1 text-[0.88rem]">{row.getValue("date")}</p>
+        <div className="w-[10rem] xl:w-auto">
+          <p className="text-gray-1 text-[0.88rem]">{row.getValue("date")}</p>
+        </div>
       );
     },
   },
@@ -67,9 +69,11 @@ export const resolve_files_columns: ColumnDef<IResolveFilesColumnData>[] = [
     header: "Last updated",
     cell: ({ row }) => {
       return (
-        <p className="text-gray-1 text-[0.88rem]">
-          {row.getValue("last_updated")}
-        </p>
+        <div className="w-[10rem] xl:w-auto">
+          <p className="text-gray-1 text-[0.88rem]">
+            {row.getValue("last_updated")}
+          </p>
+        </div>
       );
     },
   },
@@ -78,9 +82,11 @@ export const resolve_files_columns: ColumnDef<IResolveFilesColumnData>[] = [
     header: "Uploaded By",
     cell: ({ row }) => {
       return (
-        <p className="text-gray-1 text-[0.88rem]">
-          {row.getValue("uploaded_by")}
-        </p>
+        <div className="w-[10rem] xl:w-auto">
+          <p className="text-gray-1 text-[0.88rem]">
+            {row.getValue("uploaded_by")}
+          </p>
+        </div>
       );
     },
   },

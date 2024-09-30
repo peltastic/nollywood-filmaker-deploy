@@ -72,23 +72,25 @@ const DashboardHomePgae = (props: Props) => {
   return (
     <ServiceLayout>
       <DashboardBodyLayout>
-        <Header />
+        <div className="px-3 md:px-10 chatbg:px-0">
+          <Header />
 
-        <div className="mt-14">
-          <DataTable
-            title="Active requests"
-            columns={active_requests_columns}
-            data={active_req}
-          />
-        </div>
-        <div className="mt-14">
-          <DataTable
-            title="Request History"
-            subtitle="Keep track of all your past requests"
-            columns={request_history_columns}
-            // data={reqHistoryData}
-            data={[]}
-          />
+          <div className="mt-14">
+            <DataTable
+              title="Active requests"
+              columns={active_requests_columns}
+              data={active_req}
+            />
+          </div>
+          <div className="mt-14">
+            <DataTable
+              title="Request History"
+              subtitle="Keep track of all your past requests"
+              columns={request_history_columns}
+              // data={reqHistoryData}
+              data={[]}
+            />
+          </div>
         </div>
       </DashboardBodyLayout>
     </ServiceLayout>

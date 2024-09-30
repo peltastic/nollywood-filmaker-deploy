@@ -10,10 +10,10 @@ type Props = {};
 
 const ContactUsForm = (props: Props) => {
   return (
-    <div className="mt-16 mb-28 w-[40%] xxl:w-[50%] mx-auto">
+    <div className="mt-16 mb-28 w-[95%] md:w-[70%] lg:w-[40%] xxl:w-[50%] mx-auto">
       <Formik initialValues={{}} onSubmit={() => {}}>
         <Form>
-          <div className="grid gap-10 grid-cols-2">
+          <div className="grid gap-10 md:grid-cols-2">
             <div className="">
               <Field
                 classname="w-full"
@@ -65,7 +65,7 @@ const ContactUsForm = (props: Props) => {
               }
             />
           </div>
-          <UnstyledButton class="py-3 px-4 mt-12 rounded-md w-full  flex justify-center items-center mx-auto text-white bg-black-2">
+          <UnstyledButton class="py-4 px-4 mt-12 rounded-md w-full  flex justify-center items-center mx-auto text-white bg-black-2">
             <p className="text-[0.88rem] mr-2">Send message</p>
             <FaArrowRight className="text-[0.7rem]" />
           </UnstyledButton>

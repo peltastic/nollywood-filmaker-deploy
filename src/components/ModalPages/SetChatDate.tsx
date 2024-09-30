@@ -31,7 +31,7 @@ const SetChatDate = ({ open, close }: Props) => {
       ) : (
         <>
           <div className="flex items-center mb-6 mt-4">
-            <h1 className="font-semibold text-[2rem]">Choose chat date</h1>
+            <h1 className="font-semibold text-[1.2rem] md:text-[2rem]">Choose chat date</h1>
             <div
               onClick={close}
               className="cursor-pointer hover:bg-gray-bg-2 py-2 px-2 placeholder:rounded-md transition-all ml-auto"
@@ -39,7 +39,7 @@ const SetChatDate = ({ open, close }: Props) => {
               <Image src={CancelImg} alt="cancel-img" />
             </div>
           </div>
-          <div className="flex gap-5">
+          <div className="flex flex-wrap md:flex-nowrap gap-5">
             <CustomCalender value={new Date()} onChange={() => {}} />
             <CustomTime />
           </div>

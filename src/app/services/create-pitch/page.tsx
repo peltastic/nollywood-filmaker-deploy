@@ -48,7 +48,7 @@ const CreatePitchPage = (props: Props) => {
   }, []);
   return (
     <ServiceLayout nonDashboard>
-      <div className="flex items-start">
+      <div className="flex flex-wrap items-start">
         <ServiceLeft
           title="Create a production budget"
           image={<Image src={CreatePitchImg} alt="create-pitch" />}
@@ -88,7 +88,7 @@ const CreatePitchPage = (props: Props) => {
           ]}
         />
         {search === "payment" ? (
-          <div className="w-[55%] text-black-2 px-[5rem] py-[5rem]">
+          <div className="w-full lg:w-[55%] text-black-2 px-[2rem] md:px-[5rem] py-[5rem]">
             <PaymentWindow successRoute="/success-page/create-pitch" />
           </div>
         ) : (

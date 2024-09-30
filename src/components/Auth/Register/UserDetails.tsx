@@ -43,7 +43,7 @@ const UserDetails = ({ setPageProps, setDataProps, data }: Props) => {
       >
         {({ dirty, isValid }) => (
           <Form className="mt-10">
-            <div className="grid grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-2 gap-8">
               <Field
                 label="First name"
                 labelColor="text-black-2"

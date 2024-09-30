@@ -62,7 +62,7 @@ const FAQPage = (props: Props) => {
         subTitle="Everything you need to know about the product and billing."
         title="Frequently asked questions"
       />
-      <div className="w-[60%] mx-auto mt-[4rem]">
+      <div className="w-[90%] md:w-[60%] mx-auto mt-[4rem]">
         <Accordion
           disableChevronRotation
           classNames={{ chevron: classes.chevron, item: classes.item }}

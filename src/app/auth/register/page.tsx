@@ -57,15 +57,15 @@ const RegisterPage = (props: Props) => {
 
   return (
     <HomeLayout>
-      <div className="flex items-center py-6 px-10">
+      <div className="flex items-center py-6 px-3 sm:px-10">
         <LeftSide />
-        <div className="w-[55%] pl-[5rem] pr-[3rem]">
-          <div className="flex items-center text-black-1">
-            <h1 className="text-[1.75rem] mr-auto font-bold">
+        <div className="w-full md:w-[95%] mx-auto xl:w-[55%] pl-2 md:pl-[5rem] pr-2 md:pr-[3rem]">
+          <div className="flex items-center flex-wrap text-black-1">
+            <h1 className="w-full sm:w-auto text-[1.75rem] mr-auto font-bold">
               Create an account
             </h1>
             <Link href={"/auth/login"}>
-            <p className="text-[1.25rem]">Log in</p>
+              <p className="text-[1.25rem]">Log in</p>
             </Link>
           </div>
           <div className="mt-[6rem]">
@@ -98,7 +98,7 @@ const RegisterPage = (props: Props) => {
                 setDataProps={setUserDetailsHandler}
                 setPageProps={(val) => setPage(val)}
                 data={registerData}
-              /> 
+              />
             ) : (
               <SecureAccount setPageProps={(val) => setPage(val)} />
             )}

@@ -6,7 +6,7 @@ type Props = {};
 
 const LeftSide = (props: Props) => {
   return (
-    <div className="w-[45%] relative text-white ">
+    <div className="hidden xl:block w-[45%] relative text-white ">
       <div className="z-10 absolute left-0 top-0 bg-[#00000032] w-full h-full rounded-2xl"></div>
       <div className=" z-20 absolute bottom-10 px-[2rem]">
         <h1 className="font-bold text-[1.5rem]">Nollywood Filmaker</h1>

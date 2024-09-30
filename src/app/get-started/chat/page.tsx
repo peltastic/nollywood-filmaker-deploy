@@ -97,7 +97,7 @@ const GetStartedChatPage = (props: Props) => {
               <Stepper
                 data={[
                   {
-                    label: "Choose Availability",
+                    label: "Select Consultant",
                     value: "1",
                   },
                   {
@@ -119,10 +119,10 @@ const GetStartedChatPage = (props: Props) => {
             ) : (
               <>
                 {page === "1" && (
-                  <ChatRight
-                    dateProps={currentDate}
-                    setDateProps={setDateHandler}
+                  <ChatForm
                     setPageProps={(val) => setPage(val)}
+                    data={chatData}
+                    setScriptProps={setChatDataHandler}
                   />
                 )}
                 {page === "2" && (
@@ -133,13 +133,13 @@ const GetStartedChatPage = (props: Props) => {
                   />
                 )}
                 {page === "3" && (
-                  <ChatForm
+                  <ChatRight
+                    dateProps={currentDate}
+                    setDateProps={setDateHandler}
                     setPageProps={(val) => setPage(val)}
-                    data={chatData}
                     proceed={() =>
                       router.push("/get-started/chat?page=payment")
                     }
-                    setScriptProps={setChatDataHandler}
                   />
                 )}
               </>

@@ -15,7 +15,7 @@ const GetStartedPage = (props: Props) => {
 
   return (
     <HomeLayout>
-      <div className="absolute mt-[5rem] -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2">
+      <div className="absolute mt-[5rem] w-[80%] sm:w-[60%] md:w-auto -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2">
         <div className="text-black-2">
           <h1 className="font-bold text-[1.5rem] mb-[4rem]">Welcome</h1>
           <h1 className="font-bold text-[1.5rem]">What do you want to do?</h1>
@@ -23,12 +23,12 @@ const GetStartedPage = (props: Props) => {
             Lorem ipsum dolor sit amet consectetur adipisc.
           </p>
         </div>
-        <div className="flex mt-10 gap-8">
+        <div className="flex flex-wrap md:flex-nowrap mt-10 gap-8">
           <div
             onClick={() => setSelected("service")}
             className={`${
               selected === "service" ? "border-black-3" : "border-stroke-2"
-            } transition-all cursor-pointer border w-[18.6rem] flex items-center justify-center rounded-md h-[9.13rem]`}
+            } transition-all cursor-pointer border w-full md:w-[18.6rem] flex items-center justify-center rounded-md h-[9.13rem]`}
           >
             <div className="text-center">
               <Image
@@ -45,7 +45,7 @@ const GetStartedPage = (props: Props) => {
             onClick={() => setSelected("chat")}
             className={`${
               selected === "chat" ? "border-black-3" : "border-stroke-2"
-            } transition-all cursor-pointer border w-[18.6rem] flex items-center justify-center rounded-md h-[9.13rem] `}
+            } transition-all cursor-pointer border w-full md:w-[18.6rem] flex items-center justify-center rounded-md h-[9.13rem] `}
           >
             <div className="text-center">
               <Image

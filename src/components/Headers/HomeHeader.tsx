@@ -37,7 +37,7 @@ const HomeHeader = (props: Props) => {
               </div>
             </div>
             <div className="w-[90%] xl:w-[25rem] xxl:w-[35rem]">
-              <h1 className="text-[2.8rem] sm:text-[3.4rem] leading-[1.2] font-semibold">
+              <h1 className="text-[2.8rem] sm:text-[3.4rem] leading-[1.2] font-bold">
                 The one-stop spot for all the film-making help you need
               </h1>
             </div>
@@ -59,7 +59,7 @@ const HomeHeader = (props: Props) => {
                   Get Started
                 </UnstyledButton>
               </Link>
-              <UnstyledButton class="py-4 mx-auto xs:mx-0 flex items-center">
+              <UnstyledButton class="py-4 mx-auto xs:mx-0 flex items-center mt-5 xs:mt-0">
                 <Image src={PlayButtonImage} alt="play-button" />
                 <p className="text-white ml-2">Play video</p>
               </UnstyledButton>

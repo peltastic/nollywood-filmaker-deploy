@@ -65,7 +65,7 @@ const chat_data: IChatMessagesData[] = [
 const ChatRoom = (props: Props) => {
   return (
     <div className=" py-6 h-full ">
-      <div className=" h-[90%]">
+      <div className=" h-[90%] overflow-scroll">
         {chat_data.map((el, index) => (
           <ChatMessage
             key={el.text + index.toString()}

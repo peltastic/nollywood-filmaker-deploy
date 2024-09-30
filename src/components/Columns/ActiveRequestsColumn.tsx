@@ -44,7 +44,7 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
     header: () => <div className=" py-4 ">Service name</div>,
     cell: ({ row }) => {
       return (
-        <div className="flex items-center">
+        <div className="flex items-center w-[20rem] xl:w-auto">
           <div className="bg-gray-bg-3 h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4">
             <Image src={ReadMyScriptDarkImg} alt="name-img" />
           </div>
@@ -78,7 +78,9 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
     header: "Date created",
     cell: ({ row }) => {
       return (
-        <p className="text-gray-1 text-[0.88rem]">{row.getValue("date")}</p>
+        <div className=" w-[10rem] xl:w-auto">
+          <p className="text-gray-1 text-[0.88rem]">{row.getValue("date")}</p>
+        </div>
       );
     },
   },
@@ -93,14 +95,16 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
           ? "bg-light-green text-dark-green"
           : "bg-light-yellow text-dark-yellow";
       return (
-        <p
-          className={`${className} w-fit flex items-center font-medium py-1 px-2 rounded-full`}
-        >
-          <span className="block pr-1">
-            <GoDotFill />
-          </span>{" "}
-          {row.getValue("status")}
-        </p>
+        <div className=" w-[10rem] xl:w-auto">
+          <p
+            className={`${className} w-fit flex items-center font-medium py-1 px-2 rounded-full`}
+          >
+            <span className="block pr-1">
+              <GoDotFill />
+            </span>{" "}
+            {row.getValue("status")}
+          </p>
+        </div>
       );
     },
   },
@@ -118,7 +122,7 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
             size="xl"
             centered
           >
-            <SetChatDate open={open} close={close} />
+              <SetChatDate open={open} close={close} />
           </ModalComponent>
           <MenuComponent
             target={

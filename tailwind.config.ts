@@ -12,9 +12,11 @@ const config: Config = {
       screens: {
         xs: "400px",
         sm: "480px",
+        mid: "650px",
         md: "768px",
         lg: "1024px",
         xl: "1200px",
+        chatbp: "1300px",
         xxl: "1680px",
       },
       colors: {

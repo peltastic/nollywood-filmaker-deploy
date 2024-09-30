@@ -24,7 +24,7 @@ const MarketingBudgetForm = ({
 }: Props) => {
   const router = useRouter();
   return (
-    <div className="w-[80%]">
+    <div className="w-full xl:w-[80%]">
       <form
         onSubmit={(e) => {
           e.preventDefault();

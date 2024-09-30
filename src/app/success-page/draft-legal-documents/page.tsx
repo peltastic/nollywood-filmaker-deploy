@@ -16,7 +16,7 @@ const DraftLegalDocumentSuccessPage = (props: Props) => {
       lightButtonContent="Take me home"
       titleLight="Order Confirmed"
       titleBold="Draft Legal Documents"
-      width='w-[40rem]'
+      width='w-[95%] sm:w-[90%] md:w-[40rem]'
     />
   </ServiceLayout>
   )

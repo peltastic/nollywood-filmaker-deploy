@@ -19,7 +19,7 @@ type Props = {
 
 const CustomerChatMiddle = (props: Props) => {
   const [opened, { open, close }] = useDisclosure();
-  const [reportModOpened, funcs] = useDisclosure()
+  const [reportModOpened, funcs] = useDisclosure();
   return (
     <>
       <ModalComponent
@@ -38,10 +38,10 @@ const CustomerChatMiddle = (props: Props) => {
         withCloseButton={false}
         size="xl"
       >
-       <ReportAnIssue close={funcs.close} />
+        <ReportAnIssue close={funcs.close} />
       </ModalComponent>
-      
-      <div className="bg-white border-r border-r-stroke-8 border-l border-l-stroke-8  h-full">
+
+      <div className=" bg-white border-r border-r-stroke-8 border-l border-l-stroke-8  h-full">
         <header className="flex items-center py-[1.4rem] px-6 border-b border-b-stroke-8">
           <div className="w-[2.5rem] mr-3 h-[2.5rem] rounded-full bg-black flex items-center justify-center">
             <Image src={AdminProfileImg} alt="admin-alt-profile" />
@@ -76,22 +76,31 @@ const CustomerChatMiddle = (props: Props) => {
                       Export conversation
                     </Link>
                   </li>
-                  <li onClick={funcs.open} className="py-2 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
-                 
-                      Make a report
-                    
+                  <li
+                    onClick={funcs.open}
+                    className="py-2 px-4 hover:bg-gray-bg-1 transition-all rounded-md"
+                  >
+                    Make a report
                   </li>
                 </ul>
               </div>
             </MenuComponent>
-            {props.opened ? (
-              <div
-                onClick={props.open}
-                className=" hover:bg-stroke-4 transition-all ml-6 rounded-md cursor-pointer"
-              >
-                <Image src={HamburgerIcon} alt="hamburger-icons" />
-              </div>
-            ) : null}
+            <div className="hidden lg:block">
+              {props.opened ? (
+                <div
+                  onClick={props.open}
+                  className=" hover:bg-stroke-4 transition-all ml-6 rounded-md cursor-pointer"
+                >
+                  <Image src={HamburgerIcon} alt="hamburger-icons" />
+                </div>
+              ) : null}
+            </div>
+            <div
+              onClick={props.open}
+              className="block lg:hidden hover:bg-stroke-4 transition-all ml-6 rounded-md cursor-pointer"
+            >
+              <Image src={HamburgerIcon} alt="hamburger-icons" />
+            </div>
           </div>
         </header>
         <div className="h-[90%]">

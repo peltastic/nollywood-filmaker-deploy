@@ -37,7 +37,7 @@ const page = (props: Props) => {
   }, []);
   return (
     <ServiceLayout nonDashboard>
-      <div className="flex items-start">
+      <div className="flex flex-wrap items-start">
         <ServiceLeft
           title="Look at my budget"
           image={<Image src={BudgetAndAdviceImg} alt="budget-and-advice" />}

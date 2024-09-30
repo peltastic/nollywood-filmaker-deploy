@@ -2,23 +2,34 @@
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import CheckboxComponent from "@/components/Checkbox/Checkbox";
 import Field from "@/components/Field/Field";
+import { RootState } from "@/lib/store";
 import { Form, Formik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { FaArrowRight } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 type Props = {};
 
 const LoginForm = (props: Props) => {
   const router = useRouter();
+  const service = useSelector(
+    (state: RootState) => state.persistedState.services.service
+  );
   return (
     <Formik
       initialValues={{
         email: "",
         password: "",
       }}
-      onSubmit={() => {}}
+      onSubmit={() => {
+        if (service) {
+          router.push(`/services/${service}`)
+        } else {
+          router.push("/get-started/service")
+        }
+      }}
     >
       {({ isValid, dirty }) => (
         <Form>
@@ -51,7 +62,7 @@ const LoginForm = (props: Props) => {
             </Link>
           </div>
           <UnstyledButton
-            clicked={() => router.push("/")}
+            // clicked={() => router.push("/")}
             disabled={!(dirty && isValid)}
             class="flex hover:bg-blue-1 mt-[7rem] py-2 px-4 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
           >

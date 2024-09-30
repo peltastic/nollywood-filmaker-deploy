@@ -24,7 +24,7 @@ const WatchFinalCutForm = ({
 }: Props) => {
   const router = useRouter();
   return (
-    <div className="w-[80%]">
+    <div className="w-full xl:w-[80%]">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -48,7 +48,7 @@ const WatchFinalCutForm = ({
             label="Tell us your logline/synopsis"
           />
         </div>
-        <div className="grid grid-cols-2 gap-x-4 mt-6">
+        <div className="grid md:grid-cols-2 gap-x-4 mt-6">
           <SelectComponent
             size="md"
             value={data.genre}
@@ -57,14 +57,16 @@ const WatchFinalCutForm = ({
             data={testSelectData}
             placeholder="Select"
           />
-          <SelectComponent
-            size="md"
-            value={data.platform}
-            setValueProps={(val) => setScriptProps("platform", val!)}
-            label="Platform for exhibition"
-            data={testSelectData}
-            placeholder="Select"
-          />
+          <div className="mt-10 md:mt-0">
+            <SelectComponent
+              size="md"
+              value={data.platform}
+              setValueProps={(val) => setScriptProps("platform", val!)}
+              label="Platform for exhibition"
+              data={testSelectData}
+              placeholder="Select"
+            />
+          </div>
         </div>
         <div className="mt-8">
           <InputComponent

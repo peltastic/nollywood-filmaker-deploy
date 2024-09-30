@@ -15,12 +15,12 @@ type Props = {};
 const Footer = (props: Props) => {
   return (
     <footer className="bg-gray-bg-2">
-      <div className="mx-[3rem] py-[4rem]">
-        <div className="flex items-start border-b border-b-black pb-8">
+      <div className="mx-4 sm:mx-[3rem] py-[4rem]">
+        <div className="flex flex-wrap items-start border-b border-b-black pb-8">
           <div className="mr-auto">
             <Image src={Logo} alt="logo" className="w-[8rem]" />
           </div>
-          <ul className="flex gap-12 text-black-3 text-[0.88rem]">
+          <ul className=" w-full mt-6 md:mt-0 md:w-auto flex gap-6 sm:gap-12 text-black-3 text-[0.88rem]">
             <li>
               <Link href={"/"}>Get started</Link>
             </li>
@@ -35,11 +35,11 @@ const Footer = (props: Props) => {
             </li>
           </ul>
         </div>
-        <div className="flex items-center text-[0.88rem] text-black-3 pt-[3rem]">
+        <div className="flex flex-wrap items-center text-[0.88rem] text-black-3 pt-[3rem]">
           <p className="mr-8 ">
             © 2024 Nollywood Filmmaker. All rights reserved.
           </p>
-          <ul className="flex items-center  gap-8 mr-auto">
+          <ul className="flex items-center w-full my-8 lg:my-0 lg:w-auto  gap-3 sm:gap-8 mr-auto">
             <li className="underline">
               <Link href={"/"}>Privacy Policy</Link>
             </li>
@@ -64,7 +64,7 @@ const Footer = (props: Props) => {
                 <FaLinkedin />
             </li>
             <li>
-                <FaYoutube />
+                <FaYoutube className="text-2xl" />
             </li>
           </ul>
         </div>

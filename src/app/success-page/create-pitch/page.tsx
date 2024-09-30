@@ -16,7 +16,7 @@ const CreatePitchPage = (props: Props) => {
         lightButtonContent="Take me home"
         titleLight="Order Confirmed"
         titleBold="Create a Pitch"
-        width="w-[35rem]"
+        width="w-[95%] sm:w-[90%] md:w-[35rem]"
       />
     </ServiceLayout>
   );

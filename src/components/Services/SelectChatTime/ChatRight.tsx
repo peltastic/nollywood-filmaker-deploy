@@ -8,6 +8,7 @@ type Props = {
   setDateProps: (val: Date) => void;
   dateProps: Date;
   setPageProps: (val: string) => void;
+  proceed: () => void
 };
 
 const ChatRight = (props: Props) => {
@@ -25,13 +26,13 @@ const ChatRight = (props: Props) => {
       <div className="w-full flex mt-14 mb-14">
         <UnstyledButton
           type="button"
-          clicked={() => router.back()}
+          clicked={() => props.setPageProps("2")}
           class="rounded-md px-4 transition-all hover:bg-gray-bg-1 border-stroke-2 border"
         >
           Back
         </UnstyledButton>
         <UnstyledButton
-          clicked={() => props.setPageProps("2")}
+          clicked={() => props.proceed() }
           type="submit"
           // disabled={disabled}
           class="flex py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"

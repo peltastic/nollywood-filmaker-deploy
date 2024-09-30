@@ -29,7 +29,7 @@ const BudgetAndAdviceForm = ({
 }: Props) => {
   const router = useRouter();
   return (
-    <div className="w-[80%]">
+    <div className="w-full xl:w-[80%]">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -46,7 +46,7 @@ const BudgetAndAdviceForm = ({
         />
         <div className="mt-10">
           <TextArea
-          placeholder=""
+            placeholder=""
             changed={(val) => setScriptProps("logline", val)}
             value={data.logline}
             labelStyle2
@@ -54,7 +54,7 @@ const BudgetAndAdviceForm = ({
             label="Tell us your logline/synopsis"
           />
         </div>
-        <div className="grid grid-cols-2 gap-x-4 mt-10">
+        <div className="grid md:grid-cols-2 gap-x-4 mt-10">
           <SelectComponent
             size="md"
             value={data.genre}
@@ -63,14 +63,16 @@ const BudgetAndAdviceForm = ({
             data={testSelectData}
             placeholder="Select"
           />
-          <SelectComponent
-            size="md"
-            value={data.platform}
-            setValueProps={(val) => setScriptProps("platform", val!)}
-            label="Platform for exhibition"
-            data={testSelectData}
-            placeholder="Select"
-          />
+          <div className="mt-10 md:mt-0">
+            <SelectComponent
+              size="md"
+              value={data.platform}
+              setValueProps={(val) => setScriptProps("platform", val!)}
+              label="Platform for exhibition"
+              data={testSelectData}
+              placeholder="Select"
+            />
+          </div>
         </div>
         <div className="mt-10">
           <label className="block mb-2 text-black-2 font-medium text-[0.88rem]">
@@ -89,7 +91,7 @@ const BudgetAndAdviceForm = ({
         </div>
         <div className="mt-10">
           <TextArea
-          placeholder=""
+            placeholder=""
             changed={(val) => setScriptProps("concerns", val)}
             value={data.concerns}
             labelStyle2

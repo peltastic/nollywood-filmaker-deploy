@@ -6,7 +6,7 @@ interface Props extends React.PropsWithChildren {
   onClose: () => void;
   centered?: boolean;
   withCloseButton?: boolean;
-  size?: "xs" | "sm" | "md" | "lg" | "xl"
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "auto" | string
 }
 
 const ModalComponent = ({

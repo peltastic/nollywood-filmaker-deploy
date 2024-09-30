@@ -22,13 +22,14 @@ const ProfileSettingForm = (props: Props) => {
       onSubmit={() => {}}
     >
       <Form>
-        <div className="flex items-center">
-          <div className="w-[35%]">
+        <div className="flex flex-wrap items-center">
+          <div className="w-full md:w-[35%] mb-4 md:mb-0">
             <h1 className="font-semibold">First & Last Name</h1>
           </div>
-          <div className="w-[65%] grid grid-cols-2 gap-x-4">
+          <div className="w-full md:w-[65%] grid  md:grid-cols-2 gap-x-4">
+            
             <Field
-              classname="w-full font-semibold placeholder:font-normal"
+              classname="w-full font-semibold placeholder:font-normal mb-4 md:mb-0"
               label=""
               name="first_name"
               placeholder="First Name"
@@ -41,11 +42,11 @@ const ProfileSettingForm = (props: Props) => {
             />
           </div>
         </div>
-        <div className="flex items-center mt-8">
-          <div className="w-[35%]">
+        <div className="flex flex-wrap items-center mt-8">
+          <div className="w-full md:w-[35%] mb-4 md:mb-0">
             <h1 className="font-semibold">Email Address</h1>
           </div>
-          <div className="w-[65%] ">
+          <div className="w-full md:w-[65%] ">
             <Field
               classname="w-full font-semibold placeholder:font-normal"
               label=""
@@ -54,11 +55,11 @@ const ProfileSettingForm = (props: Props) => {
             />
           </div>
         </div>
-        <div className="flex items-center mt-8">
-          <div className="w-[35%]">
+        <div className="flex flex-wrap items-center mt-8">
+          <div className="w-full md:w-[35%] mb-4 md:mb-0">
             <h1 className="font-semibold">Phone</h1>
           </div>
-          <div className="w-[65%] ">
+          <div className="w-full md:w-[65%] ">
             <Field
               classname="w-full font-semibold placeholder:font-normal"
               label=""
@@ -67,11 +68,11 @@ const ProfileSettingForm = (props: Props) => {
             />
           </div>
         </div>
-        <div className="flex  mt-8">
-          <div className="w-[35%]">
+        <div className="flex flex-wrap mt-8">
+          <div className="w-full md:w-[35%] mb-4 md:mb-0">
             <h1 className="font-semibold">Write Your Bio</h1>
           </div>
-          <div className="w-[65%] ">
+          <div className="w-full md:w-[65%] ">
             <TextArea
               placeholder="Write about you"
               className="resize-none py-4 px-4 h-[10rem]"
@@ -80,11 +81,11 @@ const ProfileSettingForm = (props: Props) => {
             />
           </div>
         </div>
-        <div className="flex items-center  mt-8">
-          <div className="w-[35%]">
+        <div className="flex flex-wrap items-center  mt-8">
+          <div className="w-full md:w-[35%] mb-4 md:mb-0">
             <h1 className="font-semibold">Website</h1>
           </div>
-          <div className="w-[65%] flex">
+          <div className="w-full md:w-[65%] flex">
             <div className=" bg-gray-bg-8 border border-r-0 flex items-center justify-start rounded-s-md border-gray-2  px-3">
               <p className="text-[#71717A] text-[13px]">https://</p>
             </div>
@@ -96,19 +97,19 @@ const ProfileSettingForm = (props: Props) => {
             />
           </div>
         </div>
-        <div className="flex  mt-8">
-          <div className="w-[35%]">
+        <div className="flex flex-wrap  mt-8">
+          <div className="w-full md:w-[35%] mb-4 md:mb-0">
             <h1 className="font-semibold">Expertise</h1>
           </div>
-          <div className="w-[65%]">
+          <div className="w-full md:w-[65%]">
             <Expertise data={[]} small setExpertise={() => {}} />
           </div>
         </div>
-        <div className="flex  mt-8">
-          <div className="w-[35%]">
+        <div className="flex flex-wrap  mt-8">
+          <div className="w-full md:w-[35%] mb-4 md:mb-0">
             <h1 className="font-semibold">Location</h1>
           </div>
-          <div className="w-[65%] grid grid-cols-2 gap-4">
+          <div className="w-full md:w-[65%] grid  md:grid-cols-2 gap-4">
             <SelectComponent
               placeholder="Country"
               data={[]}
