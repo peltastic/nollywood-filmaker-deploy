@@ -12,7 +12,7 @@ type Props = {};
 
 const HomeHeader = (props: Props) => {
   return (
-    <header className="md:px-[2rem] md:pt-[2rem] text-white">
+    <header className="md:px-[2rem] md:pt-[2rem] pb-[10rem] lg:pb-0 text-white">
       <div
         style={{
           // backgroundImage: `url(${HeaderBackground.src})`,
