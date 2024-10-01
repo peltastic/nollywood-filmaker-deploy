@@ -73,7 +73,7 @@ const UserDetails = ({ setPageProps, setDataProps, data }: Props) => {
                 placeholder=""
               />
             </div>
-            <div className="w-full flex mt-28">
+            <div className="w-full flex mt-28 mb-8 sm:mb-0">
               <UnstyledButton
                 type="button"
                 clicked={() => setPageProps("1")}

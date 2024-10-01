@@ -30,7 +30,7 @@ const Expertise = ({ data, setExpertise, small }: Props) => {
           }}
           className={`${
             data.includes(el) ? "border-black-2 border-2" : "border border-stroke-2"
-          } ${small ? "text-sm px-[2rem] h-[3rem]" : "px-[3rem] h-[3.62rem]"}  transition-all cursor-pointer text-[1.13rem] font-medium  flex items-center justify-center rounded-md  text-black-2 `}
+          } ${small ? "text-sm px-[2rem] h-[3rem]" : "px-[2.5rem] sm:px-[3rem] h-[3rem] sm:h-[3.62rem]"}  transition-all cursor-pointer text-[0.9rem] sm:text-[1.13rem] font-medium  flex items-center justify-center rounded-md  text-black-2 `}
           key={el}
         >
           {el}

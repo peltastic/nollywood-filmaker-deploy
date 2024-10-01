@@ -5,12 +5,14 @@ import MenuComponent from "@/components/Menu/MenuComponent";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import { IoIosArrowDown } from "react-icons/io";
 import Link from "next/link";
+import { IoIosArrowBack } from "react-icons/io";
 import ChatRoom from "../ChatRoom";
 import HamburgerIcon from "/public/assets/chats/hamburger.svg";
 import ModalComponent from "@/components/Modal/Modal";
 import { useDisclosure } from "@mantine/hooks";
 import RequestExtension from "../ModalComponents/RequestExtension";
 import ReportAnIssue from "../ModalComponents/ReportAnIssue";
+import { useRouter } from "next/navigation";
 
 type Props = {
   open: () => void;
@@ -20,6 +22,7 @@ type Props = {
 const CustomerChatMiddle = (props: Props) => {
   const [opened, { open, close }] = useDisclosure();
   const [reportModOpened, funcs] = useDisclosure();
+  const router = useRouter();
   return (
     <>
       <ModalComponent
@@ -42,7 +45,10 @@ const CustomerChatMiddle = (props: Props) => {
       </ModalComponent>
 
       <div className=" bg-white border-r border-r-stroke-8 border-l border-l-stroke-8  h-full">
-        <header className="flex items-center py-[1.4rem] px-6 border-b border-b-stroke-8">
+        <header className="flex items-center py-[1.4rem] px-2 sm:px-6 border-b border-b-stroke-8">
+          <div className="block chatbp:hidden" onClick={() => router.back()}>
+            <IoIosArrowBack className="text-2xl mr-2" />
+          </div>
           <div className="w-[2.5rem] mr-3 h-[2.5rem] rounded-full bg-black flex items-center justify-center">
             <Image src={AdminProfileImg} alt="admin-alt-profile" />
           </div>

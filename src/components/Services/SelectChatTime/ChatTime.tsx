@@ -9,6 +9,7 @@ type Props = {
   setDateProps: (val: Date) => void;
   dateProps: Date;
   setPageProps: (val: string) => void;
+  serviceSelection?: boolean;
 };
 
 const ChatTime = (props: Props) => {
@@ -19,9 +20,9 @@ const ChatTime = (props: Props) => {
       <h2 className="text-[1.13rem]">
         Lorem ipsum dolor sit amet consectetur adipisc.
       </h2>
-      <div className="flex gap-x-4 mt-10">
+      <div className="flex flex-wrap xl:flex-nowrap gap-x-4 mt-10">
         <CustomCalender value={props.dateProps} onChange={props.setDateProps} />
-        <CustomTime />
+        <CustomTime serviceSelection={props.serviceSelection} />
       </div>
       <div className="w-full flex mt-14 mb-14">
         <UnstyledButton

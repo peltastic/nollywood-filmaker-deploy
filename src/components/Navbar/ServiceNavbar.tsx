@@ -50,7 +50,7 @@ const ServiceNavbar = (props: Props) => {
       <nav className="flex items-center pt-4 md:pt-2 pb-6 md:pb-0 text-black-1 border-b border-b-border-gray px-3 md:px-8">
         <Link href={"/user/dashboard"}>
           <div className="">
-            <Image src={Logo} alt="logo" className="w-[8rem] md:w-[6rem]" />
+            <Image src={Logo} alt="logo" className="w-[5rem] md:w-[6rem]" />
           </div>
         </Link>
         {/* <div className="md:hidden ml-auto relative z-50">

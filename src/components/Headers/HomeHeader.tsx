@@ -12,7 +12,7 @@ type Props = {};
 
 const HomeHeader = (props: Props) => {
   return (
-    <header className="md:px-[2rem] md:pt-[2rem] pb-[10rem] lg:pb-0 text-white">
+    <header className="md:px-[2rem] md:pt-[2rem] lg:pb-0 text-white">
       <div
         style={{
           // backgroundImage: `url(${HeaderBackground.src})`,
@@ -24,10 +24,10 @@ const HomeHeader = (props: Props) => {
         className={`${classes.Header} w-full h-screen xl:h-[120vh] relative md:rounded-2xl flex `}
       >
         <div className="absolute top-12 -left-1">
-          <Image src={Vector1} alt="vector-1" />
+          <Image src={Vector1} alt="vector-1" className="" />
         </div>
         <div className="w-[100%] lg:w-[70%] xl:w-[55%]  mx-auto xl:mx-0  xl:ml-auto text-[1rem]">
-          <div className="ml-6 mt-[10rem] sm:mt-[17rem] xl:mt-[8rem]">
+          <div className="ml-6 mt-[5rem] xs:mt-[8rem] sm:mt-[17rem] xl:mt-[8rem]">
             <div className=" xl:w-[30rem] xxl:w-[40rem] relative">
               <h2 className="tracking-wider font-thin mb-6 ">
                 Nollywood Filmaker

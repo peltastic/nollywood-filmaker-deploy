@@ -27,7 +27,7 @@ const TestimonialPage = (props: Props) => {
         </div>
         <div className="ml-0 lg:ml-[6rem] mt-10 lg:mt-0 w-full md:w-[70%] lg:w-[50%]">
           <Rating defaultValue={5} color="rgba(0, 0, 0, 1)" />
-          <p className="text-[1.5rem] font-bold mt-8">
+          <p className="text-[1.1rem] sm:text-[1.5rem] font-bold mt-8">
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
             Suspendisse varius enim in eros elementum tristique. Duis cursus, mi
             quis viverra ornare, eros dolor interdum nulla, ut commodo diam

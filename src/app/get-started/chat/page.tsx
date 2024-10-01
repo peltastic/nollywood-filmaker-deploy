@@ -56,7 +56,7 @@ const GetStartedChatPage = (props: Props) => {
 
   return (
     <ServiceLayout nonDashboard>
-      <div className="flex items-start">
+      <div className="flex flex-wrap items-start">
         <ServiceLeft
           title="Chat with a professional"
           body={[
@@ -83,10 +83,10 @@ const GetStartedChatPage = (props: Props) => {
           ]}
           image={<Image src={ChatWithProfessionalImg} alt="chat-img" />}
         />
-        <div className="w-[55%]">
+        <div className="w-full lg:w-[55%]">
           <div
             className={`${
-              page === "1" || page === "3" ? "w-[70%]" : "w-[85%]"
+              page === "1" || page === "3" ? "w-[90%] sm:w-[70%]" : "w-full sm:w-[85%]"
             }  mx-auto`}
           >
             <div
@@ -127,6 +127,7 @@ const GetStartedChatPage = (props: Props) => {
                 )}
                 {page === "2" && (
                   <ChatTime
+                    serviceSelection
                     dateProps={currentDate}
                     setDateProps={setDateHandler}
                     setPageProps={(val) => setPage(val)}

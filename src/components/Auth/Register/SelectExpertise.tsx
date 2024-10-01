@@ -22,7 +22,7 @@ const SelectExpertise = ({ page, data, setExpertise, setPageProps }: Props) => {
       <div className="mt-10">
         <Expertise data={data} setExpertise={setExpertise} />
       </div>
-      <div className="w-full flex mt-28">
+      <div className="w-full flex mt-28 mb-8 sm:mb-0">
         <UnstyledButton
           clicked={() => router.back()}
           class="rounded-md transition-all hover:bg-gray-bg-1 px-4 border-stroke-2 border"

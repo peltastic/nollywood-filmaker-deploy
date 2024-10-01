@@ -32,7 +32,7 @@ const SuccessTemplate = ({
       <div
         className={` ${
           width || "w-[95%] sm:w-[90%] md:w-[30rem]"
-        } absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2`}
+        } md:absolute md:-translate-x-1/2 md:-translate-y-1/2 md:left-1/2 md:top-1/2 mt-[3rem] md:mt-0`}
       >
         <div className="w-[15rem] mx-auto">
           <Image src={SuccessGif} alt="success-gif" />

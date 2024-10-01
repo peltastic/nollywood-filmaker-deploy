@@ -24,7 +24,7 @@ const ChatForm = (props: Props) => {
       <h2 className="text-[1.13rem]">
         Give us a quick summary of what you want to chat about
       </h2>
-      <div className="w-[80%]">
+      <div className="w-full xl:w-[80%]">
         <form
           onSubmit={(e) => {
             e.preventDefault();

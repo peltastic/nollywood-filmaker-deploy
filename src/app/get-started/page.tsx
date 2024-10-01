@@ -15,7 +15,7 @@ const GetStartedPage = (props: Props) => {
 
   return (
     <HomeLayout>
-      <div className="absolute mt-[5rem] w-[80%] sm:w-[60%] md:w-auto -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2">
+      <div className="mx-auto md:absolute mt-[5rem] w-[80%] sm:w-[60%] md:w-auto md:-translate-x-1/2 md:-translate-y-1/2 md:left-1/2 md:top-1/2">
         <div className="text-black-2">
           <h1 className="font-bold text-[1.5rem] mb-[4rem]">Welcome</h1>
           <h1 className="font-bold text-[1.5rem]">What do you want to do?</h1>
@@ -59,7 +59,7 @@ const GetStartedPage = (props: Props) => {
             </div>
           </div>
         </div>
-        <div className="w-full flex mt-[10rem]">
+        <div className="w-full flex mt-[10rem] mb-9 md:mb-0">
           {selected ? (
             <UnstyledButton
               clicked={() => setSelected(null)}
