@@ -31,9 +31,9 @@ const extension_data = [
 const RequestExtension = (props: Props) => {
   const [showPaymentWindow, setShowPaymentWindow] = useState<boolean>(false);
   return (
-    <section className="px-6">
+    <section className="px-3 sm:px-6">
       <div className="flex">
-        <h1 className="font-semibold text-[2rem]">
+        <h1 className="font-semibold text-[1.6rem] sm:text-[2rem]">
           {showPaymentWindow ? "Payment" :"Request an extension" }
         </h1>
         <div
@@ -63,16 +63,16 @@ const RequestExtension = (props: Props) => {
               <CaptionSelect changed={(e) => {}} data={extension_data} />
             </div>
             {/* <RadixSelect changed={() => {}} data={extension_data} /> */}
-            <div className="w-full flex mt-[10rem]">
+            <div className="w-full flex flex-wrap mt-[10rem]">
               <UnstyledButton
                 clicked={props.close}
-                class="rounded-md px-4 border-stroke-2 border ml-auto mr-4"
+                class="mb-4 xs:mb-0 py-2 rounded-md px-4 border-stroke-2 w-full xs:w-auto border ml-auto xs:mr-4"
               >
                 Cancel
               </UnstyledButton>
               <UnstyledButton
                 clicked={() => setShowPaymentWindow(true)}
-                class="flex py-2 px-4 transition-all rounded-md items-center text-white  bg-black-3 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
+                class="flex py-2 px-4 transition-all rounded-md w-full xs:w-auto justify-center items-center text-white border border-black-3 disabled:border-black-2  bg-black-3 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
               >
                 <p>Proceed to payment</p>
               </UnstyledButton>

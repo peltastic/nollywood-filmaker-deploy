@@ -56,7 +56,7 @@ const CaptionSelect = (props: Props) => {
           </div>
         </div>
       </Menu.Target>
-      <Menu.Dropdown className="w-full">
+      <Menu.Dropdown className="!w-fit md:w-full">
         <div className="w-full text-black-2">
           {props.data.map((el) => (
             <div

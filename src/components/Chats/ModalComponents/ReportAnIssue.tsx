@@ -11,9 +11,9 @@ type Props = {
 
 const ReportAnIssue = (props: Props) => {
   return (
-    <section className="px-6 py-6">
+    <section className="px-3 xs:px-6 py-6">
       <div className="flex">
-        <h1 className="font-semibold text-[2rem]">Report an issue</h1>
+        <h1 className="font-semibold text-[1.6rem] sm:text-[2rem]">Report an issue</h1>
         <div
           onClick={props.close}
           className="cursor-pointer hover:bg-gray-bg-2 py-2 px-2 placeholder:rounded-md transition-all ml-auto"

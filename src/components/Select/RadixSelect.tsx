@@ -39,11 +39,11 @@ const RadixSelect = ({ data, changed }: Props) => {
               <Select.Item
                 value={el.value}
                 key={el.value}
-                className="outline-none py-4 px-2 flex items-center !z-[100] relative"
+                className="outline-none py-4 px-2 flex flex-wrap items-center !z-[100] relative"
               >
                 <Select.ItemText className=" ">
-                  <div className="flex text-[0.88rem] px-3 cursor-pointer">
-                    <p className="text-[0.88rem] mr-2 font-medium">
+                  <div className="flex flex-wrap items-center text-[0.88rem] px-3 cursor-pointer">
+                    <p className="text-[0.88rem] mr-2 font-medium w-full sm:w-auto">
                       {el.label}
                     </p>
                     <p className="text-black-2 rounded-md px-2 bg-yellow-1">
@@ -51,7 +51,7 @@ const RadixSelect = ({ data, changed }: Props) => {
                     </p>
                   </div>
                 </Select.ItemText>
-                <Select.ItemIndicator className="ml-auto">
+                <Select.ItemIndicator className="ml-auto -mt-10 sm:mt-0">
                     <FaCheck className="text-black-2" />
                 </Select.ItemIndicator>
               </Select.Item>
