@@ -11,7 +11,7 @@ type Props = {};
 const ChatsPage = (props: Props) => {
   const [closeRight, setCloseRight] = useState<boolean>(false);
   return (
-    <ServiceLayout>
+    <ServiceLayout >
       <DashboardBodyLayout>
         <section className="flex min-h-screen bg-white">
           <section className="mx-auto w-full  chatbp:w-[30%]">

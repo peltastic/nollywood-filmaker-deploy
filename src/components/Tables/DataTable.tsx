@@ -18,13 +18,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
+import UnstyledButton from "../Button/UnstyledButton";
+import { useRouter } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   title?: string;
   subtitle?: string;
-  faded?: boolean
+  faded?: boolean;
+  showMoreBtnContent?: string;
+  link?: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -32,7 +36,9 @@ export function DataTable<TData, TValue>({
   data,
   subtitle,
   title,
-  faded
+  faded,
+  showMoreBtnContent,
+  link,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -40,11 +46,29 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const router = useRouter();
+
   return (
     <div className=" ">
-      <div className="w-full text-black-4 border border-b-0 border-stroke-5 bg-white text-[1.13rem] py-4 font-medium px-7 rounded-ss-md rounded-se-md">
-        <p>{title}</p>
-        <p className="text-gray-1 text-[0.88rem]">{subtitle}</p>
+      <div className="w-full mr-auto text-black-4 border border-b-0 border-stroke-5 bg-white text-[1.13rem] py-4 font-medium px-7 rounded-ss-md flex flex-wrap sm:flex-nowrap items-center rounded-se-md">
+        <div className=" mr-auto w-full sm:w-auto">
+          <p>{title}</p>
+          <p className="text-gray-1 text-[0.88rem]">{subtitle}</p>
+        </div>
+        <div className="">
+          {showMoreBtnContent && (
+            <UnstyledButton
+              clicked={() => {
+                if (link) {
+                  router.push(link);
+                }
+              }}
+              class="mt-8 sm:mt-0 bg-black-3 text-white px-4 py-2 rounded-md text-[0.88rem]"
+            >
+              {showMoreBtnContent}
+            </UnstyledButton>
+          )}
+        </div>
       </div>
       <Table className="table-auto overflow-hidden border border-stroke-5 shadow-xl">
         {table.getRowModel().rows?.length ? (
@@ -52,7 +76,11 @@ export function DataTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
-                className={`${faded ? "bg-white border-t border-t-white" : "bg-gray-bg-5 border border-stroke-5"}  `}
+                className={`${
+                  faded
+                    ? "bg-white border-t border-t-white"
+                    : "bg-gray-bg-5 border border-stroke-5"
+                }  `}
               >
                 {headerGroup.headers.map((header) => {
                   return (
@@ -76,7 +104,9 @@ export function DataTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
-                className={`${faded && index % 2 === 0 ? "bg-gray-bg-1" : null} border border-stroke-5`}
+                className={`${
+                  faded && index % 2 === 0 ? "bg-gray-bg-1" : null
+                } border border-stroke-5`}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>

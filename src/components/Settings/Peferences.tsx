@@ -3,21 +3,25 @@ import SelectComponent from "../Select/SelectComponent";
 import SwitchComponent from "../Switch/SwitchComponent";
 import UnstyledButton from "../Button/UnstyledButton";
 
-type Props = {};
+type Props = {
+  consultant?: boolean;
+};
 
 const PeferencesSettings = (props: Props) => {
   return (
     <div className="bg-white border border-border-gray mt-10 py-10 px-3 sm:px-10">
       <div className="w-full lg:w-[85%]">
         <div className="grid gap-10 md:grid-cols-2">
-          <SelectComponent
-            largeLabel
-            size="lg"
-            data={[]}
-            label="Currency"
-            placeholder=""
-            setValueProps={() => {}}
-          />
+          {props.consultant ? null : (
+            <SelectComponent
+              largeLabel
+              size="lg"
+              data={[]}
+              label="Currency"
+              placeholder=""
+              setValueProps={() => {}}
+            />
+          )}
           <SelectComponent
             largeLabel
             size="lg"

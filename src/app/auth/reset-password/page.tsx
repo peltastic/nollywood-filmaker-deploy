@@ -17,7 +17,7 @@ const ResetPassword = (props: Props) => {
               Lorem ipsum dolor sit amet consectetur adipisc.
             </h2>
           </div>
-          <ResetPasswordForm />
+          <ResetPasswordForm successRoute="/auth/login" />
         </div>
       </div>
     </HomeLayout>

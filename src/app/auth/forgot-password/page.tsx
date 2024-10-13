@@ -19,7 +19,7 @@ const ForgotPasswordPage = (props: Props) => {
               Lorem ipsum dolor sit amet consectetur adipisc.
             </h2>
           </div>
-     <ForgotPasswordForm />
+     <ForgotPasswordForm successRoute="/auth/reset-password" />
         </div>
       </div>
     </HomeLayout>

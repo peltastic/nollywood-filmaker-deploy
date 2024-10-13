@@ -1,0 +1,5 @@
+.BgImage {
+   background: linear-gradient(#00000004, #0000009a),url("../../../public/assets/consultant/consultant.jpeg");
+   background-size: cover; 
+   background-position: 80%;
+}

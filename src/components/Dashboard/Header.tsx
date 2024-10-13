@@ -4,10 +4,12 @@ import Image from "next/image";
 import UnstyledButton from "../Button/UnstyledButton";
 import { useRouter } from "next/navigation";
 
-type Props = {};
+type Props = {
+  consultant?: boolean;
+};
 
 const Header = (props: Props) => {
-  const router = useRouter()
+  const router = useRouter();
   return (
     <header className="pt-14 chatbp:py-0">
       <div className="flex flex-wrap items-center">
@@ -18,9 +20,14 @@ const Header = (props: Props) => {
             <h2 className="text-[1.13rem]">It's good to see you</h2>
           </div>
         </div>
-        <UnstyledButton clicked={() => router.push("/get-started")} class="mt-8 sm:mt-0 w-full sm:w-auto bg-black-3 border border-black-3 font-medium text-white py-2 px-4 rounded-md">
+        {props.consultant ? null : (
+          <UnstyledButton
+            clicked={() => router.push("/get-started")}
+            class="mt-8 sm:mt-0 w-full sm:w-auto bg-black-3 border border-black-3 font-medium text-white py-2 px-4 rounded-md"
+          >
             Make a request
-        </UnstyledButton>
+          </UnstyledButton>
+        )}
       </div>
     </header>
   );

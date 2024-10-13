@@ -1,0 +1,305 @@
+"use client";
+import Bar from "@/components/Charts/Bar";
+import {
+  IConsultantActiveRequestColumnData,
+  consultant_active_requests_columns,
+} from "@/components/Columns/consultants/ActiveRequestsColumn";
+import {
+  ICustomerReqData,
+  customer_req_columns,
+} from "@/components/Columns/consultants/CustomerRequestsColumn";
+import {
+  ReqHistoryColumnData,
+  request_history_column,
+} from "@/components/Columns/consultants/RequestHistoryColumn";
+import DashboardInfoCard from "@/components/Dashboard/DashboardInfoCard";
+import DashboardPlate from "@/components/Dashboard/DashboardPlate";
+import Header from "@/components/Dashboard/Header";
+import UpcomingConversations from "@/components/Dashboard/UpcomingConversations";
+import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
+import ServiceLayout from "@/components/Layouts/ServiceLayout";
+import { DataTable } from "@/components/Tables/DataTable";
+import React from "react";
+
+type Props = {};
+
+const data: {
+  change?: "increase" | "decrease";
+  title: string;
+  value: number;
+  percentage: number;
+  id: string;
+}[] = [
+  {
+    change: "increase",
+    percentage: 36,
+    title: "Accepted Requests",
+    value: 0,
+    id: "1",
+  },
+  {
+    change: "decrease",
+    percentage: 14,
+    title: "Rejected Requests",
+    value: 0,
+    id: "2",
+  },
+  {
+    change: "increase",
+    percentage: 36,
+    title: "Completed Requests",
+    value: 0,
+    id: "3",
+  },
+  {
+    change: "increase",
+    percentage: 36,
+    title: "Conversations held",
+    value: 0,
+    id: "4",
+  },
+];
+
+const active_req_table_data: IConsultantActiveRequestColumnData[] = [
+  {
+    customer: "Jenny Wilson",
+    date: "22 Jan 2022",
+    email: "w.lawson@example.com",
+    script: "Mikolo",
+    service_type: "Read my script",
+    status: "Ready",
+  },
+  {
+    customer: "Devon Lane",
+    date: "26 Jan 2022",
+    email: "dat.roberts@example.com",
+    script: "Jagun Jagun",
+    service_type: "Watch the Final cut of my film",
+    status: "Ongoing",
+  },
+  {
+    customer: "Jane Cooper",
+    date: "18 Jan 2022",
+    email: "jgraham@example.com",
+    script: "Criminal",
+    service_type: "Create a production Budget",
+    status: "Pending",
+  },
+];
+
+const reqHistory: ReqHistoryColumnData[] = [
+  {
+    customer: "Jenny Wilson",
+    date: "22 Jan 2022",
+    email: "w.lawson@example.com",
+    script: "Mikolo",
+    service_type: "Read my script",
+    status: "Completed",
+    rating: 5,
+  },
+  {
+    customer: "Devon Lane",
+    date: "26 Jan 2022",
+    email: "dat.roberts@example.com",
+    script: "Jagun Jagun",
+    service_type: "Watch the Final cut of my film",
+    status: "Completed",
+    rating: 4,
+  },
+  {
+    customer: "Jane Cooper",
+    date: "18 Jan 2022",
+    email: "jgraham@example.com",
+    script: "Criminal",
+    service_type: "Create a production Budget",
+    status: "Completed",
+    rating: 3,
+  },
+];
+
+const plate_data: {
+  change?: "increase" | "decrease";
+  title: string;
+  value: number;
+  percentage: number;
+  id: string;
+}[] = [
+  {
+    title: "all-time revenue",
+    value: 0,
+    percentage: 36,
+    change: "increase",
+    id: "1",
+  },
+  {
+    title: "all-time pending revenue",
+    value: 0,
+    percentage: 14,
+    change: "decrease",
+    id: "2",
+  },
+  {
+    title: "all-time claimed revenue",
+    value: 0,
+    percentage: 36,
+    change: "increase",
+    id: "3",
+  },
+];
+
+const bar_chart_data = [
+  { month: "Jan", value: 25000 },
+  { month: "Feb", value: 7000 },
+  { month: "Mar", value: 17000 },
+  { month: "Apr", value: 8000 },
+  { month: "May", value: 11000 },
+  { month: "Jun", value: 2000 },
+  { month: "Jul", value: 8000 },
+  { month: "Aug", value: 22000 },
+  { month: "Sep", value: 12000 },
+  { month: "Oct", value: 12000 },
+  { month: "Nov", value: 12000 },
+  { month: "Dec", value: 11000 },
+];
+
+const customer_req_data: ICustomerReqData[] = [
+  {
+    customer: "Jenny Wilson",
+    date: "22 Jan 2022",
+    email: "w.lawson@example.com",
+    script: "Mikolo",
+    service_type: "Read my script",
+    status: "Pending",
+  },
+  {
+    customer: "Jenny Wilson",
+    date: "22 Jan 2022",
+    email: "w.lawson@example.com",
+    script: "Mikolo",
+    service_type: "Read my script",
+    status: "Ongoing",
+  },
+  {
+    customer: "Jenny Wilson",
+    date: "22 Jan 2022",
+    email: "w.lawson@example.com",
+    script: "Mikolo",
+    service_type: "Read my script",
+    status: "Ready",
+  },
+  {
+    customer: "Jenny Wilson",
+    date: "22 Jan 2022",
+    email: "w.lawson@example.com",
+    script: "Mikolo",
+    service_type: "Read my script",
+    status: "Completed",
+  },
+];
+
+const DashboardPage = (props: Props) => {
+  return (
+    <ServiceLayout consultant>
+      <DashboardBodyLayout>
+        <div className="px-6 chatbp:px-0">
+          <Header consultant />
+          <div className="mt-16">
+            <DashboardPlate title="Overview">
+              <section className="flex flex-wrap lg:flex-nowrap gap-x-6 py-8">
+                <div className="w-full lg:w-[50%] mid:grid-cols-2 grid gap-6">
+                  {data.map((el) => (
+                    <DashboardInfoCard
+                      key={el.id}
+                      percentage={el.percentage}
+                      title={el.title}
+                      value={el.value}
+                      change={el.change}
+                    />
+                  ))}
+                </div>
+                <div className="mt-10 lg:mt-0 w-full lg:w-[50%]">
+                  <UpcomingConversations
+                    data={[
+                      {
+                        name: "Jenny Wilson",
+                        email: "w.lawson@example.com",
+                        date: "Today",
+                        time: "12:00pm",
+                        id: "1",
+                      },
+                      {
+                        name: "Jenny Wilson",
+                        email: "w.lawson@example.com",
+                        date: "Tomorrow",
+                        time: "12:00pm",
+                        id: "2",
+                      },
+                    ]}
+                  />
+                </div>
+              </section>
+            </DashboardPlate>
+          </div>
+          <div className="mt-16">
+            <DataTable
+              title="Active Requests"
+              columns={consultant_active_requests_columns}
+              data={active_req_table_data}
+            />
+          </div>
+          <div className="mt-16">
+            <DataTable
+              title="Customer Requests"
+              columns={customer_req_columns}
+              data={customer_req_data}
+            />
+          </div>
+        </div>
+        <div className="mt-16 px-6 chatbp:px-0">
+          <DashboardPlate
+            title="Your earnings"
+            link="/consultants/dashboard/commissions-withdrawals"
+            showMoreBtnContent="See more"
+          >
+            <section className="flex flex-wrap lg:flex-nowrap mt-8 gap-x-10">
+              <div className="w-full lg:w-[30%] space-y-10">
+                {plate_data.map((el) => (
+                  <DashboardInfoCard
+                    key={el.id}
+                    percentage={el.percentage}
+                    title={el.title}
+                    value={el.value}
+                    change={el.change}
+                  />
+                ))}
+              </div>
+              <div className="w-full mt-8 lg:mt-0 lg:w-[70%] border border-stroke-10 px-6 py-10 flex items-center rounded-lg">
+                <Bar
+                  chart_data={bar_chart_data}
+                  chart_series={[
+                    {
+                      name: "value",
+                      color: "#22C55E",
+                    },
+                  ]}
+                />
+              </div>
+            </section>
+          </DashboardPlate>
+        </div>
+        <div className="mt-16 px-6 chatbp:px-0">
+          <DataTable
+            showMoreBtnContent="See all"
+            link="/consultants/dashboard/request-history"
+            title="Request History"
+            subtitle="Keep track of all your past requests"
+            columns={request_history_column}
+            data={reqHistory}
+          />
+        </div>
+      </DashboardBodyLayout>
+    </ServiceLayout>
+  );
+};
+
+export default DashboardPage;

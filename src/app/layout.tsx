@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
+import '@mantine/charts/styles.css';
 import Providers from "@/components/Providers/Providers";
+// import '@mantine/dropzone/styles.css';
 
 export const metadata: Metadata = {
   title: "Create Next App",

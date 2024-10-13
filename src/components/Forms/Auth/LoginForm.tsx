@@ -10,7 +10,10 @@ import React from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
-type Props = {};
+type Props = {
+  successRoute: string;
+  forgotPasswordLink?: string;
+};
 
 const LoginForm = (props: Props) => {
   const router = useRouter();
@@ -24,11 +27,7 @@ const LoginForm = (props: Props) => {
         password: "",
       }}
       onSubmit={() => {
-        if (service) {
-          router.push(`/services/${service}`)
-        } else {
-          router.push("/get-started/service")
-        }
+        router.push(props.successRoute);
       }}
     >
       {({ isValid, dirty }) => (
@@ -57,7 +56,7 @@ const LoginForm = (props: Props) => {
                 }
               />
             </div>
-            <Link href={"/auth/forgot-password"}>
+            <Link href={props.forgotPasswordLink || "/auth/forgot-password"}>
               <p className="text-[0.88rem] font-semibold">Forgot Password?</p>
             </Link>
           </div>

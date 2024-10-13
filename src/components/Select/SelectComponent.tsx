@@ -16,6 +16,7 @@ type Props = {
   size?: "lg" | "md" | "xl" | "xs" | "sm";
   rounded?: "lg" | "md" | "xl" | "xs" | "sm";
   largeLabel?: boolean;
+  noIcon?: boolean;
 };
 
 const SelectComponent = (props: Props) => {
@@ -38,7 +39,7 @@ const SelectComponent = (props: Props) => {
         size={props.size}
         onChange={props.setValueProps}
         radius={props.rounded}
-        rightSection={icon}
+        rightSection={props.noIcon ? null : icon}
         placeholder={props.placeholder}
         data={props.data}
       />

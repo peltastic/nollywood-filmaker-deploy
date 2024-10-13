@@ -1,12 +1,18 @@
+"use client"
 import LeftSide from "@/components/Auth/LeftSide";
 import LoginForm from "@/components/Forms/Auth/LoginForm";
 import HomeLayout from "@/components/Layouts/HomeLayout";
+import { RootState } from "@/lib/store";
 import Link from "next/link";
 import React from "react";
+import { useSelector } from "react-redux";
 
 type Props = {};
 
 const LoginPage = (props: Props) => {
+  const service = useSelector(
+    (state: RootState) => state.persistedState.services.service
+  );
   return (
     <HomeLayout>
       <div className="flex items-center py-6 px-3 sm:px-10">
@@ -24,7 +30,11 @@ const LoginPage = (props: Props) => {
               Lorem ipsum dolor sit amet consectetur adipisc.
             </h2>
           </div>
-          <LoginForm />
+          <LoginForm
+            successRoute={
+              service ? `/services/${service}` : "/get-started/service"
+            }
+          />
         </div>
       </div>
     </HomeLayout>
