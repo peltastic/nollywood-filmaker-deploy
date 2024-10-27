@@ -6,7 +6,8 @@ interface Props extends React.PropsWithChildren {
   onClose: () => void;
   centered?: boolean;
   withCloseButton?: boolean;
-  size?: "xs" | "sm" | "md" | "lg" | "xl" | "auto" | string
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "auto" | string;
+  fullscreen?: boolean;
 }
 
 const ModalComponent = ({
@@ -15,7 +16,8 @@ const ModalComponent = ({
   centered,
   children,
   withCloseButton,
-  size
+  size,
+  fullscreen,
 }: Props) => {
   return (
     <Modal
@@ -24,6 +26,7 @@ const ModalComponent = ({
       opened={opened}
       onClose={onClose}
       size={size}
+      fullScreen={fullscreen}
     >
       {children}
     </Modal>

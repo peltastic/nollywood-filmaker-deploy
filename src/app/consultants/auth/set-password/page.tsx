@@ -13,7 +13,7 @@ const SetPassword = (props: Props) => {
       <ServiceNavbar removeOptions />
       <section className="flex xl:items-center h-[90vh] max-w-[1680px] mx-auto mt-8 mb-8">
         <ConsultantLeftSide />
-        <div className=" px-[2rem] md:px-[5rem] xl:px-[2rem] chatbp:px-[5rem] text-black-2 w-full xl:w-[50%]">
+        <div className=" px-7 md:px-[5rem] xl:px-[2rem] chatbp:px-[5rem] text-black-2 w-full xl:w-[50%]">
           <h1 className="text-[1.75rem] font-bold">Consultant Portal</h1>
           <div className="text-black-2 mt-[6rem] sm:mt-[8rem]">
             <h1 className="font-bold text-[1.75rem]">Secure your account</h1>

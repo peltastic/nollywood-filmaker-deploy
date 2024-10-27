@@ -13,37 +13,18 @@ import { useDisclosure } from "@mantine/hooks";
 import RequestExtension from "../ModalComponents/RequestExtension";
 import ReportAnIssue from "../ModalComponents/ReportAnIssue";
 import { useRouter } from "next/navigation";
+import UserChatMenu from "../Menu/UserChatMenu";
 
 type Props = {
   open: () => void;
   opened: boolean;
+  admin?: boolean;
 };
 
 const CustomerChatMiddle = (props: Props) => {
-  const [opened, { open, close }] = useDisclosure();
-  const [reportModOpened, funcs] = useDisclosure();
   const router = useRouter();
   return (
     <>
-      <ModalComponent
-        onClose={close}
-        opened={opened}
-        centered
-        withCloseButton={false}
-        size="xl"
-      >
-        <RequestExtension close={close} />
-      </ModalComponent>
-      <ModalComponent
-        onClose={funcs.close}
-        opened={reportModOpened}
-        centered
-        withCloseButton={false}
-        size="xl"
-      >
-        <ReportAnIssue close={funcs.close} />
-      </ModalComponent>
-
       <div className=" bg-white border-r border-r-stroke-8 border-l border-l-stroke-8  h-full">
         <header className="flex items-center py-[1.4rem] px-2 sm:px-6 border-b border-b-stroke-8">
           <div className="block chatbp:hidden" onClick={() => router.back()}>
@@ -69,27 +50,17 @@ const CustomerChatMiddle = (props: Props) => {
                 </div>
               }
             >
-              <div className="bg-white ">
-                <ul className="px-1 text-gray-6 text-[0.88rem]">
-                  <li
-                    onClick={open}
-                    className="py-2 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
-                  >
-                    Request an extension
-                  </li>
-                  <li className="py-2 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
-                    <Link href={"/user/dashboard/order-details/1"}>
-                      Export conversation
-                    </Link>
-                  </li>
-                  <li
-                    onClick={funcs.open}
-                    className="py-2 px-4 hover:bg-gray-bg-1 transition-all rounded-md"
-                  >
-                    Make a report
-                  </li>
-                </ul>
-              </div>
+              {props.admin ? (
+                <div className="">
+                  <ul className="px-1 text-gray-6 text-[0.88rem]">
+                    <li className="py-2 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
+                      Re-open chat
+                    </li>
+                  </ul>
+                </div>
+              ) : (
+                <UserChatMenu />
+              )}
             </MenuComponent>
             <div className="hidden lg:block">
               {props.opened ? (

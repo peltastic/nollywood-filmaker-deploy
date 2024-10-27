@@ -1,13 +1,16 @@
 import React from "react";
 import TestImg from "/public/assets/test-avatar.png";
 import Image from "next/image";
+import TextEditor from "../TextEditor/TextEditor";
 
-type Props = {};
+type Props = {
+  admin?: boolean;
+};
 
 const IssuesOrderDetails = (props: Props) => {
   return (
-    <div className="flex items-start">
-      <div className="w-[20%] text-black-3">
+    <div className="flex flex-wrap lg:flex-nowrap items-start">
+      <div className="w-full lg:w-[20%] text-black-3">
         <p className="text-[0.88rem] font-medium">Client</p>
         <div className="flex items-center w-fit py-1 px-2 rounded-md bg-border-gray">
           <div className="w-[1.2rem] mr-1">
@@ -29,7 +32,7 @@ const IssuesOrderDetails = (props: Props) => {
         <p className="text-[0.88rem] font-medium mt-4">Created</p>
         <p className="text-[0.88rem] ">Aug 1, 2024</p>
       </div>
-      <div className="w-[80%]">
+      <div className="w-full lg:w-[80%] mt-8 lg:mt-0">
         <div className="bg-white border border-stroke-5 shadow-md py-6 px-6 shadow-[#1018280F] rounded-md">
           <div className="text-white font-bold rounded-md bg-black-3 w-full py-2 px-4 text-[1.5rem]">
             My consultant is slow
@@ -44,24 +47,30 @@ const IssuesOrderDetails = (props: Props) => {
             </p>
           </div>
         </div>
-        <div className="bg-stroke-5 rounded-md py-6 px-6 mt-10 text-black-2">
-          <h1 className="text-[18px] font-bold">Hello Niyi,</h1>
-          <p className="my-10">
-            Thank you for reaching out and bringing this to our attention. I
-            apologize for the inconvenience you’ve experienced. It's important
-            to us that you receive the support you need, and it’s concerning to
-            hear that your issue hasn't been properly addressed.
-          </p>
-          <p className="my-10">
-            I'll escalate this matter immediately and ensure that you're
-            connected with someone who can assist you effectively. Please expect
-            a follow-up shortly. We appreciate your patience and understanding
-            as we work to resolve this situation
-          </p>
-          <p className="mb-1">Best Regards</p>
-          <p className="text-[18px] font-bold mb-1">Damilola Emmanuel</p>
-          <p className="mb-10">Nollywood Filmaker</p>
-        </div>
+        {props.admin ? (
+          <div className="mt-10">
+            <TextEditor />
+          </div>
+        ) : (
+          <div className="bg-stroke-5 rounded-md py-6 px-6 mt-10 text-black-2">
+            <h1 className="text-[18px] font-bold">Hello Niyi,</h1>
+            <p className="my-10">
+              Thank you for reaching out and bringing this to our attention. I
+              apologize for the inconvenience you’ve experienced. It's important
+              to us that you receive the support you need, and it’s concerning
+              to hear that your issue hasn't been properly addressed.
+            </p>
+            <p className="my-10">
+              I'll escalate this matter immediately and ensure that you're
+              connected with someone who can assist you effectively. Please
+              expect a follow-up shortly. We appreciate your patience and
+              understanding as we work to resolve this situation
+            </p>
+            <p className="mb-1">Best Regards</p>
+            <p className="text-[18px] font-bold mb-1">Damilola Emmanuel</p>
+            <p className="mb-10">Nollywood Filmaker</p>
+          </div>
+        )}
       </div>
     </div>
   );

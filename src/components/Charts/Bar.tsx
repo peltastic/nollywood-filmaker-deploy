@@ -1,5 +1,5 @@
 import React from "react";
-import { BarChart } from "@mantine/charts";
+import { BarChart, BarChartType } from "@mantine/charts";
 
 type data<T, K extends keyof T> = {
   [P in K]: T[P];
@@ -11,6 +11,8 @@ type Props = {
     name: string;
     color?: string;
   }[];
+  type?: BarChartType
+  noradius?: boolean
 };
 
 const Bar = (props: Props) => {
@@ -18,10 +20,13 @@ const Bar = (props: Props) => {
     <BarChart
       h={300}
       data={props.chart_data}
+      // unit="$"
+      type={props.type}
       dataKey="month"
-      unit="$"
-      barProps={{ radius: 8 }}
-      valueFormatter={(value) => new Intl.NumberFormat("en-US").format(value)}
+      barProps={{ radius:props.noradius ? 0 : 8 }}
+      valueFormatter={(value) =>
+        `$${new Intl.NumberFormat("en-US").format(value)}`
+      }
       series={props.chart_series}
     />
   );

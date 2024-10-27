@@ -29,6 +29,7 @@ interface DataTableProps<TData, TValue> {
   faded?: boolean;
   showMoreBtnContent?: string;
   link?: string;
+  clicked?: () => void
 }
 
 export function DataTable<TData, TValue>({
@@ -39,6 +40,7 @@ export function DataTable<TData, TValue>({
   faded,
   showMoreBtnContent,
   link,
+  clicked
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -50,7 +52,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className=" ">
-      <div className="w-full mr-auto text-black-4 border border-b-0 border-stroke-5 bg-white text-[1.13rem] py-4 font-medium px-7 rounded-ss-md flex flex-wrap sm:flex-nowrap items-center rounded-se-md">
+      <div className="w-full mr-auto text-black-4 border border-b-0 border-stroke-5 bg-white text-[1.13rem] py-6 font-medium px-7 rounded-ss-md flex flex-wrap sm:flex-nowrap items-center rounded-se-md">
         <div className=" mr-auto w-full sm:w-auto">
           <p>{title}</p>
           <p className="text-gray-1 text-[0.88rem]">{subtitle}</p>
@@ -62,6 +64,7 @@ export function DataTable<TData, TValue>({
                 if (link) {
                   router.push(link);
                 }
+                clicked && clicked()
               }}
               class="mt-8 sm:mt-0 bg-black-3 text-white px-4 py-2 rounded-md text-[0.88rem]"
             >

@@ -80,3 +80,6 @@ export const days = [
   "Saturday",
   "Sunday",
 ];
+
+
+// export const expertise =

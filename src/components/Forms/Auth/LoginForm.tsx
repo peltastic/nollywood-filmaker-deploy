@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 type Props = {
   successRoute: string;
   forgotPasswordLink?: string;
+  admin?: boolean;
 };
 
 const LoginForm = (props: Props) => {
@@ -48,18 +49,20 @@ const LoginForm = (props: Props) => {
               placeholder=""
             />
           </div>
-          <div className="flex items-center text-black-5 mt-8">
-            <div className="mr-auto">
-              <CheckboxComponent
-                label={
-                  <p className="text-[0.88rem] font-medium">Remember me</p>
-                }
-              />
+          {props.admin && (
+            <div className="flex items-center text-black-5 mt-8">
+              <div className="mr-auto">
+                <CheckboxComponent
+                  label={
+                    <p className="text-[0.88rem] font-medium">Remember me</p>
+                  }
+                />
+              </div>
+              <Link href={props.forgotPasswordLink || "/auth/forgot-password"}>
+                <p className="text-[0.88rem] font-semibold">Forgot Password?</p>
+              </Link>
             </div>
-            <Link href={props.forgotPasswordLink || "/auth/forgot-password"}>
-              <p className="text-[0.88rem] font-semibold">Forgot Password?</p>
-            </Link>
-          </div>
+          )}
           <UnstyledButton
             // clicked={() => router.push("/")}
             disabled={!(dirty && isValid)}

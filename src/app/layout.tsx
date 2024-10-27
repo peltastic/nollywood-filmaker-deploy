@@ -4,6 +4,7 @@ import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 import '@mantine/charts/styles.css';
 import Providers from "@/components/Providers/Providers";
+import '@mantine/tiptap/styles.css';
 // import '@mantine/dropzone/styles.css';
 
 export const metadata: Metadata = {

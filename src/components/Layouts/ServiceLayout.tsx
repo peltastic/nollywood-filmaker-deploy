@@ -6,6 +6,7 @@ type Props = {
   nonDashboard?: boolean;
   noNav?: boolean;
   consultant?: boolean;
+  admin?: boolean
 };
 
 const ServiceLayout = ({
@@ -13,10 +14,11 @@ const ServiceLayout = ({
   nonDashboard,
   noNav,
   consultant,
+  admin
 }: Props) => {
   return (
     <div>
-      {noNav ? null : <ServiceNavbar consultant={consultant} />}
+      {noNav ? null : <ServiceNavbar consultant={consultant} admin={admin} />}
       <div className={` ${nonDashboard ? "max-w-[1600px] mx-auto" : ""} `}>
         {children}
       </div>

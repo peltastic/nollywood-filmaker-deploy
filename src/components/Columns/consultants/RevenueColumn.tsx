@@ -3,6 +3,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import ReadMyScriptDarkImg from "/public/assets/services/read-my-script-dark.svg";
 import UnstyledButton from "@/components/Button/UnstyledButton";
+import { GoDotFill } from "react-icons/go";
+import { useDisclosure } from "@mantine/hooks";
+import ModalComponent from "@/components/Modal/Modal";
+import RevenueDetailsModal from "@/components/Admin/RevenueDetailsModal";
 
 export interface IRevenueTableData {
   created_at: string;
@@ -68,6 +72,30 @@ export const revenue_column: ColumnDef<IRevenueTableData>[] = [
     },
   },
   {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => {
+      const className =
+        row.original.status === "Ready"
+          ? "bg-light-blue text-dark-blue"
+          : row.original.status === "Completed"
+          ? "bg-light-green text-dark-green"
+          : "bg-light-yellow text-dark-yellow";
+      return (
+        <div className=" w-[10rem] xl:w-auto">
+          <p
+            className={`${className} w-fit flex items-center font-medium py-1 px-2 rounded-full`}
+          >
+            <span className="block pr-1">
+              <GoDotFill />
+            </span>{" "}
+            {row.getValue("status")}
+          </p>
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "availabilty",
     header: () => <div className="">Estimated availabilty</div>,
     cell: ({ row }) => {
@@ -82,13 +110,35 @@ export const revenue_column: ColumnDef<IRevenueTableData>[] = [
     accessorKey: "amount",
     header: () => <div className="">Amount</div>,
     cell: ({ row }) => {
-      return <div className="text-[0.88rem] text-gray-1 w-[15rem] xl:w-auto">{row.getValue("amount")} USD</div>;
+      return (
+        <div className="text-[0.88rem] text-gray-1 w-[15rem] xl:w-auto">
+          {row.getValue("amount")} USD
+        </div>
+      );
     },
   },
   {
     id: "action",
     cell: ({}) => {
-      return <UnstyledButton class="bg-black-3 text-[0.88rem] text-white py-2 px-4 rounded-md">Open</UnstyledButton>;
+      const [opened, { open, close }] = useDisclosure();
+      return (
+        <>
+          <ModalComponent
+            onClose={close}
+            withCloseButton={false}
+            opened={opened}
+            size="xl"
+          >
+            <RevenueDetailsModal close={close} />
+          </ModalComponent>
+          <UnstyledButton
+            clicked={open}
+            class="bg-black-3 text-[0.88rem] text-white py-2 px-4 rounded-md"
+          >
+            Open
+          </UnstyledButton>
+        </>
+      );
     },
   },
 ];

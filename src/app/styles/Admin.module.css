@@ -1,0 +1,7 @@
+.InfoBg {
+  background: linear-gradient(#111111d3, #151515e3),
+    url("../../../public/assets/admin/info-bg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: "top";
+}

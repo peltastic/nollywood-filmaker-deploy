@@ -1,5 +1,6 @@
 import React from "react";
 import classes from "@/app/styles/Auth.module.css";
+
 type Props = {};
 
 const ConsultantLeftSide = (props: Props) => {

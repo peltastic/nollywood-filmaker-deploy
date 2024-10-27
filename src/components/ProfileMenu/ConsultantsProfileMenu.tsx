@@ -34,6 +34,23 @@ const ConsultantsProfileMenu = (props: Props) => {
           </Link>
         </li>
       </ul>
+      <ul className="block md:hidden text-[0.88rem] px-3 mt-2 py-3  border-b border-profile-menu-border">
+        <li className="mb-3">
+          <Link href={"/consultants/dashboard"}>
+            <p>Dashboard</p>
+          </Link>
+        </li>
+        <li className="mb-3">
+          <Link href={"/consultants/dashboard/chats"}>
+            <p>Chats</p>
+          </Link>
+        </li>
+        <li>
+          <Link href={"/consultants/dashboard/request-history"}>
+            <p>Request History</p>
+          </Link>
+        </li>
+      </ul>
     </div>
   );
 };

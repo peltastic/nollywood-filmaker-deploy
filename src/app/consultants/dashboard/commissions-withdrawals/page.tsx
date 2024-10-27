@@ -15,6 +15,7 @@ import DashboardPlate from "@/components/Dashboard/DashboardPlate";
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import { DataTable } from "@/components/Tables/DataTable";
+import WithdrawalAmount from "@/components/WithdrawalAmount/WithdrawalAmount";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { IoIosArrowBack } from "react-icons/io";
@@ -141,19 +142,11 @@ const CommissionsAndWithdrawalsPage = (props: Props) => {
           <div className="mt-14">
             <DashboardPlate title="Commissions & withdrawals">
               <div className="grid lg:grid-cols-2 py-7 gap-x-5">
-                <div className="mb-8 lg:mb-0 border border-stroke-10 px-4 sm:px-10 py-4 rounded-md">
-                  <h3 className="font-bold mb-4">Available funds</h3>
-                  <p className="flex items-end mb-3">
-                    <span className="text-[4rem] font-bold">$0.00</span>
-                    <span className=" block mb-2 font-bold text-[1.5rem]">
-                      USD
-                    </span>
-                  </p>
-                  <p className="text-[0.88rem] text-black-4 font-medium">
-                    Nothing to withdraw, yet. Accept and complete requests to
-                    start earning.
-                  </p>
-                </div>
+                <WithdrawalAmount
+                  title="Available funds"
+                  amount="0.00"
+                  info="Nothing to withdraw, yet. Accept and complete requests to start earning."
+                />
                 <WithdrawFunds />
               </div>
             </DashboardPlate>

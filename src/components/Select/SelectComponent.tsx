@@ -17,6 +17,8 @@ type Props = {
   rounded?: "lg" | "md" | "xl" | "xs" | "sm";
   largeLabel?: boolean;
   noIcon?: boolean;
+  darkBorder?: boolean
+  defaultValue?: string
 };
 
 const SelectComponent = (props: Props) => {
@@ -36,12 +38,14 @@ const SelectComponent = (props: Props) => {
         classNames={{
           input: classes.input,
         }}
+        className={`border rounded-md ${props.darkBorder ? "border-black-3" : "border-stroke-9"} border-black`}
         size={props.size}
         onChange={props.setValueProps}
         radius={props.rounded}
         rightSection={props.noIcon ? null : icon}
         placeholder={props.placeholder}
         data={props.data}
+        defaultValue={props.defaultValue}
       />
     </div>
   );

@@ -1,0 +1,99 @@
+"use client";
+import FeedbackRatingCard from "@/components/Admin/FeedbackRatingCard";
+import TopConsultants from "@/components/Admin/TopConsultants";
+import {
+  IFeedbackData,
+  feedback_column,
+} from "@/components/Columns/admin/FeedbackColumn";
+import DashboardPlate from "@/components/Dashboard/DashboardPlate";
+import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
+import ServiceLayout from "@/components/Layouts/ServiceLayout";
+import { DataTable } from "@/components/Tables/DataTable";
+import React from "react";
+
+type Props = {};
+
+const ratings = [
+  {
+    rating: 5,
+    percentage: 80,
+  },
+  {
+    rating: 4,
+    percentage: 20,
+  },
+  {
+    rating: 3,
+    percentage: 40,
+  },
+  {
+    rating: 2,
+    percentage: 30,
+  },
+  {
+    rating: 1,
+    percentage: 80,
+  },
+];
+
+const feedbacks: IFeedbackData[] = [
+  {
+    comment: "The service was splendid!",
+    customer: "Jane Cooper",
+    date: "22 Jan 2022",
+    email: "jgraham@example.com",
+    quality: 5,
+    speed: 5,
+  },
+  {
+    comment: "The service was splendid!",
+    customer: "Jenny Wilson",
+    date: "22 Jan 2022",
+    email: "w.lawson@example.com",
+    quality: 5,
+    speed: 5,
+  },
+];
+
+const FeedbacksPage = (props: Props) => {
+  return (
+    <ServiceLayout admin>
+      <DashboardBodyLayout>
+        <div className="px-2 xs:px-8 chatbp:px-0 py-6 chatbp:py-0">
+          <DashboardPlate title="Feedback">
+            <div className="flex flex-wrap xl:flex-nowrap py-8 gap-x-6">
+              <div className="w-full md:w-[48%] xl:w-[30%] mr-auto xl:mr-0">
+                <FeedbackRatingCard
+                  title="Delivery Quality"
+                  average_rating="3.3"
+                  ratings_data={ratings}
+                  total_rating="125"
+                />
+              </div>
+              <div className="w-full md:w-[48%] xl:w-[30%] mt-8 md:mt-0">
+                <FeedbackRatingCard
+                  average_rating={"4.3"}
+                  ratings_data={ratings}
+                  total_rating={"125"}
+                  title="Delivery Speed"
+                />
+              </div>
+              <div className="mt-8 xl:mt-0 w-full xl:w-[40%]">
+                <TopConsultants />
+              </div>
+            </div>
+          </DashboardPlate>
+          <div className="mt-16">
+            <DataTable
+              title="Customer feedback"
+              columns={feedback_column}
+              data={feedbacks}
+            />
+          </div>
+        </div>
+      </DashboardBodyLayout>
+    </ServiceLayout>
+  );
+};
+
+export default FeedbacksPage;

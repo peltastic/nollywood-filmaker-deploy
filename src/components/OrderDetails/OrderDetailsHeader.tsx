@@ -9,16 +9,27 @@ import MenuContent from "../Menu/MenuContent";
 import { useDisclosure } from "@mantine/hooks";
 import ModalComponent from "../Modal/Modal";
 import ResolveRequestModal from "../Consultants/ResolveRequestModal";
+import AssignRequestModal from "../Admin/AssignRequestModal";
 
 type Props = {
   status: "ready" | "completed" | "ongoing" | "pending" | string;
   statusValue: string;
   consultant?: boolean;
+  admin?: boolean;
 };
 
-const OrderDetailsHeader = ({ status, statusValue, consultant }: Props) => {
+const OrderDetailsHeader = ({
+  status,
+  statusValue,
+  consultant,
+  admin,
+}: Props) => {
   const router = useRouter();
+
   const [opened, { open, close }] = useDisclosure();
+
+  const [assignReqOpened, assingReqOptions] = useDisclosure();
+
   const statusClassname =
     status === "ready"
       ? "bg-light-blue text-dark-blue"
@@ -27,6 +38,49 @@ const OrderDetailsHeader = ({ status, statusValue, consultant }: Props) => {
       : status === "pending"
       ? "bg-stroke-4 text-black-6"
       : "bg-light-yellow text-dark-yellow";
+
+  let adminMenuContent = <div className=""></div>;
+
+  switch (status) {
+    case "pending":
+      adminMenuContent = (
+        <MenuContent
+          data={[
+            { name: "Resolve", link: "/", function: () => {} },
+            {
+              name: "Assign",
+              link: "/",
+              function: () => {
+                assingReqOptions.open()
+              },
+            },
+          ]}
+        />
+      );
+      break;
+    case "ongoing":
+      adminMenuContent = (
+        <MenuContent
+          data={[{ name: "Assign", link: "/", function: () => {} }]}
+        />
+      );
+      break;
+    case "completed":
+      adminMenuContent = adminMenuContent = (
+        <MenuContent
+          data={[
+            {
+              name: "Go To Chat",
+              link: "/admin/dashboard/customers/1/chat/1",
+        
+            },
+          ]}
+        />
+      );
+      break;
+    default:
+      break;
+  }
 
   let consultantMenuContent = <div></div>;
 
@@ -94,6 +148,15 @@ const OrderDetailsHeader = ({ status, statusValue, consultant }: Props) => {
       >
         <ResolveRequestModal close={close} />
       </ModalComponent>
+      <ModalComponent
+        opened={assignReqOpened}
+        centered
+        size="xl"
+        onClose={assingReqOptions.close}
+        withCloseButton={false}
+      >
+        <AssignRequestModal close={assingReqOptions.close} />
+      </ModalComponent>
       <div>
         <header className="flex flex-wrap items-center px-2 chatbg:mx-0 py-4 chatbg:py-0 ">
           <div className="flex items-center w-full md:w-auto text-[1.5rem] mr-auto">
@@ -125,7 +188,9 @@ const OrderDetailsHeader = ({ status, statusValue, consultant }: Props) => {
                 </div>
               }
             >
-              {consultant ? (
+              {admin ? (
+                adminMenuContent
+              ) : consultant ? (
                 consultantMenuContent
               ) : (
                 <div className="bg-white ">

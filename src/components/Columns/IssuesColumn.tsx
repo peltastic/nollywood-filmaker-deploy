@@ -14,6 +14,7 @@ export interface IssuesColumnData {
   status: string;
   image: string | StaticImport;
   email: string;
+  admin?: boolean;
 }
 
 export const issues_columns: ColumnDef<IssuesColumnData>[] = [
@@ -35,7 +36,7 @@ export const issues_columns: ColumnDef<IssuesColumnData>[] = [
     header: () => <div className="py-4">Customer</div>,
     cell: ({ row }) => {
       return (
-        <div className="flex items-center">
+        <div className="flex items-center w-[15rem] xl:w-auto">
           <div className="mr-2">
             <Image src={row.original.image} alt="image" />
           </div>
@@ -69,7 +70,11 @@ export const issues_columns: ColumnDef<IssuesColumnData>[] = [
     accessorKey: "date_created",
     header: () => <div className="">Date created</div>,
     cell: ({ row }) => {
-      return <p className="text-gray-1">{row.getValue("date_created")}</p>;
+      return (
+        <div className="w-[10rem] xl:w-auto">
+          <p className="text-gray-1">{row.getValue("date_created")}</p>;
+        </div>
+      );
     },
   },
   {
@@ -77,24 +82,32 @@ export const issues_columns: ColumnDef<IssuesColumnData>[] = [
     header: () => <div className="">Status</div>,
     cell: ({ row }) => {
       return (
-        <p
-          className={`bg-stroke-4 w-fit text-[12px] text-black-3 flex items-center font-medium py-1 px-2 rounded-full`}
-        >
-          <span className="block pr-1">
-            <GoDotFill />
-          </span>{" "}
-          {row.getValue("status")}
-        </p>
+        <div className="w-[10rem] xl:w-auto">
+          <p
+            className={`bg-stroke-4 w-fit text-[12px] text-black-3 flex items-center font-medium py-1 px-2 rounded-full`}
+          >
+            <span className="block pr-1">
+              <GoDotFill />
+            </span>{" "}
+            {row.getValue("status")}
+          </p>
+        </div>
       );
     },
   },
   {
     id: "actions",
-    cell: ({}) => {
+    cell: ({ row }) => {
       const router = useRouter();
       return (
         <UnstyledButton
-          clicked={() => router.push(`/user/dashboard/issues/details/1`)}
+          clicked={() =>
+            router.push(
+              row.original.admin
+                ? `/admin/dashboard/issues/details/1`
+                : `/user/dashboard/issues/details/1`
+            )
+          }
           class="px-4 py-2 rounded-md items-center bg-black-3 text-white flex"
         >
           <p className="mr-1 font-medium text-[0.88rem]">Open</p>

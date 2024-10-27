@@ -72,7 +72,7 @@ const DashboardHomePgae = (props: Props) => {
   return (
     <ServiceLayout>
       <DashboardBodyLayout>
-        <div className="px-3 md:px-10 chatbg:px-0">
+        <div className="">
           <Header />
 
           <div className="mt-14">

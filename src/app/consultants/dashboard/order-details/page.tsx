@@ -12,7 +12,7 @@ type Props = {};
 const OrderDetails = (props: Props) => {
   const search = useSearchParams();
 
-  const searchVal = search.get("status");
+  const searchVal = search.get("status") || "Pending";
   return (
     <ServiceLayout consultant>
       <DashboardBodyLayout>
