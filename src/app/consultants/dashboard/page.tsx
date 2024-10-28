@@ -201,7 +201,7 @@ const DashboardPage = (props: Props) => {
   return (
     <ServiceLayout consultant>
       <DashboardBodyLayout>
-        <div className="px-2 xs:px-6 chatbp:px-0">
+        <div className="px-4 xs:px-6 chatbp:px-0">
           <Header consultant />
           <div className="mt-16">
             <DashboardPlate title="Overview">

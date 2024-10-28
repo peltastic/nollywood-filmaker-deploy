@@ -304,7 +304,7 @@ const AdminDashboardPage = (props: Props) => {
   return (
     <ServiceLayout admin>
       <DashboardBodyLayout>
-        <div className="px-2 xs:px-8 chatbp:px-0 mb-10 xl:mb-0">
+        <div className="px-4 xs:px-8 chatbp:px-0 mb-10 xl:mb-0">
           <Header admin />
           <div className="mt-16">
             <DashboardPlate title="Overview">

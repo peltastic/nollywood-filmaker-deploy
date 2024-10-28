@@ -106,7 +106,7 @@ const ServiceNavbar = (props: Props) => {
   return (
     <>
       <Advert />
-      <nav className={`${props.admin ? "py-8 xl:py-0" : "pt-4 md:pt-2 pb-6 md:pb-0"} flex items-center  text-black-1 border-b border-b-border-gray px-3 md:px-8`}>
+      <nav className={`${props.admin ? "py-6 xl:py-0" : "pt-4 md:pt-2 pb-6 md:pb-0"} flex items-center  text-black-1 border-b border-b-border-gray px-3 md:px-8`}>
         <Link
           href={
             props.admin
