@@ -41,7 +41,7 @@ const SetChatDate = ({ open, close }: Props) => {
           </div>
           <div className="flex flex-wrap md:flex-nowrap gap-5">
             <CustomCalender value={new Date()} onChange={() => {}} />
-            <CustomTime />
+            <CustomTime selectedTime="11:00 AM" />
           </div>
           <div className="my-8 flex items-center font-medium text-[0.88rem] px-6">
             <UnstyledButton
