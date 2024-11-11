@@ -1,8 +1,9 @@
+"use client"
 import Image from "next/image";
 import React from "react";
 import Logo from "/public/assets/nav/logo.svg";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { HiBell } from "react-icons/hi";
 import { BsFillQuestionCircleFill } from "react-icons/bs";
 import { IoIosSettings } from "react-icons/io";
@@ -95,7 +96,6 @@ const navLinkMobile = [
   },
 ];
 const ServiceNavbar = (props: Props) => {
-  const router = useRouter();
   const pathname = usePathname();
   const data = props.consultant
     ? consultantLink
