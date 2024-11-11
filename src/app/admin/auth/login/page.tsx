@@ -19,7 +19,7 @@ const AdminLoginPage = (props: Props) => {
             <h2 className="text-[1.13rem]">
               Lorem ipsum dolor sit amet consectetur adipisc.
             </h2>
-            <LoginForm forgotPasswordLink="/consultants/auth/forgot-password" successRoute="/admin/dashboard" />
+            <LoginForm loginType='admin' forgotPasswordLink="/consultants/auth/forgot-password" successRoute="/admin/dashboard" />
           </div>
         </div>
       </section>
