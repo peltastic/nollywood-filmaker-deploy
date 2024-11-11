@@ -1,3 +1,4 @@
+"use-client"
 import LeftSide from "@/components/Auth/LeftSide";
 import ResetPasswordForm from "@/components/Forms/Auth/ResetPasswordForm";
 import HomeLayout from "@/components/Layouts/HomeLayout";
