@@ -126,7 +126,7 @@ export const request_history_columns: ColumnDef<IActiveRequestColumnData>[] = [
           >
             <div className="flex">
               <CustomCalender value={new Date()} onChange={() => {}} />
-              <CustomTime />
+              <CustomTime selectedTime="11:00 AM" />
             </div>
           </ModalComponent>
           <MenuComponent
