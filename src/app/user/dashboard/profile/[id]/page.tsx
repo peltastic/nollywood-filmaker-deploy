@@ -1,4 +1,6 @@
 "use client";
+import { useProtectRoute } from "@/hooks/useProtectRoute";
+import { useSelector } from "react-redux";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
@@ -9,10 +11,18 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { GoDotFill } from "react-icons/go";
 import { IoIosArrowBack, IoIosArrowDown } from "react-icons/io";
+import { useFetchUserProfileDataQuery } from "@/lib/features/users/profile/profile";
+import { RootState } from "@/lib/store";
 
 type Props = {};
 
 const ProfilePage = (props: Props) => {
+  useProtectRoute();
+  const userId = useSelector(
+    (state: RootState) => state.persistedState.user.user?.id
+  );
+  const { isFetching, data } = useFetchUserProfileDataQuery(userId!);
+
   const router = useRouter();
   const status: any = "active";
   const statusClassname =
@@ -67,10 +77,13 @@ const ProfilePage = (props: Props) => {
         </header>
         <div className="flex items-start mt-10">
           <div className="w-[30%]">
-            <ProfileLeft />
+            <ProfileLeft
+              isFetching={isFetching}
+              fullname={`${data?.fname} ${data?.lname}`}
+            />
           </div>
           <div className="w-[70%]">
-            <ProfileRight />
+            <ProfileRight data={data} isFetching={isFetching} />
           </div>
         </div>
       </DashboardBodyLayout>

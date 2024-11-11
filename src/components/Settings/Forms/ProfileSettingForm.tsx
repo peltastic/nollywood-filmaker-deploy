@@ -1,25 +1,104 @@
+import Spinner from "@/app/Spinner/Spinner";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import Expertise from "@/components/Expertise/Expertise";
 import Field from "@/components/Field/Field";
 import SelectComponent from "@/components/Select/SelectComponent";
 import TextArea from "@/components/TextArea/TextArea";
+import { IGetUserProfileResponse } from "@/interfaces/profile/profile";
+import { useUpdateUserProfileMutation } from "@/lib/features/users/profile/profile";
+import { RootState } from "@/lib/store";
+import { notify } from "@/utils/notification";
+import { updateProfileSchema } from "@/utils/validation/profile";
 import { Form, Formik } from "formik";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
-type Props = {};
+type Props = {
+  data: IGetUserProfileResponse;
+};
 
 const ProfileSettingForm = (props: Props) => {
+  const [updateProfile, { isError, isSuccess, data, isLoading, error }] =
+    useUpdateUserProfileMutation();
+
+  const [nonInputValues, setNonInputValues] = useState<{
+    expertise: string[];
+  }>({
+    expertise: props.data.expertise,
+  });
+  const [bio, setBio] = useState<string>(props.data.bio || "");
+  const userId = useSelector(
+    (state: RootState) => state.persistedState.user.user?.id
+  );
+  const [showNoExpertiseErrMessage, setSetNoExpertiseErrMessage] =
+    useState<boolean>(false);
+
+  const setExpertiseHandler = (value: string, type: "add" | "remove") => {
+    if (showNoExpertiseErrMessage) {
+      setSetNoExpertiseErrMessage(false);
+    }
+    const data = [...nonInputValues.expertise];
+    if (type === "add") {
+      data.push(value);
+    } else {
+      const index = nonInputValues.expertise.indexOf(value);
+      data.splice(index, 1);
+    }
+    setNonInputValues({
+      ...nonInputValues,
+      expertise: data,
+    });
+  };
+
+  useEffect(() => {
+    if (isError) {
+      notify("error", (error as any).data?.message || "An Error Occured");
+    }
+    if (isSuccess) {
+      notify("success", "Successful", "Profile Updated Successfully!");
+    }
+  }, [isSuccess, isError]);
+
   return (
     <Formik
       initialValues={{
-        first_name: "",
-        last_name: "",
-        email: "",
-        phone: "",
-        bio: "",
-        website: "",
+        first_name: props.data.fname,
+        last_name: props.data.lname,
+        email: props.data.email,
+        phone: props.data.phone || "",
+        website: props.data.website || "",
+        postal_code: props.data.location.postalcode || "",
+        city: props.data.location.city || "",
+        state: props.data.location.state || "",
+        country: props.data.location.city || "",
       }}
-      onSubmit={() => {}}
+      onSubmit={(values) => {
+        if (nonInputValues.expertise.length === 0) {
+          return setSetNoExpertiseErrMessage(true);
+        }
+        if (userId) {
+          updateProfile({
+            body: {
+              fname: values.first_name,
+              email: values.email,
+              expertise: nonInputValues.expertise,
+              lname: values.last_name,
+              location: {
+                city: values.city,
+                country: values.country,
+                postalcode: values.postal_code,
+                state: values.state,
+              },
+              bio,
+              phone: values.phone,
+              website: values.website
+              
+            },
+            id: userId,
+          });
+        }
+      }}
+      validationSchema={updateProfileSchema}
     >
       <Form>
         <div className="flex flex-wrap items-center">
@@ -27,7 +106,6 @@ const ProfileSettingForm = (props: Props) => {
             <h1 className="font-semibold">First & Last Name</h1>
           </div>
           <div className="w-full md:w-[65%] grid  md:grid-cols-2 gap-x-4">
-            
             <Field
               classname="w-full font-semibold placeholder:font-normal mb-4 md:mb-0"
               label=""
@@ -76,8 +154,8 @@ const ProfileSettingForm = (props: Props) => {
             <TextArea
               placeholder="Write about you"
               className="resize-none py-4 px-4 h-[10rem]"
-              changed={() => {}}
-              value=""
+              changed={(e) => setBio(e)}
+              value={bio}
             />
           </div>
         </div>
@@ -102,7 +180,16 @@ const ProfileSettingForm = (props: Props) => {
             <h1 className="font-semibold">Expertise</h1>
           </div>
           <div className="w-full md:w-[65%]">
-            <Expertise data={[]} small setExpertise={() => {}} />
+            <Expertise
+              data={nonInputValues.expertise}
+              small
+              setExpertise={setExpertiseHandler}
+            />
+            {showNoExpertiseErrMessage && (
+              <p className="text-val-error-red text-xs mt-2">
+                Please select at least an expertise
+              </p>
+            )}
           </div>
         </div>
         <div className="flex flex-wrap  mt-8">
@@ -110,38 +197,40 @@ const ProfileSettingForm = (props: Props) => {
             <h1 className="font-semibold">Location</h1>
           </div>
           <div className="w-full md:w-[65%] grid  md:grid-cols-2 gap-4">
-            <SelectComponent
+            <Field
+              label=""
+              classname="w-full"
+              name="country"
               placeholder="Country"
-              data={[]}
-              label=""
-              size="md"
-              setValueProps={() => {}}
             />
-            <SelectComponent
+            <Field
+              label=""
+              classname="w-full"
+              name="state"
               placeholder="State"
-              data={[]}
-              label=""
-              size="md"
-              setValueProps={() => {}}
             />
-            <SelectComponent
-              placeholder="City"
-              data={[]}
+
+            <Field label="" classname="w-full" name="city" placeholder="City" />
+
+            <Field
               label=""
-              size="md"
-              setValueProps={() => {}}
-            />
-            <SelectComponent
-              placeholder="Postal code"
-              data={[]}
-              label=""
-              size="md"
-              setValueProps={() => {}}
+              classname="w-full"
+              name="postal_code"
+              placeholder="Postal Code"
             />
           </div>
         </div>
-        <UnstyledButton class="text-[0.88rem] font-medium mt-8 bg-black-2 text-white px-4 py-2 rounded-md ">
-            Update
+        <UnstyledButton
+          disabled={isLoading}
+          class="text-[0.88rem] disabled:opacity-50 flex w-[7rem] justify-center font-medium mt-8 bg-black-2 text-white px-4 py-2 rounded-md "
+        >
+          {isLoading ? (
+            <div className="w-[1rem] py-1">
+              <Spinner />
+            </div>
+          ) : (
+            <p>Update</p>
+          )}
         </UnstyledButton>
       </Form>
     </Formik>

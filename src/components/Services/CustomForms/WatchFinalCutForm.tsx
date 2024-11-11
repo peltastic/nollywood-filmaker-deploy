@@ -1,10 +1,14 @@
+import Spinner from "@/app/Spinner/Spinner";
 import { IWatchFinalCutState } from "@/app/services/watch-final-cut/page";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import InputComponent from "@/components/Input/Input";
 import SelectComponent from "@/components/Select/SelectComponent";
 import ServiceInfo from "@/components/ServiceInfo/ServiceInfo";
 import TextArea from "@/components/TextArea/TextArea";
-import { testSelectData } from "@/utils/constants/constants";
+import {
+  testExhibitionData,
+  testSelectData,
+} from "@/utils/constants/constants";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { FaArrowRight } from "react-icons/fa";
@@ -14,6 +18,7 @@ type Props = {
   data: IWatchFinalCutState;
   setScriptProps: (key: string, value: string) => void;
   proceed: () => void;
+  isLoading?: boolean;
 };
 
 const WatchFinalCutForm = ({
@@ -21,6 +26,7 @@ const WatchFinalCutForm = ({
   setScriptProps,
   disabled,
   proceed,
+  isLoading,
 }: Props) => {
   const router = useRouter();
   return (
@@ -63,7 +69,7 @@ const WatchFinalCutForm = ({
               value={data.platform}
               setValueProps={(val) => setScriptProps("platform", val!)}
               label="Platform for exhibition"
-              data={testSelectData}
+              data={testExhibitionData}
               placeholder="Select"
             />
           </div>
@@ -99,10 +105,18 @@ const WatchFinalCutForm = ({
           <UnstyledButton
             type="submit"
             disabled={disabled}
-            class="flex py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
+            class="flex justify-center w-[12rem] py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
           >
-            <p className="mr-2">Procced to payment</p>
-            <FaArrowRight className="text-[0.7rem]" />
+            {isLoading ? (
+              <div className="w-[1rem]">
+                <Spinner />
+              </div>
+            ) : (
+              <>
+                <p className="mr-2">Procced to payment</p>
+                <FaArrowRight className="text-[0.7rem]" />
+              </>
+            )}
           </UnstyledButton>
         </div>
       </form>

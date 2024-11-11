@@ -10,6 +10,8 @@ type Props = {
   dateProps: Date;
   setPageProps: (val: string) => void;
   serviceSelection?: boolean;
+  selectedTime: string;
+  setSelected?: (value: string) => void;
 };
 
 const ChatTime = (props: Props) => {
@@ -22,7 +24,11 @@ const ChatTime = (props: Props) => {
       </h2>
       <div className="flex flex-wrap xl:flex-nowrap gap-x-4 mt-10">
         <CustomCalender value={props.dateProps} onChange={props.setDateProps} />
-        <CustomTime serviceSelection={props.serviceSelection} />
+        <CustomTime
+          setSelected={props.setSelected}
+          selectedTime={props.selectedTime}
+          serviceSelection={props.serviceSelection}
+        />
       </div>
       <div className="w-full flex mt-14 mb-14">
         <UnstyledButton

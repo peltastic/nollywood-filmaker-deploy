@@ -17,7 +17,7 @@ const RegisterSuccessPage = (props: Props) => {
       <SuccessTemplate
         darkBtnLink={service ? `/services/${service}` : "/get-started/service"}
         darkButtonContent="Proceed to services"
-        lightBtnLink="/"
+        lightBtnLink="/user/dashboard"
         lightButtonContent="Go to dashboard"
         subTitle="Voila! You have successfully created your account. click the button below to proceed to choosing a service."
         titleLight="Account created successfully"

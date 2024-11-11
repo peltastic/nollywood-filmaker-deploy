@@ -1,3 +1,4 @@
+import Spinner from "@/app/Spinner/Spinner";
 import { ICreatePitchState } from "@/app/services/create-pitch/page";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import FileInput from "@/components/FileInput/FileInput";
@@ -17,6 +18,7 @@ type Props = {
   setScriptProps: (key: string, value: string) => void;
   setFileProps: (value: File | null) => void;
   proceed: () => void;
+  isLoading?: boolean;
 };
 
 const CreatePitchForm = ({
@@ -26,6 +28,7 @@ const CreatePitchForm = ({
   disabled,
   fileName,
   proceed,
+  isLoading,
 }: Props) => {
   const router = useRouter();
   return (
@@ -71,7 +74,7 @@ const CreatePitchForm = ({
         </div>
         <div className="mt-8">
           <TextArea
-          placeholder=""
+            placeholder=""
             changed={(val) => setScriptProps("actors_in_mind", val)}
             value={data.actors_in_mind}
             labelStyle2
@@ -81,7 +84,7 @@ const CreatePitchForm = ({
         </div>
         <div className="mt-8">
           <TextArea
-          placeholder=""
+            placeholder=""
             changed={(val) => setScriptProps("crew_in_mind", val)}
             value={data.crew_in_mind}
             labelStyle2
@@ -101,7 +104,7 @@ const CreatePitchForm = ({
         </div>
         <div className="mt-8">
           <TextArea
-          placeholder=""
+            placeholder=""
             changed={(val) => setScriptProps("information", val)}
             value={data.information}
             labelStyle2
@@ -131,10 +134,18 @@ const CreatePitchForm = ({
           <UnstyledButton
             type="submit"
             disabled={disabled}
-            class="flex py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
+            class="flex justify-center w-[12rem] py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
           >
-            <p className="mr-2">Procced to payment</p>
-            <FaArrowRight className="text-[0.7rem]" />
+            {isLoading ? (
+              <div className="w-[1rem] py-1">
+                <Spinner />
+              </div>
+            ) : (
+              <>
+                <p className="mr-2">Procced to payment</p>
+                <FaArrowRight className="text-[0.7rem]" />
+              </>
+            )}
           </UnstyledButton>
         </div>
       </form>

@@ -1,21 +1,49 @@
 import { Form, Formik } from "formik";
-import React from "react";
+import React, { useEffect } from "react";
 import Field from "../Field/Field";
 import SwitchComponent from "../Switch/SwitchComponent";
 import UnstyledButton from "../Button/UnstyledButton";
+import { useUpdatePasswordMutation } from "@/lib/features/users/profile/profile";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
+import Spinner from "@/app/Spinner/Spinner";
+import { notify } from "@/utils/notification";
 
 type Props = {};
 
 const SecuritySettings = (props: Props) => {
+  const userId = useSelector(
+    (state: RootState) => state.persistedState.user.user?.id
+  );
+
+  const [updatePassword, { isLoading, isError, isSuccess, error }] =
+    useUpdatePasswordMutation();
+
+  useEffect(() => {
+    if (isError) {
+      notify("error", (error as any).data?.message || "An Error Occured");
+    }
+    if (isSuccess) {
+      notify("success", "Successful", "Password Updated Successfully!");
+    }
+  }, [isSuccess, isError]);
   return (
     <div className="bg-white border mt-10 py-20 px-3 sm:px-10 rounded-md flex flex-wrap items-start border-stroke-10">
-      <h1 className="text-[17px] font-medium text-black-3 mb-10 ">Change Password</h1>
+      <h1 className="text-[17px] font-medium text-black-3 mb-10 ">
+        Change Password
+      </h1>
       <Formik
         initialValues={{
-          current_password: "",
-          new_password: "",
+          currentPassword: "",
+          newPassword: "",
         }}
-        onSubmit={() => {}}
+        onSubmit={(values) => {
+          updatePassword({
+            currentPassword: values.currentPassword,
+            newPassword: values.newPassword,
+            id: userId!,
+          });
+        }}
       >
         <Form className="flex flex-wrap w-full">
           <div className="w-full md:w-[60%]">
@@ -25,7 +53,7 @@ const SecuritySettings = (props: Props) => {
                   password
                   label="Current Password"
                   classname="w-full"
-                  name="current_password"
+                  name="currentPassword"
                   placeholder=""
                 />
               </div>
@@ -34,7 +62,7 @@ const SecuritySettings = (props: Props) => {
                   password
                   label="New Password"
                   classname="w-full"
-                  name="new_password"
+                  name="newPassword"
                   placeholder=""
                 />
               </div>
@@ -56,8 +84,18 @@ const SecuritySettings = (props: Props) => {
               />
             </div>
           </div>
-          <UnstyledButton class="text-[0.88rem] font-medium mt-8 bg-black-2 text-white px-4 py-2 rounded-md ">
-            Update
+          <UnstyledButton
+            type="submit"
+            disabled={isLoading}
+            class="text-[0.88rem] disabled:opacity-50 flex justify-center w-[7rem] font-medium mt-8 bg-black-2 text-white px-4 py-2 rounded-md "
+          >
+            {isLoading ? (
+              <div className="w-[1rem] py-1">
+                <Spinner />
+              </div>
+            ) : (
+              <p>Update</p>
+            )}
           </UnstyledButton>
         </Form>
       </Formik>

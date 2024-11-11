@@ -3,7 +3,7 @@ import UnstyledButton from "@/components/Button/UnstyledButton";
 import InputComponent from "@/components/Input/Input";
 import SelectComponent from "@/components/Select/SelectComponent";
 import TextArea from "@/components/TextArea/TextArea";
-import { testSelectData } from "@/utils/constants/constants";
+import { consultantTypesData, testSelectData } from "@/utils/constants/constants";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { FaArrowRight } from "react-icons/fa";
@@ -15,7 +15,7 @@ type Props = {
 };
 
 const ChatForm = (props: Props) => {
-  const router = useRouter()
+  const router = useRouter();
   return (
     <div>
       <h1 className="font-bold text-[1.5rem]">
@@ -43,8 +43,8 @@ const ChatForm = (props: Props) => {
           </div>
           <div className="mt-8">
             <TextArea
-            placeholder=""
-              changed={(val) => props.setScriptProps("logline", val)}
+              placeholder=""
+              changed={(val) => props.setScriptProps("summary", val)}
               value={props.data.summary}
               labelStyle2
               className="h-[4rem] text-gray-6 text-[0.88rem] py-2 px-3"
@@ -55,9 +55,9 @@ const ChatForm = (props: Props) => {
             <SelectComponent
               size="md"
               value={props.data.consultant}
-              setValueProps={(val) => props.setScriptProps("platform", val!)}
+              setValueProps={(val) => props.setScriptProps("consultant", val!)}
               label="Consultant type"
-              data={testSelectData}
+              data={consultantTypesData}
               placeholder="Select"
             />
           </div>
@@ -70,7 +70,7 @@ const ChatForm = (props: Props) => {
               Back
             </UnstyledButton>
             <UnstyledButton
-              clicked={() => props.setPageProps("2") }
+              clicked={() => props.setPageProps("2")}
               type="submit"
               // disabled={disabled}
               class="flex py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"

@@ -10,8 +10,8 @@ type Props = {
   setPageProps: (value: string) => void;
   setDataProps: (data: {
     email: string;
-    l_name: string;
-    f_name: string;
+    lname: string;
+    fname: string;
     phone: string;
   }) => void;
   data: IRegisterdata;
@@ -30,8 +30,8 @@ const UserDetails = ({ setPageProps, setDataProps, data }: Props) => {
       </div>
       <Formik
         initialValues={{
-          f_name: data.f_name,
-          l_name: data.l_name,
+          fname: data.fname,
+          lname: data.lname,
           phone: data.phone,
           email: data.email,
         }}
@@ -48,14 +48,14 @@ const UserDetails = ({ setPageProps, setDataProps, data }: Props) => {
                 label="First name"
                 labelColor="text-black-2"
                 classname="w-full"
-                name="f_name"
+                name="fname"
                 placeholder=""
               />
               <Field
                 label="Last name"
                 labelColor="text-black-2"
                 classname="w-full"
-                name="l_name"
+                name="lname"
                 placeholder=""
               />
               <Field

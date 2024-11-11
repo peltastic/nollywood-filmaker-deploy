@@ -1,3 +1,4 @@
+import Spinner from "@/app/Spinner/Spinner";
 import { IDraftLegalDocumentState } from "@/app/services/draft-legal-documents/page";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import InputComponent from "@/components/Input/Input";
@@ -12,6 +13,7 @@ type Props = {
   data: IDraftLegalDocumentState;
   setScriptProps: (key: string, value: string) => void;
   proceed: () => void;
+  isLoading?: boolean;
 };
 
 const DraftLegalDocumentsForm = ({
@@ -19,8 +21,9 @@ const DraftLegalDocumentsForm = ({
   proceed,
   setScriptProps,
   disabled,
+  isLoading,
 }: Props) => {
-    const router = useRouter()
+  const router = useRouter();
   return (
     <div className="w-full xl:w-[80%]">
       <form
@@ -39,12 +42,12 @@ const DraftLegalDocumentsForm = ({
         />
         <div className="mt-10">
           <TextArea
-          placeholder=""
-          changed={(val) => setScriptProps("production_company", val)}
-          value={data.production_company}
-          labelStyle2
-          className="h-[4rem] text-gray-6 text-[0.88rem] py-2 px-3"
-          label="Name of Production Company"
+            placeholder=""
+            changed={(val) => setScriptProps("production_company", val)}
+            value={data.production_company}
+            labelStyle2
+            className="h-[4rem] text-gray-6 text-[0.88rem] py-2 px-3"
+            label="Name of Production Company"
           />
         </div>
         <div className="mt-10">
@@ -69,10 +72,18 @@ const DraftLegalDocumentsForm = ({
           <UnstyledButton
             type="submit"
             disabled={disabled}
-            class="flex py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
+            class="flex justify-center w-[12rem] py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
           >
-            <p className="mr-2">Procced to payment</p>
-            <FaArrowRight className="text-[0.7rem]" />
+            {isLoading ? (
+              <div className="w-[1rem] py-1">
+                <Spinner />
+              </div>
+            ) : (
+              <>
+                <p className="mr-2">Procced to payment</p>
+                <FaArrowRight className="text-[0.7rem]" />
+              </>
+            )}
           </UnstyledButton>
         </div>
       </form>

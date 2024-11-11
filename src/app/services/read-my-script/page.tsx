@@ -8,7 +8,15 @@ import ReadMyScriptImg from "/public/assets/services/read-my-script.svg";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-// import ServiceLeft  from "@/components/"
+import { useInitializeReadMyScriptMutation } from "@/lib/features/users/services/services";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
+import InitializingTransactionModal from "@/components/Services/InitializingTransactionModal";
+import { useDisclosure } from "@mantine/hooks";
+import { nprogress } from "@mantine/nprogress";
+import { initializeTransactionListener } from "@/lib/socket";
+import { useServicePayment } from "@/hooks/useServicePayment";
+import { useProtectRoute } from "@/hooks/useProtectRoute";
 
 type Props = {};
 export interface IReadMyScriptState {
@@ -19,6 +27,22 @@ export interface IReadMyScriptState {
   concerns: string;
 }
 const ReadMyScriptPage = (props: Props) => {
+  useProtectRoute();
+  const [readMyScript, { data, isLoading, isSuccess, isError, error }] =
+    useInitializeReadMyScriptMutation();
+  const userId = useSelector(
+    (state: RootState) => state.persistedState.user.user?.id
+  );
+  const [opened, { close, open }] = useDisclosure();
+
+  const { paymentStatus } = useServicePayment(
+    isError,
+    isSuccess,
+    "/success-page/read-my-script",
+    close,
+    data?.result.authorization_url,
+    error
+  );
   const router = useRouter();
   const searchParam = useSearchParams();
   const search = searchParam.get("page");
@@ -41,68 +65,94 @@ const ReadMyScriptPage = (props: Props) => {
       router.push("/services/read-my-script");
     }
   }, []);
+
+  useEffect(() => {
+    if (paymentStatus === "pending") {
+      open();
+    }
+  }, [paymentStatus]);
+
   return (
-    <ServiceLayout nonDashboard>
-      <div className="flex flex-wrap items-start">
-        <ServiceLeft
-          title="Read my script"
-          image={<Image src={ReadMyScriptImg} alt="read-my-script" />}
-          body={[
-            { title: "Movie title", content: scriptData.movie_title },
-            {
-              title: "Logline / Synopsis",
-              content: scriptData.logline,
-            },
-            {
-              title: "Genre",
-              content: scriptData.genre,
-            },
-            {
-              title: "Platform for Exhibition",
-              content: scriptData.platform,
-            },
-            {
-              title: "Script",
-              content: file?.name || "",
-            },
-            {
-              title: "Concerns",
-              content: scriptData.concerns,
-            },
-          ]}
-        />
-        {search === "payment" ? (
-          <div className="w-full lg:w-[55%] text-black-2 px-[2rem] md:px-[5rem] py-[5rem]">
-            <PaymentWindow successRoute="/success-page/read-my-script" />
-          </div>
-        ) : (
-          <ServiceRight
-            subtitle="Lorem ipsum dolor sit amet consectetur adipisc."
-            title="Let’s start with your details"
-          >
-            {
-              <ReadMyScriptForm
-                proceed={() =>
-                  router.push("/services/read-my-script?page=payment")
-                }
-                disabled={
-                  !scriptData.movie_title ||
-                  !scriptData.genre ||
-                  !scriptData.platform ||
-                  !scriptData.concerns ||
-                  !scriptData.logline ||
-                  !file
-                }
-                setFileProps={(file) => setFile(file)}
-                setScriptProps={setScriptDataHandler}
-                data={scriptData}
-                fileName={file?.name}
-              />
-            }
-          </ServiceRight>
-        )}
-      </div>
-    </ServiceLayout>
+    <>
+      {opened ? <InitializingTransactionModal status={paymentStatus} /> : null}
+      <ServiceLayout nonDashboard>
+        <div className="flex flex-wrap items-start">
+          <ServiceLeft
+            cost="50,000"
+            title="Read my script"
+            image={<Image src={ReadMyScriptImg} alt="read-my-script" />}
+            body={[
+              { title: "Movie title", content: scriptData.movie_title },
+              {
+                title: "Logline / Synopsis",
+                content: scriptData.logline,
+              },
+              {
+                title: "Genre",
+                content: scriptData.genre,
+              },
+              {
+                title: "Platform for Exhibition",
+                content: scriptData.platform,
+              },
+              {
+                title: "Script",
+                content: file?.name || "",
+              },
+              {
+                title: "Concerns",
+                content: scriptData.concerns,
+              },
+            ]}
+          />
+          {search === "payment" ? (
+            <div className="w-full lg:w-[55%] text-black-2 px-[2rem] md:px-[5rem] py-[5rem]">
+              <PaymentWindow successRoute="/success-page/read-my-script" />
+            </div>
+          ) : (
+            <ServiceRight
+              subtitle="Lorem ipsum dolor sit amet consectetur adipisc."
+              title="Let’s start with your details"
+            >
+              {
+                <ReadMyScriptForm
+                  proceed={() => {
+                    if (userId) {
+                      readMyScript({
+                        genre: scriptData.genre,
+                        movie_title: scriptData.movie_title,
+                        synopsis: scriptData.logline,
+                        platforms: scriptData.platform,
+                        userId: userId,
+                        title: "Read My Script",
+                        concerns: scriptData.concerns,
+                        type: "request",
+                        files: file,
+                      });
+                      initializeTransactionListener(userId);
+                      nprogress.start();
+                      open();
+                    }
+                  }}
+                  disabled={
+                    !scriptData.movie_title ||
+                    !scriptData.genre ||
+                    !scriptData.platform ||
+                    !scriptData.logline ||
+                    !file
+                  }
+                  setFileProps={(file) => setFile(file)}
+                  setScriptProps={setScriptDataHandler}
+                  data={scriptData}
+                  fileName={file?.name}
+                  isLoading={isLoading}
+                />
+              }
+            </ServiceRight>
+          )}
+        </div>
+      </ServiceLayout>
+    </>
   );
 };
 

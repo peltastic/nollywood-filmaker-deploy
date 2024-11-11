@@ -8,6 +8,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import PaymentWindow from "@/components/PaymentWindow/PaymentWindow";
 import ServiceRight from "@/components/Services/ServiceRight";
 import WatchFinalCutForm from "@/components/Services/CustomForms/WatchFinalCutForm";
+import { useInitializeWatchFinalCutMutation } from "@/lib/features/users/services/services";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
+import InitializingTransactionModal from "@/components/Services/InitializingTransactionModal";
+import { useDisclosure } from "@mantine/hooks";
+import { nprogress } from "@mantine/nprogress";
+import { initializeTransactionListener } from "@/lib/socket";
+import { useServicePayment } from "@/hooks/useServicePayment";
+import { useProtectRoute } from "@/hooks/useProtectRoute";
 
 type Props = {};
 
@@ -21,9 +30,25 @@ export interface IWatchFinalCutState {
 }
 
 const page = (props: Props) => {
+  useProtectRoute()
+  const [watchFinalCut, { data, isLoading, isSuccess, isError, error }] =
+    useInitializeWatchFinalCutMutation();
+    const [opened, { close, open }] = useDisclosure();
+  const { paymentStatus } = useServicePayment(
+    isError,
+    isSuccess,
+    "/success-page/watch-final-cut",
+    close,
+    data?.result.authorization_url,
+    error
+  );
   const router = useRouter();
   const searchParam = useSearchParams();
   const search = searchParam.get("page");
+  const userId = useSelector(
+    (state: RootState) => state.persistedState.user.user?.id
+  );
+
   const [scriptData, setScriptData] = useState<IWatchFinalCutState>({
     concerns: "",
     genre: "",
@@ -43,67 +68,92 @@ const page = (props: Props) => {
       router.push("/services/watch-final-cut");
     }
   }, []);
+  useEffect(() => {
+    if (paymentStatus === "pending") {
+      open();
+    }
+  }, [paymentStatus]);
+
   return (
-    <ServiceLayout nonDashboard>
-      <div className="flex flex-wrap items-start">
-        <ServiceLeft
-          title="Watch the final cut of my film"
-          image={<Image src={WatchFinalCutImage} alt="watch-final-cut" />}
-          body={[
-            {
-              title: "Movie Title",
-              content: scriptData.movie_title,
-            },
-            {
-              title: "Logline / Synopsis",
-              content: scriptData.logline,
-            },
-            {
-              title: "Genre",
-              content: scriptData.genre,
-            },
-            {
-              title: "Platform from Exhibition",
-              content: scriptData.platform,
-            },
-            {
-              title: "Share a link",
-              content: scriptData.link,
-            },
-            {
-              title: "Concerns",
-              content: scriptData.concerns,
-            },
-          ]}
-        />
-        {search === "payment" ? (
-          <div className="w-full lg:w-[55%] text-black-2 px-[2rem] md:px-[5rem] py-[5rem]">
-            <PaymentWindow successRoute="/success-page/watch-final-cut" />
-          </div>
-        ) : (
-          <ServiceRight
-            subtitle="Lorem ipsum dolor sit amet consectetur adipisc."
-            title="Let’s start with your details"
-          >
-            <WatchFinalCutForm
-              proceed={() =>
-                router.push("/services/watch-final-cut?page=payment")
-              }
-              disabled={
-                !scriptData.movie_title ||
-                !scriptData.genre ||
-                !scriptData.platform ||
-                !scriptData.concerns ||
-                !scriptData.logline ||
-                !scriptData.link
-              }
-              setScriptProps={setScriptDataHandler}
-              data={scriptData}
-            />
-          </ServiceRight>
-        )}
-      </div>
-    </ServiceLayout>
+    <>
+      {opened ? <InitializingTransactionModal status={paymentStatus} /> : null}
+      <ServiceLayout nonDashboard>
+        <div className="flex flex-wrap items-start">
+          <ServiceLeft
+          cost="50,000"
+            title="Watch the final cut of my film"
+            image={<Image src={WatchFinalCutImage} alt="watch-final-cut" />}
+            body={[
+              {
+                title: "Movie Title",
+                content: scriptData.movie_title,
+              },
+              {
+                title: "Logline / Synopsis",
+                content: scriptData.logline,
+              },
+              {
+                title: "Genre",
+                content: scriptData.genre,
+              },
+              {
+                title: "Platform from Exhibition",
+                content: scriptData.platform,
+              },
+              {
+                title: "Share a link",
+                content: scriptData.link,
+              },
+              {
+                title: "Concerns",
+                content: scriptData.concerns,
+              },
+            ]}
+          />
+          {search === "payment" ? (
+            <div className="w-full lg:w-[55%] text-black-2 px-[2rem] md:px-[5rem] py-[5rem]">
+              <PaymentWindow successRoute="/success-page/watch-final-cut" />
+            </div>
+          ) : (
+            <ServiceRight
+              subtitle="Lorem ipsum dolor sit amet consectetur adipisc."
+              title="Let’s start with your details"
+            >
+              <WatchFinalCutForm
+                proceed={() => {
+                  if (userId) {
+                    watchFinalCut({
+                      concerns: scriptData.concerns,
+                      genre: scriptData.genre,
+                      link: scriptData.link,
+                      platform: scriptData.platform,
+                      synopsis: scriptData.logline,
+                      title: "Watch My Final Cut",
+                      movie_title: scriptData.movie_title,
+                      type: "request",
+                      userId,
+                    });
+                    initializeTransactionListener(userId);
+                    nprogress.start();
+                    open();
+                  }
+                }}
+                isLoading={isLoading}
+                disabled={
+                  !scriptData.movie_title ||
+                  !scriptData.genre ||
+                  !scriptData.platform ||
+                  !scriptData.logline ||
+                  !scriptData.link
+                }
+                setScriptProps={setScriptDataHandler}
+                data={scriptData}
+              />
+            </ServiceRight>
+          )}
+        </div>
+      </ServiceLayout>
+    </>
   );
 };
 

@@ -1,16 +1,18 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import CancelImg from "/public/assets/cancel.svg";
 import { MdInfoOutline } from "react-icons/md";
 import { days } from "@/utils/constants/constants";
 import HoursSelector from "./HoursSelector";
 import UnstyledButton from "../Button/UnstyledButton";
+import { IEditAvailabilityPayload } from "@/interfaces/consultants/profile/profile";
 
 type Props = {
   close: () => void;
 };
 
 const SetStandardHoursModal = (props: Props) => {
+  // const [availableHours, setAvailableHours] = useState<IEditAvailabilityPayload>([]) 
   return (
     <section className="px-4 py-4">
       <div className="flex">

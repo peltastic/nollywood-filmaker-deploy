@@ -15,11 +15,9 @@ const RegisterPage = (props: Props) => {
   const [page, setPage] = useState<string>("1");
   const [registerData, setRegisterData] = useState<IRegisterdata>({
     email: "",
-    confirmPassword: "",
     expertise: [],
-    f_name: "",
-    l_name: "",
-    password: "",
+    fname: "",
+    lname: "",
     phone: "",
   });
   const setExpertiseHandler = (value: string, type: "add" | "remove") => {
@@ -45,8 +43,8 @@ const RegisterPage = (props: Props) => {
 
   const setUserDetailsHandler = (data: {
     email: string;
-    l_name: string;
-    f_name: string;
+    lname: string;
+    fname: string;
     phone: string;
   }) => {
     setRegisterData({
@@ -100,7 +98,10 @@ const RegisterPage = (props: Props) => {
                 data={registerData}
               />
             ) : (
-              <SecureAccount setPageProps={(val) => setPage(val)} />
+              <SecureAccount
+                data={registerData}
+                setPageProps={(val) => setPage(val)}
+              />
             )}
           </div>
         </div>

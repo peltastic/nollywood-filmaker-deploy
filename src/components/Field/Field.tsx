@@ -48,7 +48,7 @@ const Field = (props: FieldHookConfig<string> & OtherProps) => {
             }}
             // value={props.value}
             placeholder={props.placeholder}
-            type={typePassword && props.password ? "password" : props.type}
+            type={typePassword && props.password ? "password" : "text"}
             className={`${
               props.classname
             } border text-input-text-color outline-none border-gray-2 py-3 px-4 rounded-md placeholder:text-gray-1  ${
@@ -60,7 +60,7 @@ const Field = (props: FieldHookConfig<string> & OtherProps) => {
           {props.password ? (
             <div
               onClick={() => setTypePassword(!typePassword)}
-              className="text-2xl cursor-pointer text-[#828080] absolute right-4 top-1/2 -translate-x-1/2 -translate-y-1/2"
+              className="text-  xl cursor-pointer text-[#828080] absolute right-4 top-1/2 -translate-x-1/2 -translate-y-1/2"
             >
               {typePassword ? <IoEyeOff /> : <IoMdEye />}
             </div>
@@ -68,7 +68,7 @@ const Field = (props: FieldHookConfig<string> & OtherProps) => {
         </div>
       </label>
       {meta.touched && meta.error ? (
-        <div className="text-[#eb4040] mt-2 text-xs font-medium ">
+        <div className="text-val-error-red mt-2 text-xs font-medium ">
           {meta.error}
         </div>
       ) : null}

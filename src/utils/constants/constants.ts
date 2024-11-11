@@ -1,10 +1,48 @@
 export const testSelectData = [
   {
-    label: "Test label",
-    value: "Test label",
+    label: "Sci Fi",
+    value: "Sci Fi",
+  },
+  {
+    label: "Drama",
+    value: "Drama",
   },
 ];
 
+export const testExhibitionData = [
+  {
+    label: "Cinema",
+    value: "Cinema"
+  }
+]
+
+
+export const consultantTypesData = [
+  {
+    label: "Producer",
+    value: "Producer"
+  },
+  {
+    label: "Director",
+    value: "Director"
+  }, 
+  {
+    label: "Composer",
+    value: "Composer"
+  },
+  {
+    label: "Cinematographer",
+    value: "Cinematographer"
+  },
+  {
+    label: "Editor",
+    value: "Editor"
+  },
+  {
+    label: "Writer",
+    value: "Writer"
+  }
+]
 export const paymentOptions = [
   {
     label: "Card",
@@ -81,5 +119,7 @@ export const days = [
   "Sunday",
 ];
 
+
+export const successColor = "#22C55E"
 
 // export const expertise =

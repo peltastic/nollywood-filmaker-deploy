@@ -1,0 +1,14 @@
+export const CancelSvg = (props: {fill:string}) => (
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 15 15"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M14.8047 1.74203L13.3947 0.332031L7.80469 5.92203L2.21469 0.332031L0.804688 1.74203L6.39469 7.33203L0.804688 12.922L2.21469 14.332L7.80469 8.74203L13.3947 14.332L14.8047 12.922L9.21469 7.33203L14.8047 1.74203Z"
+      fill={props.fill}
+    />
+  </svg>
+);

@@ -9,9 +9,9 @@ const ProductionBudgetSuccessPage = (props: Props) => {
   return (
     <ServiceLayout>
     <SuccessTemplate
-      darkBtnLink="/"
+      darkBtnLink="/user/dashboard"
       darkButtonContent='View on Dashboard'
-      lightBtnLink="/"
+      lightBtnLink="/user/dashboard"
       subTitle="When a killer shark unleashes chaos on a beach community off Cape Cod, it’s up to a local sheriff, a marine biologist."
       lightButtonContent="Take me home"
       titleLight="Order Confirmed"

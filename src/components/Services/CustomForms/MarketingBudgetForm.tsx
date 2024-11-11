@@ -1,3 +1,4 @@
+import Spinner from "@/app/Spinner/Spinner";
 import { IMarketingBudgetState } from "@/app/services/marketing-budget/page";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import InputComponent from "@/components/Input/Input";
@@ -14,6 +15,7 @@ type Props = {
   data: IMarketingBudgetState;
   setScriptProps: (key: string, value: string) => void;
   proceed: () => void;
+  isLoading?: boolean;
 };
 
 const MarketingBudgetForm = ({
@@ -21,6 +23,7 @@ const MarketingBudgetForm = ({
   setScriptProps,
   disabled,
   proceed,
+  isLoading,
 }: Props) => {
   const router = useRouter();
   return (
@@ -61,17 +64,17 @@ const MarketingBudgetForm = ({
         </div>
         <div className="mt-8">
           <TextArea
-          placeholder=""
-          changed={(val) => setScriptProps("target_social", val)}
-          value={data.target_social}
-          labelStyle2
-          className="h-[4rem] text-gray-6 text-[0.88rem] py-2 px-3"
-          label="Target Social media platforms"
+            placeholder=""
+            changed={(val) => setScriptProps("target_social", val)}
+            value={data.target_social}
+            labelStyle2
+            className="h-[4rem] text-gray-6 text-[0.88rem] py-2 px-3"
+            label="Target Social media platforms"
           />
         </div>
         <div className="mt-8">
           <TextArea
-          placeholder=""
+            placeholder=""
             changed={(val) => setScriptProps("target_ooh", val)}
             value={data.target_ooh}
             labelStyle2
@@ -101,10 +104,18 @@ const MarketingBudgetForm = ({
           <UnstyledButton
             type="submit"
             disabled={disabled}
-            class="flex py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
+            class="flex justify-center w-[12rem] py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
           >
-            <p className="mr-2">Procced to payment</p>
-            <FaArrowRight className="text-[0.7rem]" />
+            {isLoading ? (
+              <div className="w-[1rem] py-1">
+                <Spinner />
+              </div>
+            ) : (
+              <>
+                <p className="mr-2">Procced to payment</p>
+                <FaArrowRight className="text-[0.7rem]" />
+              </>
+            )}
           </UnstyledButton>
         </div>
       </form>

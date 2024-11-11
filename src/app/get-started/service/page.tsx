@@ -2,8 +2,11 @@
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import HomeLayout from "@/components/Layouts/HomeLayout";
 import RadixSelect from "@/components/Select/RadixSelect";
+import { setFallbackRoute } from "@/lib/slices/routeSlice";
 import { updateService } from "@/lib/slices/servicesSlice";
 import { RootState } from "@/lib/store";
+import { notify } from "@/utils/notification";
+import { nprogress } from "@mantine/nprogress";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
@@ -16,6 +19,9 @@ const ServicePage = (props: Props) => {
   const [value, setValue] = useState<string | null>(null);
   const service = useSelector(
     (state: RootState) => state.persistedState.services.service
+  );
+  const authStatus = useSelector(
+    (state: RootState) => state.persistedState.auth.status
   );
   const router = useRouter();
   const serviceData = [
@@ -78,7 +84,19 @@ const ServicePage = (props: Props) => {
             Back
           </UnstyledButton>
           <UnstyledButton
-            clicked={() => router.push(`/services/${service}`)}
+            clicked={() => {
+              if (authStatus === "LOGGED_OUT") {
+                dispatch(setFallbackRoute(`/services/${service}`));
+                notify(
+                  "message",
+                  "Login Required",
+                  "You need to log in to use a service"
+                );
+                router.push("/auth/login")
+              } else { 
+                router.push(`/services/${service}`);
+              }
+            }}
             disabled={!value}
             class="flex py-2 px-4 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
           >

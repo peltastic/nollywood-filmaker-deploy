@@ -7,11 +7,20 @@ import TestImage from "/public/assets/test-avatar.png";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { setAuthStatus } from "@/lib/slices/authSlice";
+import { notifications } from "@mantine/notifications";
+import classes from "@/app/styles/SuccessNotification.module.css";
+import { nprogress } from "@mantine/nprogress";
+import { successColor } from "@/utils/constants/constants";
+import { removeCookie } from "@/utils/storage";
+import { resetUserInfo, setUserInfo } from "@/lib/slices/userSlice";
 
 type Props = {};
 
 const UserprofileMenu = (props: Props) => {
-    const router = useRouter()
+  const router = useRouter();
+  const dispatch = useDispatch();
   return (
     <div className="bg-white w-[15rem]   py-3 text-gray-3">
       <div className="flex items-center px-3">
@@ -62,7 +71,22 @@ const UserprofileMenu = (props: Props) => {
         </li>
       </ul>
       <div
-        onClick={() => router.push("/")}
+        onClick={() => {
+          nprogress.start();
+          dispatch(setAuthStatus("LOGGED_OUT"));
+          dispatch(resetUserInfo())
+          notifications.show({
+            title: "Logout successful",
+            message: "",
+            color: successColor,
+            classNammes: classes,
+            position: "top-right",
+          });
+          removeCookie("token");
+          removeCookie("refresh")
+          nprogress.complete();
+          router.push("/");
+        }}
         className="cursor-pointer flex items-center text-[0.88rem] px-3 mt-4"
       >
         <Image src={LoginIcon} alt="login-icon" className="mr-3" />

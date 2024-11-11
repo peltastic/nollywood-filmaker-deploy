@@ -1,3 +1,4 @@
+"use client"
 import HomeHeader from "@/components/Headers/HomeHeader";
 import HomeLayout from "@/components/Layouts/HomeLayout";
 import Navbar from "@/components/Navbar/Navbar";

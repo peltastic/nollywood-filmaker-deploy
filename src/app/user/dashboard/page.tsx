@@ -2,7 +2,7 @@
 import Header from "@/components/Dashboard/Header";
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { DataTable } from "@/components/Tables/DataTable";
 import {
   IActiveRequestColumnData,
@@ -12,6 +12,7 @@ import {
   request_history_columns,
   ReqHistoryColumnData,
 } from "@/components/Columns/RequestHistoryColumns";
+import { useFetchActiveRequestsQuery } from "@/lib/features/users/dashboard/requests/requests";
 
 type Props = {};
 
@@ -69,6 +70,21 @@ const reqHistoryData: ReqHistoryColumnData[] = [
 ];
 
 const DashboardHomePgae = (props: Props) => {
+  const [activeReqData, setActiveReqData] = useState<IActiveRequestColumnData[]>([])
+  const { data, isFetching } = useFetchActiveRequestsQuery(null, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  // useEffect(() => {
+  // if (data) {
+  //   const formattedData = data.
+  //   // setActiveReqData([
+  //   //   {
+      
+  //   //   }
+  //   // ])
+  // }
+  // }, [data])
   return (
     <ServiceLayout>
       <DashboardBodyLayout>
@@ -79,7 +95,9 @@ const DashboardHomePgae = (props: Props) => {
             <DataTable
               title="Active requests"
               columns={active_requests_columns}
-              data={active_req}
+              data={activeReqData}
+              loaderLength={4}
+              isFetching={isFetching}
             />
           </div>
           <div className="mt-14">

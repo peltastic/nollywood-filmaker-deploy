@@ -8,6 +8,7 @@ type Props = {
   radius?: "lg" | "md" | "sm" | "xl" | "xs";
   checked?: boolean;
   setChecked?: (val: boolean) => void;
+  defaultChecked?: boolean
 };
 
 const SwitchComponent = (props: Props) => {
@@ -16,7 +17,7 @@ const SwitchComponent = (props: Props) => {
       <Switch
         color={props.color}
         size={props.size}
-        defaultChecked
+        defaultChecked={props.defaultChecked}
         radius={props.radius}
         checked={props.checked}
         onChange={(event) =>

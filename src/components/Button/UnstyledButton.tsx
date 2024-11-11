@@ -13,7 +13,7 @@ const UnstyledButton = (props: Props) => {
     <button
       onClick={props.clicked}
       disabled={props.disabled}
-      className={props.class}
+      className={`${props.class} disabled:cursor-not-allowed transition-all`}
       type={props.type}
     >
       {props.children}

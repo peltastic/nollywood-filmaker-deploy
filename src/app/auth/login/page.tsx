@@ -31,6 +31,7 @@ const LoginPage = (props: Props) => {
             </h2>
           </div>
           <LoginForm
+          loginType="user"
             successRoute={
               service ? `/services/${service}` : "/get-started/service"
             }

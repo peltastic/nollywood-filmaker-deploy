@@ -60,6 +60,7 @@ const config: Config = {
         "stroke-11": "#F5F6F7",
         "yellow-1": "#FDE047",
         "red-1": "#D92D20",
+        "green-1": "#DCFCE7",
         "profile-menu-border": "#F2F4F7",
         "calender-bg": "#F9F9F9",
         "admin-chat-bg": "#F1F1F1",
@@ -77,6 +78,7 @@ const config: Config = {
         "border-red": "#FFB1B2",
         "positive-green": "#22C55E",
         "negative-red": "#EF4444",
+        "val-error-red": "#eb4040",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

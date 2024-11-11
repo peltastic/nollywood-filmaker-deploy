@@ -6,12 +6,21 @@ import Image from "next/image";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import { FaArrowRight } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
+import { setFallbackRoute } from "@/lib/slices/routeSlice";
+import { notify } from "@/utils/notification";
+import { nprogress } from "@mantine/nprogress";
 
 type Props = {};
 
 const GetStartedPage = (props: Props) => {
   const [selected, setSelected] = useState<"service" | "chat" | null>(null);
   const router = useRouter();
+  const dispatch = useDispatch();
+  const authStatus = useSelector(
+    (state: RootState) => state.persistedState.auth.status
+  );
 
   return (
     <HomeLayout>
@@ -69,7 +78,27 @@ const GetStartedPage = (props: Props) => {
             </UnstyledButton>
           ) : null}
           <UnstyledButton
-            clicked={() => router.push(selected === "service" ? "/get-started/service" : "/get-started/chat")}
+            clicked={() => {
+              nprogress.start();
+              if (selected === "service") {
+                nprogress.complete();
+                router.push("/get-started/service");
+              } else {
+                if (authStatus === "LOGGED_OUT") {
+                  dispatch(setFallbackRoute(`/get-started/chat`));
+                  notify(
+                    "message",
+                    "Login Required",
+                    "You need to log in to use a service"
+                  );
+                  nprogress.complete();
+                  router.push("/auth/login");
+                } else {
+                  nprogress.complete();
+                  router.push("/get-started/chat");
+                }
+              }
+            }}
             disabled={!selected}
             class="flex py-2 px-4 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
           >

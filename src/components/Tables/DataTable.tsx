@@ -20,6 +20,7 @@ import {
 import Image from "next/image";
 import UnstyledButton from "../Button/UnstyledButton";
 import { useRouter } from "next/navigation";
+import { Skeleton } from "@mantine/core";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -29,7 +30,9 @@ interface DataTableProps<TData, TValue> {
   faded?: boolean;
   showMoreBtnContent?: string;
   link?: string;
-  clicked?: () => void
+  clicked?: () => void;
+  loaderLength?: number;
+  isFetching?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -40,7 +43,9 @@ export function DataTable<TData, TValue>({
   faded,
   showMoreBtnContent,
   link,
-  clicked
+  clicked,
+  isFetching,
+  loaderLength,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -64,7 +69,7 @@ export function DataTable<TData, TValue>({
                 if (link) {
                   router.push(link);
                 }
-                clicked && clicked()
+                clicked && clicked();
               }}
               class="mt-8 sm:mt-0 bg-black-3 text-white px-4 py-2 rounded-md text-[0.88rem]"
             >
@@ -73,67 +78,83 @@ export function DataTable<TData, TValue>({
           )}
         </div>
       </div>
-      <Table className="table-auto overflow-hidden border border-stroke-5 shadow-xl">
-        {table.getRowModel().rows?.length ? (
-          <TableHeader className=" text-gray-1 ">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow
-                key={headerGroup.id}
-                className={`${
-                  faded
-                    ? "bg-white border-t border-t-white"
-                    : "bg-gray-bg-5 border border-stroke-5"
-                }  `}
-              >
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-        ) : null}
-        <TableBody className="bg-white">
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row, index) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-                className={`${
-                  faded && index % 2 === 0 ? "bg-gray-bg-1" : null
-                } border border-stroke-5`}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <div className="w-full py-[4rem]">
-                <Image src={NoDataImg} alt="no-data" className="mx-auto" />
-                <h1 className="py-8 text-black-4 text-[1.13rem] font-medium text-center">
-                  No completed requests
-                </h1>
-                <h2 className="text-[0.88rem] text-center text-gray-1 w-[20rem] mx-auto">
-                  Any requests you have made will show up here. Start today by
-                  creating a request.
-                </h2>
+      {isFetching ? (
+        <div className="bg-white mt-2">
+          {loaderLength &&
+            Array.from({
+              length: loaderLength,
+            }).map((el, index) => (
+              <div className="mb-2" key={index.toString()}>
+                <Skeleton height={50} />
               </div>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+            ))}
+        </div>
+      ) : (
+        <Table className="table-auto overflow-hidden border border-stroke-5 shadow-xl">
+          {table.getRowModel().rows?.length ? (
+            <TableHeader className=" text-gray-1 ">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow
+                  key={headerGroup.id}
+                  className={`${
+                    faded
+                      ? "bg-white border-t border-t-white"
+                      : "bg-gray-bg-5 border border-stroke-5"
+                  }  `}
+                >
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    );
+                  })}
+                </TableRow>
+              ))}
+            </TableHeader>
+          ) : null}
+          <TableBody className="bg-white">
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row, index) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                  className={`${
+                    faded && index % 2 === 0 ? "bg-gray-bg-1" : null
+                  } border border-stroke-5`}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <div className="w-full py-[4rem]">
+                  <Image src={NoDataImg} alt="no-data" className="mx-auto" />
+                  <h1 className="py-8 text-black-4 text-[1.13rem] font-medium text-center">
+                    No completed requests
+                  </h1>
+                  <h2 className="text-[0.88rem] text-center text-gray-1 w-[20rem] mx-auto">
+                    Any requests you have made will show up here. Start today by
+                    creating a request.
+                  </h2>
+                </div>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
     </div>
   );
 }

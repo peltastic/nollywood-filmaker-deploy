@@ -5,7 +5,12 @@ import "@mantine/core/styles.css";
 import '@mantine/charts/styles.css';
 import Providers from "@/components/Providers/Providers";
 import '@mantine/tiptap/styles.css';
-// import '@mantine/dropzone/styles.css';
+import '@mantine/notifications/styles.css';
+import '@mantine/nprogress/styles.css';
+import { Notifications } from '@mantine/notifications';
+import { NavigationProgress } from '@mantine/nprogress';
+
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -31,6 +36,8 @@ export default function RootLayout({
               },
             }}
           >
+             <NavigationProgress color="#f11946" />
+             <Notifications />
             {children}
           </MantineProvider>
         </Providers>
