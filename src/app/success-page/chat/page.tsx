@@ -16,7 +16,7 @@ const ChatSuccessPage = (props: Props) => {
         lightButtonContent="Take me home"
         titleLight="Order Confirmed"
         titleBold="Chat with a professional"
-        width="w-[95%] sm:w-[90%] md:w-[40rem]"
+        width="w-full sm:w-[90%] md:w-[40rem]"
       />
     </ServiceLayout>
   );

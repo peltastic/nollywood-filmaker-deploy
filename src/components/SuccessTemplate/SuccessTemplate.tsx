@@ -28,11 +28,11 @@ const SuccessTemplate = ({
   dartBtnFunc,
 }: Props) => {
   return (
-    <div>
+    <div className="mb-20 md:mb-0 px-[1.2rem] sm:px-0">
       <div
         className={` ${
           width || "w-[95%] sm:w-[90%] md:w-[30rem]"
-        } md:absolute md:-translate-x-1/2 md:-translate-y-1/2 md:left-1/2 md:top-1/2 mt-[3rem] md:mt-0`}
+        } md:absolute md:-translate-x-1/2 md:-translate-y-1/2 md:left-1/2 md:top-1/2 mt-[3rem] md:mt-0 mx-auto`}
       >
         <div className="w-[15rem] mx-auto">
           <Image src={SuccessGif} alt="success-gif" />
@@ -49,7 +49,7 @@ const SuccessTemplate = ({
         <Link href={darkBtnLink}>
           <UnstyledButton
             clicked={dartBtnFunc && dartBtnFunc}
-            class="w-[90%] md:w-[30rem] block  mt-10 text-[1.13rem] font-bold py-4 rounded-md  text-center mx-auto bg-black-2 text-white "
+            class="w-[90%] md:w-[30rem] block hover:bg-blue-1 transition-all duration-500  mt-10 text-[1.13rem] font-bold py-4 rounded-md  text-center mx-auto bg-black-2 text-white "
           >
             {darkButtonContent}
           </UnstyledButton>

@@ -79,7 +79,7 @@ const ServicePage = (props: Props) => {
         <div className="w-full flex mt-[10rem]">
           <UnstyledButton
             clicked={() => router.back()}
-            class="rounded-md px-4 border-stroke-2 border"
+            class="rounded-md px-4 border-stroke-2 border hover:border-black-3 duration-500"
           >
             Back
           </UnstyledButton>
@@ -98,7 +98,7 @@ const ServicePage = (props: Props) => {
               }
             }}
             disabled={!value}
-            class="flex py-2 px-4 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
+            class="flex py-2 px-4 hover:bg-blue-1 duration-500 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
           >
             <p className="mr-2">Next</p>
             <FaArrowRight className="text-[0.7rem]" />

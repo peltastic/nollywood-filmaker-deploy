@@ -36,7 +36,7 @@ const Navbar = (props: Props) => {
       <nav className="flex items-center pt-2 pb-2 md:pb-0 text-black-1 border-b border-b-border-gray px-0 md:px-8">
         <Link href={"/"}>
           <div className="">
-            <Image src={Logo} alt="logo" className="w-[5rem] md:w-[6rem]" />
+            <Image src={Logo} alt="logo" className="w-[7rem]" />
           </div>
         </Link>
         <div className="md:hidden ml-auto mr-4 md:mr-0 relative z-50">

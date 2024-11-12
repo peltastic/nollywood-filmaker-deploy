@@ -33,46 +33,66 @@ const GetStartedPage = (props: Props) => {
           </p>
         </div>
         <div className="flex flex-wrap md:flex-nowrap mt-10 gap-8">
-          <div
+          <button
             onClick={() => setSelected("service")}
             className={`${
-              selected === "service" ? "border-black-3" : "border-stroke-2"
+              selected === "service"
+                ? " text-yellow-1  rounded-md  relative overflow-hidden border-2 border-yellow-1  px-3  shadow-2xl transition-all before:absolute before:bottom-0  before:top-0 before:z-[-1] before:h-full  before:bg-black-9 before:transition-all before:duration-400  before:left-0 before:w-full"
+                : "border-stroke-2 before:w-0 before:left-0 text-black-2"
             } transition-all cursor-pointer border w-full md:w-[18.6rem] flex items-center justify-center rounded-md h-[9.13rem]`}
           >
             <div className="text-center">
-              <Image
-                src={GetStartedIcon}
-                alt="get-startedIcon"
-                className="w-[3rem] mx-auto"
-              />
-              <p className="text-black-2 text-[1.13rem] mt-1 font-medium">
+              {selected === "service" ? (
+                <div className="h-[3rem]"></div>
+              ) : (
+                <Image
+                  src={GetStartedIcon}
+                  alt="get-startedIcon"
+                  className="w-[3rem] mx-auto"
+                />
+              )}
+              <p
+                className={`transition-all ${
+                  selected === "service" ? "-translate-y-[18px]" : null
+                } text-[1.13rem] mt-1 font-medium`}
+              >
                 Request a service
               </p>
             </div>
-          </div>
-          <div
+          </button>
+          <button
             onClick={() => setSelected("chat")}
             className={`${
-              selected === "chat" ? "border-black-3" : "border-stroke-2"
-            } transition-all cursor-pointer border w-full md:w-[18.6rem] flex items-center justify-center rounded-md h-[9.13rem] `}
+              selected === "chat"
+                ? " text-yellow-1  rounded-md  relative overflow-hidden border-2 border-yellow-1  px-3  shadow-2xl transition-all before:absolute before:bottom-0  before:top-0 before:z-[-1] before:h-full  before:bg-black-9 before:transition-all before:duration-400  before:left-0 before:w-full"
+                : "border-stroke-2 before:w-0 before:left-0 text-black-2"
+            } transition-all cursor-pointer border w-full md:w-[18.6rem] flex items-center justify-center rounded-md h-[9.13rem]`}
           >
             <div className="text-center">
-              <Image
-                src={GetStartedIcon}
-                alt="get-startedIcon"
-                className="w-[3rem] mx-auto"
-              />
-              <p className="text-black-2 text-[1.13rem] mt-1 font-medium">
+              {selected === "chat" ? (
+                <div className="h-[3rem]"></div>
+              ) : (
+                <Image
+                  src={GetStartedIcon}
+                  alt="get-startedIcon"
+                  className="w-[3rem] mx-auto"
+                />
+              )}
+              <p
+                className={`transition-all ${
+                  selected === "chat" ? "-translate-y-[18px]" : null
+                } text-[1.13rem] mt-1 font-medium`}
+              >
                 Chat with a professional
               </p>
             </div>
-          </div>
+          </button>
         </div>
         <div className="w-full flex mt-[10rem] mb-9 md:mb-0">
           {selected ? (
             <UnstyledButton
               clicked={() => setSelected(null)}
-              class="rounded-md px-4 border-stroke-2 border"
+              class="rounded-md px-4 border-stroke-2 border hover:border-black-3 duration-500"
             >
               Back
             </UnstyledButton>
@@ -100,7 +120,7 @@ const GetStartedPage = (props: Props) => {
               }
             }}
             disabled={!selected}
-            class="flex py-2 px-4 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
+            class="flex py-2 px-4 hover:bg-blue-1 duration-500 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
           >
             <p className="mr-2">Next</p>
             <FaArrowRight className="text-[0.7rem]" />

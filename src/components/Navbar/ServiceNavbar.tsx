@@ -143,7 +143,7 @@ const ServiceNavbar = (props: Props) => {
                     el.link === pathname ? "border-b-4 border-black-3" : ""
                   }`}
                 >
-                  <Link className="py-6 px-2 block" href={el.link}>
+                  <Link className="py-6 px-2 block hover:text-blue-1 transition-all duration-200" href={el.link}>
                     {el.name}
                   </Link>
                 </li>

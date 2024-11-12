@@ -39,7 +39,7 @@ const RadixSelect = ({ data, changed }: Props) => {
               <Select.Item
                 value={el.value}
                 key={el.value}
-                className="outline-none py-4 px-2 flex flex-wrap items-center !z-[100] relative"
+                className="outline-none py-4 px-6 sm:px-2 flex flex-wrap items-center hover:bg-gray-2 !z-[100] relative"
               >
                 <Select.ItemText className=" ">
                   <div className="flex flex-wrap items-center text-[0.88rem] px-3 cursor-pointer">

@@ -11,17 +11,15 @@ import Link from "next/link";
 import ModalComponent from "../Modal/Modal";
 import { useDisclosure } from "@mantine/hooks";
 import SetChatDate from "../ModalPages/SetChatDate";
+import { capitalizeFirstLetter } from "@/utils/helperFunction";
 
 export interface IActiveRequestColumnData {
   name: string;
-  service_type:
-    | "Read my script"
-    | "Watch the Final cut of my film"
-    | "Create a production Budget";
+  service_type: string;
   progress: number;
 
   date: string;
-  status: "Ready" | "Ongoing" | "Completed";
+  status: "ready" | "ongoing" | "completed" | "pending";
 }
 
 export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
@@ -89,9 +87,9 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
     header: "Status",
     cell: ({ row }) => {
       const className =
-        row.original.status === "Ready"
+        row.original.status.toLowerCase() === "ready"
           ? "bg-light-blue text-dark-blue"
-          : row.original.status === "Completed"
+          : row.original.status.toLowerCase() === "completed"
           ? "bg-light-green text-dark-green"
           : "bg-light-yellow text-dark-yellow";
       return (
@@ -102,7 +100,7 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
             <span className="block pr-1">
               <GoDotFill />
             </span>{" "}
-            {row.getValue("status")}
+            {capitalizeFirstLetter(row.getValue("status"))}
           </p>
         </div>
       );
@@ -122,12 +120,12 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
             size="xl"
             centered
           >
-              <SetChatDate open={open} close={close} />
+            <SetChatDate open={open} close={close} />
           </ModalComponent>
           <MenuComponent
             target={
               <div>
-                <UnstyledButton class="px-4 py-2 rounded-md items-center bg-black-3 text-white flex">
+                <UnstyledButton class="transition-all hover:bg-blue-1 duration-500 px-4 py-2 rounded-md items-center bg-black-3 text-white flex">
                   <p className="mr-1 font-medium text-[0.88rem]">Actions</p>
                   <IoIosArrowDown />
                 </UnstyledButton>

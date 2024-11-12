@@ -12,35 +12,11 @@ import {
   request_history_columns,
   ReqHistoryColumnData,
 } from "@/components/Columns/RequestHistoryColumns";
+import moment from "moment";
 import { useFetchActiveRequestsQuery } from "@/lib/features/users/dashboard/requests/requests";
 
 type Props = {};
 
-const active_req: IActiveRequestColumnData[] = [
-  {
-    name: "Mikolo",
-    date: "22 Jan 2022",
-    progress: 100,
-
-    service_type: "Read my script",
-    status: "Ready",
-  },
-  {
-    name: "Jagun Jagun",
-    date: "22 Jan 2022",
-    progress: 60,
-    service_type: "Watch the Final cut of my film",
-    status: "Ongoing",
-  },
-  {
-    name: "Criminal",
-    date: "22 Jan 2022",
-    progress: 42,
-
-    service_type: "Create a production Budget",
-    status: "Ongoing",
-  },
-];
 
 const reqHistoryData: ReqHistoryColumnData[] = [
   {
@@ -70,21 +46,34 @@ const reqHistoryData: ReqHistoryColumnData[] = [
 ];
 
 const DashboardHomePgae = (props: Props) => {
-  const [activeReqData, setActiveReqData] = useState<IActiveRequestColumnData[]>([])
+  const [activeReqData, setActiveReqData] = useState<
+    IActiveRequestColumnData[]
+  >([]);
   const { data, isFetching } = useFetchActiveRequestsQuery(null, {
     refetchOnMountOrArgChange: true,
   });
 
-  // useEffect(() => {
-  // if (data) {
-  //   const formattedData = data.
-  //   // setActiveReqData([
-  //   //   {
-      
-  //   //   }
-  //   // ])
-  // }
-  // }, [data])
+  useEffect(() => {
+    if (data) {
+      const formattedData = data.request.map((el) => {
+        return {
+          name: el.movie_title,
+          date: moment(el.date).format("ll"),
+          status: el.stattusof,
+          service_type: el.nameofservice,
+          progress:
+            el.stattusof === "completed"
+              ? 100
+              : el.stattusof === "ongoing"
+              ? 50
+              : el.stattusof === "pending"
+              ? 25
+              : 100,
+        };
+      });
+      setActiveReqData(formattedData)
+    }
+  }, [data]);
   return (
     <ServiceLayout>
       <DashboardBodyLayout>
