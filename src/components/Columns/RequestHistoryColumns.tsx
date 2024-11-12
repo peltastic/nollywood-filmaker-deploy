@@ -96,9 +96,9 @@ export const request_history_columns: ColumnDef<IActiveRequestColumnData>[] = [
     header: "Status",
     cell: ({ row }) => {
       const className =
-        row.original.status === "Ready"
+        row.original.status === "ready"
           ? "bg-light-blue text-dark-blue"
-          : row.original.status === "Completed"
+          : row.original.status === "completed"
           ? "bg-light-green text-dark-green"
           : "bg-light-yellow text-dark-yellow";
       return (
