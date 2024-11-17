@@ -1,7 +1,6 @@
 "use client";
 import Area from "@/components/Charts/Area";
-import { customer_req_columns } from "@/components/Columns/admin/CustomerRequestsColumn";
-import { ICustomerReqData } from "@/components/Columns/consultants/CustomerRequestsColumn";
+import { ICustomerReqData, customer_req_columns } from "@/components/Columns/admin/CustomerRequestsColumn";
 import CustomerFeed from "@/components/CustomerFeed/CustomerFeed";
 import DashboardInfoCard from "@/components/Dashboard/DashboardInfoCard";
 import DashboardPlate from "@/components/Dashboard/DashboardPlate";
