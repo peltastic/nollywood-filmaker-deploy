@@ -1,5 +1,5 @@
 import config from "@/config/config";
-import { ICustomerRequestDataResponse } from "@/interfaces/consultants/dashboard/request";
+import { ICustomerReqDetails, ICustomerRequestDataResponse } from "@/interfaces/consultants/dashboard/request";
 import {
   consultantBaseQueryWithReauth,
 } from "@/lib/baseQuery";
@@ -36,7 +36,7 @@ export const consultantRequestsApi = createApi({
         method: "PUT",
       }),
     }),
-    getCustomerRequestDetail: build.query<unknown, string>({
+    getCustomerRequestDetail: build.query<ICustomerReqDetails, string>({
       query: (id) => `/api/consultants/orderdetail/${id}`,
     }),
     getActiveRequest: build.query<unknown, string>({
@@ -50,5 +50,6 @@ export const {
   useAcceptRequestMutation,
   useDeclineRequestMutation,
   useGetCustomerRequestDetailQuery,
-  useGetActiveRequestQuery
+  useGetActiveRequestQuery,
+  useLazyGetCustomerRequestDetailQuery
 } = consultantRequestsApi;

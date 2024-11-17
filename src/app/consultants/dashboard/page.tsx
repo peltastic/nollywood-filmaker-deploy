@@ -225,6 +225,8 @@ const DashboardPage = (props: Props) => {
           service_type: el.info.nameofservice,
           status: el.assignment.status,
           imgurl: el.user.profilepics,
+          id: el.assignment._id,
+          orderId: el.assignment.orderId
         };
       });
       setCustomerReqData(resData);

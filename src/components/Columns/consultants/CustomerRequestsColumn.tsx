@@ -1,6 +1,5 @@
 import CheckboxComponent from "@/components/Checkbox/Checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import TestImage from "/public/assets/dashboard/issues-img-1.png";
 import Image from "next/image";
 import ReadMyScriptDarkImg from "/public/assets/services/read-my-script-dark.svg";
 import UnstyledButton from "@/components/Button/UnstyledButton";
@@ -17,6 +16,8 @@ export interface ICustomerReqData {
   date: string;
   status: "ready" | "ongoing" | "completed" | "pending";
   imgurl?: string;
+  id: string;
+  orderId: string
 }
 
 export const customer_req_columns: ColumnDef<ICustomerReqData>[] = [
@@ -41,7 +42,7 @@ export const customer_req_columns: ColumnDef<ICustomerReqData>[] = [
         <div className="flex items-center w-[20rem] xl:w-auto">
           <div className="mr-2">
             {row.original.imgurl && (
-              <AspectRatio ratio={1800/1800}>
+              <AspectRatio ratio={1800 / 1800}>
                 <Image
                   src={row.original.imgurl}
                   height={100}
@@ -124,7 +125,7 @@ export const customer_req_columns: ColumnDef<ICustomerReqData>[] = [
         <UnstyledButton
           clicked={() =>
             router.push(
-              `/consultants/dashboard/order-details?status=${row.original.status}`
+              `/consultants/dashboard/${row.original.orderId}/order-details?status=${row.original.status}`
             )
           }
           class="bg-black-3 text-[0.88rem] text-white py-2 px-4 rounded-md"

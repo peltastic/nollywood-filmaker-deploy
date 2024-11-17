@@ -22,7 +22,7 @@ const OrderDetailsBody = ({ title, script, bodyData }: Props) => {
         </div>
       </div>
       {bodyData.map((el) => (
-        <div className="border-b border-b-stroke-4 py-4">
+        <div key={el.title} className="border-b border-b-stroke-4 py-4">
           <h1 className="font-bold mb-1">{el.title}</h1>
           <p className="text-[0.88rem]">{el.content}</p>
         </div>

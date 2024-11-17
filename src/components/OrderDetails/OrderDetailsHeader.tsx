@@ -16,6 +16,7 @@ type Props = {
   statusValue: string;
   consultant?: boolean;
   admin?: boolean;
+  customerReqOrderId?: string
 };
 
 const OrderDetailsHeader = ({

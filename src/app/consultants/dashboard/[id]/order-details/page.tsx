@@ -4,8 +4,9 @@ import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import OrderDetailsBody from "@/components/OrderDetails/OrderDetailsBody";
 import OrderDetailsHeader from "@/components/OrderDetails/OrderDetailsHeader";
 import OrderDetailsTop from "@/components/OrderDetails/OrderDetailsTop";
-import { useSearchParams } from "next/navigation";
-import React from "react";
+import { useLazyGetCustomerRequestDetailQuery } from "@/lib/features/consultants/dashboard/request";
+import { useParams, useSearchParams } from "next/navigation";
+import React, { useEffect } from "react";
 
 type Props = {};
 
@@ -13,6 +14,16 @@ const OrderDetails = (props: Props) => {
   const search = useSearchParams();
 
   const searchVal = search.get("status") || "Pending";
+  const params = useParams();
+
+  const [getCustomerReqDetails, {}] = useLazyGetCustomerRequestDetailQuery();
+
+  useEffect(() => {
+    if (params.id) {
+      getCustomerReqDetails(params.id as string);
+    }
+  }, [params]);
+
   return (
     <ServiceLayout consultant>
       <DashboardBodyLayout>
