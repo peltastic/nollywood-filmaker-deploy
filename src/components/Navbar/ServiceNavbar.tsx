@@ -154,7 +154,7 @@ const ServiceNavbar = (props: Props) => {
               <div className="gap-4 hidden md:flex items-center">
                 <HiBell />
                 <BsFillQuestionCircleFill className="text-[1.4rem]" />
-                <Link href={"/admin/dashboard/settings"}>
+                <Link href={props.admin ? "/admin/dashboard/settings": props.consultant ? "/consultants/dashboard/settings" : "/user/dashboard/settings"}>
                   <div className="cursor-pointer">
                     <IoIosSettings />
                   </div>

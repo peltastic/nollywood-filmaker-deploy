@@ -118,7 +118,7 @@ const DraftLegalDocumentPage = (props: Props) => {
                         contacts: scriptData.information,
                         movie_title: scriptData.title,
                         productionCompany: scriptData.production_company,
-                        title: "Legal",
+                        title: "Draft Legal documents",
                         type: "Movie Pitch",
                         userId,
                       });

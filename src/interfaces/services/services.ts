@@ -4,7 +4,7 @@ interface GeneralType {
 }
 
 interface InitializeReadMyScriptPayload extends GeneralType {
-  title: "Read My Script";
+  title: "Read my Script and advice";
   synopsis: string;
   genre: string;
   platforms: string;
@@ -29,7 +29,7 @@ interface IServiceResponse {
 }
 
 interface InitialWatchFinalCutPayload extends GeneralType {
-  title: "Watch My Final Cut";
+  title: "Watch the Final cut of my film and advice";
   type: "request";
   synopsis: string;
   link: string;
@@ -39,7 +39,7 @@ interface InitialWatchFinalCutPayload extends GeneralType {
 }
 
 interface InitializeBudgetAndAdvicePayload extends GeneralType {
-  title: "Look At My Budget";
+  title: "Look at my Budget and advice";
   type: "request";
   synopsis: string;
   genre: string;
@@ -49,7 +49,7 @@ interface InitializeBudgetAndAdvicePayload extends GeneralType {
 }
 
 interface InitializeCreateProductionBudgetPayload extends GeneralType {
-  title: "Create Production Budget";
+  title: "Create a Production budget";
   platform: string;
   crews: string;
   days: string;
@@ -61,7 +61,7 @@ interface InitializeCreateProductionBudgetPayload extends GeneralType {
 }
 
 interface InitializeCreateMartketingBudgetPayload extends GeneralType {
-  title: "Create Marketing Budget";
+  title: "Create a Marketing budget";
   type: "request";
   movie_title: string;
   platform: string;
@@ -72,7 +72,7 @@ interface InitializeCreateMartketingBudgetPayload extends GeneralType {
 }
 
 interface InitializeCreatePitchPayload extends GeneralType {
-  title: "Create A Pitch";
+  title: "Create a Pitch based on my Script";
   type: "request";
   platform: string;
   files: File | null;
@@ -85,7 +85,7 @@ interface InitializeCreatePitchPayload extends GeneralType {
 
 interface InitializaeDraftLegalDocument extends GeneralType {
   type: "Movie Pitch";
-  title: "Legal"
-  productionCompany: string
-  contacts: string
+  title: "Draft Legal documents";
+  productionCompany: string;
+  contacts: string;
 }

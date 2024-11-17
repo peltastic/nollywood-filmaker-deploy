@@ -26,7 +26,7 @@ const Header = (props: Props) => {
         {props.consultant  || props.admin? null : (
           <UnstyledButton
             clicked={() => router.push("/get-started")}
-            class="mt-8 sm:mt-0 w-full sm:w-auto hover:bg-blue-1 transition-all duration-500 bg-black-3 border border-black-3 font-medium text-white py-2 px-4 rounded-md"
+            class="mt-8 sm:mt-0 w-full sm:w-auto hover:border-blue-1 hover:bg-blue-1 transition-all duration-500 bg-black-3 border border-black-3 font-medium text-white py-2 px-4 rounded-md"
           >
             Make a request
           </UnstyledButton>

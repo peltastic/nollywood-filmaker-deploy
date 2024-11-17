@@ -77,8 +77,49 @@ export const months_data = [
   },
 ];
 
-
 export function capitalizeFirstLetter(val: string) {
   return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }
 
+export function convert12HT24(hour: number, type24?: boolean): number {
+  const link = [
+    {
+      H12hour: 1,
+      H21hour: 13,
+    },
+    {
+      H12hour: 2,
+      H21hour: 14,
+    },
+    {
+      H12hour: 3,
+      H21hour: 15,
+    },
+    {
+      H12hour: 4,
+      H21hour: 16,
+    },
+    {
+      H12hour: 5,
+      H21hour: 17,
+    },
+  ];
+
+  let selectedHour: any = [];
+  if (type24) {
+    selectedHour = link.filter((el) => el.H12hour === hour);
+  } else {
+    selectedHour = link.filter((el) => el.H21hour === hour);
+  }
+
+  if (type24) {
+    console.log(hour);
+    return hour >= 1 && hour <= 5 ? selectedHour[0].H21hour : hour;
+  } else {
+    return hour >= 13 && hour <= 17 ? selectedHour[0].H12hour : hour;
+  }
+}
+
+export function get12HTime(hour: number): "AM" | "PM" {
+  return hour >= 9 && hour <= 12 ? "AM" : "PM";
+}

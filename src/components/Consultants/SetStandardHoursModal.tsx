@@ -1,18 +1,120 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CancelImg from "/public/assets/cancel.svg";
 import { MdInfoOutline } from "react-icons/md";
-import { days } from "@/utils/constants/constants";
+import {
+  days,
+  defaultAvailabilityHours,
+  loaderColor,
+} from "@/utils/constants/constants";
 import HoursSelector from "./HoursSelector";
 import UnstyledButton from "../Button/UnstyledButton";
-import { IEditAvailabilityPayload } from "@/interfaces/consultants/profile/profile";
+import { ICreateAvailabilityPayload } from "@/interfaces/consultants/profile/availability";
+import {
+  useEditAvailabilityMutation,
+  useGetConsultantAvailabilityQuery,
+} from "@/lib/features/consultants/profile/availability";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
+import { nprogress } from "@mantine/nprogress";
+import { notify } from "@/utils/notification";
+import Spinner from "@/app/Spinner/Spinner";
+import { Skeleton } from "@mantine/core";
 
 type Props = {
   close: () => void;
 };
 
 const SetStandardHoursModal = (props: Props) => {
-  // const [availableHours, setAvailableHours] = useState<IEditAvailabilityPayload>([]) 
+  const consultantId = useSelector(
+    (state: RootState) => state.persistedState.consultant.user?.id
+  );
+
+  const consultantExpertise = useSelector(
+    (state: RootState) => state.persistedState.consultant.user?.expertise
+  );
+  const [setStandardHours, { isSuccess, isError, error, data, isLoading }] =
+    useEditAvailabilityMutation();
+  const [availableHours, setAvailableHours] = useState<
+    ICreateAvailabilityPayload[]
+  >([]);
+  const result = useGetConsultantAvailabilityQuery(consultantId!, {
+    refetchOnMountOrArgChange: true
+  });
+
+  useEffect(() => {
+    if (result.error) {
+      if (consultantExpertise) {
+        const defaultHours: ICreateAvailabilityPayload[] =
+          defaultAvailabilityHours.map((el) => {
+            return {
+              ctime: el.ctime,
+              expertise: consultantExpertise,
+              day: el.day,
+              status: el.status,
+              otime: el.otime,
+            };
+          });
+        setAvailableHours(defaultHours);
+      }
+    } 
+    if (result.data) {
+      console.log(result.data.availability)
+      setAvailableHours(result.data.availability)
+    }
+  }, [result.error, result.data]);
+
+  useEffect(() => {
+    if (isError) {
+      nprogress.complete();
+      notify(
+        "error",
+        "Error",
+        (error as any).data?.message || "An Error Occured"
+      );
+    }
+    if (isSuccess) {
+      notify("success", "Successful!", "Availability hours set successfully");
+      props.close();
+    }
+  }, [isError, isSuccess]);
+
+  const updateAvailabiltyHours = (
+    index: number,
+    payload: {
+      hours: number;
+      minutes: number;
+      seconds: number;
+    },
+    type: "openTime" | "closeTime"
+  ) => {
+    const currAvalabilityHours = [...availableHours];
+    const currPayload = currAvalabilityHours[index];
+
+    currAvalabilityHours.splice(index, 1, {
+      ctime: type === "closeTime" ? payload : currPayload.ctime,
+      otime: type === "openTime" ? payload : currPayload.otime,
+      day: currPayload.day,
+      status: currPayload.status,
+      expertise: currPayload.expertise,
+    });
+
+    setAvailableHours(currAvalabilityHours);
+  };
+
+  const updateStatus = (index: number, status: "open" | "close") => {
+    const currAvalabilityHours = [...availableHours];
+    const currPayload = currAvalabilityHours[index];
+    currAvalabilityHours.splice(index, 1, {
+      ctime: currPayload.ctime,
+      otime: currPayload.otime,
+      day: currPayload.day,
+      status,
+      expertise: currPayload.expertise,
+    });
+    setAvailableHours(currAvalabilityHours);
+  };
+
   return (
     <section className="px-4 py-4">
       <div className="flex">
@@ -33,11 +135,41 @@ const SetStandardHoursModal = (props: Props) => {
           <p>• Save the changes</p>
         </div>
       </div>
-      <div className="mt-4">
-        {days.map((el) => (
-          <HoursSelector day={el} key={el} />
-        ))}
-      </div>
+      {result.isFetching && !result.data ? (
+        <div className="mt-8">
+          <div className="mt-4">
+            <Skeleton height={50} />
+          </div>
+          <div className="mt-4">
+            <Skeleton height={50} />
+          </div>
+          <div className="mt-4">
+            <Skeleton height={50} />
+          </div>
+          <div className="mt-4">
+            <Skeleton height={50} />
+          </div>
+          <div className="mt-4">
+            <Skeleton height={50} />
+          </div>
+          <div className="mt-4">
+            <Skeleton height={50} />
+          </div>
+        </div>
+      ) : (
+        <div className="mt-4">
+          {availableHours.map((el, index) => (
+            <HoursSelector
+              updateHours={updateAvailabiltyHours}
+              index={index}
+              day={el.day}
+              data={el}
+              key={el.day}
+              updateStatus={updateStatus}
+            />
+          ))}
+        </div>
+      )}
       <div className="w-full flex flex-wrap mt-[5rem]">
         <UnstyledButton
           clicked={props.close}
@@ -46,10 +178,19 @@ const SetStandardHoursModal = (props: Props) => {
           Cancel
         </UnstyledButton>
         <UnstyledButton
-     
-          class="flex py-2 px-4 transition-all rounded-md w-full xs:w-auto justify-center items-center text-white border border-black-3 disabled:border-black-2  bg-black-3 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
+          clicked={() => setStandardHours({ schedule: availableHours})}
+          disabled={isLoading}
+          class="flex w-[8rem] py-2 px-4 transition-all rounded-md  justify-center items-center text-white border border-black-3 disabled:border-black-2  bg-black-3 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
         >
-          <p>Save updates</p>
+          {isLoading ? (
+            <div className="">
+              <div className="w-[1rem] py-1">
+                <Spinner />
+              </div>
+            </div>
+          ) : (
+            <p>Save updates</p>
+          )}
         </UnstyledButton>
       </div>
     </section>

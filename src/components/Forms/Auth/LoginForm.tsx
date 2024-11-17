@@ -43,6 +43,11 @@ const LoginForm = (props: Props) => {
     (state: RootState) => state.persistedState.route.fallbackRoute
   );
 
+  const consultantFallbackRoute = useSelector(
+    (state: RootState) =>
+      state.persistedState.consultantRoute.consultantFallbackRoute
+  );
+
   useEffect(() => {
     if (isError) {
       nprogress.complete();
@@ -73,7 +78,9 @@ const LoginForm = (props: Props) => {
   useEffect(() => {
     if (result.isError) {
       nprogress.complete();
-      setErrorMessage((result.error as any).data?.message || "An Error Occured");
+      setErrorMessage(
+        (result.error as any).data?.message || "An Error Occured"
+      );
     }
     if (result.isSuccess) {
       notifications.show({
@@ -91,7 +98,7 @@ const LoginForm = (props: Props) => {
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       });
       setConsultantToken(result.data.accessToken);
-      router.push("/consultants/dashboard")
+      router.push(consultantFallbackRoute || "/consultants/dashboard");
     }
   }, [result.isError, result.isSuccess]);
 

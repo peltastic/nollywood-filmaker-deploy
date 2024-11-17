@@ -18,7 +18,6 @@ export const routeSlice = createSlice({
     }
 })
 
-
 export const {setFallbackRoute} = routeSlice.actions
 
 export default routeSlice.reducer

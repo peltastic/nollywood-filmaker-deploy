@@ -132,7 +132,7 @@ const MarketingBudget = (props: Props) => {
                       ooh: scriptData.target_ooh,
                       platform: scriptData.platform,
                       social: scriptData.target_social,
-                      title: "Create Marketing Budget",
+                      title: "Create a Marketing budget",
                       type: "request",
                       userId,
                     });

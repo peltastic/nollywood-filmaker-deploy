@@ -6,6 +6,8 @@ import ReadMyScriptDarkImg from "/public/assets/services/read-my-script-dark.svg
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import { GoDotFill } from "react-icons/go";
 import { useRouter } from "next/navigation";
+import { capitalizeFirstLetter } from "@/utils/helperFunction";
+import { AspectRatio } from "@mantine/core";
 
 export interface ICustomerReqData {
   customer: string;
@@ -13,7 +15,8 @@ export interface ICustomerReqData {
   script: string;
   service_type: string;
   date: string;
-  status: "Ready" | "Ongoing" | "Completed" | "Pending";
+  status: "ready" | "ongoing" | "completed" | "pending";
+  imgurl?: string;
 }
 
 export const customer_req_columns: ColumnDef<ICustomerReqData>[] = [
@@ -37,7 +40,17 @@ export const customer_req_columns: ColumnDef<ICustomerReqData>[] = [
       return (
         <div className="flex items-center w-[20rem] xl:w-auto">
           <div className="mr-2">
-            <Image src={TestImage} alt="image" />
+            {row.original.imgurl && (
+              <AspectRatio ratio={1800/1800}>
+                <Image
+                  src={row.original.imgurl}
+                  height={100}
+                  width={100}
+                  alt="image"
+                  className="rounded-full w-[2.6rem] h-[2.6rem]"
+                />
+              </AspectRatio>
+            )}
           </div>
           <div className="">
             <h1 className=" text-black-4 font-medium">
@@ -82,11 +95,11 @@ export const customer_req_columns: ColumnDef<ICustomerReqData>[] = [
     header: "Status",
     cell: ({ row }) => {
       const className =
-        row.original.status === "Ready"
+        row.original.status === "ready"
           ? "bg-light-blue text-dark-blue"
-          : row.original.status === "Completed"
+          : row.original.status === "completed"
           ? "bg-light-green text-dark-green"
-          : row.original.status === "Pending"
+          : row.original.status === "pending"
           ? "bg-stroke-4 text-black-6"
           : "bg-light-yellow text-dark-yellow";
       return (
@@ -97,7 +110,7 @@ export const customer_req_columns: ColumnDef<ICustomerReqData>[] = [
             <span className="block pr-1">
               <GoDotFill />
             </span>{" "}
-            {row.getValue("status")}
+            {capitalizeFirstLetter(row.getValue("status"))}
           </p>
         </div>
       );

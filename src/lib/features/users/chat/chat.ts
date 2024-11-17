@@ -1,4 +1,4 @@
-import { IChatWithProPayload } from "@/interfaces/chat/chat";
+import { IChatWithProPayload, ITimeSlotsResponse } from "@/interfaces/chat/chat";
 import { baseQueryWithReauth } from "@/lib/baseQuery";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
@@ -20,7 +20,17 @@ export const chatApi = createApi({
         body,
       }),
     }),
+    getAvailabilityHours: build.query<
+      ITimeSlotsResponse,
+      {
+        expertise: string;
+        date: string;
+      }
+    >({
+      query: ({ date, expertise }) =>
+        `/api/users/gethours?expertise=${expertise}&date=${date}`,
+    }),
   }),
 });
 
-export const { useInitializeChatWithAProTransactionMutation } = chatApi;
+export const { useInitializeChatWithAProTransactionMutation, useLazyGetAvailabilityHoursQuery } = chatApi;

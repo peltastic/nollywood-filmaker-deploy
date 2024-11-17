@@ -81,6 +81,7 @@ export const profileApi = createApi({
 
 export const {
   useFetchUserProfileDataQuery,
+  useLazyFetchUserProfileDataQuery,
   useUpdateUserProfileMutation,
   useUpdatePasswordMutation,
   useUpdateProfilePicMutation,

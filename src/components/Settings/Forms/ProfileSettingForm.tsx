@@ -4,7 +4,9 @@ import Expertise from "@/components/Expertise/Expertise";
 import Field from "@/components/Field/Field";
 import SelectComponent from "@/components/Select/SelectComponent";
 import TextArea from "@/components/TextArea/TextArea";
+import { IConsultantProfileResponse } from "@/interfaces/consultants/profile/profile";
 import { IGetUserProfileResponse } from "@/interfaces/profile/profile";
+import { useUpdateConsultantProfileMutation } from "@/lib/features/consultants/profile/profile";
 import { useUpdateUserProfileMutation } from "@/lib/features/users/profile/profile";
 import { RootState } from "@/lib/store";
 import { notify } from "@/utils/notification";
@@ -14,12 +16,15 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 type Props = {
-  data: IGetUserProfileResponse;
+  data: IGetUserProfileResponse | IConsultantProfileResponse;
+  settingsType?: "consultant" | "admin";
 };
 
 const ProfileSettingForm = (props: Props) => {
   const [updateProfile, { isError, isSuccess, data, isLoading, error }] =
     useUpdateUserProfileMutation();
+  const [updateConsultantProfile, result] =
+    useUpdateConsultantProfileMutation();
 
   const [nonInputValues, setNonInputValues] = useState<{
     expertise: string[];
@@ -30,6 +35,10 @@ const ProfileSettingForm = (props: Props) => {
   const userId = useSelector(
     (state: RootState) => state.persistedState.user.user?.id
   );
+  const consultantId = useSelector(
+    (state: RootState) => state.persistedState.consultant.user?.id
+  );
+
   const [showNoExpertiseErrMessage, setSetNoExpertiseErrMessage] =
     useState<boolean>(false);
 
@@ -59,6 +68,15 @@ const ProfileSettingForm = (props: Props) => {
     }
   }, [isSuccess, isError]);
 
+  useEffect(() => {
+    if (result.isError) {
+      notify("error", (result.error as any).data?.message || "An Error Occured");
+    }
+    if (result.isSuccess) {
+      notify("success", "Successful", "Profile Updated Successfully!");
+    }
+  },[result.isError, result.isSuccess]);
+
   return (
     <Formik
       initialValues={{
@@ -67,35 +85,45 @@ const ProfileSettingForm = (props: Props) => {
         email: props.data.email,
         phone: props.data.phone || "",
         website: props.data.website || "",
-        postal_code: props.data.location.postalcode || "",
-        city: props.data.location.city || "",
-        state: props.data.location.state || "",
-        country: props.data.location.city || "",
+        postal_code: props.data.location?.postalcode || "",
+        city: props.data.location?.city || "",
+        state: props.data.location?.state || "",
+        country: props.data.location?.city || "",
       }}
       onSubmit={(values) => {
         if (nonInputValues.expertise.length === 0) {
           return setSetNoExpertiseErrMessage(true);
         }
-        if (userId) {
-          updateProfile({
-            body: {
-              fname: values.first_name,
-              email: values.email,
-              expertise: nonInputValues.expertise,
-              lname: values.last_name,
-              location: {
-                city: values.city,
-                country: values.country,
-                postalcode: values.postal_code,
-                state: values.state,
-              },
-              bio,
-              phone: values.phone,
-              website: values.website
-              
-            },
-            id: userId,
-          });
+
+        const paylaod = {
+          fname: values.first_name,
+          email: values.email,
+          expertise: nonInputValues.expertise,
+          lname: values.last_name,
+          location: {
+            city: values.city,
+            country: values.country,
+            postalcode: values.postal_code,
+            state: values.state,
+          },
+          bio,
+          phone: values.phone,
+          website: values.website,
+        };
+        if (props.settingsType === "consultant") {
+          if (consultantId) {
+            updateConsultantProfile({
+              body: paylaod,
+              id: consultantId,
+            });
+          }
+        } else {
+          if (userId) {
+            updateProfile({
+              body: paylaod,
+              id: userId,
+            });
+          }
         }
       }}
       validationSchema={updateProfileSchema}
@@ -126,6 +154,7 @@ const ProfileSettingForm = (props: Props) => {
           </div>
           <div className="w-full md:w-[65%] ">
             <Field
+              disabled
               classname="w-full font-semibold placeholder:font-normal"
               label=""
               name="email"
@@ -221,10 +250,10 @@ const ProfileSettingForm = (props: Props) => {
           </div>
         </div>
         <UnstyledButton
-          disabled={isLoading}
+          disabled={isLoading || result.isLoading}
           class="text-[0.88rem] disabled:opacity-50 flex w-[7rem] justify-center font-medium mt-8 bg-black-2 text-white px-4 py-2 rounded-md "
         >
-          {isLoading ? (
+          {isLoading || result.isLoading ? (
             <div className="w-[1rem] py-1">
               <Spinner />
             </div>

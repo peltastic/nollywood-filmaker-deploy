@@ -1,5 +1,5 @@
 import config from "@/config/config";
-import { getCookie, setTokenCookie } from "@/utils/storage";
+import { getCookie, setConsultantToken, setTokenCookie } from "@/utils/storage";
 import {
   BaseQueryFn,
   FetchArgs,
@@ -14,10 +14,10 @@ export const baseQuery = fetchBaseQuery({
   baseUrl: config.API_URL,
   prepareHeaders(headers) {
     const token = getCookie("token");
-    if (token) {
-      headers.set("authorization", `Bearer ${token}`);
+    if (!token || token === "undefined") {
+      return headers;
     }
-    return headers;
+    headers.set("authorization", `Bearer ${token}`);
   },
 });
 
@@ -29,7 +29,8 @@ export const baseQueryWithReauth: BaseQueryFn<
   let result = await baseQuery(args, api, extraOptions);
   const token = getCookie("token");
   const refreshToken = getCookie("refresh");
-  if (!token) {
+
+  if (!token || token == "undefined") {
     if (!refreshToken) {
       api.dispatch(setLogoutType("expired"));
       api.dispatch(setAuthStatus("LOGGED_OUT"));
@@ -70,10 +71,10 @@ export const consultantBaseQuery = fetchBaseQuery({
   baseUrl: config.API_URL,
   prepareHeaders(headers) {
     const token = getCookie("con_token");
-    if (token) {
-      headers.set("authorization", `Bearer ${token}`);
+    if (!token || token === "undefined") {
+      return headers;
     }
-    return headers;
+    headers.set("authorization", `Bearer ${token}`);
   },
 });
 
@@ -82,7 +83,7 @@ export const consultantBaseQueryWithReauth: BaseQueryFn<
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
-  let result = await baseQuery(args, api, extraOptions);
+  let result = await consultantBaseQuery(args, api, extraOptions);
   const token = getCookie("con_token");
   const refreshToken = getCookie("con_refresh");
   if (!token) {
@@ -90,9 +91,9 @@ export const consultantBaseQueryWithReauth: BaseQueryFn<
       // api.dispatch(setLogoutType("expired"));
       api.dispatch(setConsultantAuthStatus("LOGGED_OUT"));
     }
-    const refreshResult: any = await baseQuery(
+    const refreshResult: any = await consultantBaseQuery(
       {
-        url: "/api/users/user/getaccess",
+        url: "/api/consultants/consultant/getaccess",
         headers: {
           Authorization: `Bearer ${refreshToken}`,
         },
@@ -104,8 +105,8 @@ export const consultantBaseQueryWithReauth: BaseQueryFn<
       // api.dispatch(setLogoutType("expired"));
       api.dispatch(setConsultantAuthStatus("LOGGED_OUT"));
     }
-    setTokenCookie(refreshResult.data?.accessToken);
-    result = await baseQuery(args, api, extraOptions);
+    setConsultantToken(refreshResult.data?.accessToken);
+    result = await consultantBaseQuery(args, api, extraOptions);
   }
 
   return result;

@@ -24,7 +24,7 @@ const ConsultantSettingsPage = (props: Props) => {
               ))}
             </Tabs.List>
             <Tabs.Panel value="profile">
-              <ProfileSettings />
+              <ProfileSettings settingsType='consultant' />
             </Tabs.Panel>
             <Tabs.Panel value="security">
               <SecuritySettings />

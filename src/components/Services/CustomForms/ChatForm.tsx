@@ -3,7 +3,10 @@ import UnstyledButton from "@/components/Button/UnstyledButton";
 import InputComponent from "@/components/Input/Input";
 import SelectComponent from "@/components/Select/SelectComponent";
 import TextArea from "@/components/TextArea/TextArea";
-import { consultantTypesData, testSelectData } from "@/utils/constants/constants";
+import {
+  consultantTypesData,
+  testSelectData,
+} from "@/utils/constants/constants";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { FaArrowRight } from "react-icons/fa";
@@ -55,6 +58,7 @@ const ChatForm = (props: Props) => {
             <SelectComponent
               size="md"
               value={props.data.consultant}
+              defaultValue={props.data.consultant}
               setValueProps={(val) => props.setScriptProps("consultant", val!)}
               label="Consultant type"
               data={consultantTypesData}
@@ -71,9 +75,14 @@ const ChatForm = (props: Props) => {
             </UnstyledButton>
             <UnstyledButton
               clicked={() => props.setPageProps("2")}
+              disabled={
+                !props.data.title ||
+                !props.data.summary ||
+                !props.data.consultant
+              }
               type="submit"
               // disabled={disabled}
-              class="flex py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
+              class="flex py-2 px-4 disabled:opacity-50 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2  text-[0.88rem] disabled:bg-black-2"
             >
               <p className="mr-2">Next</p>
               <FaArrowRight className="text-[0.7rem]" />

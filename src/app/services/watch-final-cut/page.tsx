@@ -128,7 +128,7 @@ const page = (props: Props) => {
                       link: scriptData.link,
                       platform: scriptData.platform,
                       synopsis: scriptData.logline,
-                      title: "Watch My Final Cut",
+                      title: "Watch the Final cut of my film and advice",
                       movie_title: scriptData.movie_title,
                       type: "request",
                       userId,

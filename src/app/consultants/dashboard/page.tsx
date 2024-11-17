@@ -19,11 +19,16 @@ import UpcomingConversations from "@/components/Dashboard/UpcomingConversations"
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import { DataTable } from "@/components/Tables/DataTable";
-import React from "react";
+import { ICustomerRequestData } from "@/interfaces/consultants/dashboard/request";
+import { useFetchCustomerRequestsQuery } from "@/lib/features/consultants/dashboard/request";
+import { RootState } from "@/lib/store";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 type Props = {};
 
-const data: {
+const dashboard_data: {
   change?: "increase" | "decrease";
   title: string;
   value: number;
@@ -162,42 +167,69 @@ const bar_chart_data = [
   { month: "Dec", value: 11000 },
 ];
 
-const customer_req_data: ICustomerReqData[] = [
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Pending",
-  },
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Ongoing",
-  },
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Ready",
-  },
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Completed",
-  },
-];
+// const customer_req_data: ICustomerReqData[] = [
+//   {
+//     customer: "Jenny Wilson",
+//     date: "22 Jan 2022",
+//     email: "w.lawson@example.com",
+//     script: "Mikolo",
+//     service_type: "Read my script",
+//     status: "Pending",
+//   },
+//   {
+//     customer: "Jenny Wilson",
+//     date: "22 Jan 2022",
+//     email: "w.lawson@example.com",
+//     script: "Mikolo",
+//     service_type: "Read my script",
+//     status: "Ongoing",
+//   },
+//   {
+//     customer: "Jenny Wilson",
+//     date: "22 Jan 2022",
+//     email: "w.lawson@example.com",
+//     script: "Mikolo",
+//     service_type: "Read my script",
+//     status: "Ready",
+//   },
+//   {
+//     customer: "Jenny Wilson",
+//     date: "22 Jan 2022",
+//     email: "w.lawson@example.com",
+//     script: "Mikolo",
+//     service_type: "Read my script",
+//     status: "Completed",
+//   },
+// ];
 
 const DashboardPage = (props: Props) => {
+  const consultantId = useSelector(
+    (state: RootState) => state.persistedState.consultant.user?.id
+  );
+
+  const [customerReqData, setCustomerReqData] = useState<ICustomerReqData[]>(
+    []
+  );
+
+  const { data, isSuccess, isError, isFetching } =
+    useFetchCustomerRequestsQuery(consultantId!);
+
+  useEffect(() => {
+    if (isSuccess) {
+      const resData: ICustomerReqData[] = data.assignments.map((el) => {
+        return {
+          customer: el.user.fullname,
+          date: moment(el.assignment.createdDate).format("LL"),
+          email: el.user.email,
+          script: el.info.chat_title,
+          service_type: el.info.nameofservice,
+          status: el.assignment.status,
+          imgurl: el.user.profilepics,
+        };
+      });
+      setCustomerReqData(resData);
+    }
+  }, [isSuccess, isError]);
   return (
     <ServiceLayout consultant>
       <DashboardBodyLayout>
@@ -207,7 +239,7 @@ const DashboardPage = (props: Props) => {
             <DashboardPlate title="Overview">
               <section className="flex flex-wrap lg:flex-nowrap gap-x-6 py-8">
                 <div className="w-full lg:w-[50%] mid:grid-cols-2 grid gap-6">
-                  {data.map((el) => (
+                  {dashboard_data?.map((el) => (
                     <DashboardInfoCard
                       key={el.id}
                       percentage={el.percentage}
@@ -250,8 +282,10 @@ const DashboardPage = (props: Props) => {
           <div className="mt-16">
             <DataTable
               title="Customer Requests"
+              isFetching={isFetching}
               columns={customer_req_columns}
-              data={customer_req_data}
+              data={customerReqData}
+              loaderLength={5}
             />
           </div>
         </div>

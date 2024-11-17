@@ -4,12 +4,10 @@ import ServiceLeft from "@/components/Services/ServiceLeft";
 import React, { useEffect, useState } from "react";
 import ChatWithProfessionalImg from "/public/assets/services/chat-with-professional.svg";
 import Image from "next/image";
-import ChatRight from "@/components/Services/SelectChatTime/ChatRight";
 import Stepper from "@/components/Stepper/Stepper";
 import ChatTime from "@/components/Services/SelectChatTime/ChatTime";
 import ChatForm from "@/components/Services/CustomForms/ChatForm";
 import { useRouter, useSearchParams } from "next/navigation";
-import ServiceRight from "@/components/Services/ServiceRight";
 import PaymentWindow from "@/components/PaymentWindow/PaymentWindow";
 import moment from "moment";
 import UnstyledButton from "@/components/Button/UnstyledButton";
@@ -22,7 +20,6 @@ import { RootState } from "@/lib/store";
 import { initializeTransactionListener } from "@/lib/socket";
 import { nprogress } from "@mantine/nprogress";
 import Spinner from "@/app/Spinner/Spinner";
-import { FaArrowRight } from "react-icons/fa";
 
 type Props = {};
 
@@ -170,6 +167,7 @@ const GetStartedChatPage = (props: Props) => {
                       setDateProps={setDateHandler}
                       setPageProps={(val) => setPage(val)}
                       selectedTime={chatData.time}
+                      consultantType={chatData.consultant}
                       setSelected={(val) =>
                         setChatData({
                           ...chatData,
@@ -190,11 +188,11 @@ const GetStartedChatPage = (props: Props) => {
                               date: moment(currentDate).format("YYYY-MM-DD"),
                               summary: chatData.summary,
                               time: {
-                                hours: Number(chatData.title.split(":")[0]),
+                                hours: Number(chatData.time.split(":")[0]),
                                 minutes: 0,
                                 seconds: 0,
                               },
-                              title: "Chat with a professional",
+                              title: "Chat With A Professional",
                               type: "Chat",
                               userId,
                             });

@@ -1,3 +1,5 @@
+import { ICreateAvailabilityPayload } from "@/interfaces/consultants/profile/availability";
+
 export const testSelectData = [
   {
     label: "Sci Fi",
@@ -12,37 +14,36 @@ export const testSelectData = [
 export const testExhibitionData = [
   {
     label: "Cinema",
-    value: "Cinema"
-  }
-]
-
+    value: "Cinema",
+  },
+];
 
 export const consultantTypesData = [
   {
     label: "Producer",
-    value: "Producer"
+    value: "Producer",
   },
   {
     label: "Director",
-    value: "Director"
-  }, 
+    value: "Director",
+  },
   {
     label: "Composer",
-    value: "Composer"
+    value: "Composer",
   },
   {
     label: "Cinematographer",
-    value: "Cinematographer"
+    value: "Cinematographer",
   },
   {
     label: "Editor",
-    value: "Editor"
+    value: "Editor",
   },
   {
     label: "Writer",
-    value: "Writer"
-  }
-]
+    value: "Writer",
+  },
+];
 export const paymentOptions = [
   {
     label: "Card",
@@ -119,7 +120,165 @@ export const days = [
   "Sunday",
 ];
 
-
-export const successColor = "#22C55E"
+export const successColor = "#22C55E";
 
 // export const expertise =
+
+export const defaultAvailabilityHours: {
+  otime: {
+    hours: number;
+    minutes: number;
+    seconds: number;
+  };
+  ctime: {
+    hours: number;
+    minutes: number;
+    seconds: number;
+  };
+  day:
+    | "Monday"
+    | "Tuesday"
+    | "Wednesday"
+    | "Thursday"
+    | "Friday"
+    | "Saturday"
+    | "Sunday";
+  status: "open" | "close";
+}[] = [
+  {
+    otime: {
+      hours: 9,
+      minutes: 0,
+      seconds: 0,
+    },
+    ctime: {
+      hours: 17,
+      minutes: 0,
+      seconds: 0,
+    },
+    day: "Monday",
+    status: "close",
+  },
+  {
+    otime: {
+      hours: 9,
+      minutes: 0,
+      seconds: 0,
+    },
+    ctime: {
+      hours: 17,
+      minutes: 0,
+      seconds: 0,
+    },
+    day: "Tuesday",
+    status: "close",
+  },
+  {
+    otime: {
+      hours: 9,
+      minutes: 0,
+      seconds: 0,
+    },
+    ctime: {
+      hours: 17,
+      minutes: 0,
+      seconds: 0,
+    },
+    day: "Wednesday",
+    status: "close",
+  },
+  {
+    otime: {
+      hours: 9,
+      minutes: 0,
+      seconds: 0,
+    },
+    ctime: {
+      hours: 17,
+      minutes: 0,
+      seconds: 0,
+    },
+    day: "Thursday",
+    status: "close",
+  },
+  {
+    otime: {
+      hours: 9,
+      minutes: 0,
+      seconds: 0,
+    },
+    ctime: {
+      hours: 17,
+      minutes: 0,
+      seconds: 0,
+    },
+    day: "Friday",
+    status: "close",
+  },
+  {
+    otime: {
+      hours: 9,
+      minutes: 0,
+      seconds: 0,
+    },
+    ctime: {
+      hours: 17,
+      minutes: 0,
+      seconds: 0,
+    },
+    day: "Saturday",
+    status: "close",
+  },
+  {
+    otime: {
+      hours: 9,
+      minutes: 0,
+      seconds: 0,
+    },
+    ctime: {
+      hours: 17,
+      minutes: 0,
+      seconds: 0,
+    },
+    day: "Sunday",
+    status: "close",
+  },
+];
+
+export const time_slots = [
+  { label: "9:00 AM", value: "9:00 AM" },
+  {
+    label: "10:00 AM",
+    value: "10:00 AM",
+  },
+  {
+    label: "11:00 AM",
+    value: "11:00 AM",
+  },
+  {
+    label: "12:00 PM",
+    value: "12:00 PM",
+  },
+  {
+    label: "1:00 PM",
+    value: "1:00 PM",
+  },
+  {
+    label: "2:00 PM",
+    value: "2:00 PM",
+  },
+  {
+    label: "3:00 PM",
+    value: "3:00 PM",
+  },
+  {
+    label: "4:00 PM",
+    value: "4:00 PM",
+  },
+  {
+    label: "5:00 PM",
+    value: "5:00 PM",
+  },
+];
+
+export const loaderColor = "#d9d0d5";

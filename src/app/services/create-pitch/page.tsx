@@ -139,7 +139,7 @@ const CreatePitchPage = (props: Props) => {
                       info: scriptData.information,
                       movie_title: scriptData.information,
                       platform: scriptData.platform,
-                      title: "Create A Pitch",
+                      title: "Create a Pitch based on my Script",
                       type: "request",
                       userId,
                       visualStyle: scriptData.visual,

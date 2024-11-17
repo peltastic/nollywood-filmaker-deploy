@@ -140,7 +140,7 @@ const ProductionBudgetPage = (props: Props) => {
                       files: file,
                       movie_title: scriptData.movie_title,
                       platform: scriptData.platform,
-                      title: "Create Production Budget",
+                      title: "Create a Production budget",
                       actors: scriptData.actors_in_mind,
                       info: scriptData.information,
                       userId,

@@ -7,16 +7,25 @@ import MenuComponent from "@/components/Menu/MenuComponent";
 import ModalComponent from "@/components/Modal/Modal";
 import ConsultantProfileLeft from "@/components/Profile/ConsultantProfileLeft";
 import ConsultantProfileRight from "@/components/Profile/ConsultantProfileRight";
+import { useProtectRoute } from "@/hooks/useProtectRoute";
+import { useGetConsultantProfileQuery } from "@/lib/features/consultants/profile/profile";
+import { RootState } from "@/lib/store";
 import { useDisclosure } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { GoDotFill } from "react-icons/go";
 import { IoIosArrowBack, IoIosArrowDown } from "react-icons/io";
+import { useSelector } from "react-redux";
 
 type Props = {};
 
 const ConsultantProfilePage = (props: Props) => {
+  useProtectRoute("consultant");
   const [opened, { open, close }] = useDisclosure();
+  const consultantId = useSelector(
+    (state: RootState) => state.persistedState.consultant.user?.id
+  );
+  const {data, isFetching} = useGetConsultantProfileQuery(consultantId!);
   const router = useRouter();
   const status: any = "active";
   const statusClassname =
@@ -72,7 +81,10 @@ const ConsultantProfilePage = (props: Props) => {
               >
                 <div className="bg-white min-w-[10rem] ">
                   <ul className="px-1 text-gray-6 text-[0.88rem]">
-                    <li onClick={open} className="py-2 mb hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4">
+                    <li
+                      onClick={open}
+                      className="py-2 mb hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
+                    >
                       Edit Availability
                     </li>
                     <li className="py-2 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4">
@@ -88,7 +100,7 @@ const ConsultantProfilePage = (props: Props) => {
               <ConsultantProfileLeft />
             </div>
             <div className="px-4 chatbp:px-0 mt-8 chatbp:mt-0 w-full chatbp:w-[70%]">
-              <ConsultantProfileRight />
+              <ConsultantProfileRight isFetching={isFetching} data={data} />
             </div>
           </div>
         </DashboardBodyLayout>

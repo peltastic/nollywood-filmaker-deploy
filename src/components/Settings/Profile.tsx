@@ -4,8 +4,7 @@ import Image from "next/image";
 import UnstyledButton from "../Button/UnstyledButton";
 import ProfileSettingForm from "./Forms/ProfileSettingForm";
 import {
-  useFetchUserProfileDataQuery,
-  useFetchUserProfilePicQuery,
+  useLazyFetchUserProfileDataQuery,
   useUpdateProfilePicMutation,
 } from "@/lib/features/users/profile/profile";
 import { useSelector } from "react-redux";
@@ -15,19 +14,34 @@ import { FaUser } from "react-icons/fa";
 import FileButtonComponent from "../FileButton/FileButtonComponent";
 import { AspectRatio } from "@mantine/core";
 import { notify } from "@/utils/notification";
+import {
+  useLazyGetConsultantProfileQuery,
+  useUpdateConsultantProfileMutation,
+} from "@/lib/features/consultants/profile/profile";
 
-type Props = {};
+type Props = {
+  settingsType?: "consultant" | "admin";
+};
 
-const ProfileSettings = (props: Props) => {
+const ProfileSettings = ({ settingsType }: Props) => {
   const userId = useSelector(
     (state: RootState) => state.persistedState.user.user?.id
   );
-  const { isFetching, data } = useFetchUserProfileDataQuery(userId!, {
-    refetchOnMountOrArgChange: true,
-  });
-  const profilepicQuery = useFetchUserProfilePicQuery(userId!, {
-    refetchOnMountOrArgChange: true,
-  });
+  const consultanId = useSelector(
+    (state: RootState) => state.persistedState.consultant.user?.id
+  );
+  // const { isFetching, data } = useFetchUserProfileDataQuery(userId!, {
+  //   refetchOnMountOrArgChange: true,
+  // });
+
+  const [getUserProfile, { isFetching, data }] =
+    useLazyFetchUserProfileDataQuery();
+  const [getConsultantProfile, consultantProfileRes] =
+    useLazyGetConsultantProfileQuery();
+
+  // const profilepicQuery =  useFetchUserProfilePicQuery(userId!, {
+  //   refetchOnMountOrArgChange: true,
+  // });
 
   const [updateProfilePic, result] = useUpdateProfilePicMutation();
 
@@ -42,12 +56,19 @@ const ProfileSettings = (props: Props) => {
       notify("success", "Successful", "Profile image updated successfully!");
     }
   }, [result.isSuccess, result.isError]);
+  useEffect(() => {
+    if (settingsType === "consultant") {
+      getConsultantProfile(consultanId!);
+    } else {
+      getUserProfile(userId!);
+    }
+  }, [settingsType]);
 
   const [profilePicFile, setProfilePicFile] = useState<File | null>(null);
   const [tempImgUrl, setTempImgUrl] = useState<string>("");
   return (
     <div className="mt-10 flex flex-wrap lg:flex-nowrap gap-6">
-      {isFetching ? (
+      {isFetching || consultantProfileRes.isFetching ? (
         <div className="w-[5rem] mx-auto">
           <Spinner dark />
         </div>
@@ -121,7 +142,15 @@ const ProfileSettings = (props: Props) => {
             </p>
           </div>
           <div className="w-full lg:w-[70%] px-4 sm:px-10 py-10 rounded-xl bg-white border border-stroke-10">
-            {data && <ProfileSettingForm data={data} />}
+            {settingsType === "consultant" && consultantProfileRes.data && (
+              <ProfileSettingForm
+                data={consultantProfileRes.data}
+                settingsType={settingsType}
+              />
+            )}
+            {data && (
+              <ProfileSettingForm data={data} settingsType={settingsType} />
+            )}
           </div>
         </>
       )}

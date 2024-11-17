@@ -63,7 +63,7 @@ const HomeHeader = (props: Props) => {
                   <span className="relative z-10">Get Started</span>
                 </UnstyledButton>
               </Link>
-              <UnstyledButton class="transition-all hover:scale-110 hover:rotate-3 py-4 w-full sm:w-auto mx-auto xs:mx-0 flex justify-center items-center mt-5 xs:mt-0">
+              <UnstyledButton class="transition-all hover:scale-110 duration-300 hover:rotate-3 py-4 w-full sm:w-auto mx-auto xs:mx-0 flex justify-center items-center mt-5 xs:mt-0">
                 <Image src={PlayButtonImage} alt="play-button" />
                 <p className="text-white ml-2">Play video</p>
               </UnstyledButton>

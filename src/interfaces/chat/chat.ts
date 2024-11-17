@@ -1,5 +1,5 @@
 export interface IChatWithProPayload {
-  title: "Chat with a professional";
+  title: "Chat With A Professional";
   userId: string;
   type: "Chat";
   chat_title: string;
@@ -11,4 +11,14 @@ export interface IChatWithProPayload {
   };
   summary: string;
   consultant: string;
+}
+
+
+export interface ITimeSlotsResponse {
+  availableHoursCount: ITimeSlots[]
+}
+
+export interface ITimeSlots {
+  time: string
+  isAvailable: boolean
 }

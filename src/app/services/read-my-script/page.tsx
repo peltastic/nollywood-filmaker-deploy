@@ -124,7 +124,7 @@ const ReadMyScriptPage = (props: Props) => {
                         synopsis: scriptData.logline,
                         platforms: scriptData.platform,
                         userId: userId,
-                        title: "Read My Script",
+                        title: "Read my Script and advice",
                         concerns: scriptData.concerns,
                         type: "request",
                         files: file,

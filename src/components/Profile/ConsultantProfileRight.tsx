@@ -1,10 +1,15 @@
+import { IConsultantProfileResponse } from "@/interfaces/consultants/profile/profile";
+import { Skeleton } from "@mantine/core";
 import React from "react";
 
-type Props = {};
+type Props = {
+  data?: IConsultantProfileResponse;
+  isFetching?: boolean;
+};
 
 const expertise = ["Producer", "Director", "Composer"];
 
-const ConsultantProfileRight = (props: Props) => {
+const ConsultantProfileRight = ({ isFetching, data }: Props) => {
   return (
     <div className="">
       <div className="bg-white rounded-2xl pb-6 pt-2 px-6 border shadow-md border-stroke-5 shadow-[#1018280F]">
@@ -34,35 +39,56 @@ const ConsultantProfileRight = (props: Props) => {
           <h1 className="font-medium text-[1.13rem]">Skills/Expertise</h1>
         </div>
         <div className="xs:grid-cols-2 md:grid-cols-4 grid mt-8 gap-x-6 gap-y-6">
-          {expertise.map((el) => (
-            <div
-              className={
-                "border border-stroke-2 transition-all cursor-pointer text-[0.88rem] font-medium  flex items-center justify-center rounded-md  text-black-2 px-[3rem] h-[3.62rem]"
-              }
-              key={el}
-            >
-              {el}
-            </div>
-          ))}
+          {isFetching ? (
+            <>
+              <Skeleton height={50} />
+              <Skeleton height={50} />
+              <Skeleton height={50} />
+              <Skeleton height={50} />
+            </>
+          ) : (
+            <>
+              {data?.expertise.map((el) => (
+                <div
+                  className={
+                    "border border-stroke-2 transition-all cursor-pointer text-[0.88rem] font-medium  flex items-center justify-center rounded-md  text-black-2 px-[3rem] h-[3.62rem]"
+                  }
+                  key={el}
+                >
+                  {el}
+                </div>
+              ))}
+            </>
+          )}
         </div>
       </div>
       <div className="mt-4 bg-white rounded-2xl pb-6 pt-2 px-6 border shadow-md border-stroke-5 shadow-[#1018280F]">
         <div className="py-4 border-b border-b-stroke-6">
           <h1 className="font-medium text-[1.13rem]">Contact</h1>
         </div>
-        <div className="grid mid:grid-cols-3 mt-8">
-          <div className="mb-4 mid:mb-0">
-            <h1 className="font-bold">Phone</h1>
-            <p>+861 555 669 6985</p>
-          </div>
-          <div className="mb-4 mid:mb-0">
-            <h1 className="font-bold">Email</h1>
-            <p>niyi@gmail.com</p>
-          </div>
-          <div className="mb-4 mid:mb-0">
-            <h1 className="font-bold">Website</h1>
-            <p>www.anthillstudios.com</p>
-          </div>
+        <div className="grid mid:grid-cols-3 gap-x-3 mt-8">
+          {isFetching ? (
+            <>
+              <Skeleton height={50} />
+              <Skeleton height={50} />
+              <Skeleton height={50} />
+            </>
+          ) : (
+            <>
+              <div className="mb-4 mid:mb-0">
+                <h1 className="font-bold">Phone</h1>
+                <p>{data?.phone}</p>
+              </div>
+              <div className="mb-4 mid:mb-0">
+                <h1 className="font-bold">Email</h1>
+                <p>{data?.email}</p>
+              </div>
+              <div className="mb-4 mid:mb-0">
+                <h1 className="font-bold">Website</h1>
+                <p>www.anthillstudios.com</p>
+              </div>
+            </>
+          )}
         </div>
       </div>
       <div className="mt-4 bg-white rounded-2xl pb-6 pt-2 px-6 border shadow-md border-stroke-5 shadow-[#1018280F]">
@@ -89,9 +115,9 @@ const ConsultantProfileRight = (props: Props) => {
           <h1 className="font-medium text-[1.13rem]">Availability</h1>
         </div>
         <div className="mt-6">
-            <h1 className="font-bold">Monday</h1>
-            <p>9:00AM - 5:00PM</p>
-          </div>
+          <h1 className="font-bold">Monday</h1>
+          <p>9:00AM - 5:00PM</p>
+        </div>
       </div>
     </div>
   );

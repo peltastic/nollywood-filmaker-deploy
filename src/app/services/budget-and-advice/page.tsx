@@ -121,7 +121,7 @@ const page = (props: Props) => {
                       movie_title: scriptData.movie_title,
                       platform: scriptData.platform,
                       synopsis: scriptData.logline,
-                      title: "Look At My Budget",
+                      title: "Look at my Budget and advice",
                       type: "request",
                       userId,
                     });
