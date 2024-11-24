@@ -29,7 +29,7 @@ type Props = {
   orderId?: string | null;
   isFetching?: boolean;
   data?: IGetUserConversations;
-  type: "user" | "consultant";
+  type: "user" | "consultant" | "admin";
 };
 
 const CustomerChatMiddle = (props: Props) => {
