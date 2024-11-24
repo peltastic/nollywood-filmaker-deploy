@@ -9,6 +9,7 @@ import {
 import { setAuthStatus } from "./slices/authSlice";
 import { setLogoutType } from "./slices/logoutSlice";
 import { setConsultantAuthStatus } from "./slices/consultants/authSlice";
+import { setAdminAuthStatus } from "./slices/admin/authSlice";
 
 export const baseQuery = fetchBaseQuery({
   baseUrl: config.API_URL,
@@ -111,3 +112,30 @@ export const consultantBaseQueryWithReauth: BaseQueryFn<
 
   return result;
 };
+
+export const adminBaseQuery = fetchBaseQuery({
+  baseUrl: config.API_URL,
+  prepareHeaders(headers) {
+    const token = getCookie("ad_token")
+    if (!token || token === "undefined") {
+      return headers
+    }
+    headers.set("authorization", `Bearer ${token}`)
+  }
+})
+
+// export const adminBaseQueryWithReauth:  BaseQueryFn<
+// string | FetchArgs,
+// unknown,
+// FetchBaseQueryError
+// > = async (args, api, extraOptions) => {
+//   let result = await adminBaseQuery(args, api, extraOptions)
+//   const token = getCookie("ad_token")
+//   const refresh_token = getCookie("ad_refresh")
+//   if (!token) {
+//     if (!refresh_token) {
+//       api.dispatch(setAdminAuthStatus("LOGGED_OUT"))
+//     }
+//     const r
+//   }
+// }

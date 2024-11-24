@@ -14,6 +14,13 @@ export function setConsultantToken(token: string) {
   });
 }
 
+export function setAdminToken(token: string) {
+  cookies.set("ad_token", token, {
+    path: "/",
+    expires: new Date(Date.now() + 0.9 * 60 * 60 * 1000),
+  });
+}
+
 export function setCookie(
   key: string,
   value: string,

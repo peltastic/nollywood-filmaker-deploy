@@ -6,6 +6,8 @@ import {
   getYear,
   addWeeks,
   subWeeks,
+  addDays,
+  subDays,
 } from "date-fns";
 import Time from "/public/assets/consultant/time.svg";
 import Image from "next/image";
@@ -14,36 +16,41 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import { getMonthName } from "@/utils/helperFunction";
 import { days } from "@/utils/constants/constants";
+import SchedulerSlots from "./SchedulerSlots";
 
 type Props = {
   value?: Date;
   setValue: (val: Date) => void;
+  data: {
+    date: string;
+    time: {
+      hours: number;
+      minutes: number;
+      seconds: number;
+    };
+  }[];
 };
 
-
-
 const time_slots = [
-  "11 AM",
-  "12 PM",
-  "1 PM",
-  "2 PM",
-  "3 PM",
-  "4 PM",
-  "5 PM",
-  "6 PM",
-  "7 PM",
-  "8 PM",
-  "9 PM",
-  "10 PM",
+  "09:00 AM",
+  "10:00 AM",
+  "11:00 AM",
+  "12:00 PM",
+  "01:00 PM",
+  "02:00 PM",
+  "03:00 PM",
+  "04:00 PM",
 ];
 
-const Scheduler = ({ value = new Date(), setValue }: Props) => {
+const Scheduler = ({ value = new Date(), setValue, data }: Props) => {
+  const [fromStartWeekCounter, setFromStartWeekCounter] = useState<number>(7);
   const [startOfWeekState, setStartOfWeekState] = useState<Date>(
-    startOfWeek(value, { weekStartsOn: 1 })
+    startOfWeek(value, { weekStartsOn: 0 })
   );
 
+
   useEffect(() => {
-    setStartOfWeekState(startOfWeek(value, { weekStartsOn: 1 }));
+    setStartOfWeekState(startOfWeek(value, { weekStartsOn: 0 }));
   }, [value]);
 
   return (
@@ -57,7 +64,14 @@ const Scheduler = ({ value = new Date(), setValue }: Props) => {
         </UnstyledButton>
         <div className="flex items-center">
           <UnstyledButton
-            clicked={() => setValue(subWeeks(value, 1))}
+            clicked={() => {
+              if (fromStartWeekCounter === 7) {
+                setFromStartWeekCounter((prev) => prev - 14);
+              } else {
+                setFromStartWeekCounter((prev) => prev - 7);
+              }
+              setValue(subWeeks(value, 1));
+            }}
             class="border font-semibold text-[0.75rem] rounded-md px-3 py-3 border-stroke-5 shadow-md shadow-[#1018281A]"
           >
             <IoIosArrowBack />
@@ -68,7 +82,14 @@ const Scheduler = ({ value = new Date(), setValue }: Props) => {
             {getYear(startOfWeekState)}
           </p>
           <UnstyledButton
-            clicked={() => setValue(addWeeks(value, 1))}
+            clicked={() => {
+              if (fromStartWeekCounter === -7) {
+                setFromStartWeekCounter((prev) => prev + 14);
+              } else {
+                setFromStartWeekCounter((prev) => prev + 7);
+              }
+              setValue(addWeeks(value, 1));
+            }}
             class="border font-semibold text-[0.75rem] rounded-md px-3 py-3 border-stroke-5 shadow-md shadow-[#1018281A]"
           >
             <IoIosArrowForward />
@@ -107,13 +128,69 @@ const Scheduler = ({ value = new Date(), setValue }: Props) => {
               key={el}
             >
               <p>
-                {el}&nbsp;{getDate(startOfWeekState) + index}
+                {el}&nbsp;
+                {fromStartWeekCounter > 0
+                  ? getDate(
+                      addDays(
+                        startOfWeek(new Date(), { weekStartsOn: 0 }),
+                        fromStartWeekCounter - (7 - (index + 1 - 1))
+                      )
+                    )
+                  : getDate(
+                      subDays(
+                        startOfWeek(new Date(), { weekStartsOn: 0 }),
+                        Math.abs(fromStartWeekCounter + (index + 1 - 1))
+                      )
+                    )}
               </p>
             </div>
           ))}
-          {Array.from({ length: days.length * time_slots.length }).map(() => (
-            <div className="border-b border-b-stroke-10 border-r border-r-stroke-10 h-[4rem]"></div>
-          ))}
+          {fromStartWeekCounter && (
+            <>
+              {Array.from({
+                length: days.length * time_slots.length
+              }).map((el, index) => {
+                const no = index + 1;
+                const slotValue = no % 7 || 7;
+
+                return (
+                  <SchedulerSlots
+                    key={index}
+                    allocatedTime={
+                      no < 8
+                        ? "09:00"
+                        : no > 7 && no < 15
+                        ? "10:00"
+                        : no > 14 && no < 22
+                        ? "11:00"
+                        : no > 21 && no < 29
+                        ? "12:00"
+                        : no > 28 && no < 36
+                        ? "13:00"
+                        : no > 35 && no < 43
+                        ? "14:00"
+                        : no > 42 && no < 50
+                        ? "15:00"
+                        : "16:00"
+                    }
+                    date={
+                      fromStartWeekCounter > 0
+                        ? addDays(
+                            startOfWeek(new Date(), { weekStartsOn: 0 }),
+                            fromStartWeekCounter - (7 - (slotValue - 1))
+                          )
+                        : subDays(
+                            startOfWeek(new Date(), { weekStartsOn: 0 }),
+                            Math.abs(fromStartWeekCounter + (slotValue - 1))
+                          )
+                    }
+                    data={data}
+                    index={index + 1}
+                  />
+                );
+              })}
+            </>
+          )}
         </div>
       </div>
     </div>

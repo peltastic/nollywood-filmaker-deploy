@@ -1,0 +1,51 @@
+import { Skeleton } from "@mantine/core";
+import React from "react";
+
+type Props = {};
+
+const OrderDetailsPageSkeleton = (props: Props) => {
+  return (
+    <div className=" mt-6">
+      <div className="flex">
+        <div className="w-[2rem] mr-2">
+          <Skeleton height={40} />
+        </div>
+        <div className="w-[8rem] mr-auto">
+          <Skeleton height={40} />
+        </div>
+        <div className="w-[4rem] mr-2">
+          <Skeleton height={40} />
+        </div>
+        <div className="w-[8rem]">
+          <Skeleton height={40} />
+        </div>
+      </div>
+      <div className="flex items-start mt-14">
+        <div className="">
+          <div className="w-[9rem]">
+            <Skeleton height={144} radius={"100%"} />
+          </div>
+          <div className="w-[10rem] mt-4">
+            <Skeleton height={20} />
+          </div>
+          <div className="w-[6rem] mt-4 mx-auto">
+            <Skeleton height={15} />
+          </div>
+        </div>
+        <div className="w-[80%] ml-auto">
+            <div className="grid grid-cols-3 gap-2">
+                <Skeleton height={100} />
+                <Skeleton height={100} />
+                <Skeleton height={100} />
+            </div>
+            <div className="mt-4 w-full">
+                <Skeleton height={300}  />
+              
+            </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default OrderDetailsPageSkeleton;

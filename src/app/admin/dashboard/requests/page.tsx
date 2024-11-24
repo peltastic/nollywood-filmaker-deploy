@@ -1,113 +1,43 @@
 "use client";
-import {
-  IAdminReqsData,
-  admin_reqs_columns,
-} from "@/components/Columns/admin/AdminRequestsColumn";
+import { admin_reqs_columns } from "@/components/Columns/admin/AdminRequestsColumn";
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import { DataTable } from "@/components/Tables/DataTable";
-import React from "react";
+import { ICustomerRequest } from "@/interfaces/admin/requests/requests";
+import { useLazyFetchCustomerRequestQuery } from "@/lib/features/admin/requests/request";
+import React, { useEffect, useState } from "react";
 
 type Props = {};
 
-const data: IAdminReqsData[] = [
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    rating: 5,
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Completed",
-  },
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    rating: 5,
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Completed",
-  },
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    rating: 5,
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Completed",
-  },
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    rating: 5,
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Completed",
-  },
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    rating: 5,
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Completed",
-  },
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    rating: 5,
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Completed",
-  },
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    rating: 5,
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Completed",
-  },
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    rating: 5,
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Completed",
-  },
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    rating: 5,
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Completed",
-  },
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    rating: 5,
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Completed",
-  },
-];
-
 const AdminRequests = (props: Props) => {
+  const [fetchCustomerRequests, { data, isFetching }] =
+    useLazyFetchCustomerRequestQuery();
+  const [customerReqData, setCustomerReqData] = useState<ICustomerRequest[]>(
+    []
+  );
+
+  useEffect(() => {
+    fetchCustomerRequests({
+      order: "desc",
+    });
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      setCustomerReqData(data.requests);
+    }
+  }, [data]);
+
   return (
     <ServiceLayout admin>
       <DashboardBodyLayout>
-        <DataTable title="Customer requests" columns={admin_reqs_columns} data={data} />
+        <DataTable
+          isFetching={isFetching}
+          loaderLength={10}
+          title="Customer requests"
+          columns={admin_reqs_columns}
+          data={customerReqData}
+        />
       </DashboardBodyLayout>
     </ServiceLayout>
   );

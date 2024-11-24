@@ -13,6 +13,7 @@ type Props = {
     caption?: string;
     info?: string;
   }[];
+  setValue: (val: string) => void;
 };
 
 const CustomSelect = (props: Props) => {
@@ -30,7 +31,9 @@ const CustomSelect = (props: Props) => {
   return (
     <div>
       <div
-        onClick={() => setShowDropdown(!showDropdown)}
+        onClick={() => {
+          setShowDropdown(!showDropdown);
+        }}
         className="cursor-pointer relative border border-stroke-2 rounded-md py-3 px-4 text-black-2 text-[0.88rem]"
       >
         {selected.value ? (
@@ -59,13 +62,16 @@ const CustomSelect = (props: Props) => {
           <div className="absolute rounded-md cursor-pointer bg-white left-0 top-0 border border-stroke-2 w-full">
             {props.data.map((el) => (
               <div
-                onClick={() =>
+                onClick={() => {
+                  props.setValue(el.value);
                   setSelected({
                     label: el.label,
                     caption: el.caption,
                     value: el.value,
-                  })
-                }
+                  });
+
+                  setShowDropdown(false);
+                }}
                 className="flex items-center my-6 px-3"
                 key={el.value}
               >
@@ -97,7 +103,6 @@ const CustomSelect = (props: Props) => {
           </div>
         </div>
       )}
-      
     </div>
   );
 };

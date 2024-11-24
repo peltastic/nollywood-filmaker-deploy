@@ -49,7 +49,7 @@ const OrderDetailsPage = (props: Props) => {
           <OrderDetailsTop
             order_date="2024-06-29 10:21:54"
             order_no="O-NG240629806487"
-            order_type="Watch the final cut of my film"
+            order_type="Chat With A Professional"
           />
           <OrderDetailsBody
             bodyData={[

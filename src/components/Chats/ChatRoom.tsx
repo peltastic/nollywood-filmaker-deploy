@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ChatMessage from "./ChatMessage";
 import AttachIcon from "/public/assets/chats/attach-icon.svg";
 import Image from "next/image";
 import SendImg from "/public/assets/chats/send-icon.svg";
+import { Textarea } from "@mantine/core";
+import { useSendChatMessageMutation } from "@/lib/features/users/dashboard/chat/chat";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
+import { chat_socket, joinChatRoom, sendChatMessageEvent } from "@/lib/socket";
 
-type Props = {};
+type Props = {
+  type: "user" | "consultant" | "admin";
+  orderId: string;
+};
 
 export interface IChatMessagesData {
   text: string;
@@ -63,9 +71,49 @@ const chat_data: IChatMessagesData[] = [
 ];
 
 const ChatRoom = (props: Props) => {
+  const userData = useSelector(
+    (state: RootState) => state.persistedState.user.user
+  );
+  const [sendUserChatMessage, {}] = useSendChatMessageMutation();
+  const [inputValue, setInputValue] = useState<string>("");
+
+  useEffect(() => {
+    if (userData) {
+      joinChatRoom({
+        room: props.orderId,
+        name: `${userData.fname} ${userData.lname}`,
+        role: "user",
+        userId: userData.id,
+      });
+    }
+  }, []);
+
+  const sendMessageHandler = () => {
+    if (userData) {
+      sendUserChatMessage({
+        message: inputValue,
+        name: `${userData.fname} ${userData.lname}`,
+        role: props.type,
+        room: props.orderId,
+        uid: userData.id,
+      });
+      sendChatMessageEvent({
+        room: props.orderId,
+        message: inputValue,
+        sender: userData.id,
+      });
+    }
+  };
+
+  useEffect(() => {
+    chat_socket.on("message", (data) => {
+      console.log(data);
+    });
+  }, []);
+
   return (
-    <div className=" py-6 h-full ">
-      <div className=" h-[90%] overflow-scroll">
+    <div className=" py-6  h-full  relative">
+      <div className="h-[45rem] overflow-scroll">
         {chat_data.map((el, index) => (
           <ChatMessage
             key={el.text + index.toString()}
@@ -76,21 +124,33 @@ const ChatRoom = (props: Props) => {
           />
         ))}
       </div>
-      <div className="h-[10%] relative">
+      <div className="h-[5rem] relative">
         <div className="w-full px-6 flex items-center absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2">
           <div className="mr-10">
             <Image src={AttachIcon} alt="attach-icon" />
           </div>
           <form className="w-full" onSubmit={(e) => e.preventDefault()}>
             <div className="w-full">
-              <input
+              {/* <input
                 type="text"
                 placeholder="Type a message"
                 className="outline-none border-2 px-4 pr-10 py-3 w-full rounded-xl border-stroke-7 placeholder:text-[#0000005f] text-[0.88rem]"
+              /> */}
+              <Textarea
+                minRows={0}
+                autosize
+                size="md"
+                radius={"md"}
+                value={inputValue}
+                onChange={(event) => setInputValue(event.currentTarget.value)}
               />
-              <div className="w-fit absolute right-10 -translate-y-1/2 top-1/2">
+              <button
+                onClick={sendMessageHandler}
+                disabled={!inputValue}
+                className="w-fit disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer absolute right-10 -translate-y-1/2 top-1/2"
+              >
                 <Image src={SendImg} alt="send-img" />
-              </div>
+              </button>
             </div>
           </form>
         </div>

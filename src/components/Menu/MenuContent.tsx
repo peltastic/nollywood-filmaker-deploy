@@ -5,6 +5,7 @@ type Props = {
   data: {
     name: string;
     link: string;
+    disabled?: boolean;
     function?: () => void;
   }[];
 };
@@ -12,10 +13,12 @@ type Props = {
 const MenuContent = ({ data }: Props) => {
   const router = useRouter();
   return (
-    <ul className="px-1 text-gray-6 text-[0.88rem] min-w-[7rem]">
+    <ul className={` px-1 text-gray-6 text-[0.88rem] min-w-[7rem]`}>
       {data.map((el) => (
         <li
-          className="py-2 px-4 cursor-pointer hover:bg-gray-bg-1 transition-all rounded-md"
+          className={`${
+            el.disabled ? "text-gray-7 cursor-not-allowed" : ""
+          } py-2 px-4 cursor-pointer hover:bg-gray-bg-1 transition-all rounded-md`}
           onClick={() => {
             if (el.function) {
               return el.function && el.function();

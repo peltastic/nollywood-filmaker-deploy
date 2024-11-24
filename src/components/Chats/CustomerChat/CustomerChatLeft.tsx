@@ -1,82 +1,75 @@
 import React, { useState } from "react";
 import ChatSearch from "../ChatSearch";
 import Chat from "../Chat";
+import { Skeleton } from "@mantine/core";
+import ConversationsSkeleton from "@/components/Skeletons/ConversationsSkeleton";
 
-type Props = {};
+type Props = {
+  isFetching?: boolean;
+  data: IChatData[];
+  orderId?:string | null
+  type?: "consultant" | "admin"
+};
 
 export interface IChatData {
   name: string;
+  id: string
   service: string;
   type: "Service" | "Chat";
-  status: "Ongoing" | "Completed";
-  date: string;
+  status: "ongoing" | "completed" | "pending" | "ready";
+  start_time: string
+  end_time: string
+  orderId: string
+  date: string
+  time: {
+    hours: number
+    minutes: number
+    seconds: number
+  }
 }
 
-const data: IChatData[] = [
-  {
-    name: "Mikolo",
-    service: "Read my script",
-    type: "Service",
-    status: "Ongoing",
-    date: "24m",
-  },
-  {
-    name: "Jagun Jagun",
-    service: "Watch the Final cut of my film",
-    type: "Service",
-    status: "Completed",
-    date: "02/08/2024",
-  },
-  {
-    name: "Criminal",
-    service: "Create a production Budget",
-    type: "Service",
-    status: "Completed",
-    date: "02/08/2024",
-  },
-  {
-    name: "Miracle in cell no. 7",
-    service: "Create a marketing budget",
-    type: "Chat",
-    status: "Completed",
-    date: "02/08/2024",
-  },
-  {
-    name: "Train to Busan",
-    service: "Create a Pitch",
-    type: "Service",
-    status: "Completed",
-    date: "02/08/2024",
-  },
-  {
-    name: "Mission Impossible",
-    service: "Draft Legal Documents",
-    type: "Chat",
-    status: "Completed",
-    date: "02/08/2024",
-  },
-];
-
 const CustomerChatLeft = (props: Props) => {
-    const [selected, setSelected] = useState<number>(0)
+  const [selected, setSelected] = useState<number>(0);
   return (
-    <div className="bg-white">
+    <div className="bg-white h-full">
       <header className="font-semibold flex items-center px-6 py-8 border-b border-b-stroke-8">
         <h1 className=" text-[1.25rem] mr-4">Conversations</h1>
         <div className="rounded-full bg-gray-bg-6 h-[1.5rem] w-[1.5rem] flex items-center justify-center">
-          <p className="text-[0.75rem]">6</p>
+          <p className="text-[0.75rem]">{props.data.length}</p>
         </div>
       </header>
-      <div className="bg-white px-4 py-4">
-        <div className="px-2">
-          <ChatSearch />
+      {props.isFetching ? (
+        <div className="px-4 mt-4">
+          <Skeleton height={40} />
+          <ConversationsSkeleton />
+          <ConversationsSkeleton />
+          <ConversationsSkeleton />
+          <ConversationsSkeleton />
+          <ConversationsSkeleton />
+          <ConversationsSkeleton />
+          <ConversationsSkeleton />
+          <ConversationsSkeleton />
+          <ConversationsSkeleton />
         </div>
-        <div className="my-4">
-          {data.map((el, index) => (
-            <Chat index={index} selctedIndex={selected} data={el} key={el.name} />
-          ))}
+      ) : (
+        <div className="bg-white px-4 py-4">
+          <div className="px-2">
+            <ChatSearch />
+          </div>
+          <div className="my-4">
+            {props.data?.map((el, index) => (
+              <Chat
+                index={index}
+                selctedIndex={selected}
+                data={el}
+                key={el.name}
+                orderId={props.orderId}
+                type={props.type}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

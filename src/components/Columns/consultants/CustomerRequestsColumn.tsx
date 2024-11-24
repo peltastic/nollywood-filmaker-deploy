@@ -125,7 +125,7 @@ export const customer_req_columns: ColumnDef<ICustomerReqData>[] = [
         <UnstyledButton
           clicked={() =>
             router.push(
-              `/consultants/dashboard/${row.original.orderId}/order-details?status=${row.original.status}`
+              `/consultants/dashboard/${row.original.orderId}/order-details`
             )
           }
           class="bg-black-3 text-[0.88rem] text-white py-2 px-4 rounded-md"

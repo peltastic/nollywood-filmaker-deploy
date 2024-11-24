@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import { GoDotFill } from "react-icons/go";
 import { IoIosArrowBack, IoIosArrowDown } from "react-icons/io";
 import UnstyledButton from "../Button/UnstyledButton";
@@ -10,13 +10,33 @@ import { useDisclosure } from "@mantine/hooks";
 import ModalComponent from "../Modal/Modal";
 import ResolveRequestModal from "../Consultants/ResolveRequestModal";
 import AssignRequestModal from "../Admin/AssignRequestModal";
+import {
+  useAcceptRequestMutation,
+  useDeclineRequestMutation,
+} from "@/lib/features/consultants/dashboard/request";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
+import { nprogress } from "@mantine/nprogress";
+import { notify } from "@/utils/notification";
+import { capitalizeFirstLetter } from "@/utils/helperFunction";
 
 type Props = {
-  status: "ready" | "completed" | "ongoing" | "pending" | string;
-  statusValue: string;
+  status?: "ready" | "completed" | "ongoing" | "pending" | string;
+  statusValue?: string;
   consultant?: boolean;
   admin?: boolean;
-  customerReqOrderId?: string
+  customerReqOrderId?: string;
+  orderId?: string;
+  expertise?: string;
+  chat_appointment_data?: {
+    time: {
+      hours: number;
+      minutes: number;
+      seconds: number;
+    };
+    userId: string;
+    date: string;
+  };
 };
 
 const OrderDetailsHeader = ({
@@ -24,12 +44,45 @@ const OrderDetailsHeader = ({
   statusValue,
   consultant,
   admin,
+  orderId,
+  expertise,
+  chat_appointment_data,
 }: Props) => {
   const router = useRouter();
 
   const [opened, { open, close }] = useDisclosure();
 
   const [assignReqOpened, assingReqOptions] = useDisclosure();
+
+  const [acceptRequest, { isLoading, isSuccess, isError, data, error }] =
+    useAcceptRequestMutation();
+  const [declineRequest, result] = useDeclineRequestMutation();
+
+  const consultantId = useSelector(
+    (state: RootState) => state.persistedState.consultant.user?.id
+  );
+
+  useEffect(() => {
+    if (isError) {
+      nprogress.complete();
+      notify("error", "", (error as any)?.data.message || "An error occured");
+    }
+    if (isSuccess) {
+      nprogress.complete();
+      notify("success", "Successful", "Customer request accepted successfully");
+    }
+  }, [isError, isSuccess]);
+
+  useEffect(() => {
+    if (result.isError) {
+      nprogress.complete();
+      notify("error", "", (error as any)?.data.message || "An error occured");
+    }
+    if (result.isSuccess) {
+      nprogress.complete();
+      notify("success", "Successful", "Customer request declined successfully");
+    }
+  }, [result.isError, result.isSuccess]);
 
   const statusClassname =
     status === "ready"
@@ -52,7 +105,7 @@ const OrderDetailsHeader = ({
               name: "Assign",
               link: "/",
               function: () => {
-                assingReqOptions.open()
+                assingReqOptions.open();
               },
             },
           ]}
@@ -73,7 +126,6 @@ const OrderDetailsHeader = ({
             {
               name: "Go To Chat",
               link: "/admin/dashboard/customers/1/chat/1",
-        
             },
           ]}
         />
@@ -90,11 +142,33 @@ const OrderDetailsHeader = ({
       consultantMenuContent = (
         <MenuContent
           data={[
-            { name: "Accept", link: "/", function: () => {} },
+            {
+              name: "Accept",
+              link: "/",
+              disabled: isLoading,
+              function: () => {
+                if (consultantId && orderId) {
+                  nprogress.start();
+                  acceptRequest({
+                    consultant_id: consultantId,
+                    order_id: orderId,
+                  });
+                }
+              },
+            },
             {
               name: "Reject",
               link: "/",
-              function: () => {},
+              disabled: result.isLoading,
+              function: () => {
+                if (consultantId && orderId) {
+                  nprogress.start();
+                  declineRequest({
+                    consultant_id: consultantId,
+                    order_id: orderId,
+                  });
+                }
+              },
             },
           ]}
         />
@@ -156,7 +230,14 @@ const OrderDetailsHeader = ({
         onClose={assingReqOptions.close}
         withCloseButton={false}
       >
-        <AssignRequestModal close={assingReqOptions.close} />
+        {expertise && orderId && chat_appointment_data && (
+          <AssignRequestModal
+            chat_appointment_data={chat_appointment_data}
+            expertise={expertise}
+            close={assingReqOptions.close}
+            orderId={orderId}
+          />
+        )}
       </ModalComponent>
       <div>
         <header className="flex flex-wrap items-center px-2 chatbg:mx-0 py-4 chatbg:py-0 ">
@@ -171,14 +252,16 @@ const OrderDetailsHeader = ({
           </div>
           <div className="flex items-center ml-3 md:ml-0 mt-6 md:mt-0">
             <p className="text-[0.88rem] text-black-2 mr-2">Status:</p>
-            <p
-              className={`${statusClassname} font-medium, w-fit flex text-[0.75rem] items-center font-medium py-2 px-2 rounded-md`}
-            >
-              <span className="block pr-1">
-                <GoDotFill />
-              </span>
-              {statusValue}
-            </p>
+            {statusValue && (
+              <p
+                className={`${statusClassname} font-medium, w-fit flex text-[0.75rem] items-center font-medium py-2 px-2 rounded-md`}
+              >
+                <span className="block pr-1">
+                  <GoDotFill />
+                </span>
+                {capitalizeFirstLetter(statusValue)}
+              </p>
+            )}
             <MenuComponent
               target={
                 <div>

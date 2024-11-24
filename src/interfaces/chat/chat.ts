@@ -22,3 +22,22 @@ export interface ITimeSlots {
   time: string
   isAvailable: boolean
 }
+
+
+export interface ISendChatMessagePayload {
+  uid: string
+  role: "consultant" | "user" | "admin"
+  name: string
+  room: string
+  message: string
+}
+
+export interface ISendChatMessageFilePayload {
+  uid: string
+  role: string
+  name: string
+  room: string
+  file: File
+}
+
+// export interface IChatMessages 

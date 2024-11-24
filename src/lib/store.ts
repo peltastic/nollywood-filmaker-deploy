@@ -5,9 +5,12 @@ import userReducer from "./slices/userSlice";
 import authReducer from "./slices/authSlice";
 import routeReducer from "./slices/routeSlice";
 import logoutReducer from "./slices/logoutSlice";
-import consultantAuthReducer from "./slices/consultants/authSlice"
-import consultantReducer from "./slices/consultants/consultantSlice"
-import consultantRouteReducer from "./slices/consultants/routeSlice"
+import consultantAuthReducer from "./slices/consultants/authSlice";
+import adminAuthReducer from "./slices/admin/authSlice";
+import adminReducer from "./slices/admin/adminSlice";
+import adminRouteReducer from "./slices/admin/routeSlice";
+import consultantReducer from "./slices/consultants/consultantSlice";
+import consultantRouteReducer from "./slices/consultants/routeSlice";
 import persistReducer from "redux-persist/lib/persistReducer";
 import { authApi } from "./features/users/auth/auth";
 import { servicesApi } from "./features/users/services/services";
@@ -15,9 +18,14 @@ import { profileApi } from "./features/users/profile/profile";
 import { requestsApi } from "./features/users/dashboard/requests/requests";
 import { consultantAuthApi } from "./features/consultants/auth/auth";
 import { availabilityApi } from "./features/consultants/profile/availability";
-import { chatApi } from "./features/users/chat/chat";
+import { chatApi } from "./features/users/services/chat/chat";
 import { consultantRequestsApi } from "./features/consultants/dashboard/request";
 import { consultantProfileApi } from "./features/consultants/profile/profile";
+import { calendarApi } from "./features/consultants/calendar/calendar";
+import { adminAuthApi } from "./features/admin/auth/auth";
+import { adminRequestApi } from "./features/admin/requests/request";
+import { dashboardChatApi } from "./features/users/dashboard/chat/chat";
+import { consultantDashboardChatApi } from "./features/consultants/dashboard/chat/chat";
 
 const persistConfig = {
   key: "root",
@@ -31,7 +39,10 @@ const combinedReducer = combineReducers({
   logout: logoutReducer,
   consultantAuth: consultantAuthReducer,
   consultant: consultantReducer,
-  consultantRoute: consultantRouteReducer
+  consultantRoute: consultantRouteReducer,
+  adminAuth: adminAuthReducer,
+  admin: adminReducer,
+  adminRoute: adminRouteReducer,
 });
 const persistedReducer = persistReducer(persistConfig, combinedReducer);
 export const store = configureStore({
@@ -45,7 +56,13 @@ export const store = configureStore({
     [consultantAuthApi.reducerPath]: consultantAuthApi.reducer,
     [availabilityApi.reducerPath]: availabilityApi.reducer,
     [consultantRequestsApi.reducerPath]: consultantRequestsApi.reducer,
-    [consultantProfileApi.reducerPath]: consultantProfileApi.reducer
+    [consultantProfileApi.reducerPath]: consultantProfileApi.reducer,
+    [calendarApi.reducerPath]: calendarApi.reducer,
+    [adminAuthApi.reducerPath]: adminAuthApi.reducer,
+    [adminRequestApi.reducerPath]: adminRequestApi.reducer,
+    [dashboardChatApi.reducerPath]: dashboardChatApi.reducer,
+    [consultantDashboardChatApi.reducerPath]:
+      consultantDashboardChatApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -59,7 +76,12 @@ export const store = configureStore({
       availabilityApi.middleware,
       chatApi.middleware,
       consultantRequestsApi.middleware,
-      consultantProfileApi.middleware
+      consultantProfileApi.middleware,
+      calendarApi.middleware,
+      adminAuthApi.middleware,
+      adminRequestApi.middleware,
+      dashboardChatApi.middleware,
+      consultantDashboardChatApi.middleware,
     ]),
   devTools: process.env.NODE_ENV !== "production",
 });

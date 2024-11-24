@@ -3,7 +3,7 @@ import CustomCalender from "@/components/CustomCalender/CustomCalender";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import { FaArrowRight } from "react-icons/fa";
 import CustomTime from "@/components/CustomTime/CustomTime";
-import { useLazyGetAvailabilityHoursQuery } from "@/lib/features/users/chat/chat";
+import { useLazyGetAvailabilityHoursQuery } from "@/lib/features/users/services/chat/chat";
 import moment from "moment";
 
 type Props = {

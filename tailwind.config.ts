@@ -60,6 +60,7 @@ const config: Config = {
         "stroke-11": "#F5F6F7",
         "yellow-1": "#FDE047",
         "red-1": "#D92D20",
+        "schedule-bg": "#1818180D",
         "green-1": "#DCFCE7",
         "profile-menu-border": "#F2F4F7",
         "calender-bg": "#F9F9F9",

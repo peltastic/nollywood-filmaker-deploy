@@ -8,6 +8,7 @@ import AdminProfileImg from "/public/assets/dashboard/admin-profile-img.svg";
 import ChatTimer from "../ChatTimer";
 type Props = {
   close: () => void;
+  closeRight?: boolean;
 };
 
 export interface IFilesData {
@@ -36,7 +37,11 @@ const reviewed_request_file_data: IFilesData[] = [
 
 const CustomerChatRight = (props: Props) => {
   return (
-    <div className="border-l border-l-stroke-8">
+    <div
+      className={`border-l ${
+        props.closeRight ? "hidden" : null
+      }  border-l-stroke-8`}
+    >
       <header className="w-full font-semibold flex items-center px-6 py-8 border-b border-b-stroke-8">
         <h1 className=" text-[1.25rem] mr-auto">Directory</h1>
         <div

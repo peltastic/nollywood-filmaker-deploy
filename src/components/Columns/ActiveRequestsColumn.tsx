@@ -90,7 +90,7 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
         row.original.status.toLowerCase() === "ready"
           ? "bg-light-blue text-dark-blue"
           : row.original.status.toLowerCase() === "completed"
-          ? "bg-light-green text-dark-green"
+          ? "bg-light-green text-dark-green" : row.original.status === "pending" ? "bg-stroke-4 text-black-6"
           : "bg-light-yellow text-dark-yellow";
       return (
         <div className=" w-[10rem] xl:w-auto">

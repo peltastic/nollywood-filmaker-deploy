@@ -11,7 +11,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import PaymentWindow from "@/components/PaymentWindow/PaymentWindow";
 import moment from "moment";
 import UnstyledButton from "@/components/Button/UnstyledButton";
-import { useInitializeChatWithAProTransactionMutation } from "@/lib/features/users/chat/chat";
+import { useInitializeChatWithAProTransactionMutation } from "@/lib/features/users/services/chat/chat";
 import { useServicePayment } from "@/hooks/useServicePayment";
 import InitializingTransactionModal from "@/components/Services/InitializingTransactionModal";
 import { useDisclosure } from "@mantine/hooks";
@@ -20,6 +20,7 @@ import { RootState } from "@/lib/store";
 import { initializeTransactionListener } from "@/lib/socket";
 import { nprogress } from "@mantine/nprogress";
 import Spinner from "@/app/Spinner/Spinner";
+import { convert12HT24 } from "@/utils/helperFunction";
 
 type Props = {};
 
@@ -179,7 +180,7 @@ const GetStartedChatPage = (props: Props) => {
                   {page === "3" && (
                     <div className="">
                       <UnstyledButton
-                      disabled={isLoading}
+                        disabled={isLoading}
                         clicked={() => {
                           if (userId) {
                             chatWithPro({
@@ -188,7 +189,10 @@ const GetStartedChatPage = (props: Props) => {
                               date: moment(currentDate).format("YYYY-MM-DD"),
                               summary: chatData.summary,
                               time: {
-                                hours: Number(chatData.time.split(":")[0]),
+                                hours: convert12HT24(
+                                  Number(chatData.time.split(":")[0]),
+                                  true
+                                ),
                                 minutes: 0,
                                 seconds: 0,
                               },
@@ -209,7 +213,7 @@ const GetStartedChatPage = (props: Props) => {
                           </div>
                         ) : (
                           <>
-                            <p className="mr-2">Procced to payment</p>
+                            <p className="mr-2">Proceed to payment</p>
                             {/* <FaArrowRight className="text-[0.7rem]" /> */}
                           </>
                         )}

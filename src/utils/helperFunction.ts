@@ -113,7 +113,6 @@ export function convert12HT24(hour: number, type24?: boolean): number {
   }
 
   if (type24) {
-    console.log(hour);
     return hour >= 1 && hour <= 5 ? selectedHour[0].H21hour : hour;
   } else {
     return hour >= 13 && hour <= 17 ? selectedHour[0].H12hour : hour;
@@ -122,4 +121,10 @@ export function convert12HT24(hour: number, type24?: boolean): number {
 
 export function get12HTime(hour: number): "AM" | "PM" {
   return hour >= 9 && hour <= 12 ? "AM" : "PM";
+}
+
+export function convertToAfricaLagosTz(time: string) {
+  return `${time.split("T")[0]}T${
+    Number(time.split("T")[1].split(":")[0]) - 1
+  }:00:00+01:00`;
 }

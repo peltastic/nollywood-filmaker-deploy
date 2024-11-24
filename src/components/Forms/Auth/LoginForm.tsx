@@ -18,12 +18,20 @@ import Spinner from "@/app/Spinner/Spinner";
 import { nprogress } from "@mantine/nprogress";
 import { CancelSvg } from "@/components/CustomSvgs/CustomSvgs";
 import { setAuthStatus } from "@/lib/slices/authSlice";
-import { setConsultantToken, setCookie, setTokenCookie } from "@/utils/storage";
+import {
+  setAdminToken,
+  setConsultantToken,
+  setCookie,
+  setTokenCookie,
+} from "@/utils/storage";
 import { setUserInfo } from "@/lib/slices/userSlice";
 import { setLogoutType } from "@/lib/slices/logoutSlice";
 import { useLoginConsultantMutation } from "@/lib/features/consultants/auth/auth";
 import { setConsultantAuthStatus } from "@/lib/slices/consultants/authSlice";
 import { setConsultantInfo } from "@/lib/slices/consultants/consultantSlice";
+import { useLoginAdminMutation } from "@/lib/features/admin/auth/auth";
+import { setAdminAuthStatus } from "@/lib/slices/admin/authSlice";
+import { setAdminInfo } from "@/lib/slices/admin/adminSlice";
 
 type Props = {
   successRoute: string;
@@ -36,6 +44,7 @@ const LoginForm = (props: Props) => {
   const [loginUser, { isLoading, isSuccess, isError, error, data }] =
     useLoginMutation();
   const [loginConsultant, result] = useLoginConsultantMutation();
+  const [loginAdmin, loginAdminRes] = useLoginAdminMutation();
   const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
@@ -46,6 +55,9 @@ const LoginForm = (props: Props) => {
   const consultantFallbackRoute = useSelector(
     (state: RootState) =>
       state.persistedState.consultantRoute.consultantFallbackRoute
+  );
+  const adminFallbackRoute = useSelector(
+    (state: RootState) => state.persistedState.adminRoute.adminFallbackRoute
   );
 
   useEffect(() => {
@@ -67,13 +79,41 @@ const LoginForm = (props: Props) => {
       dispatch(setUserInfo(data.user));
       setCookie("refresh", data.refreshToken, {
         path: "/",
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        expires: new Date(Date.now() + 6.5 * 24 * 60 * 60 * 1000),
       });
       setTokenCookie(data.accessToken);
 
       router.push(fallBackRoute || "/user/dashboard");
     }
   }, [isSuccess, isError]);
+
+  useEffect(() => {
+    if (loginAdminRes.isError) {
+      nprogress.complete();
+      setErrorMessage(
+        (result.error as any).data?.message || "An Error Occured"
+      );
+    }
+
+    if (loginAdminRes.isSuccess) {
+      notifications.show({
+        title: "Login successful",
+        message: "",
+        color: successColor,
+        classNames: classes,
+        position: "top-right",
+      });
+      nprogress.complete();
+      dispatch(setAdminAuthStatus("LOGGED_IN"));
+      dispatch(setAdminInfo(loginAdminRes.data.user));
+      setCookie("ad_refresh", loginAdminRes.data.refreshToken, {
+        path: "/",
+        expires: new Date(Date.now() + 6.5 * 24 * 60 * 60 * 1000),
+      });
+      setAdminToken(loginAdminRes.data.accessToken);
+      router.push(adminFallbackRoute || "/admin/dashboard");
+    }
+  }, [loginAdminRes.isError, loginAdminRes.isSuccess]);
 
   useEffect(() => {
     if (result.isError) {
@@ -95,7 +135,7 @@ const LoginForm = (props: Props) => {
       dispatch(setConsultantInfo(result.data.user));
       setCookie("con_refresh", result.data.refreshToken, {
         path: "/",
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        expires: new Date(Date.now() + 6.5 * 24 * 60 * 60 * 1000),
       });
       setConsultantToken(result.data.accessToken);
       router.push(consultantFallbackRoute || "/consultants/dashboard");
@@ -125,14 +165,17 @@ const LoginForm = (props: Props) => {
               email,
               password,
             });
+          } else if (props.loginType === "admin") {
+            loginAdmin({
+              email,
+              password,
+            });
           } else {
             loginUser({
               email,
               password,
             });
           }
-
-          // router.push(props.successRoute);
         }}
         validationSchema={loginSchema}
       >
@@ -175,10 +218,15 @@ const LoginForm = (props: Props) => {
             )}
             <UnstyledButton
               // clicked={() => router.push("/")}
-              disabled={!(dirty && isValid) || isLoading || result.isLoading}
+              disabled={
+                !(dirty && isValid) ||
+                isLoading ||
+                result.isLoading ||
+                loginAdminRes.isLoading
+              }
               class="flex justify-center w-[6.5rem] hover:bg-blue-1 mt-[7rem] py-2 px-4 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
             >
-              {isLoading || result.isLoading ? (
+              {isLoading || result.isLoading || loginAdminRes.isLoading ? (
                 <div className="">
                   <div className="w-[1rem] py-1">
                     <Spinner />

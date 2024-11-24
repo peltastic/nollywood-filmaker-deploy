@@ -7,18 +7,10 @@ import TestImage from "/public/assets/dashboard/issues-img-1.png";
 import { useRouter } from "next/navigation";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import { Rating } from "@mantine/core";
+import { ICustomerRequest } from "@/interfaces/admin/requests/requests";
+import moment from "moment";
 
-export interface IAdminReqsData {
-  customer: string;
-  email: string;
-  script: string;
-  service_type: string;
-  date: string;
-  rating: number;
-  status: "Ready" | "Ongoing" | "Completed" | "Pending";
-}
-
-export const admin_reqs_columns: ColumnDef<IAdminReqsData>[] = [
+export const admin_reqs_columns: ColumnDef<ICustomerRequest>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -42,17 +34,19 @@ export const admin_reqs_columns: ColumnDef<IAdminReqsData>[] = [
             <Image src={TestImage} alt="image" />
           </div>
           <div className="">
-            <h1 className=" text-black-4 font-medium">
+            <h1 className=" text-black-4 font-medium">Jenny Wilson</h1>
+            {/* <h1 className=" text-black-4 font-medium">
               {row.getValue("customer")}
-            </h1>
-            <p className="text-gray-1 text-[0.88rem]">{row.original.email}</p>
+            </h1> */}
+            {/* <p className="text-gray-1 text-[0.88rem]">{row.original.email}</p> */}
+            <p className="text-gray-1 text-[0.88rem]">w.lawson@example.com</p>
           </div>
         </div>
       );
     },
   },
   {
-    accessorKey: "script",
+    accessorKey: "chat_title",
     header: () => <div className="">Service name</div>,
     cell: ({ row }) => {
       return (
@@ -61,8 +55,10 @@ export const admin_reqs_columns: ColumnDef<IAdminReqsData>[] = [
             <Image src={ReadMyScriptDarkImg} alt="name-img" />
           </div>
           <div className="text-[0.88rem]">
-            <p className="text-black-4 font-medium">{row.getValue("script")}</p>
-            <p className="text-gray-1">{row.original.service_type}</p>
+            <p className="text-black-4 font-medium">
+              {row.original.movie_title || row.original.chat_title}
+            </p>
+            <p className="text-gray-1">{row.original.nameofservice}</p>
           </div>
         </div>
       );
@@ -74,21 +70,23 @@ export const admin_reqs_columns: ColumnDef<IAdminReqsData>[] = [
     cell: ({ row }) => {
       return (
         <div className=" w-[10rem] xl:w-auto">
-          <p className="text-gray-1 text-[0.88rem]">{row.getValue("date")}</p>
+          <p className="text-gray-1 text-[0.88rem]">
+            {moment(row.getValue("date")).format("ll")}
+          </p>
         </div>
       );
     },
   },
   {
-    accessorKey: "status",
+    accessorKey: "stattusof",
     header: "Status",
     cell: ({ row }) => {
       const className =
-        row.original.status === "Ready"
+        row.original.stattusof === "ready"
           ? "bg-light-blue text-dark-blue"
-          : row.original.status === "Completed"
+          : row.original.stattusof === "completed"
           ? "bg-light-green text-dark-green"
-          : row.original.status === "Pending"
+          : row.original.stattusof === "pending"
           ? "bg-stroke-4 text-black-6"
           : "bg-light-yellow text-dark-yellow";
       return (
@@ -99,7 +97,7 @@ export const admin_reqs_columns: ColumnDef<IAdminReqsData>[] = [
             <span className="block pr-1">
               <GoDotFill />
             </span>{" "}
-            {row.getValue("status")}
+            {row.getValue("stattusof")}
           </p>
         </div>
       );
@@ -109,7 +107,15 @@ export const admin_reqs_columns: ColumnDef<IAdminReqsData>[] = [
     accessorKey: "rating",
     header: "Rating",
     cell: ({ row }) => {
-      return <Rating defaultValue={row.getValue("rating")} color="#F8C51B" />;
+      return (
+        <div className="">
+          {row.original.rating ? (
+            <Rating defaultValue={row.getValue("rating")} color="#F8C51B" />
+          ) : (
+            <p>N/A</p>
+          )}
+        </div>
+      );
     },
   },
   {
@@ -120,7 +126,7 @@ export const admin_reqs_columns: ColumnDef<IAdminReqsData>[] = [
         <UnstyledButton
           clicked={() =>
             router.push(
-              `/admin/dashboard/customers/1/order-details/1?status=${row.original.status}`
+              `/admin/dashboard/customers/${row.original.orderId}/order-details?status=${row.original.stattusof}`
             )
           }
           class="bg-black-3 text-[0.88rem] text-white py-2 px-4 rounded-md"

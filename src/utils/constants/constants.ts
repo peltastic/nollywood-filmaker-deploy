@@ -111,13 +111,13 @@ export const monthNames = [
 ];
 
 export const days = [
+  "Sunday",
   "Monday",
   "Tuesday",
   "Wednesday",
   "Thursday",
   "Friday",
   "Saturday",
-  "Sunday",
 ];
 
 export const successColor = "#22C55E";

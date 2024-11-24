@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import CustomerChatLeft from "@/components/Chats/CustomerChat/CustomerChatLeft";
 import CustomerChatRight from "@/components/Chats/CustomerChat/CustomerChatRight";
 import CustomerChatMiddle from "@/components/Chats/CustomerChat/CutomerChatMiddle";
@@ -16,7 +16,7 @@ const AdminChats = (props: Props) => {
       <DashboardBodyLayout>
         <section className="flex min-h-screen bg-white">
           <section className="mx-auto w-full  chatbp:w-[30%]">
-            <CustomerChatLeft />
+            <CustomerChatLeft data={[]} />
           </section>
           <section
             className={`${
@@ -24,6 +24,7 @@ const AdminChats = (props: Props) => {
             } transition-all hidden chatbp:block`}
           >
             <CustomerChatMiddle
+              type="admin"
               opened={closeRight}
               open={() => setCloseRight(false)}
             />

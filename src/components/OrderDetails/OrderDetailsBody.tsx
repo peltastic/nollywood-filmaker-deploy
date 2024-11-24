@@ -2,15 +2,16 @@ import React from "react";
 import { IoMdDownload } from "react-icons/io";
 
 type Props = {
-  title: string;
-  script: string;
+  chat?: boolean
+  title?: string;
+  script?: string;
   bodyData: { title: string; content: string }[];
 };
 
-const OrderDetailsBody = ({ title, script, bodyData }: Props) => {
+const OrderDetailsBody = ({ title, script, bodyData, chat }: Props) => {
   return (
     <div className="text-black-2 bg-white px-6 py-6 mt-8 rounded-2xl border border-stroke-5 shadow-md shadow-[#1018280F]">
-      <div className="border-b border-b-stroke-4">
+      {chat ? null : <div className="border-b border-b-stroke-4">
         <h1 className="font-bold mb-1">Movie Title</h1>
         <p className="text-[0.88rem]">{title}</p>
         <div className="mt-4 mb-4">
@@ -20,9 +21,9 @@ const OrderDetailsBody = ({ title, script, bodyData }: Props) => {
             <IoMdDownload />
           </div>
         </div>
-      </div>
+      </div>}
       {bodyData.map((el) => (
-        <div key={el.title} className="border-b border-b-stroke-4 py-4">
+        <div key={el.title} className="border-b last:border-0 border-b-stroke-4 py-4">
           <h1 className="font-bold mb-1">{el.title}</h1>
           <p className="text-[0.88rem]">{el.content}</p>
         </div>

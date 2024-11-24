@@ -1,0 +1,18 @@
+export interface IGetUserConversations {
+    _id: string
+    stattusof: "ongoing" | "completed" | "pending" | "ready";
+    orderId: string
+    time: {
+        hours: number
+        minutes: number
+        seconds: number
+    } 
+    startTime: string
+    endTime: string
+    date: string
+    nameofservice: "Chat With A Professional"
+    chat_title: string
+}
+export interface IGetUserConversationsResponse {
+    requests: IGetUserConversations[]
+}

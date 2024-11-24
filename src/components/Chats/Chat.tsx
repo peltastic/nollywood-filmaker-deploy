@@ -1,27 +1,64 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IChatData } from "./CustomerChat/CustomerChatLeft";
 import AdminProfileImg from "/public/assets/dashboard/admin-profile-img.svg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import moment from "moment";
+import momentTz from "moment-timezone";
+import { differenceInDays, differenceInHours } from "date-fns";
+import { convertToAfricaLagosTz } from "@/utils/helperFunction";
 
 type Props = {
   data: IChatData;
   index: number;
   selctedIndex: number;
+  orderId?: string | null;
+  type?: "consultant" | "admin";
 };
 
-const Chat = ({ data, index, selctedIndex }: Props) => {
-  const router = useRouter()
+const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
+  const [chatTimeStatus, setChatTimeStatus] = useState<string>("");
+
+  const router = useRouter();
   const className =
-    data.status === "Completed"
+    data.status === "completed"
       ? "bg-light-green text-dark-green border border-light-green"
       : "bg-light-yellow text-dark-yellow border border-light-yellow";
+
+  useEffect(() => {
+    const startTime = convertToAfricaLagosTz(data.start_time);
+    const endTime = convertToAfricaLagosTz(data.end_time);
+    const currTime = momentTz(new Date()).tz("Africa/Lagos").format();
+
+    const differenceInDaysVal = differenceInDays(
+      new Date(),
+      new Date(data.date)
+    );
+    if (differenceInDaysVal > 1) {
+      setChatTimeStatus(moment(data.date).format("DD/MM/YYYY"));
+    } else {
+      setChatTimeStatus(
+        differenceInHours(currTime, startTime) > 0 &&
+          differenceInHours(currTime, endTime) < 0
+          ? "Chat Active"
+          : moment(endTime).fromNow()
+      );
+    }
+  }, []);
+
   return (
     <>
       <div
+        onClick={() =>
+          router.push(
+            type === "consultant"
+              ? `/consultants/dashboard/chats?chat=${data.id}`
+              : `/user/dashboard/chats?chat=${data.id}`
+          )
+        }
         className={`${
-          index === selctedIndex ? "bg-[#615EF00F]" : ""
-        } hidden chatbp:flex rounded-md items-start py-4 mb-2 px-4  `}
+          orderId === data.id ? "bg-[#615EF00F]" : ""
+        } hidden chatbp:flex rounded-md transition-all hover:bg-[#615EF00F] items-start py-4 mb-2 px-4 cursor-pointer `}
       >
         <div className="w-[3rem] mr-3 h-[3rem] rounded-full bg-black flex items-center justify-center">
           <Image src={AdminProfileImg} alt="admin-alt-profile" />
@@ -41,11 +78,11 @@ const Chat = ({ data, index, selctedIndex }: Props) => {
           </div>
         </div>
         <div className="ml-auto font-semibold text-[#00000056] text-[0.88rem]">
-          <p>{data.date}</p>
+          <p>{chatTimeStatus}</p>
         </div>
       </div>
       <div
-      onClick={() => router.push("/user/dashboard/chats/1") }
+        onClick={() => router.push("/user/dashboard/chats/1")}
         className={`${
           index === selctedIndex ? "bg-[#615EF00F]" : ""
         } flex chatbp:hidden rounded-md items-start py-4 mb-2 px-4  `}
