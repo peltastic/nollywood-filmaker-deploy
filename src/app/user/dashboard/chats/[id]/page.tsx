@@ -14,6 +14,7 @@ const SingleChatPage = (props: Props) => {
       <DashboardBodyLayout>
         <section className={`w-full transition-all h-[calc(100dvh)] `}>
           <CustomerChatMiddle
+          type="user"
             opened={closeRight}
             open={() => setCloseRight(false)}
           />
