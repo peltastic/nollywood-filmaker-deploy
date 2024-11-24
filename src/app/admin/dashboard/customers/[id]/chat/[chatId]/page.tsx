@@ -19,6 +19,7 @@ const CustomerChatPage = (props: Props) => {
             } transition-all hidden chatbp:block`}
           >
             <CustomerChatMiddle
+            type='admin'
             admin
               opened={closeRight}
               open={() => setCloseRight(false)}
