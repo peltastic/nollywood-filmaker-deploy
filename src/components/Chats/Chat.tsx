@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import moment from "moment";
 import momentTz from "moment-timezone";
 import { differenceInDays, differenceInHours } from "date-fns";
-import { convertToAfricaLagosTz } from "@/utils/helperFunction";
+import { convertToAfricaLagosTz, truncateStr } from "@/utils/helperFunction";
 
 type Props = {
   data: IChatData;
@@ -29,6 +29,7 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
     const startTime = convertToAfricaLagosTz(data.start_time);
     const endTime = convertToAfricaLagosTz(data.end_time);
     const currTime = momentTz(new Date()).tz("Africa/Lagos").format();
+    console.log(endTime);
 
     const differenceInDaysVal = differenceInDays(
       new Date(),
@@ -64,7 +65,10 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
           <Image src={AdminProfileImg} alt="admin-alt-profile" />
         </div>
         <div className="">
-          <h1 className="font-semibold text-[0.88rem]">{data.name}</h1>
+          <h1 className="font-semibold text-[0.88rem]">
+            {/* <>{truncateStr( */}
+            {data.name} {/* , 20)}</> */}
+          </h1>
           <p className="text-black-3 text-[0.75rem]">{data.service}</p>
           <div className="flex items-center mt-3">
             <div className="mr-2 text-black-3 rounded-full py-[0.15rem] border border-black-3 text-[0.75rem] font-medium px-3">

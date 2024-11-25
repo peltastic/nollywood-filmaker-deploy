@@ -128,3 +128,11 @@ export function convertToAfricaLagosTz(time: string) {
     Number(time.split("T")[1].split(":")[0]) - 1
   }:00:00+01:00`;
 }
+
+export function truncateStr(word: string, length: number) {
+  const str = word.substring(0, length);
+  if (word.length <= length) {
+    return { text: word, status: false };
+  }
+  return word.length <= length ? word : str;
+}

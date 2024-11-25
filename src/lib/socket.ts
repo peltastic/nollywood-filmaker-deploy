@@ -21,7 +21,11 @@ export function joinChatRoom(data: {
 export function sendChatMessageEvent (data: {
     room: string
     message: string
-    sender: string
+    sender: {
+      userid: string
+      name: string
+      role: "user" | "consultant" | "admin"
+    }
 }) {
     chat_socket.emit('chatMessage', data)
 }

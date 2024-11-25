@@ -1,3 +1,4 @@
+import { IUserInfoData } from "@/interfaces/auth/auth";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export interface IConsultantInfo {
@@ -11,7 +12,7 @@ export interface IConsultantInfo {
 }
 
 export interface IConsultantInfoState {
-  user: IConsultantInfo | null;
+  user: IUserInfoData | null;
 }
 
 const initialState: IConsultantInfoState = {
@@ -31,7 +32,7 @@ export const consultantInfoSlice = createSlice({
     name: "consultantSlice",
     initialState,
     reducers: {
-        setConsultantInfo: (state, action: PayloadAction<IConsultantInfo>) => {
+        setConsultantInfo: (state, action: PayloadAction<IUserInfoData>) => {
             state.user = action.payload
         }
     }

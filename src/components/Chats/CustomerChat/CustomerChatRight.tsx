@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TestImage from "/public/assets/test-avatar-big.png";
 import HamburgerIcon from "/public/assets/chats/hamburger.svg";
 import Image from "next/image";
@@ -6,9 +6,15 @@ import FileImg from "/public/assets/dashboard/file.svg";
 import DownloadImg from "/public/assets/chats/download-icon.svg";
 import AdminProfileImg from "/public/assets/dashboard/admin-profile-img.svg";
 import ChatTimer from "../ChatTimer";
+import momentTz from "moment-timezone";
+import { IGetUserConversations } from "@/interfaces/dashboard/chat";
+import { convertToAfricaLagosTz } from "@/utils/helperFunction";
+import { differenceInMinutes } from "date-fns";
 type Props = {
   close: () => void;
   closeRight?: boolean;
+  data?: IGetUserConversations;
+  openRight?: () => void;
 };
 
 export interface IFilesData {
@@ -36,6 +42,23 @@ const reviewed_request_file_data: IFilesData[] = [
 ];
 
 const CustomerChatRight = (props: Props) => {
+  const [isTime, setIsTime] = useState<boolean>(false);
+  useEffect(() => {
+    if (props.data) {
+      const startTime = convertToAfricaLagosTz(props.data.startTime);
+      const diff = differenceInMinutes(
+        momentTz(new Date()).tz("Africa/Lagos").format(),
+        startTime
+      );
+
+      if (diff >= 0) {
+        setIsTime(true);
+      } else {
+        setIsTime(false);
+      }
+    }
+  }, [props.data]);
+
   return (
     <div
       className={`border-l ${
@@ -52,7 +75,16 @@ const CustomerChatRight = (props: Props) => {
         </div>
       </header>
       <section>
-        <ChatTimer />
+        {props.data && (
+          <ChatTimer
+            timeData={{
+              startTime: props.data.startTime,
+              endTime: props.data.endTime,
+            }}
+            isTime={isTime}
+            openRight={props.openRight}
+          />
+        )}
       </section>
       <section className="py-6 px-4 border-b border-b-stroke-8">
         <div className="flex items-center mb-2">

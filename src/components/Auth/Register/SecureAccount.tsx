@@ -23,7 +23,7 @@ type Props = {
 const SecureAccount = ({ setPageProps, data }: Props) => {
   const [registerUser, { isLoading, isSuccess, isError, error }] =
     useRegisterMutation();
-    const [errorMessage, setErrorMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
 
   useEffect(() => {
@@ -33,13 +33,14 @@ const SecureAccount = ({ setPageProps, data }: Props) => {
     }
     if (isSuccess) {
       notifications.show({
-        title: "Testing",
-        message: "testing",
+        title: "Successful",
+        message: "Acoount created successfully, Please login",
         color: successColor,
         classNames: classes,
         position: "top-right",
       });
-      router.push("/success-page/register");
+      nprogress.complete();
+      router.push("/auth/login");
     }
   }, [isSuccess, isError]);
 

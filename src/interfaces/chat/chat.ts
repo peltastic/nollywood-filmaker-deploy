@@ -40,4 +40,17 @@ export interface ISendChatMessageFilePayload {
   file: File
 }
 
-// export interface IChatMessages 
+export interface IChatMessages {
+  _id: string
+  uid: string
+  role: "user" | "consultant" | "admin"
+  name: string
+  room: string
+  message: string
+  timestamp: string
+}
+
+
+export interface IChatMessagesResponse {
+  messages: IChatMessages[]
+}

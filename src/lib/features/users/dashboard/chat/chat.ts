@@ -1,4 +1,4 @@
-import { ISendChatMessagePayload } from "@/interfaces/chat/chat";
+import { IChatMessages, IChatMessagesResponse, ISendChatMessagePayload } from "@/interfaces/chat/chat";
 import {
   IGetUserConversations,
   IGetUserConversationsResponse,
@@ -40,7 +40,7 @@ export const dashboardChatApi = createApi({
     fetchChatFiles: build.query<unknown, string>({
       query: (id) => `/api/chat/files/${id}`,
     }),
-    fetchChatMessages: build.query<unknown, string>({
+    fetchChatMessages: build.query<IChatMessagesResponse, string>({
       query: (id) => `/api/chat/fetchmessage/${id}`,
     }),
   }),

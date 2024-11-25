@@ -26,7 +26,6 @@ const ChatsPage = (props: Props) => {
 
   const search = useSearchParams();
   const searchVal = search.get("chat");
-  
 
   const [chatData, setChatData] = useState<IChatData[]>([]);
 
@@ -43,7 +42,6 @@ const ChatsPage = (props: Props) => {
       fetchConversationData(searchVal);
     }
   }, [searchVal]);
-
 
   useEffect(() => {
     if (conversationsRes.data) {
@@ -86,7 +84,7 @@ const ChatsPage = (props: Props) => {
           <section
             className={`${
               closeRight ? "w-[70%]" : "w-[43%]"
-            } transition-all h-full hidden chatbp:block`}
+            } transition-all h-full hidden chatbp:block bg-white`}
           >
             <CustomerChatMiddle
               opened={closeRight}
@@ -103,8 +101,10 @@ const ChatsPage = (props: Props) => {
             }  hidden chatbp:block `}
           >
             <CustomerChatRight
+            data={result.data?.request}
               closeRight={closeRight}
               close={() => setCloseRight(true)}
+              openRight={() => setCloseRight(false)}
             />
           </section>
         </section>

@@ -8,15 +8,22 @@ import { useSendChatMessageMutation } from "@/lib/features/users/dashboard/chat/
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { chat_socket, joinChatRoom, sendChatMessageEvent } from "@/lib/socket";
+import { ChatPayload } from "./CustomerChat/CutomerChatMiddle";
+import ConsultantChatMessage from "./ConsultantChatMessage";
+import { IUserInfoData } from "@/interfaces/auth/auth";
 
 type Props = {
   type: "user" | "consultant" | "admin";
   orderId: string;
+  data: ChatPayload[];
+  updateChatHandlerProps: (newEntry: ChatPayload) => void;
+  userData: IUserInfoData | null;
+  isTime?: boolean;
 };
 
 export interface IChatMessagesData {
   text: string;
-  user: "admin" | "user";
+  user: "admin" | "user" | "consultant";
 }
 
 const chat_data: IChatMessagesData[] = [
@@ -71,90 +78,122 @@ const chat_data: IChatMessagesData[] = [
 ];
 
 const ChatRoom = (props: Props) => {
-  const userData = useSelector(
-    (state: RootState) => state.persistedState.user.user
-  );
   const [sendUserChatMessage, {}] = useSendChatMessageMutation();
   const [inputValue, setInputValue] = useState<string>("");
 
   useEffect(() => {
-    if (userData) {
+    if (props.userData) {
       joinChatRoom({
         room: props.orderId,
-        name: `${userData.fname} ${userData.lname}`,
+        name: `${props.userData.fname} ${props.userData.lname}`,
         role: "user",
-        userId: userData.id,
+        userId: props.userData.id,
       });
     }
   }, []);
 
   const sendMessageHandler = () => {
-    if (userData) {
+    if (props.userData) {
       sendUserChatMessage({
         message: inputValue,
-        name: `${userData.fname} ${userData.lname}`,
+        name: `${props.userData.fname} ${props.userData.lname}`,
         role: props.type,
         room: props.orderId,
-        uid: userData.id,
+        uid: props.userData.id,
       });
       sendChatMessageEvent({
         room: props.orderId,
         message: inputValue,
-        sender: userData.id,
+        sender: {
+          name: `${props.userData.fname} ${props.userData.lname}`,
+          role: props.type,
+          userid: props.userData.id,
+        },
       });
     }
   };
 
   useEffect(() => {
-    chat_socket.on("message", (data) => {
-      console.log(data);
-    });
+    chat_socket.on(
+      "message",
+      (data: {
+        sender: {
+          name: string;
+          role: "user" | "consultant" | "admin";
+          userid: string;
+        };
+        message: string;
+      }) => {
+        props.updateChatHandlerProps({
+          text: data.message,
+          user: data.sender.role,
+        });
+      }
+    );
   }, []);
 
   return (
-    <div className=" py-6  h-full  relative">
-      <div className="h-[45rem] overflow-scroll">
-        {chat_data.map((el, index) => (
-          <ChatMessage
-            key={el.text + index.toString()}
-            text={el.text}
-            user={el.user}
-            prevUser={index ? chat_data[index - 1].user : null}
-            index={index}
-          />
-        ))}
+    <div className=" py-6  h-full  relative bg-white">
+      <div className="h-[45rem] overflow-scroll w-full">
+        {props.data && (
+          <>
+            {props.data.map((el, index) => (
+              <>
+                {props.type === "user" ? (
+                  <ChatMessage
+                    key={el.text + index.toString()}
+                    text={el.text}
+                    user={el.user}
+                    prevUser={index ? props.data[index - 1].user : null}
+                    index={index}
+                  />
+                ) : (
+                  <ConsultantChatMessage
+                    key={el.text + index.toString()}
+                    text={el.text}
+                    user={el.user}
+                    prevUser={index ? props.data[index - 1].user : null}
+                    index={index}
+                  />
+                )}
+              </>
+            ))}
+          </>
+        )}
       </div>
-      <div className="h-[5rem] relative">
-        <div className="w-full px-6 flex items-center absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2">
-          <div className="mr-10">
-            <Image src={AttachIcon} alt="attach-icon" />
-          </div>
-          <form className="w-full" onSubmit={(e) => e.preventDefault()}>
-            <div className="w-full">
-              {/* <input
+      {props.isTime && (
+        <div className="h-[5rem] relative">
+          <div className="w-full px-6 flex items-center absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2">
+            <div className="mr-10">
+              <Image src={AttachIcon} alt="attach-icon" />
+            </div>
+            <form className="w-full" onSubmit={(e) => e.preventDefault()}>
+              <div className="w-full">
+                {/* <input
                 type="text"
                 placeholder="Type a message"
                 className="outline-none border-2 px-4 pr-10 py-3 w-full rounded-xl border-stroke-7 placeholder:text-[#0000005f] text-[0.88rem]"
               /> */}
-              <Textarea
-                minRows={0}
-                autosize
-                size="md"
-                radius={"md"}
-                value={inputValue}
-                onChange={(event) => setInputValue(event.currentTarget.value)}
-              />
-              <button
-                onClick={sendMessageHandler}
-                disabled={!inputValue}
-                className="w-fit disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer absolute right-10 -translate-y-1/2 top-1/2"
-              >
-                <Image src={SendImg} alt="send-img" />
-              </button>
-            </div>
-          </form>
+                <Textarea
+                  minRows={0}
+                  autosize
+                  size="md"
+                  radius={"md"}
+                  value={inputValue}
+                  onChange={(event) => setInputValue(event.currentTarget.value)}
+                />
+                <button
+                  onClick={sendMessageHandler}
+                  disabled={!inputValue}
+                  className="w-fit disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer absolute right-10 -translate-y-1/2 top-1/2"
+                >
+                  <Image src={SendImg} alt="send-img" />
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -91,7 +91,7 @@ const LoginForm = (props: Props) => {
     if (loginAdminRes.isError) {
       nprogress.complete();
       setErrorMessage(
-        (result.error as any).data?.message || "An Error Occured"
+        (loginAdminRes.error as any).data?.message || "An Error Occured"
       );
     }
 

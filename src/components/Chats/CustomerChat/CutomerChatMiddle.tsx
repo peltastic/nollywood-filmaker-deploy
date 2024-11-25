@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AdminProfileImg from "/public/assets/dashboard/admin-profile-img.svg";
 import Image from "next/image";
 import MenuComponent from "@/components/Menu/MenuComponent";
@@ -8,8 +8,9 @@ import Link from "next/link";
 import { IoIosArrowBack } from "react-icons/io";
 import ChatRoom from "../ChatRoom";
 import HamburgerIcon from "/public/assets/chats/hamburger.svg";
+import momentTz from "moment-timezone";
 import ModalComponent from "@/components/Modal/Modal";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useInterval } from "@mantine/hooks";
 import RequestExtension from "../ModalComponents/RequestExtension";
 import ReportAnIssue from "../ModalComponents/ReportAnIssue";
 import { useRouter } from "next/navigation";
@@ -21,6 +22,16 @@ import {
 import Logo from "/public/assets/nav/logo.svg";
 import Spinner from "@/app/Spinner/Spinner";
 import { IGetUserConversations } from "@/interfaces/dashboard/chat";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
+import { chat_socket } from "@/lib/socket";
+import { convertToAfricaLagosTz } from "@/utils/helperFunction";
+import { differenceInMinutes } from "date-fns";
+
+export interface ChatPayload {
+  text: string;
+  user: "user" | "consultant" | "admin";
+}
 
 type Props = {
   open: () => void;
@@ -33,16 +44,76 @@ type Props = {
 };
 
 const CustomerChatMiddle = (props: Props) => {
+  const userData = useSelector(
+    (state: RootState) => state.persistedState.user.user
+  );
+  const consultantData = useSelector(
+    (state: RootState) => state.persistedState.consultant.user
+  );
   const router = useRouter();
 
-  const [fetchUserChatMessages, {}] = useLazyFetchChatMessagesQuery();
+  const [isTime, setIsTime] = useState<boolean>(false);
+  const interval = useInterval(() => {
+    if (props.data) {
+      const startTime = convertToAfricaLagosTz(props.data.startTime);
+      const diff = differenceInMinutes(
+        momentTz(new Date()).tz("Africa/Lagos").format(),
+        startTime
+      );
+      if (diff >= 0) {
+        setIsTime(true);
+        interval.stop();
+      }
+    }
+  }, 1000);
+
+  const [chatData, setChatData] = useState<ChatPayload[]>([]);
+
+  const [fetchUserChatMessages, { data }] = useLazyFetchChatMessagesQuery();
 
   useEffect(() => {
     if (props.data) {
+      const startTime = convertToAfricaLagosTz(props.data.startTime);
+      const diff = differenceInMinutes(
+        momentTz(new Date()).tz("Africa/Lagos").format(),
+        startTime
+      );
+
+      if (diff >= 0) {
+        setIsTime(true);
+      } else {
+        setIsTime(false);
+        interval.start();
+      }
+
       fetchUserChatMessages(props.data.orderId);
     }
   }, [props.data]);
 
+  useEffect(() => {
+    if (data) {
+      const chat_data: {
+        text: string;
+        user: "user" | "consultant" | "admin";
+      }[] = data.messages.map((el) => {
+        return {
+          text: el.message,
+          user: el.role,
+        };
+      });
+      setChatData(chat_data);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (props.isFetching) {
+      setChatData([]);
+    }
+  }, [props.isFetching]);
+
+  const updateChatDataHandler = (newEntry: ChatPayload) => {
+    setChatData((prev) => [...prev, newEntry]);
+  };
 
   return (
     <div className=" bg-white border-r relative border-r-stroke-8 border-l border-l-stroke-8  h-full">
@@ -104,27 +175,38 @@ const CustomerChatMiddle = (props: Props) => {
                       <UserChatMenu />
                     )}
                   </MenuComponent>
-                  <div className="hidden lg:block">
-                    {props.opened ? (
-                      <div
-                        onClick={props.open}
-                        className=" hover:bg-stroke-4 transition-all ml-6 rounded-md cursor-pointer"
-                      >
-                        <Image src={HamburgerIcon} alt="hamburger-icons" />
-                      </div>
-                    ) : null}
-                  </div>
-                  <div
-                    onClick={props.open}
-                    className="block lg:hidden hover:bg-stroke-4 transition-all ml-6 rounded-md cursor-pointer"
-                  >
-                    <Image src={HamburgerIcon} alt="hamburger-icons" />
-                  </div>
+                  {isTime && (
+                    <div className="hidden lg:block">
+                      {props.opened ? (
+                        <div
+                          onClick={props.open}
+                          className=" hover:bg-stroke-4 transition-all ml-6 rounded-md cursor-pointer"
+                        >
+                          <Image src={HamburgerIcon} alt="hamburger-icons" />
+                        </div>
+                      ) : null}
+                    </div>
+                  )}
+                  {isTime && (
+                    <div
+                      onClick={props.open}
+                      className="block lg:hidden hover:bg-stroke-4 transition-all ml-6 rounded-md cursor-pointer"
+                    >
+                      <Image src={HamburgerIcon} alt="hamburger-icons" />
+                    </div>
+                  )}
                 </div>
               </header>
-              <div className="h-full">
+              <div className="h-full bg-white">
                 {props.data && (
-                  <ChatRoom orderId={props.data.orderId} type={props.type} />
+                  <ChatRoom
+                    userData={props.type === "user" ? userData : consultantData}
+                    orderId={props.data.orderId}
+                    updateChatHandlerProps={updateChatDataHandler}
+                    type={props.type}
+                    data={chatData}
+                    isTime={isTime}
+                  />
                 )}
               </div>
             </>
