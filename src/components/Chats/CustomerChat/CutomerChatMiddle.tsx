@@ -26,7 +26,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { chat_socket } from "@/lib/socket";
 import { convertToAfricaLagosTz, truncateStr } from "@/utils/helperFunction";
-import { differenceInMinutes } from "date-fns";
+import { differenceInMinutes, isAfter } from "date-fns";
 
 export interface ChatPayload {
   text: string;
@@ -77,20 +77,27 @@ const CustomerChatMiddle = (props: Props) => {
     if (props.data) {
       const startTime = convertToAfricaLagosTz(props.data.startTime);
 
-      const diff = differenceInMinutes(
+      const timeIsAfterStartTime = isAfter(
         momentTz(new Date()).tz("Africa/Lagos").format(),
         startTime
       );
       const endTime = convertToAfricaLagosTz(props.data.endTime);
-      const diffEndTime = differenceInMinutes(
-        endTime,
-        momentTz(new Date()).tz("Africa/Lagos").format()
+      const timeIsAfterEndTime = isAfter(
+        momentTz(new Date()).tz("Africa/Lagos").format(),
+        endTime
       );
-      if (diffEndTime < 0) {
+      console.log(
+        startTime,
+        endTime,
+        momentTz(new Date()).tz("Africa/Lagos").format(),
+        timeIsAfterEndTime,
+        timeIsAfterStartTime
+      );
+      if (timeIsAfterEndTime) {
         setSessionOver(true);
       } else {
         setSessionOver(false);
-        if (diff >= 0) {
+        if (timeIsAfterStartTime) {
           setIsTime(true);
         } else {
           setIsTime(false);

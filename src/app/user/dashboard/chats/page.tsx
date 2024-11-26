@@ -11,6 +11,7 @@ import {
   useLazyFetchUserConversationsQuery,
 } from "@/lib/features/users/dashboard/chat/chat";
 import { RootState } from "@/lib/store";
+import { convertToAfricaLagosTz } from "@/utils/helperFunction";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -42,6 +43,8 @@ const ChatsPage = (props: Props) => {
       fetchConversationData(searchVal);
     }
   }, [searchVal]);
+
+  console.log(convertToAfricaLagosTz("2024-11-26T24:00:00.000Z"))
 
   useEffect(() => {
     if (conversationsRes.data) {

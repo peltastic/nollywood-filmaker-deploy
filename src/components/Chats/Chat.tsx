@@ -5,7 +5,11 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import moment from "moment";
 import momentTz from "moment-timezone";
-import { differenceInDays, differenceInHours, differenceInMinutes } from "date-fns";
+import {
+  differenceInDays,
+  differenceInHours,
+  differenceInMinutes,
+} from "date-fns";
 import { convertToAfricaLagosTz, truncateStr } from "@/utils/helperFunction";
 
 type Props = {
@@ -29,11 +33,7 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
     const startTime = convertToAfricaLagosTz(data.start_time);
     const endTime = convertToAfricaLagosTz(data.end_time);
     const currTime = momentTz(new Date()).tz("Africa/Lagos").format();
-    console.log(data);
-    const differenceInDaysVal = differenceInDays(
-      currTime,
-      new Date(startTime)
-    );
+    const differenceInDaysVal = differenceInDays(currTime, new Date(startTime));
     if (differenceInDaysVal > 1) {
       setChatTimeStatus(moment(data.date).format("DD/MM/YYYY"));
     } else {
@@ -43,7 +43,7 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
       //     ? "Chat Active"
       //     :
       // );
-           moment(endTime).fromNow()
+      setChatTimeStatus(moment(endTime).fromNow());
     }
   }, [data]);
 

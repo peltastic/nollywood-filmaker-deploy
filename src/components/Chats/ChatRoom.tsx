@@ -118,6 +118,7 @@ const ChatRoom = (props: Props) => {
       });
     }
   };
+  // console.log(props.sessionOver, props.isTime)
 
   useEffect(() => {
   
