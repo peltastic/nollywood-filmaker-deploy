@@ -25,11 +25,13 @@ export const useProtectRoute = (type?: "consultant" | "admin") => {
   const router = useRouter();
 
   useEffect(() => {
-    if (authStatus === "LOGGED_OUT" && logoutType === "expired") {
-      dispatch(setFallbackRoute(pathame));
-      notify("error", "Session Expired", "Please Login in");
-      nprogress.complete();
-      router.push("/auth/login");
+    if (!type) {
+      if (authStatus === "LOGGED_OUT" && logoutType === "expired") {
+        dispatch(setFallbackRoute(pathame));
+        notify("error", "Session Expired", "Please Login in");
+        nprogress.complete();
+        router.push("/auth/login");
+      }
     }
   }, [authStatus]);
 

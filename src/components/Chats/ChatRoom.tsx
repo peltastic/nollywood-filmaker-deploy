@@ -94,13 +94,13 @@ const ChatRoom = (props: Props) => {
 
   const sendMessageHandler = () => {
     if (props.userData) {
-      sendUserChatMessage({
-        message: inputValue,
-        name: `${props.userData.fname} ${props.userData.lname}`,
-        role: props.type,
-        room: props.orderId,
-        uid: props.userData.id,
-      });
+      // sendUserChatMessage({
+      //   message: inputValue,
+      //   name: `${props.userData.fname} ${props.userData.lname}`,
+      //   role: props.type,
+      //   room: props.orderId,
+      //   uid: props.userData.id,
+      // });
       sendChatMessageEvent({
         room: props.orderId,
         message: inputValue,
@@ -124,13 +124,14 @@ const ChatRoom = (props: Props) => {
         };
         message: string;
       }) => {
-        props.updateChatHandlerProps({
-          text: data.message,
-          user: data.sender.role,
-        });
+        console.log(data)
+        // props.updateChatHandlerProps({
+        //   text: data.message,
+        //   user: data.sender.role,
+        // });
       }
     );
-  }, []);
+  }, [props.data]);
 
   return (
     <div className=" py-6  h-full  relative bg-white">

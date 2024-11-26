@@ -204,7 +204,7 @@ const bar_chart_data = [
 // ];
 
 const DashboardPage = (props: Props) => {
-  useProtectRoute()
+  useProtectRoute("consultant")
   const consultantId = useSelector(
     (state: RootState) => state.persistedState.consultant.user?.id
   );
