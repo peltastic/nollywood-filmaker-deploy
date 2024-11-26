@@ -114,6 +114,7 @@ const ChatRoom = (props: Props) => {
   };
 
   useEffect(() => {
+    console.log("mounted");
     chat_socket.on(
       "message",
       (data: {
@@ -124,14 +125,19 @@ const ChatRoom = (props: Props) => {
         };
         message: string;
       }) => {
-        console.log(data)
+        console.log(data);
+
         // props.updateChatHandlerProps({
         //   text: data.message,
         //   user: data.sender.role,
         // });
       }
     );
-  }, [ ]);
+    return () => {
+      console.log("unmounted");
+      chat_socket.removeListener();
+    };
+  }, []);
 
   return (
     <div className=" py-6  h-full  relative bg-white">

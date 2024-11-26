@@ -106,6 +106,10 @@ const CustomerChatMiddle = (props: Props) => {
   }, [data]);
 
   useEffect(() => {
+ console.log('rendered')
+  }, [])
+
+  useEffect(() => {
     if (props.isFetching) {
       setChatData([]);
     }
@@ -114,6 +118,29 @@ const CustomerChatMiddle = (props: Props) => {
   const updateChatDataHandler = (newEntry: ChatPayload) => {
     setChatData((prev) => [...prev, newEntry]);
   };
+
+  // useEffect(() => {
+  //   console.log("yh")
+  //   chat_socket.on(
+  //     "message",
+  //     (data: {
+  //       sender: {
+  //         name: string;
+  //         role: "user" | "consultant" | "admin";
+  //         userid: string;
+  //       };
+  //       message: string;
+  //     }) => {
+  //       console.log(data)
+        
+  //       // props.updateChatHandlerProps({
+  //       //   text: data.message,
+  //       //   user: data.sender.role,
+  //       // });
+  //     }
+  //   );
+  // }, []);
+
 
   return (
     <div className=" bg-white border-r relative border-r-stroke-8 border-l border-l-stroke-8  h-full">

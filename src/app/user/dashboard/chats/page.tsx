@@ -28,6 +28,7 @@ const ChatsPage = (props: Props) => {
   const searchVal = search.get("chat");
 
   const [chatData, setChatData] = useState<IChatData[]>([]);
+  const [a,b] = useState("")
 
   const [fetchConversation, conversationsRes] =
     useLazyFetchUserConversationsQuery();
@@ -39,6 +40,7 @@ const ChatsPage = (props: Props) => {
   }, []);
   useEffect(() => {
     if (searchVal) {
+      b(searchVal)
       fetchConversationData(searchVal);
     }
   }, [searchVal]);
@@ -81,7 +83,7 @@ const ChatsPage = (props: Props) => {
               orderId={searchVal}
             />
           </section>
-          <section
+        {a &&  <section
             className={`${
               closeRight ? "w-[70%]" : "w-[43%]"
             } transition-all h-full hidden chatbp:block bg-white`}
@@ -94,7 +96,7 @@ const ChatsPage = (props: Props) => {
               data={result.data?.request}
               type="user"
             />
-          </section>
+          </section>}
           <section
             className={`transition-all ${
               closeRight ? "w-[0%] invisible " : "w-[27%] visible ml-3  "
