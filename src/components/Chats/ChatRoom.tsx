@@ -11,6 +11,8 @@ import { chat_socket, joinChatRoom, sendChatMessageEvent } from "@/lib/socket";
 import { ChatPayload } from "./CustomerChat/CutomerChatMiddle";
 import ConsultantChatMessage from "./ConsultantChatMessage";
 import { IUserInfoData } from "@/interfaces/auth/auth";
+import { useParams, useSearchParams } from "next/navigation";
+import { MdInfoOutline } from "react-icons/md";
 
 type Props = {
   type: "user" | "consultant" | "admin";
@@ -19,6 +21,7 @@ type Props = {
   updateChatHandlerProps: (newEntry: ChatPayload) => void;
   userData: IUserInfoData | null;
   isTime?: boolean;
+  sessionOver?: boolean;
 };
 
 export interface IChatMessagesData {
@@ -80,6 +83,8 @@ const chat_data: IChatMessagesData[] = [
 const ChatRoom = (props: Props) => {
   const [sendUserChatMessage, {}] = useSendChatMessageMutation();
   const [inputValue, setInputValue] = useState<string>("");
+  const search = useSearchParams();
+  const searchVal = search.get("chat");
 
   useEffect(() => {
     if (props.userData) {
@@ -108,13 +113,14 @@ const ChatRoom = (props: Props) => {
           name: `${props.userData.fname} ${props.userData.lname}`,
           role: props.type,
           userid: props.userData.id,
+          chatRoomId: searchVal as string,
         },
       });
     }
   };
 
   useEffect(() => {
-    console.log("mounted");
+    console.log("mounted")
     chat_socket.on(
       "message",
       (data: {
@@ -122,19 +128,21 @@ const ChatRoom = (props: Props) => {
           name: string;
           role: "user" | "consultant" | "admin";
           userid: string;
+          chatRoomId: string;
         };
         message: string;
       }) => {
-        console.log(data);
-
-        // props.updateChatHandlerProps({
-        //   text: data.message,
-        //   user: data.sender.role,
-        // });
+        console.log(data)
+        if (searchVal === data.sender.chatRoomId) {
+          props.updateChatHandlerProps({
+            text: data.message,
+            user: data.sender.role,
+          });
+        }
       }
     );
     return () => {
-      console.log("unmounted");
+      console.log("unmounted")
       chat_socket.removeListener();
     };
   }, []);
@@ -168,7 +176,12 @@ const ChatRoom = (props: Props) => {
           </>
         )}
       </div>
-      {props.isTime && (
+      {props.sessionOver ? (
+        <div className="flex items-center text-[0.88rem] bg-gray-bg-7 border mx-4 mt-8 py-2 rounded-md px-4 border-border-gray">
+          <MdInfoOutline className="text-gray-4 mr-4 text-xl " />
+          <p className="text-gray-4">This conversation has ended</p>
+        </div>
+      ) : props.isTime ? (
         <div className="h-[5rem] relative">
           <div className="w-full px-6 flex items-center absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2">
             <div className="mr-10">
@@ -200,6 +213,8 @@ const ChatRoom = (props: Props) => {
             </form>
           </div>
         </div>
+      ) : (
+        <div className=""></div>
       )}
     </div>
   );

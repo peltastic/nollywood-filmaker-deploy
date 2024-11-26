@@ -14,65 +14,24 @@ import {
 import momentTz from "moment-timezone";
 import { notify } from "@/utils/notification";
 import { convertToAfricaLagosTz } from "@/utils/helperFunction";
+import CountdownTimer from "../Timer/CountdownTimer";
 
-const timerRenderer = ({
-  hours,
-  minutes,
-  seconds,
-  completed,
-}: CountdownRenderProps) => {
-  const isFinalMinutes = minutes <= 10;
-  return (
-    <div
-      className={`flex items-center text-[2rem] ${
-        isFinalMinutes ? "text-dark-red" : "text-black-3"
-      } font-semibold`}
-    >
-      <div
-        className={`${
-          isFinalMinutes
-            ? " bg-light-red border border-border-red"
-            : "bg-admin-chat-bg"
-        }  w-[4.2rem] h-[4rem] rounded-lg flex items-center justify-center `}
-      >
-        <p>{hours < 10 ? "0" + hours : hours}</p>
-      </div>
-      <p className="mx-6">:</p>
-      <p
-        className={`${
-          isFinalMinutes
-            ? "bg-light-red border border-border-red"
-            : "bg-admin-chat-bg"
-        } w-[4.2rem] h-[4rem] rounded-lg flex items-center justify-center font-semibold`}
-      >
-        {minutes < 10 ? "0" + minutes : minutes}
-      </p>
-      <p className="mx-6">:</p>
-      <p
-        className={`${
-          isFinalMinutes
-            ? "bg-light-red border border-border-red"
-            : "bg-admin-chat-bg"
-        } w-[4.2rem] h-[4rem] rounded-lg flex items-center justify-center font-semibold`}
-      >
-        {seconds < 10 ? "0" + seconds : seconds}
-      </p>
-    </div>
-  );
-};
 type Props = {
   isTime?: boolean;
+  sessionOver?: boolean;
   timeData?: {
     startTime: string;
     endTime: string;
   };
   openRight?: () => void;
+  type?: "user" | "consultant" | "admin";
 };
 
 const ChatTimer = (props: Props) => {
   const [opened, { open, close }] = useDisclosure();
 
-  const [endTime, setEndTime] = useState<string>("");
+  const [endTime, setEndTime] = useState<number>(0);
+  const [showTimer, setShowTimer] = useState<boolean>(true);
   const interval = useInterval(() => {
     if (
       props.timeData &&
@@ -80,32 +39,42 @@ const ChatTimer = (props: Props) => {
         // convertToAfricaLagosTz(props.timeData.endTime),
         props.timeData.endTime,
         momentTz(new Date()).tz("Africa/Lagos").format()
-      ) <= 57
+      ) <= 10
     ) {
+      setShowTimer(true);
       interval.stop();
       props.openRight && props.openRight();
-      notify("error", "", "time is almost up");
-      setEndTime(props.timeData.endTime);
+      if (!props.sessionOver) {
+        notify("error", "", "time is almost up");
+      }
     }
   }, 1000);
 
   useEffect(() => {
-    if (props.isTime) {
-      interval.start();
+    if (props.sessionOver) {
     } else {
-      setEndTime("");
+      if (
+        props.isTime &&
+        props.timeData &&
+        props.timeData &&
+        differenceInMinutes(
+          // convertToAfricaLagosTz(props.timeData.endTime),
+          props.timeData.endTime,
+          momentTz(new Date()).tz("Africa/Lagos").format()
+        ) > 10
+      ) {
+        interval.start();
+      } else {
+        setEndTime(0);
+      }
     }
     return interval.stop;
-  }, [props.timeData, props.timeData]);
-
+  }, [props.timeData]);
   useEffect(() => {
-    console.log(
-      differenceInMinutes(
-        convertToAfricaLagosTz(props.timeData!.endTime),
-        momentTz(new Date()).tz("Africa/Lagos").format()
-      )
-    );
-  }, []);
+    if (props.type === "user") {
+      setShowTimer(false);
+    }
+  }, [props.type]);
 
   return (
     <>
@@ -118,33 +87,68 @@ const ChatTimer = (props: Props) => {
       >
         <RateYourExperience close={close} />
       </ModalComponent>
-      <div className="px-4 border-b border-b-stroke-8 pt-3 pb-6">
-        <div className="flex items-center py-6">
-          <h1 className=" text-[0.88rem] font-semibold mr-2">
-            Conversation Timer
-          </h1>
-          <div className="">
-            <BsFillStopwatchFill className="text-xl" />
+      {props.timeData && props.isTime && showTimer && (
+        <div className="px-4 border-b border-b-stroke-8 pt-3 pb-6">
+          <div className="flex items-center py-6">
+            <h1 className=" text-[0.88rem] font-semibold mr-2">
+              Conversation Timer
+            </h1>
+            <div className="">
+              <BsFillStopwatchFill className="text-xl" />
+            </div>
           </div>
+
+          <CountdownTimer endTime={props.timeData.endTime} />
         </div>
-        {endTime ? (
-          <Countdown
-            date={
-              props.timeData
-                ? Date.now() +
-                  differenceInMilliseconds(
-                    endTime,
-                    // convertToAfricaLagosTz(props.timeData.endTime),
-                    momentTz(new Date()).tz("Africa/Lagos").format()
-                  )
-                : 0
-            }
-            renderer={timerRenderer}
-          />
-        ) : null}
-      </div>
+      )}
     </>
   );
 };
 
 export default ChatTimer;
+
+// const timerRenderer = ({
+//   hours,
+//   minutes,
+//   seconds,
+//   completed,
+// }: CountdownRenderProps) => {
+//   const isFinalMinutes = minutes <= 10;
+//   return (
+//     <div
+//       className={`flex items-center text-[2rem] ${
+//         isFinalMinutes ? "text-dark-red" : "text-black-3"
+//       } font-semibold`}
+//     >
+//       <div
+//         className={`${
+//           isFinalMinutes
+//             ? " bg-light-red border border-border-red"
+//             : "bg-admin-chat-bg"
+//         }  w-[4.2rem] h-[4rem] rounded-lg flex items-center justify-center `}
+//       >
+//         <p>{hours < 10 ? "0" + hours : hours}</p>
+//       </div>
+//       <p className="mx-6">:</p>
+//       <p
+//         className={`${
+//           isFinalMinutes
+//             ? "bg-light-red border border-border-red"
+//             : "bg-admin-chat-bg"
+//         } w-[4.2rem] h-[4rem] rounded-lg flex items-center justify-center font-semibold`}
+//       >
+//         {minutes < 10 ? "0" + minutes : minutes}
+//       </p>
+//       <p className="mx-6">:</p>
+//       <p
+//         className={`${
+//           isFinalMinutes
+//             ? "bg-light-red border border-border-red"
+//             : "bg-admin-chat-bg"
+//         } w-[4.2rem] h-[4rem] rounded-lg flex items-center justify-center font-semibold`}
+//       >
+//         {seconds < 10 ? "0" + seconds : seconds}
+//       </p>
+//     </div>
+//   );
+// };

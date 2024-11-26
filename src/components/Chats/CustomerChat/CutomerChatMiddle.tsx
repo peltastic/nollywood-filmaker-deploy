@@ -53,6 +53,7 @@ const CustomerChatMiddle = (props: Props) => {
   const router = useRouter();
 
   const [isTime, setIsTime] = useState<boolean>(false);
+  const [sessionOver, setSessionOver] = useState<boolean>(false);
   const interval = useInterval(() => {
     if (props.data) {
       const startTime = convertToAfricaLagosTz(props.data.startTime);
@@ -60,6 +61,7 @@ const CustomerChatMiddle = (props: Props) => {
         momentTz(new Date()).tz("Africa/Lagos").format(),
         startTime
       );
+
       if (diff >= 0) {
         setIsTime(true);
         interval.stop();
@@ -74,16 +76,26 @@ const CustomerChatMiddle = (props: Props) => {
   useEffect(() => {
     if (props.data) {
       const startTime = convertToAfricaLagosTz(props.data.startTime);
+
       const diff = differenceInMinutes(
         momentTz(new Date()).tz("Africa/Lagos").format(),
         startTime
       );
-
-      if (diff >= 0) {
-        setIsTime(true);
+      const endTime = convertToAfricaLagosTz(props.data.endTime);
+      const diffEndTime = differenceInMinutes(
+        endTime,
+        momentTz(new Date()).tz("Africa/Lagos").format()
+      );
+      if (diffEndTime < 0) {
+        setSessionOver(true);
       } else {
-        setIsTime(false);
-        interval.start();
+        setSessionOver(false);
+        if (diff >= 0) {
+          setIsTime(true);
+        } else {
+          setIsTime(false);
+          interval.start();
+        }
       }
 
       fetchUserChatMessages(props.data.orderId);
@@ -106,10 +118,6 @@ const CustomerChatMiddle = (props: Props) => {
   }, [data]);
 
   useEffect(() => {
- console.log('rendered')
-  }, [])
-
-  useEffect(() => {
     if (props.isFetching) {
       setChatData([]);
     }
@@ -118,29 +126,6 @@ const CustomerChatMiddle = (props: Props) => {
   const updateChatDataHandler = (newEntry: ChatPayload) => {
     setChatData((prev) => [...prev, newEntry]);
   };
-
-  // useEffect(() => {
-  //   console.log("yh")
-  //   chat_socket.on(
-  //     "message",
-  //     (data: {
-  //       sender: {
-  //         name: string;
-  //         role: "user" | "consultant" | "admin";
-  //         userid: string;
-  //       };
-  //       message: string;
-  //     }) => {
-  //       console.log(data)
-        
-  //       // props.updateChatHandlerProps({
-  //       //   text: data.message,
-  //       //   user: data.sender.role,
-  //       // });
-  //     }
-  //   );
-  // }, []);
-
 
   return (
     <div className=" bg-white border-r relative border-r-stroke-8 border-l border-l-stroke-8  h-full">
@@ -171,7 +156,8 @@ const CustomerChatMiddle = (props: Props) => {
                 </div>
                 <div className="">
                   <h1 className="font-semibold text-[1.25rem]">
-                    {props.data?.chat_title && truncateStr(props.data.chat_title, 25)}
+                    {props.data?.chat_title &&
+                      truncateStr(props.data.chat_title, 25)}
                   </h1>
                   <p className="text-[#00000082] text-[0.75rem] font-semibold">
                     {props.data?.nameofservice}
@@ -202,7 +188,10 @@ const CustomerChatMiddle = (props: Props) => {
                       <UserChatMenu />
                     )}
                   </MenuComponent>
-                  {isTime && (
+                  {/* {!isTime && ( */}
+
+                  {/* )} */}
+                  {isTime || sessionOver ? (
                     <div className="hidden lg:block">
                       {props.opened ? (
                         <div
@@ -213,8 +202,8 @@ const CustomerChatMiddle = (props: Props) => {
                         </div>
                       ) : null}
                     </div>
-                  )}
-                  {isTime && (
+                  ) : null}
+                  {(isTime || sessionOver) && (
                     <div
                       onClick={props.open}
                       className="block lg:hidden hover:bg-stroke-4 transition-all ml-6 rounded-md cursor-pointer"
@@ -224,7 +213,20 @@ const CustomerChatMiddle = (props: Props) => {
                   )}
                 </div>
               </header>
-              <div className="h-full bg-white">
+
+              <div className="h-full bg-white relative">
+                {sessionOver || isTime ? null : (
+                  <div className="absolute left-[50%] top-[50%]  -translate-x-1/2 z-10 -translate-y-1/2">
+                    <Image
+                      src={Logo}
+                      alt="logo image"
+                      className="w-[10rem] opacity-50 mx-auto"
+                    />
+                    <p className="text-center font-semibold text-gray-4">
+                      Session with consultant hasn't started yet
+                    </p>
+                  </div>
+                )}
                 {props.data && (
                   <ChatRoom
                     userData={props.type === "user" ? userData : consultantData}
@@ -233,6 +235,7 @@ const CustomerChatMiddle = (props: Props) => {
                     type={props.type}
                     data={chatData}
                     isTime={isTime}
+                    sessionOver={sessionOver}
                   />
                 )}
               </div>

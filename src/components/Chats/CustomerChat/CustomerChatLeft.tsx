@@ -31,7 +31,7 @@ export interface IChatData {
 const CustomerChatLeft = (props: Props) => {
   const [selected, setSelected] = useState<number>(0);
   return (
-    <div className="bg-white h-full">
+    <div className="bg-white h-full overflow-scroll">
       <header className="font-semibold flex items-center px-6 py-8 border-b border-b-stroke-8">
         <h1 className=" text-[1.25rem] mr-4">Conversations</h1>
         <div className="rounded-full bg-gray-bg-6 h-[1.5rem] w-[1.5rem] flex items-center justify-center">

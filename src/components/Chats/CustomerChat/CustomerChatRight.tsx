@@ -15,6 +15,7 @@ type Props = {
   closeRight?: boolean;
   data?: IGetUserConversations;
   openRight?: () => void;
+  type?: "user" | "consultant" | "admin";
 };
 
 export interface IFilesData {
@@ -43,13 +44,24 @@ const reviewed_request_file_data: IFilesData[] = [
 
 const CustomerChatRight = (props: Props) => {
   const [isTime, setIsTime] = useState<boolean>(false);
+  const [sessionOver, setSessionOver] = useState<boolean>(false);
   useEffect(() => {
     if (props.data) {
       const startTime = convertToAfricaLagosTz(props.data.startTime);
+      const endTime = convertToAfricaLagosTz(props.data.endTime);
       const diff = differenceInMinutes(
         momentTz(new Date()).tz("Africa/Lagos").format(),
         startTime
       );
+      const diffEndTime = differenceInMinutes(
+        endTime,
+        momentTz(new Date()).tz("Africa/Lagos").format()
+      );
+      if (diffEndTime < 0) {
+        setSessionOver(true);
+      } else {
+        setSessionOver(false);
+      }
 
       if (diff >= 0) {
         setIsTime(true);
@@ -63,9 +75,9 @@ const CustomerChatRight = (props: Props) => {
     <div
       className={`border-l ${
         props.closeRight ? "hidden" : null
-      }  border-l-stroke-8`}
+      }  border-l-stroke-8 h-full`}
     >
-      <header className="w-full font-semibold flex items-center px-6 py-8 border-b border-b-stroke-8">
+      <header className="w-full font-semibold flex items-center px-6 py-8  border-b border-b-stroke-8">
         <h1 className=" text-[1.25rem] mr-auto">Directory</h1>
         <div
           onClick={props.close}
@@ -82,7 +94,9 @@ const CustomerChatRight = (props: Props) => {
               endTime: convertToAfricaLagosTz(props.data.endTime),
             }}
             isTime={isTime}
+            sessionOver={sessionOver}
             openRight={props.openRight}
+            type={props.type}
           />
         )}
       </section>
@@ -118,7 +132,7 @@ const CustomerChatRight = (props: Props) => {
           </div>
         </div>
       </section>
-      <section className="py-6 px-4 border-b border-b-stroke-8">
+      {/* <section className="py-6 px-4 border-b border-b-stroke-8">
         <div className="flex items-center mb-2">
           <h1 className=" text-[0.88rem] font-semibold mr-2">
             Reviewed Request
@@ -146,7 +160,7 @@ const CustomerChatRight = (props: Props) => {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
       <section className="py-6 px-4 border-b border-b-stroke-8">
         <div className="flex items-center mb-2">
           <h1 className=" text-[0.88rem] font-semibold mr-2">In-chat files</h1>
@@ -163,7 +177,12 @@ const CustomerChatRight = (props: Props) => {
               <div className="mr-auto">
                 <h1 className="text-[0.88rem] font-semibold">{el.name}</h1>
                 <div className="flex text-[#00000066] items-center font-semibold text-[0.75rem]">
-                  <p className="mr-3">{el.file_type}</p>
+                  <p
+                    className="mr-3
+                  "
+                  >
+                    {el.file_type}
+                  </p>
                   <p>{el.size}</p>
                 </div>
               </div>

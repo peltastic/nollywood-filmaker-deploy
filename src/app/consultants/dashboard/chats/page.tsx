@@ -61,7 +61,25 @@ const ConsultantChastPage = (props: Props) => {
           };
         }
       );
-      setChatData(transformed_data);
+      setChatData([
+        ...transformed_data,
+        {
+          date: "2024-11-26T18:00:00+01:00",
+          start_time: "2024-11-26T22:00:00.000Z",
+          end_time: "2024-11-26T23:00:00.000Z",
+          name: "Omo",
+          id: "67391bfc443190b76b64c77b",
+          orderId: "shjjhs",
+          service: "Chat With A Professional",
+          status: "ongoing",
+          time: {
+            hours: 18,
+            minutes: 0,
+            seconds: 0,
+          },
+          type: "Chat",
+        },
+      ]);
     }
   }, [conversationsRes.data]);
 
@@ -84,12 +102,31 @@ const ConsultantChastPage = (props: Props) => {
             } transition-all hidden chatbp:block`}
           >
             <CustomerChatMiddle
-            type="consultant"
+              type="consultant"
               opened={closeRight}
               open={() => setCloseRight(false)}
               orderId={searchVal}
               isFetching={result.isFetching}
-              data={result.data?.request}
+              data={
+                searchVal === "67391bfc443190b76b64c77b"
+                  ? {
+                      date: "2024-11-26T18:00:00+01:00",
+                      startTime: "2024-11-26T22:00:00.000Z",
+                      endTime: "2024-11-26T23:00:00.000Z",
+                      chat_title: "Omo",
+                      _id: "sdjjsd",
+                      orderId: "shjjhs",
+                      nameofservice: "Chat With A Professional",
+                      stattusof: "ongoing",
+                      time: {
+                        hours: 18,
+                        minutes: 0,
+                        seconds: 0,
+                      },
+                      // type: "Chat",
+                    }
+                  : result.data?.request
+              }
             />
           </section>
           <section
@@ -97,7 +134,29 @@ const ConsultantChastPage = (props: Props) => {
               closeRight ? "w-[0%] invisible " : "w-[27%] visible ml-3  "
             }  hidden chatbp:block `}
           >
-            <CustomerChatRight close={() => setCloseRight(true)} />
+            <CustomerChatRight
+              data={
+                searchVal === "67391bfc443190b76b64c77b"
+                  ? {
+                      date: "2024-11-26T18:00:00+01:00",
+                      startTime: "2024-11-26T22:00:00.000Z",
+                      endTime: "2024-11-26T23:00:00.000Z",
+                      chat_title: "Omo",
+                      _id: "sdjjsd",
+                      orderId: "shjjhs",
+                      nameofservice: "Chat With A Professional",
+                      stattusof: "ongoing",
+                      time: {
+                        hours: 18,
+                        minutes: 0,
+                        seconds: 0,
+                      },
+                      // type: "Chat",
+                    }
+                  : result.data?.request
+              }
+              close={() => setCloseRight(true)}
+            />
           </section>
         </section>
       </DashboardBodyLayout>
