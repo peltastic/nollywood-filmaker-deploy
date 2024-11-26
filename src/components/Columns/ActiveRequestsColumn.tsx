@@ -15,11 +15,12 @@ import { capitalizeFirstLetter } from "@/utils/helperFunction";
 
 export interface IActiveRequestColumnData {
   name: string;
-  service_type: string;
+  service_type: "Chat With A Professional";
   progress: number;
-
+  chat_title?: string;
   date: string;
   status: "ready" | "ongoing" | "completed" | "pending";
+  orderId: string;
 }
 
 export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
@@ -47,7 +48,9 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
             <Image src={ReadMyScriptDarkImg} alt="name-img" />
           </div>
           <div className="text-[0.88rem]">
-            <p className="text-black-4 font-medium">{row.getValue("name")}</p>
+            <p className="text-black-4 font-medium">
+              {row.getValue("name") || row.original.chat_title}
+            </p>
             <p className="text-gray-1">{row.original.service_type}</p>
           </div>
         </div>
@@ -59,7 +62,7 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
     header: "Progress chart",
     cell: ({ row }) => {
       return (
-        <div className="flex items-center py-4">
+        <div className="flex items-center py-6">
           <div className="w-[20rem] mr-2">
             <Progress value={row.getValue("progress")} color="#181818" />
           </div>
@@ -90,7 +93,9 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
         row.original.status.toLowerCase() === "ready"
           ? "bg-light-blue text-dark-blue"
           : row.original.status.toLowerCase() === "completed"
-          ? "bg-light-green text-dark-green" : row.original.status === "pending" ? "bg-stroke-4 text-black-6"
+          ? "bg-light-green text-dark-green"
+          : row.original.status === "pending"
+          ? "bg-stroke-4 text-black-6"
           : "bg-light-yellow text-dark-yellow";
       return (
         <div className=" w-[10rem] xl:w-auto">
@@ -108,7 +113,7 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
   },
   {
     id: "actions",
-    cell: ({}) => {
+    cell: ({ row }) => {
       const [opened, { open, close }] = useDisclosure();
       // const
       return (
@@ -141,7 +146,9 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
                   Go to Chat
                 </li>
                 <li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
-                  <Link href={"/user/dashboard/order-details/1"}>
+                  <Link
+                    href={`/user/dashboard/order-details/${row.original.orderId}`}
+                  >
                     See Details
                   </Link>
                 </li>

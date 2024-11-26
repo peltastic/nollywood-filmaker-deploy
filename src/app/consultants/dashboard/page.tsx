@@ -19,6 +19,7 @@ import UpcomingConversations from "@/components/Dashboard/UpcomingConversations"
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import { DataTable } from "@/components/Tables/DataTable";
+import { useProtectRoute } from "@/hooks/useProtectRoute";
 import { ICustomerRequestData } from "@/interfaces/consultants/dashboard/request";
 import { useFetchCustomerRequestsQuery } from "@/lib/features/consultants/dashboard/request";
 import { RootState } from "@/lib/store";
@@ -203,6 +204,7 @@ const bar_chart_data = [
 // ];
 
 const DashboardPage = (props: Props) => {
+  useProtectRoute()
   const consultantId = useSelector(
     (state: RootState) => state.persistedState.consultant.user?.id
   );

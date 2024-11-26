@@ -1,7 +1,9 @@
 import { Skeleton } from "@mantine/core";
 import React from "react";
 
-type Props = {};
+type Props = {
+  noUserInfo?: boolean
+};
 
 const OrderDetailsPageSkeleton = (props: Props) => {
   return (
@@ -20,8 +22,8 @@ const OrderDetailsPageSkeleton = (props: Props) => {
           <Skeleton height={40} />
         </div>
       </div>
-      <div className="flex items-start mt-14">
-        <div className="">
+      <div className="flex justify-center items-start mt-14">
+        {props.noUserInfo ? null : <div className="">
           <div className="w-[9rem]">
             <Skeleton height={144} radius={"100%"} />
           </div>
@@ -31,8 +33,8 @@ const OrderDetailsPageSkeleton = (props: Props) => {
           <div className="w-[6rem] mt-4 mx-auto">
             <Skeleton height={15} />
           </div>
-        </div>
-        <div className="w-[80%] ml-auto">
+        </div>}
+        <div className={`w-[80%] ml-auto`}>
             <div className="grid grid-cols-3 gap-2">
                 <Skeleton height={100} />
                 <Skeleton height={100} />

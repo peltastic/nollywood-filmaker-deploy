@@ -27,19 +27,20 @@ const initialState: IConsultantInfoState = {
   },
 };
 
-
 export const consultantInfoSlice = createSlice({
-    name: "consultantSlice",
-    initialState,
-    reducers: {
-        setConsultantInfo: (state, action: PayloadAction<IUserInfoData>) => {
-            state.user = action.payload
-        }
-    }
-})
+  name: "consultantSlice",
+  initialState,
+  reducers: {
+    setConsultantInfo: (state, action: PayloadAction<IUserInfoData>) => {
+      state.user = action.payload;
+    },
+    resetConsultantInfo: (state) => {
+      state.user = null;
+    },
+  },
+});
 
+export const { setConsultantInfo, resetConsultantInfo } =
+  consultantInfoSlice.actions;
 
-
-export const {setConsultantInfo} = consultantInfoSlice.actions
-
-export default consultantInfoSlice.reducer
+export default consultantInfoSlice.reducer;

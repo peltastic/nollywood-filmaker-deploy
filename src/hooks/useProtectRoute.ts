@@ -5,10 +5,11 @@ import { notify } from "@/utils/notification";
 import { getCookie } from "@/utils/storage";
 import { nprogress } from "@mantine/nprogress";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export const useProtectRoute = (type?: "consultant" | "admin") => {
+  const [showExpiredMessage, setExpiredMessage] = useState<boolean>(true);
   const authStatus = useSelector(
     (state: RootState) => state.persistedState.auth.status
   );
@@ -33,13 +34,19 @@ export const useProtectRoute = (type?: "consultant" | "admin") => {
   }, [authStatus]);
 
   useEffect(() => {
-    if (consultantAuthStatus === "LOGGED_OUT" && type === "consultant") {
-      dispatch(setConsultantFallbackRoute(pathame))
-      notify("error", "Session Expired", "Please Login in")
-      nprogress.complete()
-      router.push("/consultants/auth/login")
+    if (
+      consultantAuthStatus === "LOGGED_OUT" &&
+      type === "consultant" &&
+      showExpiredMessage
+    ) {
+      dispatch(setConsultantFallbackRoute(pathame));
+      notify("error", "Session Expired", "Please Login in");
+      nprogress.complete();
+      router.push("/consultants/auth/login");
     }
   }, [consultantAuthStatus]);
 
-  return null;
+  return {
+    disableExpiredMessage: () => setExpiredMessage(false),
+  };
 };

@@ -29,7 +29,6 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
     const startTime = convertToAfricaLagosTz(data.start_time);
     const endTime = convertToAfricaLagosTz(data.end_time);
     const currTime = momentTz(new Date()).tz("Africa/Lagos").format();
-    console.log(endTime);
 
     const differenceInDaysVal = differenceInDays(
       new Date(),
@@ -66,8 +65,7 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
         </div>
         <div className="">
           <h1 className="font-semibold text-[0.88rem]">
-            {/* <>{truncateStr( */}
-            {data.name} {/* , 20)}</> */}
+            {truncateStr(data.name, 15)}
           </h1>
           <p className="text-black-3 text-[0.75rem]">{data.service}</p>
           <div className="flex items-center mt-3">

@@ -4,10 +4,24 @@ import TestImage from "/public/assets/test-avatar.png";
 import Link from "next/link";
 import SettingsIconImg from "/public/assets/dashboard/settings-icon.svg";
 import ProfileIconImg from "/public/assets/dashboard/profile-icon.svg";
+import LoginIcon from "/public/assets/dashboard/login-icon.svg";
+import { nprogress } from "@mantine/nprogress";
+import { useDispatch } from "react-redux";
+import { setConsultantAuthStatus } from "@/lib/slices/consultants/authSlice";
+import { resetConsultantInfo } from "@/lib/slices/consultants/consultantSlice";
+import { removeCookie } from "@/utils/storage";
+import { notifications } from "@mantine/notifications";
+import { successColor } from "@/utils/constants/constants";
+import classes from "@/app/styles/SuccessNotification.module.css";
+import { useRouter } from "next/navigation";
+import { useProtectRoute } from "@/hooks/useProtectRoute";
 
 type Props = {};
 
 const ConsultantsProfileMenu = (props: Props) => {
+  const { disableExpiredMessage } = useProtectRoute();
+  const dispatch = useDispatch();
+  const router = useRouter();
   return (
     <div className="bg-white w-[15rem]   py-3 text-gray-3">
       <div className="flex items-center px-3">
@@ -18,7 +32,7 @@ const ConsultantsProfileMenu = (props: Props) => {
         </div>
       </div>
       <ul className="text-[0.88rem] mt-2 py-3 border-t border-b border-profile-menu-border">
-      <li className=" px-3">
+        <li className=" px-3">
           <Link
             className="flex items-center"
             href={"/consultants/dashboard/profile/1"}
@@ -28,7 +42,10 @@ const ConsultantsProfileMenu = (props: Props) => {
           </Link>
         </li>
         <li className=" px-3 mt-4 cursor-pointer">
-          <Link className="flex items-center" href={"/consultants/dashboard/settings"}>
+          <Link
+            className="flex items-center"
+            href={"/consultants/dashboard/settings"}
+          >
             <Image src={SettingsIconImg} alt="setting-icon" className="mr-3" />
             <p>Settings</p>
           </Link>
@@ -51,6 +68,29 @@ const ConsultantsProfileMenu = (props: Props) => {
           </Link>
         </li>
       </ul>
+      <div
+        onClick={() => {
+          disableExpiredMessage();
+          nprogress.start();
+          dispatch(setConsultantAuthStatus("LOGGED_OUT"));
+          dispatch(resetConsultantInfo());
+          notifications.show({
+            title: "Logout successful",
+            message: "",
+            color: successColor,
+            classNammes: classes,
+            position: "top-right",
+          });
+          removeCookie("con_token");
+          removeCookie("con_refresh");
+          nprogress.complete();
+          router.push("/consultants/auth/login");
+        }}
+        className="cursor-pointer flex items-center text-[0.88rem] px-3 mt-4"
+      >
+        <Image src={LoginIcon} alt="login-icon" className="mr-3" />
+        <p>Log out</p>
+      </div>
     </div>
   );
 };

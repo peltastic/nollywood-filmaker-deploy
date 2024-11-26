@@ -45,7 +45,7 @@ const reqHistoryData: ReqHistoryColumnData[] = [
   },
 ];
 
-const DashboardHomePgae = (props: Props) => {
+const DashboardHomePgae = (props: Props) => { 
   const [activeReqData, setActiveReqData] = useState<
     IActiveRequestColumnData[]
   >([]);
@@ -61,6 +61,8 @@ const DashboardHomePgae = (props: Props) => {
           date: moment(el.date).format("ll"),
           status: el.stattusof,
           service_type: el.nameofservice,
+          chat_title: el.chat_title,
+          orderId: el.orderId,
           progress:
             el.stattusof === "completed"
               ? 100

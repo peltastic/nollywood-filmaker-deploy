@@ -78,8 +78,8 @@ const CustomerChatRight = (props: Props) => {
         {props.data && (
           <ChatTimer
             timeData={{
-              startTime: props.data.startTime,
-              endTime: props.data.endTime,
+              startTime: convertToAfricaLagosTz(props.data.startTime),
+              endTime: convertToAfricaLagosTz(props.data.endTime),
             }}
             isTime={isTime}
             openRight={props.openRight}

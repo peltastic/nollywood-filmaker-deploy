@@ -71,21 +71,21 @@ type Props = {
 
 const ChatTimer = (props: Props) => {
   const [opened, { open, close }] = useDisclosure();
-  const [showCountdown, setShowCountdown] = useState<boolean>(false);
-  const [minutes, setMinutes] = useState(0);
+
+  const [endTime, setEndTime] = useState<string>("");
   const interval = useInterval(() => {
     if (
       props.timeData &&
       differenceInMinutes(
-        convertToAfricaLagosTz(props.timeData.endTime),
+        // convertToAfricaLagosTz(props.timeData.endTime),
+        props.timeData.endTime,
         momentTz(new Date()).tz("Africa/Lagos").format()
-      ) <= 30
+      ) <= 57
     ) {
+      interval.stop();
       props.openRight && props.openRight();
       notify("error", "", "time is almost up");
-      setShowCountdown(true);
-      interval.stop();
-      console.log("llsks");
+      setEndTime(props.timeData.endTime);
     }
   }, 1000);
 
@@ -93,10 +93,10 @@ const ChatTimer = (props: Props) => {
     if (props.isTime) {
       interval.start();
     } else {
-      setShowCountdown(false);
+      setEndTime("");
     }
     return interval.stop;
-  }, [props.isTime, props.timeData]);
+  }, [props.timeData, props.timeData]);
 
   useEffect(() => {
     console.log(
@@ -127,13 +127,14 @@ const ChatTimer = (props: Props) => {
             <BsFillStopwatchFill className="text-xl" />
           </div>
         </div>
-        {showCountdown ? (
+        {endTime ? (
           <Countdown
             date={
               props.timeData
                 ? Date.now() +
                   differenceInMilliseconds(
-                    convertToAfricaLagosTz(props.timeData.endTime),
+                    endTime,
+                    // convertToAfricaLagosTz(props.timeData.endTime),
                     momentTz(new Date()).tz("Africa/Lagos").format()
                   )
                 : 0

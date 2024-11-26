@@ -25,7 +25,7 @@ import { IGetUserConversations } from "@/interfaces/dashboard/chat";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { chat_socket } from "@/lib/socket";
-import { convertToAfricaLagosTz } from "@/utils/helperFunction";
+import { convertToAfricaLagosTz, truncateStr } from "@/utils/helperFunction";
 import { differenceInMinutes } from "date-fns";
 
 export interface ChatPayload {
@@ -144,7 +144,7 @@ const CustomerChatMiddle = (props: Props) => {
                 </div>
                 <div className="">
                   <h1 className="font-semibold text-[1.25rem]">
-                    {props.data?.chat_title}
+                    {props.data?.chat_title && truncateStr(props.data.chat_title, 25)}
                   </h1>
                   <p className="text-[#00000082] text-[0.75rem] font-semibold">
                     {props.data?.nameofservice}
