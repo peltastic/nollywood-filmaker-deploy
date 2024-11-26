@@ -131,7 +131,7 @@ const ChatRoom = (props: Props) => {
         // });
       }
     );
-  }, [props.data]);
+  }, [ ]);
 
   return (
     <div className=" py-6  h-full  relative bg-white">
