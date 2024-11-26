@@ -25,6 +25,7 @@ type Props = {
   };
   openRight?: () => void;
   type?: "user" | "consultant" | "admin";
+  opened?: boolean;
 };
 
 const ChatTimer = (props: Props) => {
@@ -42,32 +43,45 @@ const ChatTimer = (props: Props) => {
       ) <= 10
     ) {
       setShowTimer(true);
-      interval.stop();
       props.openRight && props.openRight();
-      if (!props.sessionOver) {
-        notify("error", "", "time is almost up");
-      }
+      notify("error", "", "time is almost up");
+      // if (!props.sessionOver) {
+      // }
+      interval.stop();
     }
   }, 1000);
 
   useEffect(() => {
     if (props.sessionOver) {
-    } else {
-      if (
-        props.isTime &&
-        props.timeData &&
-        props.timeData &&
-        differenceInMinutes(
-          // convertToAfricaLagosTz(props.timeData.endTime),
-          props.timeData.endTime,
-          momentTz(new Date()).tz("Africa/Lagos").format()
-        ) > 10
-      ) {
-        interval.start();
-      } else {
-        setEndTime(0);
-      }
+      return () => {};
     }
+    if (props.type === "consultant") {
+      return () => {}
+    }
+    if (
+      props.isTime &&
+      props.timeData &&
+      differenceInMinutes(
+        // convertToAfricaLagosTz(props.timeData.endTime),
+        props.timeData.endTime,
+        momentTz(new Date()).tz("Africa/Lagos").format()
+      ) <= 10
+    ) {
+      if (!showTimer) {
+        setShowTimer(true);
+        if (!opened) {
+          notify("error", "", "time is almost up");
+          props.openRight && props.openRight();
+        }
+      }
+      return () => {};
+    }
+
+    if (props.isTime) {
+      setShowTimer(false)
+      interval.start();
+    }
+
     return interval.stop;
   }, [props.timeData]);
   useEffect(() => {

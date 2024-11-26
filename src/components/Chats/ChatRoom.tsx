@@ -120,7 +120,7 @@ const ChatRoom = (props: Props) => {
   };
 
   useEffect(() => {
-    console.log("mounted")
+  
     chat_socket.on(
       "message",
       (data: {
@@ -132,17 +132,18 @@ const ChatRoom = (props: Props) => {
         };
         message: string;
       }) => {
-        console.log(data)
+       
         if (searchVal === data.sender.chatRoomId) {
           props.updateChatHandlerProps({
             text: data.message,
             user: data.sender.role,
           });
+          setInputValue("")
         }
       }
     );
     return () => {
-      console.log("unmounted")
+
       chat_socket.removeListener();
     };
   }, []);

@@ -22,11 +22,11 @@ const ConsultantChatMessage = ({ user, text, prevUser, index }: Props) => {
       {prevUser === user && index + 1 !== 1 ? null : (
         <>
           {user === "admin" || user === "consultant" ? (
-            <div className="w-[2.5rem] mr-3 h-[2.5rem] rounded-full bg-black flex items-center justify-center">
+            <div className="w-[2.5rem]  h-[2.5rem] rounded-full bg-black flex items-center justify-center">
               {<Image src={AdminProfileImg} alt="admin-alt-profile" />}
             </div>
           ) : (
-            <div className="w-[2.5rem] h-[2.5rem]">
+            <div className="w-[2.5rem] h-[2.5rem] mr-3">
               <Image
                 src={TestImage}
                 alt="test-image"

@@ -12,6 +12,7 @@ import { convertToAfricaLagosTz } from "@/utils/helperFunction";
 import { differenceInMinutes } from "date-fns";
 type Props = {
   close: () => void;
+  opened?: string;
   closeRight?: boolean;
   data?: IGetUserConversations;
   openRight?: () => void;
@@ -94,6 +95,7 @@ const CustomerChatRight = (props: Props) => {
               endTime: convertToAfricaLagosTz(props.data.endTime),
             }}
             isTime={isTime}
+            opened={!props.closeRight}
             sessionOver={sessionOver}
             openRight={props.openRight}
             type={props.type}
