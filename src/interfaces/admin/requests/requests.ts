@@ -7,6 +7,11 @@ export interface ICustomerRequest {
   chat_title?: string;
   movie_title?: string
   rating?: string;
+  user: {
+    fname: string
+    lname: string
+    email: string
+  }
 }
 
 export interface IFetchCustomerRequestsResponse {

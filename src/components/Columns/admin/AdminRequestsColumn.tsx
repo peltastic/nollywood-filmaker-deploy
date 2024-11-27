@@ -34,12 +34,16 @@ export const admin_reqs_columns: ColumnDef<ICustomerRequest>[] = [
             <Image src={TestImage} alt="image" />
           </div>
           <div className="">
-            <h1 className=" text-black-4 font-medium">Jenny Wilson</h1>
+            <h1 className=" text-black-4 font-medium">
+              {row.original.user.fname + " " + row.original.user.lname}
+            </h1>
             {/* <h1 className=" text-black-4 font-medium">
               {row.getValue("customer")}
             </h1> */}
             {/* <p className="text-gray-1 text-[0.88rem]">{row.original.email}</p> */}
-            <p className="text-gray-1 text-[0.88rem]">w.lawson@example.com</p>
+            <p className="text-gray-1 text-[0.88rem]">
+              {row.original.user.email}
+            </p>
           </div>
         </div>
       );
