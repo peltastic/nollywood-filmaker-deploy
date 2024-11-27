@@ -83,7 +83,7 @@ const LoginForm = (props: Props) => {
       });
       setTokenCookie(data.accessToken);
 
-      router.push(fallBackRoute || "/user/dashboard");
+      router.push("/user/dashboard");
     }
   }, [isSuccess, isError]);
 
@@ -138,7 +138,7 @@ const LoginForm = (props: Props) => {
         expires: new Date(Date.now() + 6.5 * 24 * 60 * 60 * 1000),
       });
       setConsultantToken(result.data.accessToken);
-      router.push(consultantFallbackRoute || "/consultants/dashboard");
+      router.push( "/consultants/dashboard");
     }
   }, [result.isError, result.isSuccess]);
 
