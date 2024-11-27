@@ -57,12 +57,12 @@ const CustomerChatMiddle = (props: Props) => {
   const interval = useInterval(() => {
     if (props.data) {
       const startTime = convertToAfricaLagosTz(props.data.startTime);
-      const diff = differenceInMinutes(
+      const timeIsAfterStartTime = isAfter(
         momentTz(new Date()).tz("Africa/Lagos").format(),
         startTime
       );
 
-      if (diff >= 0) {
+      if (timeIsAfterStartTime) {
         setIsTime(true);
         interval.stop();
       }
@@ -85,13 +85,6 @@ const CustomerChatMiddle = (props: Props) => {
       const timeIsAfterEndTime = isAfter(
         momentTz(new Date()).tz("Africa/Lagos").format(),
         endTime
-      );
-      console.log(
-        startTime,
-        endTime,
-        momentTz(new Date()).tz("Africa/Lagos").format(),
-        timeIsAfterEndTime,
-        timeIsAfterStartTime
       );
       if (timeIsAfterEndTime) {
         setSessionOver(true);

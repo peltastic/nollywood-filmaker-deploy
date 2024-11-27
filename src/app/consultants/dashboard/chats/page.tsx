@@ -65,8 +65,8 @@ const ConsultantChastPage = (props: Props) => {
         ...transformed_data,
         {
           date: "2024-11-26T18:00:00+01:00",
-          start_time: "2024-11-26T24:00:00.000Z",
-          end_time: "2024-11-26T01:00:00.000Z",
+          start_time: "2024-11-27T05:00:00.000Z",
+          end_time: "2024-11-27T06:00:00.000Z",
           name: "Omo",
           id: "67391bfc443190b76b64c77b",
           orderId: "shjjhs",
@@ -111,8 +111,8 @@ const ConsultantChastPage = (props: Props) => {
                 searchVal === "67391bfc443190b76b64c77b"
                   ? {
                       date: "2024-11-26T18:00:00+01:00",
-                      startTime: "2024-11-26T24:00:00.000Z",
-                      endTime: "2024-11-26T01:00:00.000Z",
+                      startTime: "2024-11-27T05:00:00.000Z",
+                      endTime: "2024-11-27T06:00:00.000Z",
                       chat_title: "Omo",
                       _id: "sdjjsd",
                       orderId: "shjjhs",
@@ -140,8 +140,8 @@ const ConsultantChastPage = (props: Props) => {
                 searchVal === "67391bfc443190b76b64c77b"
                   ? {
                       date: "2024-11-26T18:00:00+01:00",
-                      startTime: "2024-11-26T24:00:00.000Z",
-                      endTime: "2024-11-26T01:00:00.000Z",
+                      startTime: "2024-11-27T05:00:00.000Z",
+                      endTime: "2024-11-27T06:00:00.000Z",
                       chat_title: "Omo",
                       _id: "sdjjsd",
                       orderId: "shjjhs",
