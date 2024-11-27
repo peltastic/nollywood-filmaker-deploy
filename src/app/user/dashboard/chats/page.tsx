@@ -44,7 +44,7 @@ const ChatsPage = (props: Props) => {
     }
   }, [searchVal]);
 
-  console.log(convertToAfricaLagosTz("2024-11-26T24:00:00.000Z"))
+  console.log(convertToAfricaLagosTz("2024-11-26T24:00:00.000Z"));
 
   useEffect(() => {
     if (conversationsRes.data) {
@@ -67,25 +67,7 @@ const ChatsPage = (props: Props) => {
           };
         }
       );
-      setChatData([
-        ...transformed_data,
-        {
-          date: "2024-11-27T18:00:00+01:00",
-          start_time: "2024-11-27T06:00:00.000Z",
-          end_time: "2024-11-27T07:00:00.000Z",
-          name: "Omo",
-          id: "67391bfc443190b76b64c77b",
-          orderId: "shjjhs",
-          service: "Chat With A Professional",
-          status: "ongoing",
-          time: {
-            hours: 18,
-            minutes: 0,
-            seconds: 0,
-          },
-          type: "Chat",
-        },
-      ]);
+      setChatData(transformed_data);
     }
   }, [conversationsRes.data]);
 
@@ -112,26 +94,7 @@ const ChatsPage = (props: Props) => {
               open={() => setCloseRight(false)}
               orderId={searchVal}
               isFetching={result.isFetching}
-              data={
-                searchVal === "67391bfc443190b76b64c77b"
-                  ? {
-                      date: "2024-11-26T18:00:00+01:00",
-                      startTime: "2024-11-27T06:00:00.000Z",
-                      endTime: "2024-11-27T07:00:00.000Z",
-                      chat_title: "Omo",
-                      _id: "sdjjsd",
-                      orderId: "shjjhs",
-                      nameofservice: "Chat With A Professional",
-                      stattusof: "ongoing",
-                      time: {
-                        hours: 18,
-                        minutes: 0,
-                        seconds: 0,
-                      },
-                      // type: "Chat",
-                    }
-                  : result.data?.request
-              }
+              data={result.data?.request}
               type="user"
             />
           </section>
@@ -142,30 +105,10 @@ const ChatsPage = (props: Props) => {
           >
             <CustomerChatRight
               type="user"
-              data={
-                searchVal === "67391bfc443190b76b64c77b"
-                  ? {
-                      date: "2024-11-26T18:00:00+01:00",
-                      startTime: "2024-11-27T06:00:00.000Z",
-                      endTime: "2024-11-27T07:00:00.000Z",
-                      chat_title: "Omo",
-                      _id: "sdjjsd",
-                      orderId: "shjjhs",
-                      nameofservice: "Chat With A Professional",
-                      stattusof: "ongoing",
-                      time: {
-                        hours: 18,
-                        minutes: 0,
-                        seconds: 0,
-                      },
-                      // type: "Chat",
-                    }
-                  : result.data?.request
-              }
+              data={result.data?.request}
               closeRight={closeRight}
               close={() => setCloseRight(true)}
               openRight={() => setCloseRight(false)}
-             
             />
           </section>
         </section>
