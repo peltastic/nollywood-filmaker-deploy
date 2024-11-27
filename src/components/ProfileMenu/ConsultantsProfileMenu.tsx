@@ -19,7 +19,7 @@ import { useProtectRoute } from "@/hooks/useProtectRoute";
 type Props = {};
 
 const ConsultantsProfileMenu = (props: Props) => {
-  const { disableExpiredMessage } = useProtectRoute();
+ const {disableExpiredMessage} = useProtectRoute("consultant")
   const dispatch = useDispatch();
   const router = useRouter();
   return (

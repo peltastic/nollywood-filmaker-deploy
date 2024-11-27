@@ -9,6 +9,8 @@ import {
   differenceInDays,
   differenceInHours,
   differenceInMinutes,
+  isAfter,
+  isBefore,
 } from "date-fns";
 import { convertToAfricaLagosTz, truncateStr } from "@/utils/helperFunction";
 
@@ -34,16 +36,22 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
     const endTime = convertToAfricaLagosTz(data.end_time);
     const currTime = momentTz(new Date()).tz("Africa/Lagos").format();
     const differenceInDaysVal = differenceInDays(currTime, new Date(startTime));
+    const timeIsAfterStartTime = isAfter(
+      momentTz(new Date()).tz("Africa/Lagos").format(),
+      startTime
+    );
+    const timeIsBeforeEndTime = isBefore(
+      momentTz(new Date()).tz("Africa/Lagos").format(),
+      endTime
+    );
     if (differenceInDaysVal > 1) {
       setChatTimeStatus(moment(data.date).format("DD/MM/YYYY"));
     } else {
-      // setChatTimeStatus(
-      //   differenceInMinutes( startTime, currTime) > 0 &&
-      //     differenceInMinutes(currTime, endTime) < 0
-      //     ? "Chat Active"
-      //     :
-      // );
-      setChatTimeStatus(moment(endTime).fromNow());
+      if (timeIsAfterStartTime && timeIsBeforeEndTime) {
+        setChatTimeStatus("Chat Active");
+      } else {
+        setChatTimeStatus(moment(endTime).fromNow());
+      }
     }
   }, [data]);
 
