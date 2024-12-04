@@ -26,30 +26,30 @@ type Props = {};
 
 const ConsultantDetailsPage = (props: Props) => {
   const active_req_table_data: IConsultantActiveRequestColumnData[] = [
-    {
-      customer: "Jenny Wilson",
-      date: "22 Jan 2022",
-      email: "w.lawson@example.com",
-      script: "Mikolo",
-      service_type: "Read my script",
-      status: "Ready",
-    },
-    {
-      customer: "Devon Lane",
-      date: "26 Jan 2022",
-      email: "dat.roberts@example.com",
-      script: "Jagun Jagun",
-      service_type: "Watch the Final cut of my film",
-      status: "Ongoing",
-    },
-    {
-      customer: "Jane Cooper",
-      date: "18 Jan 2022",
-      email: "jgraham@example.com",
-      script: "Criminal",
-      service_type: "Create a production Budget",
-      status: "Pending",
-    },
+    // {
+    //   customer: "Jenny Wilson",
+    //   date: "22 Jan 2022",
+    //   email: "w.lawson@example.com",
+    //   script: "Mikolo",
+    //   service_type: "Read my script",
+    //   status: "Ready",
+    // },
+    // {
+    //   customer: "Devon Lane",
+    //   date: "26 Jan 2022",
+    //   email: "dat.roberts@example.com",
+    //   script: "Jagun Jagun",
+    //   service_type: "Watch the Final cut of my film",
+    //   status: "Ongoing",
+    // },
+    // {
+    //   customer: "Jane Cooper",
+    //   date: "18 Jan 2022",
+    //   email: "jgraham@example.com",
+    //   script: "Criminal",
+    //   service_type: "Create a production Budget",
+    //   status: "Pending",
+    // },
   ];
   const router = useRouter();
   const plate_data: {
