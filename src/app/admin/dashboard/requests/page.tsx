@@ -3,6 +3,7 @@ import { admin_reqs_columns } from "@/components/Columns/admin/AdminRequestsColu
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import { DataTable } from "@/components/Tables/DataTable";
+import { useProtectAdmin } from "@/hooks/useProtectAdminRoute";
 import { ICustomerRequest } from "@/interfaces/admin/requests/requests";
 import { useLazyFetchCustomerRequestQuery } from "@/lib/features/admin/requests/request";
 import React, { useEffect, useState } from "react";
@@ -10,6 +11,7 @@ import React, { useEffect, useState } from "react";
 type Props = {};
 
 const AdminRequests = (props: Props) => {
+  useProtectAdmin()
   const [fetchCustomerRequests, { data, isFetching }] =
     useLazyFetchCustomerRequestQuery();
   const [customerReqData, setCustomerReqData] = useState<ICustomerRequest[]>(

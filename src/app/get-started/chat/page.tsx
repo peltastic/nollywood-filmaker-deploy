@@ -88,7 +88,12 @@ const GetStartedChatPage = (props: Props) => {
 
   return (
     <>
-      {opened ? <InitializingTransactionModal status={paymentStatus} /> : null}
+      {opened ? (
+        <InitializingTransactionModal
+          paymentUrl={data?.result.authorization_url}
+          status={paymentStatus}
+        />
+      ) : null}
       <ServiceLayout nonDashboard>
         <div className="flex flex-wrap items-start">
           <ServiceLeft
@@ -218,15 +223,14 @@ const GetStartedChatPage = (props: Props) => {
                           </>
                         )}
                       </UnstyledButton>
+                      <UnstyledButton
+                        type="button"
+                        clicked={() => setPage("2")}
+                        class="rounded-md py-1  mt-8 px-4 transition-all hover:bg-gray-bg-1 border-stroke-2 border"
+                      >
+                        Back
+                      </UnstyledButton>
                     </div>
-                    // <ChatRight
-                    //   dateProps={currentDate}
-                    //   setDateProps={setDateHandler}
-                    //   setPageProps={(val) => setPage(val)}
-                    //   proceed={() =>
-                    //     router.push("/get-started/chat?page=payment")
-                    //   }
-                    // />
                   )}
                 </>
               )}

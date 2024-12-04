@@ -30,10 +30,10 @@ export interface IWatchFinalCutState {
 }
 
 const page = (props: Props) => {
-  useProtectRoute()
+  useProtectRoute();
   const [watchFinalCut, { data, isLoading, isSuccess, isError, error }] =
     useInitializeWatchFinalCutMutation();
-    const [opened, { close, open }] = useDisclosure();
+  const [opened, { close, open }] = useDisclosure();
   const { paymentStatus } = useServicePayment(
     isError,
     isSuccess,
@@ -76,11 +76,16 @@ const page = (props: Props) => {
 
   return (
     <>
-      {opened ? <InitializingTransactionModal status={paymentStatus} /> : null}
+      {opened ? (
+        <InitializingTransactionModal
+          paymentUrl={data?.result.authorization_url}
+          status={paymentStatus}
+        />
+      ) : null}
       <ServiceLayout nonDashboard>
         <div className="flex flex-wrap items-start">
           <ServiceLeft
-          cost="50,000"
+            cost="50,000"
             title="Watch the final cut of my film"
             image={<Image src={WatchFinalCutImage} alt="watch-final-cut" />}
             body={[

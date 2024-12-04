@@ -6,7 +6,7 @@ import SettingsIconImg from "/public/assets/dashboard/settings-icon.svg";
 import ProfileIconImg from "/public/assets/dashboard/profile-icon.svg";
 import LoginIcon from "/public/assets/dashboard/login-icon.svg";
 import { nprogress } from "@mantine/nprogress";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setConsultantAuthStatus } from "@/lib/slices/consultants/authSlice";
 import { resetConsultantInfo } from "@/lib/slices/consultants/consultantSlice";
 import { removeCookie } from "@/utils/storage";
@@ -15,20 +15,38 @@ import { successColor } from "@/utils/constants/constants";
 import classes from "@/app/styles/SuccessNotification.module.css";
 import { useRouter } from "next/navigation";
 import { useProtectRoute } from "@/hooks/useProtectRoute";
+import { useProtectRouteConsultantRoute } from "@/hooks/useProtectConsultantRoute";
+import { setConsultantLogoutType } from "@/lib/slices/consultants/logoutSlice";
+import { RootState } from "@/lib/store";
+import { truncateStr } from "@/utils/helperFunction";
 
 type Props = {};
 
 const ConsultantsProfileMenu = (props: Props) => {
- const {disableExpiredMessage} = useProtectRoute("consultant")
+  const consultantData = useSelector(
+    (state: RootState) => state.persistedState.consultant.user
+  );
+
+  useProtectRouteConsultantRoute();
   const dispatch = useDispatch();
   const router = useRouter();
   return (
     <div className="bg-white w-[15rem]   py-3 text-gray-3">
       <div className="flex items-center px-3">
-        <Image src={TestImage} alt="test-image" className="mr-4 w-[3rem]" />
+        {consultantData?.ppicture ? (
+          <Image src={TestImage} alt="test-image" className="mr-4 w-[3rem]" />
+        ) : (
+          <div className="bg-black-3 font-bold text-[0.7rem] mr-4 h-[2.5rem] flex items-center justify-center w-[2.5rem] rounded-full text-white">
+            {consultantData?.fname[0]} {consultantData?.lname[0]}
+          </div>
+        )}
         <div className="text-[0.88rem]">
-          <h1 className="font-bold text-gray-3">Niyi Akinmolayan</h1>
-          <p className="text-gray-1">niyi@gmail.com</p>
+          <h1 className="font-bold text-gray-3">
+            {consultantData?.fname} {consultantData?.lname}
+          </h1>
+          <p className="text-gray-1">
+            {truncateStr(consultantData?.email || "", 20)}
+          </p>
         </div>
       </div>
       <ul className="text-[0.88rem] mt-2 py-3 border-t border-b border-profile-menu-border">
@@ -70,7 +88,7 @@ const ConsultantsProfileMenu = (props: Props) => {
       </ul>
       <div
         onClick={() => {
-          disableExpiredMessage();
+          dispatch(setConsultantLogoutType("triggered"));
           nprogress.start();
           dispatch(setConsultantAuthStatus("LOGGED_OUT"));
           dispatch(resetConsultantInfo());

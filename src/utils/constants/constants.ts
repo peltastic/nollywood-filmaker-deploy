@@ -2,20 +2,76 @@ import { ICreateAvailabilityPayload } from "@/interfaces/consultants/profile/ava
 
 export const testSelectData = [
   {
-    label: "Sci Fi",
-    value: "Sci Fi",
+    label: "Action",
+    value: "Action",
+  },
+  {
+    label: "Adventure",
+    value: "Adventure",
+  },
+  {
+    label: "Animation",
+    value: "Animation",
+  },
+  {
+    label: "Comedy",
+    value: "Comedy",
   },
   {
     label: "Drama",
     value: "Drama",
   },
-];
+  {
+    label: "Fantasy",
+    value: "Fantasy",
+  },
+  {
+    label: "Horror",
+    value: "Horror",
+  },
+  {
+    label: "Mystery",
+    value: "Mystery",
+  },
+  {
+    label: "Romance",
+    value: "Romance",
+  },
+  {
+    label: "Sci Fi",
+    value: "Sci Fi",
+  },
+  {
+    label: "Thriller",
+    value: "Thriller",
+  },
+  {
+    label: "Faith-Based",
+    value: "Faith-Based",
+  },
+]; 
 
 export const testExhibitionData = [
   {
     label: "Cinema",
     value: "Cinema",
   },
+  {
+    label: "Netflix",
+    value: "Netflix",
+  },
+  {
+    label: "Amazon Prime Video",
+    value: "Amazon Prime Video",
+  },
+  {
+    label: "Youtube",
+    value: "Youtube",
+  },
+  {
+    label: "TV Broadcast",
+    value: "TV Broadcast"
+  }
 ];
 
 export const consultantTypesData = [

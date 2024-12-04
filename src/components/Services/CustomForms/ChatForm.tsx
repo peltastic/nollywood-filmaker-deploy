@@ -37,7 +37,7 @@ const ChatForm = (props: Props) => {
           <div className="mt-8">
             <InputComponent
               value={props.data.title}
-              label="Movie title"
+              label="Conversation title"
               placeholder="Text"
               changed={(val) => props.setScriptProps("title", val)}
               className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"

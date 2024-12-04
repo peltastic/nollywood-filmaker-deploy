@@ -14,9 +14,9 @@ export interface IConsultantActiveRequestColumnData {
   customer: string;
   email: string;
   script: string;
-  service_type: string;
+  service_type: "Chat With A Professional";
   date: string;
-  status: "Ready" | "Ongoing" | "Completed" | "Pending";
+  status: "ready" | "ongoing" | "completed" | "pending";
 }
 
 export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequestColumnData>[] =
@@ -88,11 +88,11 @@ export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequ
       header: "Status",
       cell: ({ row }) => {
         const className =
-          row.original.status === "Ready"
+          row.original.status === "ready"
             ? "bg-light-blue text-dark-blue"
-            : row.original.status === "Completed"
+            : row.original.status === "completed"
             ? "bg-light-green text-dark-green"
-            : row.original.status === "Pending"
+            : row.original.status === "pending"
             ? "bg-stroke-4 text-black-6"
             : "bg-light-yellow text-dark-yellow";
         return (

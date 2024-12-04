@@ -9,6 +9,9 @@ import { IoIosArrowDown } from "react-icons/io";
 type Props = {
   consultant?: boolean;
   admin?: boolean;
+  fname: string;
+  lname: string;
+  ppicture?: string;
 };
 
 const Header = (props: Props) => {
@@ -17,13 +20,19 @@ const Header = (props: Props) => {
     <header className="pt-14 chatbp:py-0">
       <div className="flex flex-wrap items-center">
         <div className="flex items-center mr-auto w-full sm:w-auto">
-          <Image src={TestImage} alt="test-image" className="mr-4" />
+          {props.ppicture ? (
+            <Image src={TestImage} alt="test-image" className="mr-4" />
+          ) : (
+            <div className="bg-black-3 font-bold text-[1.2rem] mr-4 h-[3.9rem] flex items-center justify-center w-[3.9rem] rounded-full text-white">
+              {props.fname[0]} {props.lname[0]}
+            </div>
+          )}
           <div className="text-black-2">
-            <h1 className="text-[1.5rem] font-bold">Welcome, Niyi</h1>
+            <h1 className="text-[1.5rem] font-bold">Welcome, {props.fname}</h1>
             <h2 className="text-[1.13rem]">It's good to see you</h2>
           </div>
         </div>
-        {props.consultant  || props.admin? null : (
+        {props.consultant || props.admin ? null : (
           <UnstyledButton
             clicked={() => router.push("/get-started")}
             class="mt-8 sm:mt-0 w-full sm:w-auto hover:border-blue-1 hover:bg-blue-1 transition-all duration-500 bg-black-3 border border-black-3 font-medium text-white py-2 px-4 rounded-md"

@@ -77,11 +77,11 @@ const CreatePitchPage = (props: Props) => {
   }, [paymentStatus]);
   return (
     <>
-      {opened ? <InitializingTransactionModal status={paymentStatus} /> : null}
+      {opened ? <InitializingTransactionModal paymentUrl={data?.result.authorization_url} status={paymentStatus} /> : null}
       <ServiceLayout nonDashboard>
         <div className="flex flex-wrap items-start">
           <ServiceLeft
-            title="Create a Pitch"
+            title="Create a Movie Schedule"
             cost="105,000"
             image={<Image src={CreatePitchImg} alt="create-pitch" />}
             body={[
@@ -137,7 +137,7 @@ const CreatePitchPage = (props: Props) => {
                       crew: scriptData.crew_in_mind,
                       files: file,
                       info: scriptData.information,
-                      movie_title: scriptData.information,
+                      movie_title: scriptData.movie_title,
                       platform: scriptData.platform,
                       title: "Create a Pitch based on my Script",
                       type: "request",

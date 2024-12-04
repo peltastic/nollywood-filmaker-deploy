@@ -14,9 +14,11 @@ import {
 } from "@/components/Columns/RequestHistoryColumns";
 import moment from "moment";
 import { useFetchActiveRequestsQuery } from "@/lib/features/users/dashboard/requests/requests";
+import { useProtectRoute } from "@/hooks/useProtectRoute";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
 
 type Props = {};
-
 
 const reqHistoryData: ReqHistoryColumnData[] = [
   {
@@ -45,7 +47,12 @@ const reqHistoryData: ReqHistoryColumnData[] = [
   },
 ];
 
-const DashboardHomePgae = (props: Props) => { 
+const DashboardHomePgae = (props: Props) => {
+  const userData = useSelector(
+    (state: RootState) => state.persistedState.user.user
+  );
+
+  useProtectRoute();
   const [activeReqData, setActiveReqData] = useState<
     IActiveRequestColumnData[]
   >([]);
@@ -73,14 +80,18 @@ const DashboardHomePgae = (props: Props) => {
               : 100,
         };
       });
-      setActiveReqData(formattedData)
+      setActiveReqData(formattedData);
     }
   }, [data]);
   return (
     <ServiceLayout>
       <DashboardBodyLayout>
         <div className="px-4 xs:px-8 chatbp:px-0">
-          <Header />
+          <Header
+            fname={userData?.fname || ""}
+            lname={userData?.lname || ""}
+            ppicture={userData?.ppicture}
+          />
 
           <div className="mt-14">
             <DataTable

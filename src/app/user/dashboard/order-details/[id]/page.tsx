@@ -13,6 +13,7 @@ import {
 } from "@/components/Columns/ResolveFilesColumn";
 import { useLazyGetCustomerRequestDetailQuery } from "@/lib/features/consultants/dashboard/request";
 import OrderDetailsPageSkeleton from "@/components/Skeletons/OrderDetailsPageSkeleton";
+import moment from "moment";
 
 type Props = {};
 
@@ -75,6 +76,36 @@ const OrderDetailsPage = (props: Props) => {
             content: data.request.consultant,
           },
         ]);
+      } else if (data.request.nameofservice === "Read my Script and advice") {
+        setBodyData([
+          { title: "Logline/Synopsis", content: data.request.synopsis },
+          {
+            title: "Genre",
+            content: data.request.genre,
+          },
+          {
+            title: "Concerns",
+            content: data.request.concerns,
+          },
+        ]);
+      } else if (
+        data.request.nameofservice ===
+        "Watch the Final cut of my film and advice"
+      ) {
+        setBodyData([
+          {
+            title: "Logline/Synopsis",
+            content: data.request.synopsis,
+          },
+          {
+            title: "Genre",
+            content: data.request.genre,
+          },
+          {
+            title: "Platform For Exhibition",
+            content: data.request.genre,
+          },
+        ]);
       }
     }
   }, [data]);
@@ -89,17 +120,44 @@ const OrderDetailsPage = (props: Props) => {
             <OrderDetailsHeader status="pending" statusValue="Pending" />
             <div className="w-[90%] lg:w-[82%] mx-auto">
               <OrderDetailsTop
-                order_date="2024-06-29 10:21:54"
+                order_date={data?.request.date}
                 order_no="O-NG240629806487"
-                order_type="Chat With A Professional"
+                order_type={data?.request.nameofservice}
               />
               <OrderDetailsBody
                 chat={
                   data?.request.nameofservice === "Chat With A Professional"
                 }
-                bodyData={bodyData}
-                script="Movie script 2024.pdf"
-                title="Mission Impossible"
+                concerns={data?.request.concerns}
+                consultant_type={data?.request.consultant}
+                genre={data?.request.genre}
+                platform={data?.request.platform}
+                synopsis={data?.request.synopsis}
+                summary={data?.request.summary}
+                script={
+                  data?.request.nameofservice === "Read my Script and advice" ||
+                  data?.request.nameofservice ===
+                    "Look at my Budget and advice" ||
+                  data?.request.nameofservice ===
+                    "Create a Production budget" ||
+                  data?.request.nameofservice ===
+                    "Create a Pitch based on my Script"
+                    ? data?.request.movie_title
+                    : null
+                }
+                fileLink={data?.request.files && data.request.files[0]}
+                title={data?.request.movie_title}
+                link={data?.request.link}
+                chat_title={data?.request.chat_title}
+                actors={data?.request.actors}
+                budget={data?.request.budgetrange}
+                days={data?.request.days}
+                info={data?.request.info}
+                ooh={data?.request.oohTarget}
+                target_social={data?.request.socialTarget}
+                visual={data?.request.visualStyle}
+                company={data?.request.productionCompany}
+                contact_info={data?.request.contactInfo}
               />
               <div className="mt-14">
                 {downloadPage === "download_files" ? (

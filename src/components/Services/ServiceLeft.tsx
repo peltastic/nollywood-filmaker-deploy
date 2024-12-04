@@ -13,7 +13,7 @@ type Props = {
 
 const ServiceLeft = ({ body, title, image, cost }: Props) => {
   return (
-    <section className="bg-gray-bg-3 w-full lg:w-[45%] py-[5rem] lg:min-h-screen">
+    <section className="bg-gray-bg-3 w-full lg:w-[45%] py-[5rem] lg:min-h-screen relative">
       <div className="bg-black-3 h-[3.8rem] flex justify-center items-center mx-auto w-[3.8rem] rounded-full">
         <p className="text-[1.5rem] font-bold text-white">NA</p>
       </div>
@@ -26,22 +26,26 @@ const ServiceLeft = ({ body, title, image, cost }: Props) => {
           <p className="text-white font-bold">{title}</p>
           <div className="">{image}</div>
         </div>
-        {body.map((el) => (
-          <div
-            className="text-[0.88rem] border-t border-t-stroke-4 py-4"
-            key={el.title}
-          >
-            <h1 className="text-black-2 font-bold">{el.title}</h1>
-            <p className="mt-2">{el.content || "..."}</p>
-          </div>
-        ))}
-      </div>
-     {cost &&  <div className="w-[90%] mt-10 xl:w-[70%] mx-auto text-black-3">
-        <div className="flex items-center">
-          <p className="mr-auto">Cost</p>
-          <p className="font-bold text-[1.25rem]">₦ {cost}</p>
+        <div className="w-full break-words">
+          {body.map((el) => (
+            <div
+              className="text-[0.88rem] border-t border-t-stroke-4 py-4"
+              key={el.title}
+            >
+              <h1 className="text-black-2 font-bold">{el.title}</h1>
+              <p className="mt-2">{el.content || "..."}</p>
+            </div>
+          ))}
         </div>
-      </div>}
+      </div>
+      {cost && (
+        <div className="w-[90%] mt-10 xl:w-[70%] mx-auto text-black-3">
+          <div className="flex items-center">
+            <p className="mr-auto">Cost</p>
+            <p className="font-bold text-[1.25rem]">₦ {cost}</p>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

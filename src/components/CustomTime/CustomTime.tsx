@@ -1,11 +1,16 @@
 import { Skeleton } from "@mantine/core";
 import React from "react";
+import SlotDisabledImg from "/public/assets/chats/slot-disabled.png";
+import Image from "next/image";
 
 type Props = {
   serviceSelection?: boolean;
   selectedTime: string;
   setSelected?: (value: string) => void;
-  time_slots?: string[];
+  time_slots?: {
+    time: string;
+    isAvailable: boolean;
+  }[];
   isFetching?: boolean;
 };
 
@@ -51,22 +56,28 @@ const CustomTime = (props: Props) => {
           <div className="mb-2">
             <Skeleton height={50} />
           </div>
-         
         </>
       ) : (
         <>
           {props.time_slots?.map((el) => (
-            <div
-              onClick={() => props.setSelected && props.setSelected(el)}
-              key={el}
-              className={`${
-                el === props.selectedTime
+            <button
+              style={{
+                backgroundImage: el.isAvailable
+                  ? ""
+                  : `url(${SlotDisabledImg.src})`,
+                // backgroundSize: "cover",
+              }}
+              disabled={!el.isAvailable}
+              onClick={() => props.setSelected && props.setSelected(el.time)}
+              key={el.time}
+              className={`w-full\ ${
+                el.time === props.selectedTime
                   ? "bg-black-2 text-white"
                   : "text-black-2 bg-white"
-              }  text-[1.13rem] transition-all cursor-pointer font-medium mx-0 md:mx-auto  rounded-md py-3 px-3 mb-2`}
+              }  text-[1.13rem] disabled:cursor-not-allowed relative transition-all cursor-pointer font-medium mx-0 md:mx-auto  rounded-md py-3 px-3 mb-2`}
             >
-              {el}
-            </div>
+              {el.time}
+            </button>
           ))}
         </>
       )}

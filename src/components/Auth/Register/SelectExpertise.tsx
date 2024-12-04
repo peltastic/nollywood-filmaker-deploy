@@ -21,6 +21,7 @@ const SelectExpertise = ({ page, data, setExpertise, setPageProps }: Props) => {
       </div>
       <div className="mt-10">
         <Expertise data={data} setExpertise={setExpertise} />
+        <p className="mt-4">You can select a maximum of three expertise</p>
       </div>
       <div className="w-full flex mt-28 mb-8 sm:mb-0">
         <UnstyledButton

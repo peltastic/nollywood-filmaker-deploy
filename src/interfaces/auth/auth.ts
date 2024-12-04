@@ -16,7 +16,13 @@ export interface ILoginData {
 export interface ILoginResponse {
   refreshToken: string;
   accessToken: string
-  user: IUserInfoData;
+  user : IUserInfoData;
+}
+
+export interface IAdminLoginResponse {
+  refreshToken: string;
+  accessToken: string
+  admin: IUserInfoData
 }
 
 export interface IUserInfoData {
@@ -27,4 +33,6 @@ export interface IUserInfoData {
   email: string;
   role: string;
   expertise: string[];
+  ppicture?: string
+  isVerified?: string
 } 

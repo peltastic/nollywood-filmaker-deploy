@@ -1,6 +1,9 @@
 "use client";
 import Area from "@/components/Charts/Area";
-import { ICustomerReqData, customer_req_columns } from "@/components/Columns/admin/CustomerRequestsColumn";
+import {
+  ICustomerReqData,
+  customer_req_columns,
+} from "@/components/Columns/admin/CustomerRequestsColumn";
 import CustomerFeed from "@/components/CustomerFeed/CustomerFeed";
 import DashboardInfoCard from "@/components/Dashboard/DashboardInfoCard";
 import DashboardPlate from "@/components/Dashboard/DashboardPlate";
@@ -14,6 +17,9 @@ import Image from "next/image";
 import React from "react";
 import ReadMyScriptDarkImg from "/public/assets/services/read-my-script-dark.svg";
 import TestImage from "/public/assets/dashboard/issues-img-1.png";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
+import { useProtectAdmin } from "@/hooks/useProtectAdminRoute";
 
 type Props = {};
 
@@ -300,11 +306,20 @@ const top_countries: {
 ];
 
 const AdminDashboardPage = (props: Props) => {
+  useProtectAdmin()
+  const adminUserData = useSelector(
+    (state: RootState) => state.persistedState.adminuser.user
+  );
   return (
     <ServiceLayout admin>
       <DashboardBodyLayout>
         <div className="px-4 xs:px-8 chatbp:px-0 mb-10 xl:mb-0">
-          <Header admin />
+          <Header
+            fname={adminUserData.fname}
+            lname={adminUserData.lname}
+            ppicture={adminUserData.ppicture}
+            admin
+          />
           <div className="mt-16">
             <DashboardPlate title="Overview">
               <div className="w-full my-8  md:grid-cols-2 xl:grid-cols-4 grid gap-6">

@@ -1,0 +1,29 @@
+import Image from 'next/image'
+import React from 'react'
+import TestImage from "/public/assets/test-avatar.png";
+
+type Props = {
+    fname: string
+    lname: string
+    ppicture?: string
+}
+
+const ProfileTarget = (props: Props) => {
+  return (
+    <div>
+    {props.ppicture ? (
+      <Image
+        src={TestImage}
+        alt="test-image"
+        className="md:mr-4 w-[2.8rem]  md:w-[2rem]"
+      />
+    ) : (
+      <div className="bg-black-3 font-bold text-[0.5rem] mr-4 h-[1.7rem] flex items-center justify-center w-[1.7rem] rounded-full text-white">
+        {props.fname[0]} {props.lname[0]}
+      </div>
+    )}
+  </div>
+  )
+}
+
+export default ProfileTarget

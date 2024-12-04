@@ -19,9 +19,13 @@ import UpcomingConversations from "@/components/Dashboard/UpcomingConversations"
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import { DataTable } from "@/components/Tables/DataTable";
+import { useProtectRouteConsultantRoute } from "@/hooks/useProtectConsultantRoute";
 import { useProtectRoute } from "@/hooks/useProtectRoute";
 import { ICustomerRequestData } from "@/interfaces/consultants/dashboard/request";
-import { useFetchCustomerRequestsQuery } from "@/lib/features/consultants/dashboard/request";
+import {
+  useFetchCustomerRequestsQuery,
+  useGetActiveRequestQuery,
+} from "@/lib/features/consultants/dashboard/request";
 import { RootState } from "@/lib/store";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
@@ -63,33 +67,6 @@ const dashboard_data: {
     title: "Conversations held",
     value: 0,
     id: "4",
-  },
-];
-
-const active_req_table_data: IConsultantActiveRequestColumnData[] = [
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Ready",
-  },
-  {
-    customer: "Devon Lane",
-    date: "26 Jan 2022",
-    email: "dat.roberts@example.com",
-    script: "Jagun Jagun",
-    service_type: "Watch the Final cut of my film",
-    status: "Ongoing",
-  },
-  {
-    customer: "Jane Cooper",
-    date: "18 Jan 2022",
-    email: "jgraham@example.com",
-    script: "Criminal",
-    service_type: "Create a production Budget",
-    status: "Pending",
   },
 ];
 
@@ -204,17 +181,30 @@ const bar_chart_data = [
 // ];
 
 const DashboardPage = (props: Props) => {
-  useProtectRoute("consultant")
+  useProtectRouteConsultantRoute();
   const consultantId = useSelector(
     (state: RootState) => state.persistedState.consultant.user?.id
+  );
+
+  const userData = useSelector(
+    (state: RootState) => state.persistedState.consultant.user
   );
 
   const [customerReqData, setCustomerReqData] = useState<ICustomerReqData[]>(
     []
   );
+  const [activeReqData, setActiveReqData] = useState<
+    IConsultantActiveRequestColumnData[]
+  >([]);
+
+  const result = useGetActiveRequestQuery(consultantId!, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const { data, isSuccess, isError, isFetching } =
-    useFetchCustomerRequestsQuery(consultantId!);
+    useFetchCustomerRequestsQuery(consultantId!, {
+      refetchOnMountOrArgChange: true,
+    });
 
   useEffect(() => {
     if (isSuccess) {
@@ -228,17 +218,42 @@ const DashboardPage = (props: Props) => {
           status: el.assignment.status,
           imgurl: el.user.profilepics,
           id: el.assignment._id,
-          orderId: el.assignment.orderId
+          orderId: el.assignment.orderId,
         };
       });
       setCustomerReqData(resData);
     }
   }, [isSuccess, isError]);
+
+  useEffect(() => {
+    if (result.isSuccess) {
+      if (result.data.appointments) {
+        const resData: IConsultantActiveRequestColumnData[] =
+          result.data.appointments.map((el) => {
+            return {
+              customer: "Jenny Wilson",
+              date: moment(el.date).format("LL"),
+              email: "email@email.com",
+              script: el.request.chat_title || el.request.movie_title,
+              service_type: el.request.nameofservice,
+              status: el.request.stattusof,
+            };
+          });
+        setActiveReqData(resData);
+      }
+    }
+  }, [result.isSuccess]);
   return (
     <ServiceLayout consultant>
       <DashboardBodyLayout>
         <div className="px-4 xs:px-6 chatbp:px-0">
-          <Header consultant />
+          <Header
+            fname={userData?.fname || ""}
+            lname={userData?.lname || ""}
+            ppicture={userData?.ppicture}
+            admin
+            consultant
+          />
           <div className="mt-16">
             <DashboardPlate title="Overview">
               <section className="flex flex-wrap lg:flex-nowrap gap-x-6 py-8">
@@ -280,7 +295,9 @@ const DashboardPage = (props: Props) => {
             <DataTable
               title="Active Requests"
               columns={consultant_active_requests_columns}
-              data={active_req_table_data}
+              data={activeReqData}
+              isFetching={result.isFetching}
+              loaderLength={5}
             />
           </div>
           <div className="mt-16">

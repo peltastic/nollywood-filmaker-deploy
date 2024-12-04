@@ -74,7 +74,7 @@ const DraftLegalDocumentPage = (props: Props) => {
 
   return (
     <>
-      {opened ? <InitializingTransactionModal status={paymentStatus} /> : null}
+      {opened ? <InitializingTransactionModal paymentUrl={data?.result.authorization_url} status={paymentStatus} /> : null}
       <ServiceLayout nonDashboard>
         <div className="flex flex-wrap items-start">
           <ServiceLeft

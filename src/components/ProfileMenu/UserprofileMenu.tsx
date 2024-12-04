@@ -7,7 +7,7 @@ import TestImage from "/public/assets/test-avatar.png";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAuthStatus } from "@/lib/slices/authSlice";
 import { notifications } from "@mantine/notifications";
 import classes from "@/app/styles/SuccessNotification.module.css";
@@ -15,19 +15,34 @@ import { nprogress } from "@mantine/nprogress";
 import { successColor } from "@/utils/constants/constants";
 import { removeCookie } from "@/utils/storage";
 import { resetUserInfo, setUserInfo } from "@/lib/slices/userSlice";
+import { useProtectRoute } from "@/hooks/useProtectRoute";
+import { setLogoutType } from "@/lib/slices/logoutSlice";
+import { RootState } from "@/lib/store";
+import { truncateStr } from "@/utils/helperFunction";
 
 type Props = {};
 
 const UserprofileMenu = (props: Props) => {
+  const userData = useSelector(
+    (state: RootState) => state.persistedState.user.user
+  );
   const router = useRouter();
   const dispatch = useDispatch();
   return (
     <div className="bg-white w-[15rem]   py-3 text-gray-3">
       <div className="flex items-center px-3">
-        <Image src={TestImage} alt="test-image" className="mr-4 w-[3rem]" />
+        {userData?.ppicture ? (
+          <Image src={TestImage} alt="test-image" className="mr-4 w-[3rem]" />
+        ) : (
+          <div className="bg-black-3 font-bold text-[0.7rem] mr-4 h-[2.5rem] flex items-center justify-center w-[2.5rem] rounded-full text-white">
+            {userData?.fname[0]} {userData?.lname[0]}
+          </div>
+        )}
         <div className="text-[0.88rem]">
-          <h1 className="font-bold text-gray-3">Niyi Akinmolayan</h1>
-          <p className="text-gray-1">niyi@gmail.com</p>
+          <h1 className="font-bold text-gray-3">
+            {userData?.fname} {userData?.lname}
+          </h1>
+          <p className="text-gray-1">{truncateStr(userData?.email || "", 20)}</p>
         </div>
       </div>
       <ul className="text-[0.88rem] mt-2 py-3 border-t border-b border-profile-menu-border">
@@ -72,9 +87,9 @@ const UserprofileMenu = (props: Props) => {
       </ul>
       <div
         onClick={() => {
+          dispatch(setLogoutType("triggered"));
           nprogress.start();
-          dispatch(setAuthStatus("LOGGED_OUT"));
-          dispatch(resetUserInfo())
+          dispatch(resetUserInfo());
           notifications.show({
             title: "Logout successful",
             message: "",
@@ -82,8 +97,9 @@ const UserprofileMenu = (props: Props) => {
             classNammes: classes,
             position: "top-right",
           });
+          dispatch(setAuthStatus("LOGGED_OUT"));
           removeCookie("token");
-          removeCookie("refresh")
+          removeCookie("refresh");
           nprogress.complete();
           router.push("/");
         }}

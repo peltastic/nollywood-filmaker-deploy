@@ -7,25 +7,25 @@ import ConversationsSkeleton from "@/components/Skeletons/ConversationsSkeleton"
 type Props = {
   isFetching?: boolean;
   data: IChatData[];
-  orderId?:string | null
-  type?: "consultant" | "admin"
+  orderId?: string | null;
+  type?: "consultant" | "admin";
 };
 
 export interface IChatData {
   name: string;
-  id: string
+  id: string;
   service: string;
   type: "Service" | "Chat";
   status: "ongoing" | "completed" | "pending" | "ready";
-  start_time: string
-  end_time: string
-  orderId: string
-  date: string
+  start_time: string;
+  end_time: string;
+  orderId: string;
+  date: string;
   time: {
-    hours: number
-    minutes: number
-    seconds: number
-  }
+    hours: number;
+    minutes: number;
+    seconds: number;
+  };
 }
 
 const CustomerChatLeft = (props: Props) => {
@@ -53,9 +53,11 @@ const CustomerChatLeft = (props: Props) => {
         </div>
       ) : (
         <div className="bg-white px-4 py-4">
-          <div className="px-2">
-            <ChatSearch />
-          </div>
+          {props.data.length === 0 ? null : (
+            <div className="px-2">
+              <ChatSearch />
+            </div>
+          )}
           <div className="my-4">
             {props.data?.map((el, index) => (
               <Chat

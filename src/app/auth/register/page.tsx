@@ -62,7 +62,7 @@ const RegisterPage = (props: Props) => {
             <h1 className="w-full sm:w-auto text-[1.75rem] mr-auto font-bold">
               Create an account
             </h1>
-            <Link href={"/auth/login"}>
+            <Link href={"/auth/login"} className="hover:text-blue-1 transition-all">
               <p className="text-[1.25rem]">Log in</p>
             </Link>
           </div>

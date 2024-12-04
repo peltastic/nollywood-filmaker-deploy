@@ -32,7 +32,7 @@ export const useServicePayment = (
     if (isSuccess) {
       close();
       setPaymentStatus("pending");
-      window.open(url, "_blank");
+      // window.open(url, "_blank");
     }
   }, [isError, isSuccess]);
 
@@ -45,6 +45,7 @@ export const useServicePayment = (
             status: "completed";
           };
         }) => {
+          console.log(data)
           if (data.transaction.status === "completed") {
             nprogress.complete();
             dispatch(setFallbackRoute(null))

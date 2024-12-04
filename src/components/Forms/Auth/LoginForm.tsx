@@ -32,6 +32,8 @@ import { setConsultantInfo } from "@/lib/slices/consultants/consultantSlice";
 import { useLoginAdminMutation } from "@/lib/features/admin/auth/auth";
 import { setAdminAuthStatus } from "@/lib/slices/admin/authSlice";
 import { setAdminInfo } from "@/lib/slices/admin/adminSlice";
+import { setConsultantLogoutType } from "@/lib/slices/consultants/logoutSlice";
+import { setAdminLogoutType } from "@/lib/slices/admin/logoutSlice";
 
 type Props = {
   successRoute: string;
@@ -75,7 +77,7 @@ const LoginForm = (props: Props) => {
       });
       nprogress.complete();
       dispatch(setAuthStatus("LOGGED_IN"));
-      dispatch(setLogoutType("triggered"));
+      dispatch(setLogoutType("expired"));
       dispatch(setUserInfo(data.user));
       setCookie("refresh", data.refreshToken, {
         path: "/",
@@ -83,7 +85,7 @@ const LoginForm = (props: Props) => {
       });
       setTokenCookie(data.accessToken);
 
-      router.push("/user/dashboard");
+      router.push(fallBackRoute || "/user/dashboard");
     }
   }, [isSuccess, isError]);
 
@@ -105,7 +107,8 @@ const LoginForm = (props: Props) => {
       });
       nprogress.complete();
       dispatch(setAdminAuthStatus("LOGGED_IN"));
-      dispatch(setAdminInfo(loginAdminRes.data.user));
+      dispatch(setAdminLogoutType("expired"))
+      dispatch(setAdminInfo(loginAdminRes.data.admin));
       setCookie("ad_refresh", loginAdminRes.data.refreshToken, {
         path: "/",
         expires: new Date(Date.now() + 6.5 * 24 * 60 * 60 * 1000),
@@ -132,13 +135,14 @@ const LoginForm = (props: Props) => {
       });
       nprogress.complete();
       dispatch(setConsultantAuthStatus("LOGGED_IN"));
+      dispatch(setConsultantLogoutType("expired"))
       dispatch(setConsultantInfo(result.data.user));
       setCookie("con_refresh", result.data.refreshToken, {
         path: "/",
         expires: new Date(Date.now() + 6.5 * 24 * 60 * 60 * 1000),
       });
       setConsultantToken(result.data.accessToken);
-      router.push( "/consultants/dashboard");
+      router.push(consultantFallbackRoute || "/consultants/dashboard");
     }
   }, [result.isError, result.isSuccess]);
 

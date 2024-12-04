@@ -5,12 +5,14 @@ import userReducer from "./slices/userSlice";
 import authReducer from "./slices/authSlice";
 import routeReducer from "./slices/routeSlice";
 import logoutReducer from "./slices/logoutSlice";
+import consultantLogoutReducer from "./slices/consultants/logoutSlice";
 import consultantAuthReducer from "./slices/consultants/authSlice";
 import adminAuthReducer from "./slices/admin/authSlice";
 import adminReducer from "./slices/admin/adminSlice";
 import adminRouteReducer from "./slices/admin/routeSlice";
 import consultantReducer from "./slices/consultants/consultantSlice";
 import consultantRouteReducer from "./slices/consultants/routeSlice";
+import adminLogoutReducer from "./slices/admin/logoutSlice";
 import persistReducer from "redux-persist/lib/persistReducer";
 import { authApi } from "./features/users/auth/auth";
 import { servicesApi } from "./features/users/services/services";
@@ -39,10 +41,12 @@ const combinedReducer = combineReducers({
   logout: logoutReducer,
   consultantAuth: consultantAuthReducer,
   consultant: consultantReducer,
+  consultantLogout: consultantLogoutReducer,
   consultantRoute: consultantRouteReducer,
   adminAuth: adminAuthReducer,
-  admin: adminReducer,
+  adminuser: adminReducer,
   adminRoute: adminRouteReducer,
+  adminLogout: adminLogoutReducer
 });
 const persistedReducer = persistReducer(persistConfig, combinedReducer);
 export const store = configureStore({

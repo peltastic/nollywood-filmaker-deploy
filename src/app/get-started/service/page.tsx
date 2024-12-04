@@ -52,7 +52,7 @@ const ServicePage = (props: Props) => {
     },
     {
       value: "create-pitch",
-      label: "Create a Pitch based on my Script",
+      label: "Create a Movie Schedule",
       caption: "sent via email as download link",
     },
     {

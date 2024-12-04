@@ -28,18 +28,14 @@ const GetStartedPage = (props: Props) => {
         <div className="text-black-2">
           <h1 className="font-bold text-[1.5rem] mb-[4rem]">Welcome</h1>
           <h1 className="font-bold text-[1.5rem]">What do you want to do?</h1>
-          <p className="text-[1.13rem]">
-            Lorem ipsum dolor sit amet consectetur adipisc.
-          </p>
+          <p className="text-[1.13rem]">Please select a service</p>
         </div>
         <div className="flex flex-wrap md:flex-nowrap mt-10 gap-8">
           <button
-            onClick={() => setSelected("service")}
-            className={`${
-              selected === "service"
-                ? " text-yellow-1  rounded-md  relative overflow-hidden border-2 border-yellow-1  px-3  shadow-2xl transition-all before:absolute before:bottom-0  before:top-0 before:z-[-1] before:h-full  before:bg-black-9 before:transition-all before:duration-400  before:left-0 before:w-full"
-                : "border-stroke-2 before:w-0 before:left-0 text-black-2"
-            } transition-all cursor-pointer border w-full md:w-[18.6rem] flex items-center justify-center rounded-md h-[9.13rem]`}
+            onClick={() => {
+              router.push("/get-started/service");
+            }}
+            className=" hover:text-yellow-1 hover:border-2 hover:border-yellow-1  hover:px-3  hover:shadow-2xl  hover:before:absolute hover:before:bottom-0  hover:before:top-0 hover:before:z-[-1] hover:before:h-full  hover:before:bg-black-9 hover:before:transition-all hover:before:duration-400  hover:before:left-0 hover:before:w-full border-stroke-2 before:w-0 before:left-0 text-black-2 rounded-md relative overflow-hiddentransition-all transition-all cursor-pointer border w-full md:w-[18.6rem] flex items-center justify-center  h-[9.13rem]"
           >
             <div className="text-center">
               {selected === "service" ? (
@@ -61,12 +57,22 @@ const GetStartedPage = (props: Props) => {
             </div>
           </button>
           <button
-            onClick={() => setSelected("chat")}
-            className={`${
-              selected === "chat"
-                ? " text-yellow-1  rounded-md  relative overflow-hidden border-2 border-yellow-1  px-3  shadow-2xl transition-all before:absolute before:bottom-0  before:top-0 before:z-[-1] before:h-full  before:bg-black-9 before:transition-all before:duration-400  before:left-0 before:w-full"
-                : "border-stroke-2 before:w-0 before:left-0 text-black-2"
-            } transition-all cursor-pointer border w-full md:w-[18.6rem] flex items-center justify-center rounded-md h-[9.13rem]`}
+            onClick={() => {
+              if (authStatus === "LOGGED_OUT") {
+                dispatch(setFallbackRoute(`/get-started/chat`));
+                notify(
+                  "message",
+                  "Login Required",
+                  "You need to log in to use a service"
+                );
+                router.push("/auth/login");
+              } else {
+                router.push("/get-started/chat");
+              }
+            }}
+            className={
+              " hover:text-yellow-1 hover:border-2 hover:border-yellow-1  hover:px-3  hover:shadow-2xl  hover:before:absolute hover:before:bottom-0  hover:before:top-0 hover:before:z-[-1] hover:before:h-full  hover:before:bg-black-9 hover:before:transition-all hover:before:duration-400  hover:before:left-0 hover:before:w-full border-stroke-2 before:w-0 before:left-0 text-black-2 rounded-md relative overflow-hiddentransition-all transition-all cursor-pointer border w-full md:w-[18.6rem] flex items-center justify-center h-[9.13rem]"
+            }
           >
             <div className="text-center">
               {selected === "chat" ? (
@@ -97,7 +103,7 @@ const GetStartedPage = (props: Props) => {
               Back
             </UnstyledButton>
           ) : null}
-          <UnstyledButton
+          {/* <UnstyledButton
             clicked={() => {
               nprogress.start();
               if (selected === "service") {
@@ -124,7 +130,7 @@ const GetStartedPage = (props: Props) => {
           >
             <p className="mr-2">Next</p>
             <FaArrowRight className="text-[0.7rem]" />
-          </UnstyledButton>
+          </UnstyledButton> */}
         </div>
       </div>
     </HomeLayout>

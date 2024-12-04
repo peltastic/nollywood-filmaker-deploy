@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Image from "next/image";
 import React from "react";
 import Logo from "/public/assets/nav/logo.svg";
@@ -13,6 +13,9 @@ import Advert from "./Advert";
 import UserprofileMenu from "../ProfileMenu/UserprofileMenu";
 import ConsultantsProfileMenu from "../ProfileMenu/ConsultantsProfileMenu";
 import AdminProfileMenu from "../ProfileMenu/AdminProfileMenu";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
+import ProfileTarget from "../ProfileMenu/ProfileTarget";
 
 type Props = {
   removeOptions?: boolean;
@@ -103,10 +106,22 @@ const ServiceNavbar = (props: Props) => {
     ? adminLinks
     : navLink;
 
+  const userData = useSelector(
+    (state: RootState) => state.persistedState.user.user
+  );
+
+  const consultantData = useSelector(
+    (state: RootState) => state.persistedState.consultant.user
+  );
+
   return (
     <>
       <Advert />
-      <nav className={`${props.admin ? "py-6 xl:py-0" : "pt-4 md:pt-2 pb-6 md:pb-0"} flex items-center  text-black-1 border-b border-b-border-gray px-3 md:px-8`}>
+      <nav
+        className={`${
+          props.admin ? "py-6 xl:py-0" : "pt-4 md:pt-2 pb-6 md:pb-0"
+        } flex items-center  text-black-1 border-b border-b-border-gray px-3 md:px-8`}
+      >
         <Link
           href={
             props.admin
@@ -126,14 +141,13 @@ const ServiceNavbar = (props: Props) => {
             />
           </div>
         </Link>
-        {/* <div className="md:hidden ml-auto relative z-50">
-          <NavMobile dashboard links={navLink} />
-        </div> */}
         {props.removeOptions ? null : (
           <>
             <ul
               className={`${
-                props.admin ? "text-[0.88rem] hidden xl:flex " : "text-[1rem] hidden md:flex"
+                props.admin
+                  ? "text-[0.88rem] hidden xl:flex "
+                  : "text-[1rem] hidden md:flex"
               }  mx-6 gap-2   mr-auto`}
             >
               {data.map((el) => (
@@ -143,7 +157,10 @@ const ServiceNavbar = (props: Props) => {
                     el.link === pathname ? "border-b-4 border-black-3" : ""
                   }`}
                 >
-                  <Link className="py-6 px-2 block hover:text-blue-1 transition-all duration-200" href={el.link}>
+                  <Link
+                    className="py-6 px-2 block hover:text-blue-1 transition-all duration-200"
+                    href={el.link}
+                  >
                     {el.name}
                   </Link>
                 </li>
@@ -154,7 +171,15 @@ const ServiceNavbar = (props: Props) => {
               <div className="gap-4 hidden md:flex items-center">
                 <HiBell />
                 <BsFillQuestionCircleFill className="text-[1.4rem]" />
-                <Link href={props.admin ? "/admin/dashboard/settings": props.consultant ? "/consultants/dashboard/settings" : "/user/dashboard/settings"}>
+                <Link
+                  href={
+                    props.admin
+                      ? "/admin/dashboard/settings"
+                      : props.consultant
+                      ? "/consultants/dashboard/settings"
+                      : "/user/dashboard/settings"
+                  }
+                >
                   <div className="cursor-pointer">
                     <IoIosSettings />
                   </div>
@@ -163,11 +188,23 @@ const ServiceNavbar = (props: Props) => {
               {/* <FaCircleUser /> */}
               <MenuComponent
                 target={
-                  <div>
-                    <Image
-                      src={TestImage}
-                      alt="test-image"
-                      className="md:mr-4 w-[2.8rem]  md:w-[2rem]"
+                  <div className="cursor-pointer">
+                    <ProfileTarget
+                      fname={
+                        props.consultant
+                          ? consultantData?.fname || ""
+                          : userData?.fname || ""
+                      }
+                      lname={
+                        props.consultant
+                          ? consultantData?.lname || ""
+                          : userData?.lname || ""
+                      }
+                      ppicture={
+                        props.consultant
+                          ? consultantData?.ppicture || ""
+                          : userData?.ppicture || ""
+                      }
                     />
                   </div>
                 }

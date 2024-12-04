@@ -44,7 +44,7 @@ const ChatTime = (props: Props) => {
     <div className="">
       <h1 className="font-bold text-[1.5rem]">Let’s start with your details</h1>
       <h2 className="text-[1.13rem]">
-        Lorem ipsum dolor sit amet consectetur adipisc.
+        Please select a date and time for your chat appointment.
       </h2>
       <div className="flex flex-wrap xl:flex-nowrap gap-x-4 mt-10">
         <CustomCalender
@@ -64,9 +64,12 @@ const ChatTime = (props: Props) => {
           selectedTime={props.selectedTime}
           serviceSelection={props.serviceSelection}
           isFetching={isFetching}
-          time_slots={data?.availableHoursCount.map((el) =>
-            moment(el.time, ["HH:mm"]).format("h:mm A")
-          )}
+          time_slots={data?.availableHoursCount.map((el) => {
+            return {
+              time: moment(el.time, ["HH:mm"]).format("h:mm A"),
+              isAvailable: el.isAvailable,
+            };
+          })}
         />
       </div>
       <div className="w-full flex mt-14 mb-14">

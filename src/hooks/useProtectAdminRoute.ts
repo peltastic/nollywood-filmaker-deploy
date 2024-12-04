@@ -1,41 +1,41 @@
-import { setConsultantFallbackRoute } from "@/lib/slices/consultants/routeSlice";
-import { setFallbackRoute } from "@/lib/slices/routeSlice";
+import { setAdminFallbackRoute } from "@/lib/slices/admin/routeSlice";
 import { RootState } from "@/lib/store";
 import { notify } from "@/utils/notification";
 import { nprogress } from "@mantine/nprogress";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-export const useProtectRoute = () => {
+export const useProtectAdmin = () => {
   const authStatus = useSelector(
-    (state: RootState) => state.persistedState.auth.status
-  );
-  const logoutType = useSelector(
-    (state: RootState) => state.persistedState.logout.logoutType
+    (state: RootState) => state.persistedState.adminAuth.status
   );
 
-  const pathame = usePathname();
   const dispatch = useDispatch();
   const router = useRouter();
+  const pathname = usePathname();
+
+  const logoutType = useSelector(
+    (state: RootState) => state.persistedState.adminLogout.logoutType
+  );
 
   useEffect(() => {
     if (authStatus === "LOGGED_OUT" && logoutType === "expired") {
-      dispatch(setFallbackRoute(pathame));
+      dispatch(setAdminFallbackRoute(pathname));
       notify("message", "Your session has expired", "Please Log In");
       nprogress.complete();
-      router.push("/auth/login");
+      router.push("/admin/auth/login");
     }
   }, [authStatus]);
 
   useEffect(() => {
     if (authStatus === "LOGGED_OUT") {
-      dispatch(setFallbackRoute(pathame));
+      dispatch(setAdminFallbackRoute(pathname));
       notify("message", "Your session has expired", "Please Log In");
       nprogress.complete();
-      router.push("/auth/login");
+      router.push("/admin/auth/login");
     }
   }, []);
 
-  return null;
+  return null
 };

@@ -1,5 +1,5 @@
 import config from "@/config/config";
-import { ILoginData, ILoginResponse } from "@/interfaces/auth/auth";
+import { IAdminLoginResponse, ILoginData} from "@/interfaces/auth/auth";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const adminAuthApi = createApi({
@@ -8,7 +8,7 @@ export const adminAuthApi = createApi({
     baseUrl: config.API_URL,
   }),
   endpoints: (builder) => ({
-    loginAdmin: builder.mutation<ILoginResponse, ILoginData>({
+    loginAdmin: builder.mutation<IAdminLoginResponse, ILoginData>({
       query: (body) => ({
         url: "/api/admin/login",
         method: "POST",

@@ -76,12 +76,17 @@ const MarketingBudget = (props: Props) => {
   }, [paymentStatus]);
   return (
     <>
-      {opened ? <InitializingTransactionModal status={paymentStatus} /> : null}
+      {opened ? (
+        <InitializingTransactionModal
+          paymentUrl={data?.result.authorization_url}
+          status={paymentStatus}
+        />
+      ) : null}
 
       <ServiceLayout nonDashboard>
         <div className="flex flex-wrap items-start">
           <ServiceLeft
-          cost="105,000"
+            cost="105,000"
             title="Create a marketing budget"
             image={<Image src={MarketingBudgetImg} alt="production-budget" />}
             body={[
