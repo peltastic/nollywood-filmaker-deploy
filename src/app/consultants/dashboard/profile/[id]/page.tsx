@@ -20,7 +20,7 @@ import { useSelector } from "react-redux";
 type Props = {};
 
 const ConsultantProfilePage = (props: Props) => {
-  useProtectRoute("consultant");
+  useProtectRoute();
   const [opened, { open, close }] = useDisclosure();
   const consultantId = useSelector(
     (state: RootState) => state.persistedState.consultant.user?.id
