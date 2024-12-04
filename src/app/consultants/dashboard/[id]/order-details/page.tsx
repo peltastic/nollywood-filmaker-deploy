@@ -89,7 +89,7 @@ const OrderDetails = (props: Props) => {
                   chat={
                     data?.request.nameofservice === "Chat With A Professional"
                   }
-                  bodyData={bodyData}
+                  // bodyData={bodyData}
                   script="Movie script 2024.pdf"
                   title="Mission Impossible"
                 />
