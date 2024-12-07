@@ -74,7 +74,13 @@ const DraftLegalDocumentPage = (props: Props) => {
 
   return (
     <>
-      {opened ? <InitializingTransactionModal paymentUrl={data?.result.authorization_url} status={paymentStatus} /> : null}
+      {opened ? (
+        <InitializingTransactionModal
+          info="Pitch deck Creation  can take between 1-2 weeks. You will be mailed with an editable pitch deck and a calendar to choose a chat date"
+          paymentUrl={data?.result.authorization_url}
+          status={paymentStatus}
+        />
+      ) : null}
       <ServiceLayout nonDashboard>
         <div className="flex flex-wrap items-start">
           <ServiceLeft
@@ -106,10 +112,7 @@ const DraftLegalDocumentPage = (props: Props) => {
               <PaymentWindow successRoute="/success-page/draft-legal-documents" />
             </div>
           ) : (
-            <ServiceRight
-              subtitle="Lorem ipsum dolor sit amet consectetur adipisc."
-              title="Let’s start with your details"
-            >
+            <ServiceRight subtitle="" title="Let’s start with your details">
               {
                 <DraftLegalDocumentsForm
                   proceed={() => {

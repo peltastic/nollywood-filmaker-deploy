@@ -13,6 +13,7 @@ import { ICreateAvailabilityPayload } from "@/interfaces/consultants/profile/ava
 import {
   useEditAvailabilityMutation,
   useGetConsultantAvailabilityQuery,
+  useLazyGetConsultantAvailabilityQuery,
 } from "@/lib/features/consultants/profile/availability";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
@@ -20,6 +21,7 @@ import { nprogress } from "@mantine/nprogress";
 import { notify } from "@/utils/notification";
 import Spinner from "@/app/Spinner/Spinner";
 import { Skeleton } from "@mantine/core";
+import { useLazyGetAvailabilityHoursQuery } from "@/lib/features/users/services/chat/chat";
 
 type Props = {
   close: () => void;
@@ -38,9 +40,8 @@ const SetStandardHoursModal = (props: Props) => {
   const [availableHours, setAvailableHours] = useState<
     ICreateAvailabilityPayload[]
   >([]);
-  const result = useGetConsultantAvailabilityQuery(consultantId!, {
-    refetchOnMountOrArgChange: true
-  });
+  const [getConsultantAvailability, result] =
+    useLazyGetConsultantAvailabilityQuery();
 
   useEffect(() => {
     if (result.error) {
@@ -57,10 +58,9 @@ const SetStandardHoursModal = (props: Props) => {
           });
         setAvailableHours(defaultHours);
       }
-    } 
+    }
     if (result.data) {
-      console.log(result.data.availability)
-      setAvailableHours(result.data.availability)
+      setAvailableHours(result.data.availability);
     }
   }, [result.error, result.data]);
 
@@ -78,6 +78,10 @@ const SetStandardHoursModal = (props: Props) => {
       props.close();
     }
   }, [isError, isSuccess]);
+
+  useEffect(() => {
+    getConsultantAvailability(consultantId!);
+  }, []);
 
   const updateAvailabiltyHours = (
     index: number,
@@ -117,7 +121,7 @@ const SetStandardHoursModal = (props: Props) => {
 
   return (
     <section className="px-4 py-4">
-      <div className="flex">
+      <div className="flex items-center ">
         <h1 className="font-semibold text-[1.6rem] sm:text-[2rem]">
           Set standard hours
         </h1>
@@ -135,7 +139,7 @@ const SetStandardHoursModal = (props: Props) => {
           <p>• Save the changes</p>
         </div>
       </div>
-      {result.isFetching && !result.data ? (
+      {result.isFetching ? (
         <div className="mt-8">
           <div className="mt-4">
             <Skeleton height={50} />
@@ -178,7 +182,7 @@ const SetStandardHoursModal = (props: Props) => {
           Cancel
         </UnstyledButton>
         <UnstyledButton
-          clicked={() => setStandardHours({ schedule: availableHours})}
+          clicked={() => setStandardHours({ schedule: availableHours })}
           disabled={isLoading}
           class="flex w-[8rem] py-2 px-4 transition-all rounded-md  justify-center items-center text-white border border-black-3 disabled:border-black-2  bg-black-3 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
         >

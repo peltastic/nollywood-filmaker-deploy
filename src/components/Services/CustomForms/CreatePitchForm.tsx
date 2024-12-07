@@ -122,7 +122,7 @@ const CreatePitchForm = ({
             type=""
           />
         </div>
-        <ServiceInfo content="Pitch deck Creation  can take between 1-2 weeks. You will be mailed with an editable pitch deck and a calendar to choose a chat date" />
+        {/* <ServiceInfo content="Pitch deck Creation  can take between 1-2 weeks. You will be mailed with an editable pitch deck and a calendar to choose a chat date" /> */}
         <div className="w-full flex mt-14">
           <UnstyledButton
             type="button"

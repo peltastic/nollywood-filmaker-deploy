@@ -14,6 +14,7 @@ const initialState: UserInfoState = {
     lname: "",
     phone: "",
     role: "",
+    profilepics: "",
   },
 };
 
@@ -27,9 +28,14 @@ export const userInfoSlice = createSlice({
     resetUserInfo: (state) => {
       state.user = null;
     },
+    updateProfilePics: (state, action: PayloadAction<string>) => {
+      if (state.user) {
+        state.user.profilepics = action.payload;
+      }
+    },
   },
 });
 
-export const { setUserInfo, resetUserInfo } = userInfoSlice.actions;
+export const { setUserInfo, resetUserInfo, updateProfilePics } = userInfoSlice.actions;
 
 export default userInfoSlice.reducer;

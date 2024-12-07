@@ -59,56 +59,6 @@ const OrderDetailsPage = (props: Props) => {
     }
   }, [params]);
 
-  useEffect(() => {
-    if (data) {
-      if (data.request.nameofservice === "Chat With A Professional") {
-        setBodyData([
-          {
-            title: "Conversation title",
-            content: data.request.chat_title,
-          },
-          {
-            title: "Quick summary",
-            content: data.request.summary,
-          },
-          {
-            title: "Consultant type",
-            content: data.request.consultant,
-          },
-        ]);
-      } else if (data.request.nameofservice === "Read my Script and advice") {
-        setBodyData([
-          { title: "Logline/Synopsis", content: data.request.synopsis },
-          {
-            title: "Genre",
-            content: data.request.genre,
-          },
-          {
-            title: "Concerns",
-            content: data.request.concerns,
-          },
-        ]);
-      } else if (
-        data.request.nameofservice ===
-        "Watch the Final cut of my film and advice"
-      ) {
-        setBodyData([
-          {
-            title: "Logline/Synopsis",
-            content: data.request.synopsis,
-          },
-          {
-            title: "Genre",
-            content: data.request.genre,
-          },
-          {
-            title: "Platform For Exhibition",
-            content: data.request.genre,
-          },
-        ]);
-      }
-    }
-  }, [data]);
 
   return (
     <ServiceLayout>

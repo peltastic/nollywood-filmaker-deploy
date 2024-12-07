@@ -33,6 +33,6 @@ export interface IUserInfoData {
   email: string;
   role: string;
   expertise: string[];
-  ppicture?: string
+  profilepics?: string
   isVerified?: string
 } 

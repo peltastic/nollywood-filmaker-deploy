@@ -26,20 +26,7 @@ const ProfileRight = ({ data, isFetching }: Props) => {
           </div>
           <div className="mt-6">
             <h1 className="font-bold mb-2">Profile Bio</h1>
-            <div className="text-black-2">
-              <p>
-                I am based in Miami, Florida USA and am a Business Entrepreneur
-                with proven talent for driving website traffic along with a
-                superior quality deliverable.A keen acumen and web building
-                spirit help me in providing impeccable customer service for your
-                personal or business website.
-              </p>
-              <p className="mt-4">
-                There are many variations of passages of Lorem Ipsum available,
-                but the majority have suffered alteration in some form, by
-                injected humour
-              </p>
-            </div>
+            <div className="text-black-2">{data.bio}</div>
           </div>
         </div>
       )}
@@ -106,25 +93,35 @@ const ProfileRight = ({ data, isFetching }: Props) => {
           )}
         </div>
       </div>
-      <div className="mt-4 bg-white rounded-2xl pb-6 pt-2 px-6 border shadow-md border-stroke-5 shadow-[#1018280F]">
-        <div className="py-4 border-b border-b-stroke-6">
-          <h1 className="font-medium text-[1.13rem]">Location</h1>
+      {(data?.location?.city ||
+        data?.location?.country ||
+        data?.location?.state) && (
+        <div className="mt-4 bg-white rounded-2xl pb-6 pt-2 px-6 border shadow-md border-stroke-5 shadow-[#1018280F]">
+          <div className="py-4 border-b border-b-stroke-6">
+            <h1 className="font-medium text-[1.13rem]">Location</h1>
+          </div>
+          <div className="grid grid-cols-3 mt-8">
+            {data.location.city && (
+              <div className="">
+                <h1 className="font-bold">City</h1>
+                <p>{data.location.city}</p>
+              </div>
+            )}
+            {data.location.country && (
+              <div className="">
+                <h1 className="font-bold">Country</h1>
+                <p>{data.location.country}</p>
+              </div>
+            )}
+            {data.location.state && (
+              <div className="">
+                <h1 className="font-bold">State</h1>
+                <p>{data.location.state}</p>
+              </div>
+            )}
+          </div>
         </div>
-        <div className="grid grid-cols-3 mt-8">
-          <div className="">
-            <h1 className="font-bold">City</h1>
-            <p>+861 555 669 6985</p>
-          </div>
-          <div className="">
-            <h1 className="font-bold">Country</h1>
-            <p>niyi@gmail.com</p>
-          </div>
-          <div className="">
-            <h1 className="font-bold">Postal code</h1>
-            <p>+234</p>
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -7,7 +7,7 @@ import {
   useLazyFetchUserProfileDataQuery,
   useUpdateProfilePicMutation,
 } from "@/lib/features/users/profile/profile";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import Spinner from "@/app/Spinner/Spinner";
 import { FaUser } from "react-icons/fa";
@@ -17,13 +17,22 @@ import { notify } from "@/utils/notification";
 import {
   useLazyGetConsultantProfileQuery,
   useUpdateConsultantProfileMutation,
+  useUpdateConsultantProfilePicMutation,
 } from "@/lib/features/consultants/profile/profile";
+import { updateProfilePics } from "@/lib/slices/userSlice";
 
 type Props = {
   settingsType?: "consultant" | "admin";
 };
 
 const ProfileSettings = ({ settingsType }: Props) => {
+  const dispatch = useDispatch();
+  const profilePic = useSelector(
+    (state: RootState) => state.persistedState.user.user?.profilepics
+  );
+  const consultantProfilePic = useSelector(
+    (state: RootState) => state.persistedState.consultant.user?.profilepics
+  );
   const userId = useSelector(
     (state: RootState) => state.persistedState.user.user?.id
   );
@@ -36,6 +45,7 @@ const ProfileSettings = ({ settingsType }: Props) => {
 
   const [getUserProfile, { isFetching, data }] =
     useLazyFetchUserProfileDataQuery();
+
   const [getConsultantProfile, consultantProfileRes] =
     useLazyGetConsultantProfileQuery();
 
@@ -45,6 +55,9 @@ const ProfileSettings = ({ settingsType }: Props) => {
 
   const [updateProfilePic, result] = useUpdateProfilePicMutation();
 
+  const [updateConsultantProfilePic, consultantRes] =
+    useUpdateConsultantProfilePicMutation();
+
   useEffect(() => {
     if (result.isError) {
       notify(
@@ -53,9 +66,24 @@ const ProfileSettings = ({ settingsType }: Props) => {
       );
     }
     if (result.isSuccess) {
+      dispatch(updateProfilePics(result.data.profilePicUrl));
       notify("success", "Successful", "Profile image updated successfully!");
     }
   }, [result.isSuccess, result.isError]);
+  
+  useEffect(() => {
+    if (consultantRes.isError) {
+      notify(
+        "error",
+        (consultantRes.error as any).data?.message || "An error occured"
+      );
+    }
+    if (consultantRes.isSuccess) {
+      notify("success", "Successful", "Profile image updated successfully!");
+      
+    }
+  }, [consultantRes.isError, consultantRes.isSuccess]);
+
   useEffect(() => {
     if (settingsType === "consultant") {
       getConsultantProfile(consultanId!);
@@ -65,7 +93,11 @@ const ProfileSettings = ({ settingsType }: Props) => {
   }, [settingsType]);
 
   const [profilePicFile, setProfilePicFile] = useState<File | null>(null);
-  const [tempImgUrl, setTempImgUrl] = useState<string>("");
+  const [tempImgUrl, setTempImgUrl] = useState<string>(
+    settingsType === "consultant"
+      ? consultantProfilePic || ""
+      : profilePic || ""
+  );
   return (
     <div className="mt-10 flex flex-wrap lg:flex-nowrap gap-6">
       {isFetching || consultantProfileRes.isFetching ? (
@@ -118,16 +150,27 @@ const ProfileSettings = ({ settingsType }: Props) => {
                   Remove
                 </UnstyledButton>
                 <UnstyledButton
-                  disabled={!profilePicFile || result.isLoading}
-                  clicked={() =>
-                    updateProfilePic({
-                      file: profilePicFile,
-                      id: userId!,
-                    })
+                  disabled={
+                    !profilePicFile ||
+                    result.isLoading ||
+                    consultantRes.isLoading
                   }
+                  clicked={() => {
+                    if (settingsType === "consultant") {
+                      updateConsultantProfilePic({
+                        id: consultanId!,
+                        file: profilePicFile,
+                      });
+                    } else {
+                      updateProfilePic({
+                        file: profilePicFile,
+                        id: userId!,
+                      });
+                    }
+                  }}
                   class="disabled:text-gray-7 w-[6rem] flex justify-center text-black-3 font-bold"
                 >
-                  {result.isLoading ? (
+                  {result.isLoading || consultantRes.isLoading ? (
                     <div className="py-1 w-[1rem]">
                       <Spinner dark />
                     </div>
@@ -137,9 +180,9 @@ const ProfileSettings = ({ settingsType }: Props) => {
                 </UnstyledButton>
               </div>
             </div>
-            <p className="mt-10 text-center text-[0.88rem] text-black-2">
+            {/* <p className="mt-10 text-center text-[0.88rem] text-black-2">
               User since <span className="font-bold">Jan 12, 2022</span>
-            </p>
+            </p> */}
           </div>
           <div className="w-full lg:w-[70%] px-4 sm:px-10 py-10 rounded-xl bg-white border border-stroke-10">
             {settingsType === "consultant" && consultantProfileRes.data && (

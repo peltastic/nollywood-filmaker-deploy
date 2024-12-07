@@ -34,13 +34,13 @@ const SecureAccount = ({ setPageProps, data }: Props) => {
     if (isSuccess) {
       notifications.show({
         title: "Successful",
-        message: "Acoount created successfully, Please login",
+        message: "Acoount created successfully, Please verify your email",
         color: successColor,
         classNames: classes,
         position: "top-right",
       });
       nprogress.complete();
-      router.push("/auth/login");
+      router.push("/auth/email-verification");
     }
   }, [isSuccess, isError]);
 

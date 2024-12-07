@@ -30,7 +30,7 @@ const WatchFinalCutForm = ({
 }: Props) => {
   const router = useRouter();
   return (
-    <div className="w-full xl:w-[80%]">
+    <div className="w-full xl:w-[90%]">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -93,7 +93,7 @@ const WatchFinalCutForm = ({
             label="Share any particular concerns"
           />
         </div>
-        <ServiceInfo content="Final Cut watch can take between 3-5 days. You will be mailed with calendar dates to choose a chat" />
+        {/* <ServiceInfo content="Final Cut watch can take between 3-5 days. You will be mailed with calendar dates to choose a chat" /> */}
         <div className="w-full flex mt-14">
           <UnstyledButton
             type="button"

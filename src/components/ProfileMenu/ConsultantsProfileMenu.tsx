@@ -27,13 +27,12 @@ const ConsultantsProfileMenu = (props: Props) => {
     (state: RootState) => state.persistedState.consultant.user
   );
 
-  useProtectRouteConsultantRoute();
   const dispatch = useDispatch();
   const router = useRouter();
   return (
     <div className="bg-white w-[15rem]   py-3 text-gray-3">
       <div className="flex items-center px-3">
-        {consultantData?.ppicture ? (
+        {consultantData?.profilepics ? (
           <Image src={TestImage} alt="test-image" className="mr-4 w-[3rem]" />
         ) : (
           <div className="bg-black-3 font-bold text-[0.7rem] mr-4 h-[2.5rem] flex items-center justify-center w-[2.5rem] rounded-full text-white">

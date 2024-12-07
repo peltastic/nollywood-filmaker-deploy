@@ -42,7 +42,9 @@ export const profileApi = createApi({
       }),
     }),
     updateProfilePic: build.mutation<
-      unknown,
+      {
+        profilePicUrl: string
+      },
       {
         id: string;
         file: File | null;

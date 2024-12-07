@@ -5,6 +5,7 @@ import UnstyledButton from "../Button/UnstyledButton";
 import { useRouter } from "next/navigation";
 import MenuComponent from "../Menu/MenuComponent";
 import { IoIosArrowDown } from "react-icons/io";
+import { AspectRatio } from "@mantine/core";
 
 type Props = {
   consultant?: boolean;
@@ -21,7 +22,17 @@ const Header = (props: Props) => {
       <div className="flex flex-wrap items-center">
         <div className="flex items-center mr-auto w-full sm:w-auto">
           {props.ppicture ? (
-            <Image src={TestImage} alt="test-image" className="mr-4" />
+            <div className="mr-4">
+              <AspectRatio ratio={1800 / 1800}>
+                <Image
+                  src={props.ppicture}
+                  width={100}
+                  height={100}
+                  alt="test-image"
+                  className="h-[5rem] w-[5rem] rounded-full"
+                />
+              </AspectRatio>
+            </div>
           ) : (
             <div className="bg-black-3 font-bold text-[1.2rem] mr-4 h-[3.9rem] flex items-center justify-center w-[3.9rem] rounded-full text-white">
               {props.fname[0]} {props.lname[0]}

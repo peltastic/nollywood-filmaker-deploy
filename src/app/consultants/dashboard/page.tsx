@@ -250,7 +250,7 @@ const DashboardPage = (props: Props) => {
           <Header
             fname={userData?.fname || ""}
             lname={userData?.lname || ""}
-            ppicture={userData?.ppicture}
+            ppicture={userData?.profilepics}
             admin
             consultant
           />

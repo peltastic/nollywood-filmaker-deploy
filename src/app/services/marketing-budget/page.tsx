@@ -80,6 +80,7 @@ const MarketingBudget = (props: Props) => {
         <InitializingTransactionModal
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
+          info="Budget Creation  can take between 1-2 weeks. You will be mailed a link to a detailed, editable budget and a calendar to choose a chat date"
         />
       ) : null}
 
@@ -124,7 +125,7 @@ const MarketingBudget = (props: Props) => {
             </div>
           ) : (
             <ServiceRight
-              subtitle="Lorem ipsum dolor sit amet consectetur adipisc."
+              subtitle=""
               title="Let’s start with your details"
             >
               <MarketingBudgetForm

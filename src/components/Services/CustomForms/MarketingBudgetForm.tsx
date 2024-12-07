@@ -92,7 +92,7 @@ const MarketingBudgetForm = ({
             type=""
           />
         </div>
-        <ServiceInfo content="Budget Creation  can take between 1-2 weeks. You will be mailed a link to a detailed, editable budget and a calendar to choose a chat date" />
+        {/* <ServiceInfo content="Budget Creation  can take between 1-2 weeks. You will be mailed a link to a detailed, editable budget and a calendar to choose a chat date" /> */}
         <div className="w-full flex mt-14">
           <UnstyledButton
             type="button"

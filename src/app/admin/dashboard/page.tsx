@@ -317,7 +317,7 @@ const AdminDashboardPage = (props: Props) => {
           <Header
             fname={adminUserData.fname}
             lname={adminUserData.lname}
-            ppicture={adminUserData.ppicture}
+            ppicture={adminUserData.profilepics}
             admin
           />
           <div className="mt-16">

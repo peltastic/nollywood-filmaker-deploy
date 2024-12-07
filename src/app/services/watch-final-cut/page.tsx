@@ -80,8 +80,9 @@ const page = (props: Props) => {
         <InitializingTransactionModal
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
+          info="Final Cut watch can take between 3-5 days. You will be mailed with calendar dates to choose a chat"
         />
-      ) : null}
+       ) : null} 
       <ServiceLayout nonDashboard>
         <div className="flex flex-wrap items-start">
           <ServiceLeft
@@ -121,7 +122,7 @@ const page = (props: Props) => {
             </div>
           ) : (
             <ServiceRight
-              subtitle="Lorem ipsum dolor sit amet consectetur adipisc."
+              subtitle=""
               title="Let’s start with your details"
             >
               <WatchFinalCutForm

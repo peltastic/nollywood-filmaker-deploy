@@ -7,6 +7,7 @@ import HomeLayout from "@/components/Layouts/HomeLayout";
 import Stepper from "@/components/Stepper/Stepper";
 import { IRegisterdata } from "@/interfaces/auth/auth";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 
 type Props = {};
@@ -34,13 +35,6 @@ const RegisterPage = (props: Props) => {
     });
   };
 
-  const setRegisterDataHandler = (key: string, value: string) => {
-    setRegisterData({
-      ...registerData,
-      [key]: value,
-    });
-  };
-
   const setUserDetailsHandler = (data: {
     email: string;
     lname: string;
@@ -62,7 +56,10 @@ const RegisterPage = (props: Props) => {
             <h1 className="w-full sm:w-auto text-[1.75rem] mr-auto font-bold">
               Create an account
             </h1>
-            <Link href={"/auth/login"} className="hover:text-blue-1 transition-all">
+            <Link
+              href={"/auth/login"}
+              className="hover:text-blue-1 transition-all"
+            >
               <p className="text-[1.25rem]">Log in</p>
             </Link>
           </div>

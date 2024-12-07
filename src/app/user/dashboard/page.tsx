@@ -90,7 +90,7 @@ const DashboardHomePgae = (props: Props) => {
           <Header
             fname={userData?.fname || ""}
             lname={userData?.lname || ""}
-            ppicture={userData?.ppicture}
+            ppicture={userData?.profilepics}
           />
 
           <div className="mt-14">

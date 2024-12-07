@@ -78,6 +78,8 @@ const ReadMyScriptPage = (props: Props) => {
         <InitializingTransactionModal
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
+          info="Script reading can take between 1-2 weeks. You will be mailed with
+          calendar dates to choose a chat"
         />
       ) : null}
       <ServiceLayout nonDashboard>
@@ -116,7 +118,7 @@ const ReadMyScriptPage = (props: Props) => {
             </div>
           ) : (
             <ServiceRight
-              subtitle="Lorem ipsum dolor sit amet consectetur adipisc."
+              subtitle=""
               title="Let’s start with your details"
             >
               {

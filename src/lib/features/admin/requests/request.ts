@@ -3,12 +3,12 @@ import {
   IAppointConsultantPayload,
   IFetchConsultantsResponse,
 } from "@/interfaces/consultants/dashboard/request";
-import { adminBaseQuery } from "@/lib/baseQuery";
+import {  adminBaseQueryWithReauth } from "@/lib/baseQuery";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const adminRequestApi = createApi({
   reducerPath: "adminRequestApi",
-  baseQuery: adminBaseQuery,
+  baseQuery: adminBaseQueryWithReauth,
   endpoints: (build) => ({
     fetchCustomerRequest: build.query<
       IFetchCustomerRequestsResponse,

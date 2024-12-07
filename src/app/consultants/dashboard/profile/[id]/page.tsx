@@ -7,12 +7,12 @@ import MenuComponent from "@/components/Menu/MenuComponent";
 import ModalComponent from "@/components/Modal/Modal";
 import ConsultantProfileLeft from "@/components/Profile/ConsultantProfileLeft";
 import ConsultantProfileRight from "@/components/Profile/ConsultantProfileRight";
-import { useProtectRoute } from "@/hooks/useProtectRoute";
+import { useProtectRouteConsultantRoute } from "@/hooks/useProtectConsultantRoute";
 import { useGetConsultantProfileQuery } from "@/lib/features/consultants/profile/profile";
 import { RootState } from "@/lib/store";
 import { useDisclosure } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GoDotFill } from "react-icons/go";
 import { IoIosArrowBack, IoIosArrowDown } from "react-icons/io";
 import { useSelector } from "react-redux";
@@ -20,12 +20,15 @@ import { useSelector } from "react-redux";
 type Props = {};
 
 const ConsultantProfilePage = (props: Props) => {
-  useProtectRoute();
+  useProtectRouteConsultantRoute();
   const [opened, { open, close }] = useDisclosure();
+
   const consultantId = useSelector(
     (state: RootState) => state.persistedState.consultant.user?.id
   );
-  const {data, isFetching} = useGetConsultantProfileQuery(consultantId!);
+  const { data, isFetching } = useGetConsultantProfileQuery(consultantId!, {
+    refetchOnMountOrArgChange: true,
+  });
   const router = useRouter();
   const status: any = "active";
   const statusClassname =
@@ -36,6 +39,8 @@ const ConsultantProfilePage = (props: Props) => {
       : status === "pending"
       ? "bg-stroke-4 text-black-6"
       : "bg-light-yellow text-dark-yellow";
+
+
   return (
     <ServiceLayout consultant>
       <>

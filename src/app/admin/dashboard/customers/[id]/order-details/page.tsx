@@ -112,10 +112,46 @@ const CustomerOrderDetailsPage = (props: Props) => {
                     chat={
                       data?.request.nameofservice === "Chat With A Professional"
                     }
+                    concerns={data?.request.concerns}
+                    consultant_type={data?.request.consultant}
+                    genre={data?.request.genre}
+                    platform={data?.request.platform}
+                    synopsis={data?.request.synopsis}
+                    summary={data?.request.summary}
+                    script={
+                      data?.request.nameofservice ===
+                        "Read my Script and advice" ||
+                      data?.request.nameofservice ===
+                        "Look at my Budget and advice" ||
+                      data?.request.nameofservice ===
+                        "Create a Production budget" ||
+                      data?.request.nameofservice ===
+                        "Create a Pitch based on my Script"
+                        ? data?.request.movie_title
+                        : null
+                    }
+                    fileLink={data?.request.files && data.request.files[0]}
+                    title={data?.request.movie_title}
+                    link={data?.request.link}
+                    chat_title={data?.request.chat_title}
+                    actors={data?.request.actors}
+                    budget={data?.request.budgetrange}
+                    days={data?.request.days}
+                    info={data?.request.info}
+                    ooh={data?.request.oohTarget}
+                    target_social={data?.request.socialTarget}
+                    visual={data?.request.visualStyle}
+                    company={data?.request.productionCompany}
+                    contact_info={data?.request.contactInfo}
+                  />
+                  {/* <OrderDetailsBody
+                    chat={
+                      data?.request.nameofservice === "Chat With A Professional"
+                    }
                     // bodyData={bodyData}
                     script="Movie script 2024.pdf"
                     title="Mission Impossible"
-                  />
+                  /> */}
                 </div>
               </div>
             </div>

@@ -103,10 +103,6 @@ const ReadMyScriptForm = ({
             label="Share any particular concerns"
           />
         </div>
-        <ServiceInfo
-          content="Script reading can take between 1-2 weeks. You will be mailed with
-        calendar dates to choose a chat"
-        />
         <div className="w-full flex mt-14">
           <UnstyledButton
             type="button"

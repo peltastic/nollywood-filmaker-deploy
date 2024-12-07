@@ -202,8 +202,8 @@ const ServiceNavbar = (props: Props) => {
                       }
                       ppicture={
                         props.consultant
-                          ? consultantData?.ppicture || ""
-                          : userData?.ppicture || ""
+                          ? consultantData?.profilepics || ""
+                          : userData?.profilepics || ""
                       }
                     />
                   </div>

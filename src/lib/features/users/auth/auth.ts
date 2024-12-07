@@ -22,7 +22,10 @@ export const authApi = createApi({
         body,
       }),
     }),
+    verifyEmail: builder.query<unknown, string>({
+      query: (code) => `/api/users/verify/${code}`
+    })
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation } = authApi;
+export const { useRegisterMutation, useLoginMutation, useLazyVerifyEmailQuery } = authApi;

@@ -102,7 +102,7 @@ const BudgetAndAdviceForm = ({
             label="Share any particular concerns"
           />
         </div>
-        <ServiceInfo content="Budget Review  can take between 3-5 days. You will be mailed with calendar dates to choose a chat" />
+        {/* <ServiceInfo content="Budget Review  can take between 3-5 days. You will be mailed with calendar dates to choose a chat" /> */}
         <div className="w-full flex mt-14">
           <UnstyledButton
             type="button"

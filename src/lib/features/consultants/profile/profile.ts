@@ -1,4 +1,7 @@
-import { IConsultantProfileResponse, IUpdateConsultantProfilePayload } from "@/interfaces/consultants/profile/profile";
+import {
+  IConsultantProfileResponse,
+  IUpdateConsultantProfilePayload,
+} from "@/interfaces/consultants/profile/profile";
 import { consultantBaseQueryWithReauth } from "@/lib/baseQuery";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
@@ -19,6 +22,22 @@ export const consultantProfileApi = createApi({
         body,
       }),
     }),
+    updateConsultantProfilePic: build.mutation<
+      unknown,
+      { id: string; file: File | null }
+    >({
+      query: ({ file, id }) => {
+        const formData = new FormData();
+        if (file) {
+          formData.append("file", file);
+        }
+        return {
+          url: `/api/consultants/update/${id}`,
+          method: "PUT",
+          body: formData,
+        };
+      },
+    }),
   }),
 });
 
@@ -26,4 +45,5 @@ export const {
   useLazyGetConsultantProfileQuery,
   useGetConsultantProfileQuery,
   useUpdateConsultantProfileMutation,
+  useUpdateConsultantProfilePicMutation,
 } = consultantProfileApi;

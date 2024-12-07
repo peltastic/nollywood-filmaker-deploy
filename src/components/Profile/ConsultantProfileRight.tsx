@@ -1,6 +1,11 @@
+import { ICreateAvailabilityPayload } from "@/interfaces/consultants/profile/availability";
 import { IConsultantProfileResponse } from "@/interfaces/consultants/profile/profile";
+import { useLazyGetConsultantAvailabilityQuery } from "@/lib/features/consultants/profile/availability";
+import { RootState } from "@/lib/store";
+import { convert12HT24, get12HTime } from "@/utils/helperFunction";
 import { Skeleton } from "@mantine/core";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 type Props = {
   data?: IConsultantProfileResponse;
@@ -10,30 +15,39 @@ type Props = {
 const expertise = ["Producer", "Director", "Composer"];
 
 const ConsultantProfileRight = ({ isFetching, data }: Props) => {
+  const consultantId = useSelector(
+    (state: RootState) => state.persistedState.consultant.user?.id
+  );
+  const [availableHours, setAvailableHours] = useState<
+    ICreateAvailabilityPayload[]
+  >([]);
+
+  const [getConsultantAvailability, result] =
+    useLazyGetConsultantAvailabilityQuery();
+
+  useEffect(() => {
+    if (result.isSuccess) {
+      setAvailableHours(result.data.availability);
+    }
+  }, [result.isSuccess]);
+
+  useEffect(() => {
+    getConsultantAvailability(consultantId!);
+  }, []);
+
   return (
     <div className="">
-      <div className="bg-white rounded-2xl pb-6 pt-2 px-6 border shadow-md border-stroke-5 shadow-[#1018280F]">
-        <div className="py-4 border-b border-b-stroke-6">
-          <h1 className="font-medium text-[1.13rem]">About</h1>
-        </div>
-        <div className="mt-6">
-          <h1 className="font-bold mb-2">Profile Bio</h1>
-          <div className="text-black-2">
-            <p>
-              I am based in Miami, Florida USA and am a Business Entrepreneur
-              with proven talent for driving website traffic along with a
-              superior quality deliverable.A keen acumen and web building spirit
-              help me in providing impeccable customer service for your personal
-              or business website.
-            </p>
-            <p className="mt-4">
-              There are many variations of passages of Lorem Ipsum available,
-              but the majority have suffered alteration in some form, by
-              injected humour
-            </p>
+      {data?.bio && (
+        <div className="bg-white rounded-2xl pb-6 pt-2 px-6 border shadow-md border-stroke-5 shadow-[#1018280F]">
+          <div className="py-4 border-b border-b-stroke-6">
+            <h1 className="font-medium text-[1.13rem]">About</h1>
+          </div>
+          <div className="mt-6">
+            <h1 className="font-bold mb-2">Profile Bio</h1>
+            <div className="text-black-2">{data.bio}</div>
           </div>
         </div>
-      </div>
+      )}
       <div className="mt-4 bg-white rounded-2xl pb-6 pt-2 px-6 border shadow-md border-stroke-5 shadow-[#1018280F]">
         <div className="py-4 border-b border-b-stroke-6">
           <h1 className="font-medium text-[1.13rem]">Skills/Expertise</h1>
@@ -62,63 +76,90 @@ const ConsultantProfileRight = ({ isFetching, data }: Props) => {
           )}
         </div>
       </div>
-      <div className="mt-4 bg-white rounded-2xl pb-6 pt-2 px-6 border shadow-md border-stroke-5 shadow-[#1018280F]">
-        <div className="py-4 border-b border-b-stroke-6">
-          <h1 className="font-medium text-[1.13rem]">Contact</h1>
-        </div>
-        <div className="grid mid:grid-cols-3 gap-x-3 mt-8">
-          {isFetching ? (
-            <>
-              <Skeleton height={50} />
-              <Skeleton height={50} />
-              <Skeleton height={50} />
-            </>
-          ) : (
-            <>
-              <div className="mb-4 mid:mb-0">
-                <h1 className="font-bold">Phone</h1>
-                <p>{data?.phone}</p>
-              </div>
-              <div className="mb-4 mid:mb-0">
-                <h1 className="font-bold">Email</h1>
-                <p>{data?.email}</p>
-              </div>
-              <div className="mb-4 mid:mb-0">
-                <h1 className="font-bold">Website</h1>
-                <p>www.anthillstudios.com</p>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-      <div className="mt-4 bg-white rounded-2xl pb-6 pt-2 px-6 border shadow-md border-stroke-5 shadow-[#1018280F]">
-        <div className="py-4 border-b border-b-stroke-6">
-          <h1 className="font-medium text-[1.13rem]">Location</h1>
-        </div>
-        <div className="grid mid:grid-cols-3 mt-8">
-          <div className="mb-4 mid:mb-0">
-            <h1 className="font-bold">City</h1>
-            <p>+861 555 669 6985</p>
+      {(data?.phone || data?.email || data?.website) && (
+        <div className="mt-4 bg-white rounded-2xl pb-6 pt-2 px-6 border shadow-md border-stroke-5 shadow-[#1018280F]">
+          <div className="py-4 border-b border-b-stroke-6">
+            <h1 className="font-medium text-[1.13rem]">Contact</h1>
           </div>
-          <div className="mb-4 mid:mb-0">
-            <h1 className="font-bold">Country</h1>
-            <p>niyi@gmail.com</p>
-          </div>
-          <div className="mb-4 mid:mb-0">
-            <h1 className="font-bold">Postal code</h1>
-            <p>+234</p>
+          <div className="grid mid:grid-cols-3 gap-x-3 mt-8">
+            {isFetching ? (
+              <>
+                <Skeleton height={50} />
+                <Skeleton height={50} />
+                <Skeleton height={50} />
+              </>
+            ) : (
+              <>
+                {data?.phone && (
+                  <div className="mb-4 mid:mb-0">
+                    <h1 className="font-bold">Phone</h1>
+                    <p>{data?.phone}</p>
+                  </div>
+                )}
+                {data?.email && (
+                  <div className="mb-4 mid:mb-0">
+                    <h1 className="font-bold">Email</h1>
+                    <p>{data?.email}</p>
+                  </div>
+                )}
+                {data?.website && (
+                  <div className="mb-4 mid:mb-0">
+                    <h1 className="font-bold">Website</h1>
+                    <p>{data.website}</p>
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
-      </div>
-      <div className="mt-4 bg-white rounded-2xl pb-6 pt-2 px-6 border shadow-md border-stroke-5 shadow-[#1018280F]">
-        <div className="py-4 border-b border-b-stroke-6">
-          <h1 className="font-medium text-[1.13rem]">Availability</h1>
+      )}
+      {(data?.location?.city ||
+        data?.location?.country ||
+        data?.location?.state) && (
+        <div className="mt-4 bg-white rounded-2xl pb-6 pt-2 px-6 border shadow-md border-stroke-5 shadow-[#1018280F]">
+          <div className="py-4 border-b border-b-stroke-6">
+            <h1 className="font-medium text-[1.13rem]">Location</h1>
+          </div>
+          <div className="grid mid:grid-cols-3 mt-8">
+            {data.location.city && (
+              <div className="mb-4 mid:mb-0">
+                <h1 className="font-bold">City</h1>
+                <p>{data.location.city}</p>
+              </div>
+            )}
+            {data.location.country && (
+              <div className="mb-4 mid:mb-0">
+                <h1 className="font-bold">Country</h1>
+                <p>{data.location.country}</p>
+              </div>
+            )}
+            {data.location.state && (
+              <div className="mb-4 mid:mb-0">
+                <h1 className="font-bold">State</h1>
+                <p>{data.location.state}</p>
+              </div>
+            )}
+          </div>
         </div>
-        <div className="mt-6">
-          <h1 className="font-bold">Monday</h1>
-          <p>9:00AM - 5:00PM</p>
+      )}
+      {availableHours.length > 0 && (
+        <div className="mt-4 bg-white rounded-2xl pb-6 pt-2 px-6 border shadow-md border-stroke-5 shadow-[#1018280F]">
+          <div className="py-4 border-b border-b-stroke-6">
+            <h1 className="font-medium text-[1.13rem]">Availability</h1>
+          </div>
+          {availableHours.map((el) => (
+            <div className="mt-6" key={el.day}>
+              <h1 className="font-bold">{el.day}</h1>
+              <p>
+                {convert12HT24(el.otime.hours)}:00 
+                {get12HTime(el.otime.hours)} - &nbsp;
+                {convert12HT24(el.ctime.hours)}:00 {get12HTime(el.ctime.hours)}
+                
+              </p>
+            </div>
+          ))}
         </div>
-      </div>
+      )}
     </div>
   );
 };

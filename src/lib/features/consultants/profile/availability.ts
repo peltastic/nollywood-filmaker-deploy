@@ -27,4 +27,5 @@ export const availabilityApi = createApi({
 export const {
   useEditAvailabilityMutation,
   useGetConsultantAvailabilityQuery,
+  useLazyGetConsultantAvailabilityQuery
 } = availabilityApi;

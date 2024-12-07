@@ -1,5 +1,5 @@
 import config from "@/config/config";
-import { getCookie, setConsultantToken, setTokenCookie } from "@/utils/storage";
+import { getCookie, setAdminToken, setConsultantToken, setTokenCookie } from "@/utils/storage";
 import {
   BaseQueryFn,
   FetchArgs,
@@ -10,6 +10,7 @@ import { setAuthStatus } from "./slices/authSlice";
 import { setLogoutType } from "./slices/logoutSlice";
 import { setConsultantAuthStatus } from "./slices/consultants/authSlice";
 import { setAdminAuthStatus } from "./slices/admin/authSlice";
+import { setAdminLogoutType } from "./slices/admin/logoutSlice";
 
 export const baseQuery = fetchBaseQuery({
   baseUrl: config.API_URL,
@@ -31,8 +32,8 @@ export const baseQueryWithReauth: BaseQueryFn<
   const token = getCookie("token");
   const refreshToken = getCookie("refresh");
 
-  if (!token || token == "undefined") {
-    if (!refreshToken) {
+  if (!token || token === "undefined") {
+    if (!refreshToken || refreshToken === "undefined") {
       api.dispatch(setLogoutType("expired"));
       api.dispatch(setAuthStatus("LOGGED_OUT"));
     }
@@ -87,8 +88,8 @@ export const consultantBaseQueryWithReauth: BaseQueryFn<
   let result = await consultantBaseQuery(args, api, extraOptions);
   const token = getCookie("con_token");
   const refreshToken = getCookie("con_refresh");
-  if (!token) {
-    if (!refreshToken) {
+  if (!token || token === "undefined") {
+    if (!refreshToken || refreshToken === "undefined" ) {
       // api.dispatch(setLogoutType("expired"));
       api.dispatch(setConsultantAuthStatus("LOGGED_OUT"));
     }
@@ -124,18 +125,35 @@ export const adminBaseQuery = fetchBaseQuery({
   }
 })
 
-// export const adminBaseQueryWithReauth:  BaseQueryFn<
-// string | FetchArgs,
-// unknown,
-// FetchBaseQueryError
-// > = async (args, api, extraOptions) => {
-//   let result = await adminBaseQuery(args, api, extraOptions)
-//   const token = getCookie("ad_token")
-//   const refresh_token = getCookie("ad_refresh")
-//   if (!token) {
-//     if (!refresh_token) {
-//       api.dispatch(setAdminAuthStatus("LOGGED_OUT"))
-//     }
-//     const r
-//   }
-// }
+export const adminBaseQueryWithReauth:  BaseQueryFn<
+string | FetchArgs,
+unknown,
+FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  let result = await adminBaseQuery(args, api, extraOptions)
+  const token = getCookie("ad_token")
+  const refresh_token = getCookie("ad_refresh")
+  if (!token || token === "undefined") {
+    if (!refresh_token || refresh_token === "undefined") {
+      api.dispatch(setAdminAuthStatus("LOGGED_OUT"))
+      api.dispatch(setAdminLogoutType("expired"))
+    }
+    const refreshResult: any = await baseQuery(
+      {
+        url: "/api/admin/admin/getaccess",
+        headers: {
+          Authorization: `Bearer ${refresh_token}`
+        }
+      },
+      api,
+      extraOptions
+    )
+    if (refreshResult.error && refreshResult.error.status === 401) {
+      api.dispatch(setAdminLogoutType("expired"));
+      api.dispatch(setAdminAuthStatus("LOGGED_OUT"));
+    }
+    setAdminToken(refreshResult.data?.accessToken)
+    result = await adminBaseQuery(args, api, extraOptions)
+  }
+  return result
+}
