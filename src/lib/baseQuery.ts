@@ -138,7 +138,7 @@ FetchBaseQueryError
       api.dispatch(setAdminAuthStatus("LOGGED_OUT"))
       api.dispatch(setAdminLogoutType("expired"))
     }
-    const refreshResult: any = await baseQuery(
+    const refreshResult: any = await adminBaseQuery(
       {
         url: "/api/admin/admin/getaccess",
         headers: {

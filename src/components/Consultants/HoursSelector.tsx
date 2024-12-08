@@ -4,6 +4,7 @@ import SelectComponent from "../Select/SelectComponent";
 import { ICreateAvailabilityPayload } from "@/interfaces/consultants/profile/availability";
 import { time_slots } from "@/utils/constants/constants";
 import { convert12HT24, get12HTime } from "@/utils/helperFunction";
+import moment from "moment";
 
 type Props = {
   day: string;
@@ -31,14 +32,10 @@ const HoursSelector = (props: Props) => {
   useEffect(() => {
     if (props.data) {
       setOpenTimeValue(
-        `${convert12HT24(props.data.otime.hours)}:00 ${get12HTime(
-          props.data.otime.hours
-        )}`
+        moment(`${props.data.otime.hours}:00 `, ["HH:mm"]).format("h:mm A")
       );
       setCloseTimeValue(
-        `${convert12HT24(props.data.ctime.hours)}:00 ${get12HTime(
-          props.data.ctime.hours
-        )}`
+        moment(`${props.data.ctime.hours}:00`, ["HH:mm"]).format("h:mm A")
       );
     }
   }, [props.data]);
@@ -76,7 +73,11 @@ const HoursSelector = (props: Props) => {
                   props.updateHours(
                     props.index,
                     {
-                      hours: convert12HT24(Number(val.split(":")[0]), true),
+                      hours: Number(
+                        moment(`${val}:00 `, ["h:mm A"])
+                          .format("HH:mm")
+                          .split(":")[0]
+                      ),
                       minutes: 0,
                       seconds: 0,
                     },
@@ -101,7 +102,11 @@ const HoursSelector = (props: Props) => {
                   props.updateHours(
                     props.index,
                     {
-                      hours: convert12HT24(Number(val.split(":")[0]), true),
+                      hours: Number(
+                        moment(`${val}:00 `, ["h:mm A"])
+                          .format("HH:mm")
+                          .split(":")[0]
+                      ),
                       minutes: 0,
                       seconds: 0,
                     },

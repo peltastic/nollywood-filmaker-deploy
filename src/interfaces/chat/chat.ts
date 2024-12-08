@@ -4,53 +4,46 @@ export interface IChatWithProPayload {
   type: "Chat";
   chat_title: string;
   date: string;
-  time: {
-    hours: number;
-    minutes: number;
-    seconds: number;
-  };
+  time: string;
   summary: string;
   consultant: string;
 }
 
-
 export interface ITimeSlotsResponse {
-  availableHoursCount: ITimeSlots[]
+  availableHoursCount: ITimeSlots[];
 }
 
 export interface ITimeSlots {
-  time: string
-  isAvailable: boolean
+  time: string;
+  isAvailable: boolean;
 }
 
-
 export interface ISendChatMessagePayload {
-  uid: string
-  role: "consultant" | "user" | "admin"
-  name: string
-  room: string
-  message: string
+  uid: string;
+  role: "consultant" | "user" | "admin";
+  name: string;
+  room: string;
+  message: string;
 }
 
 export interface ISendChatMessageFilePayload {
-  uid: string
-  role: string
-  name: string
-  room: string
-  file: File
+  uid: string;
+  role: string;
+  name: string;
+  room: string;
+  file: File;
 }
 
 export interface IChatMessages {
-  _id: string
-  uid: string
-  role: "user" | "consultant" | "admin"
-  name: string
-  room: string
-  message: string
-  timestamp: string
+  _id: string;
+  uid: string;
+  role: "user" | "consultant" | "admin";
+  name: string;
+  room: string;
+  message: string;
+  timestamp: string;
 }
 
-
 export interface IChatMessagesResponse {
-  messages: IChatMessages[]
+  messages: IChatMessages[];
 }

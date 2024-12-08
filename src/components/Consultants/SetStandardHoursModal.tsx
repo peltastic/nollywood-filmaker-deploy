@@ -182,7 +182,10 @@ const SetStandardHoursModal = (props: Props) => {
           Cancel
         </UnstyledButton>
         <UnstyledButton
-          clicked={() => setStandardHours({ schedule: availableHours })}
+          clicked={() => {
+            setStandardHours({ schedule: availableHours });
+
+          }}
           disabled={isLoading}
           class="flex w-[8rem] py-2 px-4 transition-all rounded-md  justify-center items-center text-white border border-black-3 disabled:border-black-2  bg-black-3 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
         >

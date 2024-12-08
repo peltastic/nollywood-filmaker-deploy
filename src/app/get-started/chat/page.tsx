@@ -193,14 +193,11 @@ const GetStartedChatPage = (props: Props) => {
                               consultant: chatData.consultant,
                               date: moment(currentDate).format("YYYY-MM-DD"),
                               summary: chatData.summary,
-                              time: {
-                                hours: convert12HT24(
-                                  Number(chatData.time.split(":")[0]),
-                                  true
-                                ),
-                                minutes: 0,
-                                seconds: 0,
-                              },
+                              time: `${moment(currentDate).format(
+                                "YYYY-MM-DD"
+                              )}T${moment(chatData.time, ["h:mm A"]).format(
+                                "HH:mm"
+                              )}:00+01:00`,
                               title: "Chat With A Professional",
                               type: "Chat",
                               userId,

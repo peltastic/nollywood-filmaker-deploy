@@ -49,7 +49,7 @@ export const testSelectData = [
     label: "Faith-Based",
     value: "Faith-Based",
   },
-]; 
+];
 
 export const testExhibitionData = [
   {
@@ -70,8 +70,8 @@ export const testExhibitionData = [
   },
   {
     label: "TV Broadcast",
-    value: "TV Broadcast"
-  }
+    value: "TV Broadcast",
+  },
 ];
 
 export const consultantTypesData = [
@@ -303,12 +303,11 @@ export const defaultAvailabilityHours: {
 
 export const time_slots = [
   { label: "9:00 AM", value: "9:00 AM" },
-
   {
     label: "11:00 AM",
     value: "11:00 AM",
   },
- 
+
   {
     label: "1:00 PM",
     value: "1:00 PM",
