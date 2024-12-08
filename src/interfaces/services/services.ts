@@ -11,6 +11,7 @@ interface InitializeReadMyScriptPayload extends GeneralType {
   files: File | null;
   concerns?: string;
   type: "request";
+  fileName: string
 }
 interface IServiceResponse {
   result: {

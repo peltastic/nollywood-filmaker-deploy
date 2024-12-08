@@ -34,6 +34,7 @@ import { setAdminAuthStatus } from "@/lib/slices/admin/authSlice";
 import { setAdminInfo } from "@/lib/slices/admin/adminSlice";
 import { setConsultantLogoutType } from "@/lib/slices/consultants/logoutSlice";
 import { setAdminLogoutType } from "@/lib/slices/admin/logoutSlice";
+import { notify } from "@/utils/notification";
 
 type Props = {
   successRoute: string;
@@ -65,6 +66,10 @@ const LoginForm = (props: Props) => {
   useEffect(() => {
     if (isError) {
       nprogress.complete();
+      if (!(error as any).data.isverified) {
+        notify("message", "Please verify your account before logging in");
+        return router.push("/auth/email-verification");
+      }
       setErrorMessage((error as any).data?.message || "An Error Occured");
     }
     if (isSuccess) {
@@ -107,7 +112,7 @@ const LoginForm = (props: Props) => {
       });
       nprogress.complete();
       dispatch(setAdminAuthStatus("LOGGED_IN"));
-      dispatch(setAdminLogoutType("expired"))
+      dispatch(setAdminLogoutType("expired"));
       dispatch(setAdminInfo(loginAdminRes.data.admin));
       setCookie("ad_refresh", loginAdminRes.data.refreshToken, {
         path: "/",
@@ -135,7 +140,7 @@ const LoginForm = (props: Props) => {
       });
       nprogress.complete();
       dispatch(setConsultantAuthStatus("LOGGED_IN"));
-      dispatch(setConsultantLogoutType("expired"))
+      dispatch(setConsultantLogoutType("expired"));
       dispatch(setConsultantInfo(result.data.user));
       setCookie("con_refresh", result.data.refreshToken, {
         path: "/",

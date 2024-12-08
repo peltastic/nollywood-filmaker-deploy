@@ -135,6 +135,7 @@ const ReadMyScriptPage = (props: Props) => {
                         concerns: scriptData.concerns,
                         type: "request",
                         files: file,
+                        fileName: file?.name || ""
                       });
                       initializeTransactionListener(userId);
                       nprogress.start();

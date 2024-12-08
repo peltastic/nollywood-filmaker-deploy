@@ -44,7 +44,8 @@ export interface ICustomerReqDetails {
       seconds: number;
     };
     date: string;
-    summary: string;
+    summary: string
+    filename?: string;
     chat_title: string;
     productionCompany: string
     contactInfo: string

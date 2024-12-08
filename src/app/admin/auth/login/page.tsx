@@ -16,9 +16,9 @@ const AdminLoginPage = (props: Props) => {
           <h1 className="text-[1.75rem] font-bold">Admin Portal</h1>
           <div className="text-black-2 mt-[6rem] sm:mt-[8rem]">
             <h1 className="font-bold text-[1.75rem]">Welcome Back</h1>
-            <h2 className="text-[1.13rem]">
+            {/* <h2 className="text-[1.13rem]">
               Lorem ipsum dolor sit amet consectetur adipisc.
-            </h2>
+            </h2> */}
             <LoginForm loginType='admin' forgotPasswordLink="/consultants/auth/forgot-password" successRoute="/admin/dashboard" />
           </div>
         </div>

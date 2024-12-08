@@ -28,6 +28,7 @@ import { adminAuthApi } from "./features/admin/auth/auth";
 import { adminRequestApi } from "./features/admin/requests/request";
 import { dashboardChatApi } from "./features/users/dashboard/chat/chat";
 import { consultantDashboardChatApi } from "./features/consultants/dashboard/chat/chat";
+import { adminCustomersApi } from "./features/admin/customers/customers";
 
 const persistConfig = {
   key: "root",
@@ -46,7 +47,7 @@ const combinedReducer = combineReducers({
   adminAuth: adminAuthReducer,
   adminuser: adminReducer,
   adminRoute: adminRouteReducer,
-  adminLogout: adminLogoutReducer
+  adminLogout: adminLogoutReducer,
 });
 const persistedReducer = persistReducer(persistConfig, combinedReducer);
 export const store = configureStore({
@@ -67,6 +68,7 @@ export const store = configureStore({
     [dashboardChatApi.reducerPath]: dashboardChatApi.reducer,
     [consultantDashboardChatApi.reducerPath]:
       consultantDashboardChatApi.reducer,
+    [adminCustomersApi.reducerPath]: adminCustomersApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -86,6 +88,7 @@ export const store = configureStore({
       adminRequestApi.middleware,
       dashboardChatApi.middleware,
       consultantDashboardChatApi.middleware,
+      adminCustomersApi.middleware,
     ]),
   devTools: process.env.NODE_ENV !== "production",
 });

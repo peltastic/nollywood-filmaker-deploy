@@ -6,109 +6,42 @@ import {
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import { DataTable } from "@/components/Tables/DataTable";
-import React from "react";
+import { useFetchAllCustomersQuery } from "@/lib/features/admin/customers/customers";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
 
 type Props = {};
 
 const AdminCustomersPage = (props: Props) => {
-  const customers: IAdminCustomersColumnData[] = [
+  const [customerData, setCustomerData] = useState<IAdminCustomersColumnData[]>(
+    []
+  );
+  const { isError, isFetching, isSuccess, data } = useFetchAllCustomersQuery(
+    null,
     {
-      customer: "Jenny Wilson",
-      email: "w.lawson@example.com",
-      number: "09087675243",
-      date: "22 Jan 2022",
-      expertise: ["Producer", "Director", "Director"],
-      location: "Lagos, Nigeria",
-    },
-    {
-      customer: "Davon Lane",
-      email: "w.lawson@example.com",
-      number: "09087675243",
-      date: "22 Jan 2022",
-      expertise: ["Producer", "Director"],
-      location: "Lagos, Nigeria",
-    },
-    {
-      customer: "Jane Cooper",
-      email: "w.lawson@example.com",
-      number: "09087675243",
-      date: "22 Jan 2022",
-      expertise: ["Producer", "Director"],
-      location: "Lagos, Nigeria",
-    },
-    {
-      customer: "Jenny Wilson",
-      email: "w.lawson@example.com",
-      number: "09087675243",
-      date: "22 Jan 2022",
-      expertise: ["Producer", "Director", "Director"],
-      location: "Lagos, Nigeria",
-    },
-    {
-      customer: "Davon Lane",
-      email: "w.lawson@example.com",
-      number: "09087675243",
-      date: "22 Jan 2022",
-      expertise: ["Producer", "Director"],
-      location: "Lagos, Nigeria",
-    },
-    {
-      customer: "Jane Cooper",
-      email: "w.lawson@example.com",
-      number: "09087675243",
-      date: "22 Jan 2022",
-      expertise: ["Producer", "Director"],
-      location: "Lagos, Nigeria",
-    },
-    {
-      customer: "Jenny Wilson",
-      email: "w.lawson@example.com",
-      number: "09087675243",
-      date: "22 Jan 2022",
-      expertise: ["Producer", "Director", "Director"],
-      location: "Lagos, Nigeria",
-    },
-    {
-      customer: "Davon Lane",
-      email: "w.lawson@example.com",
-      number: "09087675243",
-      date: "22 Jan 2022",
-      expertise: ["Producer", "Director"],
-      location: "Lagos, Nigeria",
-    },
-    {
-      customer: "Jane Cooper",
-      email: "w.lawson@example.com",
-      number: "09087675243",
-      date: "22 Jan 2022",
-      expertise: ["Producer", "Director"],
-      location: "Lagos, Nigeria",
-    },
-    {
-      customer: "Jenny Wilson",
-      email: "w.lawson@example.com",
-      number: "09087675243",
-      date: "22 Jan 2022",
-      expertise: ["Producer", "Director", "Director"],
-      location: "Lagos, Nigeria",
-    },
-    {
-      customer: "Davon Lane",
-      email: "w.lawson@example.com",
-      number: "09087675243",
-      date: "22 Jan 2022",
-      expertise: ["Producer", "Director"],
-      location: "Lagos, Nigeria",
-    },
-    {
-      customer: "Jane Cooper",
-      email: "w.lawson@example.com",
-      number: "09087675243",
-      date: "22 Jan 2022",
-      expertise: ["Producer", "Director"],
-      location: "Lagos, Nigeria",
-    },
-  ];
+      refetchOnMountOrArgChange: true,
+    }
+  );
+
+  useEffect(() => {
+    if (data) {
+      const customer_data: IAdminCustomersColumnData[] = data.users.map(
+        (el) => {
+          return {
+            customer: `${el.fname} ${el.lname}`,
+            date: moment(el.createdAt).format("ll"),
+            email: el.email,
+            expertise: el.expertise,
+            location: "N/A",
+            number: el.phone,
+            profilePic: el.profilepics
+          };
+        }
+      );
+      setCustomerData(customer_data);
+    }
+  }, [data]);
+
   return (
     <ServiceLayout admin>
       <DashboardBodyLayout>
@@ -116,7 +49,9 @@ const AdminCustomersPage = (props: Props) => {
           <DataTable
             title="Customers"
             columns={admin_customers_column}
-            data={customers}
+            data={customerData}
+            isFetching={isFetching}
+            loaderLength={14}
           />
         </div>
       </DashboardBodyLayout>

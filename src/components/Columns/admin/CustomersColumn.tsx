@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import TestImage from "/public/assets/dashboard/issues-img-1.png";
 import { useRouter } from "next/navigation";
+import { AspectRatio } from "@mantine/core";
 
 export interface IAdminCustomersColumnData {
   customer: string;
@@ -12,6 +13,7 @@ export interface IAdminCustomersColumnData {
   location: string;
   expertise: string[];
   date: string;
+  profilePic: string;
 }
 
 export const admin_customers_column: ColumnDef<IAdminCustomersColumnData>[] = [
@@ -35,7 +37,15 @@ export const admin_customers_column: ColumnDef<IAdminCustomersColumnData>[] = [
       return (
         <div className="flex items-center w-[20rem] xl:w-auto">
           <div className="mr-2">
-            <Image src={TestImage} alt="image" />
+            <AspectRatio ratio={1800/1800}>
+              <Image
+                className="w-[3rem] rounded-full h-[3rem]"
+                src={row.original.profilePic}
+                alt="image"
+                width={100}
+                height={100}
+              />
+            </AspectRatio>
           </div>
           <div className="">
             <h1 className=" text-black-4 font-medium">
@@ -52,7 +62,7 @@ export const admin_customers_column: ColumnDef<IAdminCustomersColumnData>[] = [
     header: () => <div className="">Phone number</div>,
     cell: ({ row }) => {
       return (
-        <div className="text-[0.88rem] py-6 text-gray-1 w-[15rem] xl:w-auto">
+        <div className="text-[0.88rem] py-8 text-gray-1 w-[15rem] xl:w-auto">
           {row.getValue("number")}
         </div>
       );

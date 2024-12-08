@@ -69,9 +69,9 @@ const ServicePage = (props: Props) => {
     <HomeLayout>
       <div className="text-black-2 w-[90%] md:w-[50%] mx-auto mt-[10rem] mb-[10rem]">
         <h1 className=" text-[1.5rem] font-bold">What service do you need?</h1>
-        <h2 className="text-[1.13rem]">
-          Lorem ipsum dolor sit amet consectetur adipisc.
-        </h2>
+        {/* <h2 className="text-[1.13rem]">
+          
+        </h2> */}
         <h3 className="font-medium text-[0.88rem] mt-10 mb-2">
           Choose your service
         </h3>

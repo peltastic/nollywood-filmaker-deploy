@@ -92,7 +92,7 @@ const OrderDetailsPage = (props: Props) => {
                     "Create a Production budget" ||
                   data?.request.nameofservice ===
                     "Create a Pitch based on my Script"
-                    ? data?.request.movie_title
+                    ? data?.request.filename
                     : null
                 }
                 fileLink={data?.request.files && data.request.files[0]}
