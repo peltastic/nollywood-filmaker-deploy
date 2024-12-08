@@ -46,6 +46,7 @@ interface InitializeBudgetAndAdvicePayload extends GeneralType {
   genre: string;
   platform: string;
   concerns: string;
+  fileName: string
   files: File | null;
 }
 
@@ -59,6 +60,7 @@ interface InitializeCreateProductionBudgetPayload extends GeneralType {
   actors: string;
   info: string;
   type: "request";
+  fileName: string
 }
 
 interface InitializeCreateMartketingBudgetPayload extends GeneralType {
@@ -82,6 +84,7 @@ interface InitializeCreatePitchPayload extends GeneralType {
   visualStyle: string;
   info: string;
   budgetrange: string;
+  fileName: string
 }
 
 interface InitializaeDraftLegalDocument extends GeneralType {

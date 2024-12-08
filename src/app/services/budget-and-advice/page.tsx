@@ -129,6 +129,7 @@ const page = (props: Props) => {
                       synopsis: scriptData.logline,
                       title: "Look at my Budget and advice",
                       type: "request",
+                      fileName: file?.name || "" ,
                       userId,
                     });
                     initializeTransactionListener(userId);

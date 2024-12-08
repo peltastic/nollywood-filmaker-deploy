@@ -151,6 +151,7 @@ const ProductionBudgetPage = (props: Props) => {
                       info: scriptData.information,
                       userId,
                       type: "request",
+                      fileName: file?.name || ""
                     });
                     initializeTransactionListener(userId);
                     nprogress.start();

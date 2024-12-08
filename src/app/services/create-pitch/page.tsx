@@ -149,6 +149,7 @@ const CreatePitchPage = (props: Props) => {
                       type: "request",
                       userId,
                       visualStyle: scriptData.visual,
+                      fileName: file?.name || ""
                     });
                     initializeTransactionListener(userId);
                     nprogress.start();

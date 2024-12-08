@@ -57,9 +57,9 @@ const Navbar = (props: Props) => {
           ))}
         </ul>
         <ul className="hidden md:flex items-center text-[0.9rem]">
-          <li>
+          <li className="hover:bg-gray-bg-3 py-1 px-3 transition-all rounded-md mr-4">
             <Link href="/auth/register">
-              <UnstyledButton class="mr-4">Sign up</UnstyledButton>
+              <UnstyledButton class="">Sign up</UnstyledButton>
             </Link>
           </li>
           <li>
