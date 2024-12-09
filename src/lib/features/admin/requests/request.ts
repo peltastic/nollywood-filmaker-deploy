@@ -22,7 +22,7 @@ export const adminRequestApi = createApi({
     >({
       query: ({ limit, order, page, sort, type }) => {
         return {
-          url: `/api/admin/pullrequests?order=${order}`,
+          url: `/api/admin/pullrequests?order=${order}&type=Chat`,
         };
       },
     }),
