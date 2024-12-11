@@ -46,11 +46,8 @@ const ChatsPage = (props: Props) => {
     }
   }, [searchVal]);
 
-  console.log(convertToAfricaLagosTz("2024-11-26T24:00:00.000Z"));
-
   useEffect(() => {
     if (conversationsRes.data) {
-      console.log(conversationsRes.data)
       const transformed_data: IChatData[] = conversationsRes.data.requests.map(
         (el) => {
           return {

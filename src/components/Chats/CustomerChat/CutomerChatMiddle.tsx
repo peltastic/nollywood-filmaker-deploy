@@ -8,39 +8,23 @@ import Link from "next/link";
 import { IoIosArrowBack } from "react-icons/io";
 import ChatRoom from "../ChatRoom";
 import HamburgerIcon from "/public/assets/chats/hamburger.svg";
-import momentTz from "moment-timezone";
-import ModalComponent from "@/components/Modal/Modal";
-import { useDisclosure, useInterval } from "@mantine/hooks";
-import RequestExtension from "../ModalComponents/RequestExtension";
-import ReportAnIssue from "../ModalComponents/ReportAnIssue";
+
 import { useRouter } from "next/navigation";
 import UserChatMenu from "../Menu/UserChatMenu";
-import {
-  useLazyFetchChatMessagesQuery,
-  useLazyFetchSingleConversationDataQuery,
-} from "@/lib/features/users/dashboard/chat/chat";
+import { useLazyFetchChatMessagesQuery } from "@/lib/features/users/dashboard/chat/chat";
 import Logo from "/public/assets/nav/logo.svg";
 import Spinner from "@/app/Spinner/Spinner";
 import { IGetUserConversations } from "@/interfaces/dashboard/chat";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
-import { chat_socket } from "@/lib/socket";
-import { convertToAfricaLagosTz, truncateStr } from "@/utils/helperFunction";
-import {
-  addHours,
-  differenceInDays,
-  differenceInMilliseconds,
-  differenceInMinutes,
-  getHours,
-  isAfter,
-  isBefore,
-} from "date-fns";
+import { truncateStr } from "@/utils/helperFunction";
+import { differenceInMilliseconds, isAfter, isBefore } from "date-fns";
 import { notify } from "@/utils/notification";
 
 export interface ChatPayload {
   text: string;
   user: "user" | "consultant" | "admin";
-  id: string
+  id: string;
   // fileUrl: string
   // fileName: string
   // type: "text" | "file"
@@ -67,11 +51,11 @@ const CustomerChatMiddle = ({
   setIsTimeProps,
   open,
   opened,
-  type, 
-  admin, 
-  data, 
+  type,
+  admin,
+  data,
   isFetching,
-  orderId
+  orderId,
 }: Props) => {
   const userData = useSelector(
     (state: RootState) => state.persistedState.user.user
@@ -98,34 +82,24 @@ const CustomerChatMiddle = ({
       const isBeforeEndtime = isBefore(now, endTime);
       const isAfterStartTime = isAfter(now, startTime);
 
-      const differenceInDaysStartTime = differenceInDays(startTime, now);
-
-      const hours = getHours(startTime);
       if (isBeforeStartTime) {
-        console.log("1");
         setIsTimeProps(false);
         setIsSessionOverProps(false);
-        if (differenceInDaysStartTime >= 0) {
-          startTime.setDate(now.getDate() + differenceInDaysStartTime);
-          startTime.setHours(hours, 0, 0, 0);
-          const delay = differenceInMilliseconds(startTime, now);
-          const timer = setTimeout(() => {
-            notify("message", "Chat session has started");
-            setIsTimeProps(true);
-            setIsSessionOverProps(false);
-          }, delay);
 
-          return () => {
-            console.log("timeout cleared - starttime");
-            clearTimeout(timer);
-          };
-        }
+        const delay = differenceInMilliseconds(startTime, now);
+        const timer = setTimeout(() => {
+          notify("message", "Chat session has started");
+          setIsTimeProps(true);
+          setIsSessionOverProps(false);
+        }, delay);
+
+        return () => {
+          clearTimeout(timer);
+        };
       } else if (isAfterStartTime && isBeforeEndtime) {
-        console.log("2");
         setIsSessionOverProps(false);
         setIsTimeProps(true);
       } else {
-        console.log("3");
         setIsSessionOverProps(true);
         setIsTimeProps(false);
       }
@@ -141,34 +115,15 @@ const CustomerChatMiddle = ({
       const isBeforeEndtime = isBefore(now, endTime);
       const isAfterStartTime = isAfter(now, startTime);
 
-      const differenceInDaysEndTime = differenceInDays(endTime, now);
-
-      const hours = getHours(endTime);
       if (isBeforeStartTime || (isAfterStartTime && isBeforeEndtime)) {
-        if (isAfterStartTime && isBeforeEndtime) {
-          setIsTimeProps(true);
-        } else {
+        const delay = differenceInMilliseconds(endTime, now);
+        const timer = setTimeout(() => {
           setIsTimeProps(false);
-        }
-        console.log("4");
-        setIsSessionOverProps(false);
-        if (differenceInDaysEndTime >= 0) {
-          endTime.setDate(now.getDate() + differenceInDaysEndTime);
-          endTime.setHours(hours, 0, 0, 0);
-          const delay = differenceInMilliseconds(endTime, now);
-          const timer = setTimeout(() => {
-            setIsTimeProps(false);
-            setIsSessionOverProps(true);
-          }, delay);
-          return () => {
-            console.log("timeout cleared - endtime");
-            clearTimeout(timer);
-          };
-        }
-      } else {
-        console.log("5");
-        setIsTimeProps(false);
-        setIsSessionOverProps(true);
+          setIsSessionOverProps(true);
+        }, delay);
+        return () => {
+          clearTimeout(timer);
+        };
       }
     }
   }, [data]);
@@ -177,11 +132,11 @@ const CustomerChatMiddle = ({
 
   useEffect(() => {
     if (result.data) {
-      const chat_data:ChatPayload[] = result.data.messages.map((el) => {
+      const chat_data: ChatPayload[] = result.data.messages.map((el) => {
         return {
           text: el.message,
           user: el.role,
-          id: el._id
+          id: el._id,
         };
       });
       setChatData(chat_data);
@@ -227,8 +182,7 @@ const CustomerChatMiddle = ({
                 </div>
                 <div className="">
                   <h1 className="font-semibold text-[1.25rem]">
-                    {data?.chat_title &&
-                      truncateStr(data.chat_title, 25)}
+                    {data?.chat_title && truncateStr(data.chat_title, 25)}
                   </h1>
                   <p className="text-[#00000082] text-[0.75rem] font-semibold">
                     {data?.nameofservice}
@@ -285,19 +239,7 @@ const CustomerChatMiddle = ({
               </header>
 
               <div className="h-full bg-white relative">
-                {sessionOver || isTime ? null : (
-                  <div className="absolute left-[50%] top-[50%]  -translate-x-1/2 z-10 -translate-y-1/2">
-                    <Image
-                      src={Logo}
-                      alt="logo image"
-                      className="w-[10rem] opacity-50 mx-auto"
-                    />
-                    <p className="text-center font-semibold text-gray-4">
-                      Session with consultant hasn't started yet
-                    </p>
-                  </div>
-                )}
-                {data && (
+                {data && (isTime || sessionOver) ? (
                   <ChatRoom
                     userData={type === "user" ? userData : consultantData}
                     orderId={data.orderId}
@@ -307,6 +249,19 @@ const CustomerChatMiddle = ({
                     isTime={isTime}
                     sessionOver={sessionOver}
                   />
+                ) : (
+                  <div className="h-[90vh] w-full">
+                    <div className="absolute left-[50%] top-[50%]  -translate-x-1/2 z-10 -translate-y-1/2">
+                      <Image
+                        src={Logo}
+                        alt="logo image"
+                        className="w-[10rem] opacity-50 mx-auto"
+                      />
+                      <p className="text-center font-semibold text-gray-4">
+                        Session with consultant hasn't started yet
+                      </p>
+                    </div>
+                  </div>
                 )}
               </div>
             </>

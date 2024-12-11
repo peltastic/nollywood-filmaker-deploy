@@ -18,6 +18,10 @@ export function joinChatRoom(data: {
   chat_socket.emit("joinRoom", data);
 }
 
+export function leaveRoom() {
+  chat_socket.emit("disconnect");
+}
+
 export function sendChatMessageEvent(data: {
   room: string;
   message: string;
@@ -34,7 +38,7 @@ export function sendChatMessageEvent(data: {
 export function sendFileMessage(data: {
   room: string;
   fileName: string;
-  fileData: string | ArrayBuffer 
+  fileData: string | ArrayBuffer;
   sender: {
     userid: string;
     name: string;

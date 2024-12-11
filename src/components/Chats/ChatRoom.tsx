@@ -10,6 +10,7 @@ import { RootState } from "@/lib/store";
 import {
   chat_socket,
   joinChatRoom,
+  leaveRoom,
   sendChatMessageEvent,
   sendFileMessage,
 } from "@/lib/socket";
@@ -49,8 +50,8 @@ const ChatRoom = (props: Props) => {
   const searchVal = search.get("chat");
 
   useEffect(() => {
+    if (props.sessionOver) return () => {};
     if (props.userData) {
-      console.log("joined-room");
       joinChatRoom({
         room: props.orderId,
         name: `${props.userData.fname} ${props.userData.lname}`,
@@ -58,7 +59,7 @@ const ChatRoom = (props: Props) => {
         userId: props.userData.id,
       });
     }
-  }, []);
+  }, [props.isTime, props.sessionOver]);
 
   const sendMessageHandler = () => {
     if (props.userData) {
@@ -103,7 +104,7 @@ const ChatRoom = (props: Props) => {
     });
 
     return () => {
-      console.log("left" + " " + "room");
+      leaveRoom()
       chat_socket.off("message");
       chat_socket.off("fileMessage");
     };
