@@ -50,6 +50,7 @@ const ChatRoom = (props: Props) => {
 
   useEffect(() => {
     if (props.userData) {
+      console.log("joined-room");
       joinChatRoom({
         room: props.orderId,
         name: `${props.userData.fname} ${props.userData.lname}`,
@@ -86,7 +87,6 @@ const ChatRoom = (props: Props) => {
         };
         message: string;
       }) => {
-        console.log(data)
         if (searchVal === data.sender.chatRoomId) {
           props.updateChatHandlerProps({
             text: data.message,
@@ -103,7 +103,9 @@ const ChatRoom = (props: Props) => {
     });
 
     return () => {
-      chat_socket.removeListener();
+      console.log("left" + " " + "room");
+      chat_socket.off("message");
+      chat_socket.off("fileMessage");
     };
   }, []);
 
@@ -152,96 +154,103 @@ const ChatRoom = (props: Props) => {
           </>
         )}
       </div>
-
-      <div className="min-h-[5rem] relative">
-        <div className="w-full px-6  absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2">
-          {fileInputValue && (
-            <div className=" flex items-center mb-6 ">
-              <div className="max-w-[30rem] flex items-center break-words ml-10 border w-fit py-3 px-3 text-white rounded-md bg-gray-1 ">
-                <FaFile className="mr-4" />
-                <p>{fileInputValue.name}</p>
+      {props.sessionOver ? (
+        <div className="flex items-center text-[0.88rem] bg-gray-bg-7 border mx-4 mt-8 py-2 rounded-md px-4 border-border-gray">
+          <MdInfoOutline className="text-gray-4 mr-4 text-xl " />
+          <p className="text-gray-4">This conversation has ended</p>
+        </div>
+      ) : props.isTime ? (
+        <div className="min-h-[5rem] relative">
+          <div className="w-full px-6  absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2">
+            {fileInputValue && (
+              <div className=" flex items-center mb-6 ">
+                <div className="max-w-[30rem] flex items-center break-words ml-10 border w-fit py-3 px-3 text-white rounded-md bg-gray-1 ">
+                  <FaFile className="mr-4" />
+                  <p>{fileInputValue.name}</p>
+                </div>
+                <div className="ml-2">
+                  <UnstyledButton
+                    clicked={() => {
+                      if (base64File && props.userData) {
+                        console.log({
+                          fileData: base64File,
+                          fileName: fileInputValue.name,
+                          room: props.orderId,
+                          sender: {
+                            name: `${props.userData.fname} ${props.userData.lname}`,
+                            role: props.type,
+                            userid: props.userData.id,
+                            chatRoomId: searchVal as string,
+                          },
+                        });
+                        sendFileMessage({
+                          fileData: base64File,
+                          fileName: fileInputValue.name,
+                          room: props.orderId,
+                          sender: {
+                            name: `${props.userData.fname} ${props.userData.lname}`,
+                            role: props.type,
+                            userid: props.userData.id,
+                            chatRoomId: searchVal as string,
+                          },
+                        });
+                      }
+                    }}
+                    class="flex hover:bg-blue-1 transition-all items-center bg-black-2 text-white py-2 px-4 rounded-md"
+                  >
+                    <p className="mr-2">Send</p>
+                    <RiSendPlane2Line className=" text-xl" />
+                  </UnstyledButton>
+                </div>
               </div>
-              <div className="ml-2">
-                <UnstyledButton
-                  clicked={() => {
-                    if (base64File && props.userData) {
-                      console.log({
-                        fileData: base64File,
-                        fileName: fileInputValue.name,
-                        room: props.orderId,
-                        sender: {
-                          name: `${props.userData.fname} ${props.userData.lname}`,
-                          role: props.type,
-                          userid: props.userData.id,
-                          chatRoomId: searchVal as string,
-                        },
-                      })
-                      sendFileMessage({
-                        fileData: base64File,
-                        fileName: fileInputValue.name,
-                        room: props.orderId,
-                        sender: {
-                          name: `${props.userData.fname} ${props.userData.lname}`,
-                          role: props.type,
-                          userid: props.userData.id,
-                          chatRoomId: searchVal as string,
-                        },
+            )}
+            <div className="flex items-center">
+              <UnstyledButton>
+                <FileButtonComponent
+                  accept="application/pdf, .docx"
+                  setFile={(file) => {
+                    setFileInputValue(file);
+                    if (file) {
+                      getBase64(file).then((res) => {
+                        if (res) {
+                          setBase64File(res as any);
+                        }
                       });
                     }
                   }}
-                  class="flex hover:bg-blue-1 transition-all items-center bg-black-2 text-white py-2 px-4 rounded-md"
                 >
-                  <p className="mr-2">Send</p>
-                  <RiSendPlane2Line className=" text-xl" />
-                </UnstyledButton>
-              </div>
-            </div>
-          )}
-          <div className="flex items-center">
-            <UnstyledButton>
-              <FileButtonComponent
-                accept="application/pdf, .docx"
-                setFile={(file) => {
-                  setFileInputValue(file);
-                  if (file) {
-                    getBase64(file).then((res) => {
-                      if (res) {
-                        setBase64File(res as any);
-                      }
-                    });
-                  }
-                }}
-              >
-                <div className="mr-10">
-                  <Image src={AttachIcon} alt="attach-icon" />
+                  <div className="mr-10">
+                    <Image src={AttachIcon} alt="attach-icon" />
+                  </div>
+                </FileButtonComponent>
+              </UnstyledButton>
+              <form className="w-full" onSubmit={(e) => e.preventDefault()}>
+                <div className="w-full relative">
+                  <Textarea
+                    minRows={0}
+                    autosize
+                    size="md"
+                    radius={"md"}
+                    value={inputValue}
+                    onChange={(event) =>
+                      setInputValue(event.currentTarget.value)
+                    }
+                  />
+                  <button
+                    onClick={sendMessageHandler}
+                    disabled={!inputValue}
+                    className="w-fit disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer absolute right-3 -translate-y-1/2 top-1/2"
+                  >
+                    <Image src={SendImg} alt="send-img" />
+                  </button>
                 </div>
-              </FileButtonComponent>
-            </UnstyledButton>
-            <form className="w-full" onSubmit={(e) => e.preventDefault()}>
-              <div className="w-full relative">
-                <Textarea
-                  minRows={0}
-                  autosize
-                  size="md"
-                  radius={"md"}
-                  value={inputValue}
-                  onChange={(event) => setInputValue(event.currentTarget.value)}
-                />
-                <button
-                  onClick={sendMessageHandler}
-                  disabled={!inputValue}
-                  className="w-fit disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer absolute right-3 -translate-y-1/2 top-1/2"
-                >
-                  <Image src={SendImg} alt="send-img" />
-                </button>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-      {/* ) : (
+      ) : (
         <div className=""></div>
-      )} */}
+      )}
     </div>
   );
 };

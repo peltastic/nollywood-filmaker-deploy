@@ -47,3 +47,9 @@ export interface IChatMessages {
 export interface IChatMessagesResponse {
   messages: IChatMessages[];
 }
+
+
+export interface IChatFiles {
+  _id: string
+  path: string
+}

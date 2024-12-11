@@ -10,6 +10,7 @@ import momentTz from "moment-timezone";
 import { IGetUserConversations } from "@/interfaces/dashboard/chat";
 import { convertToAfricaLagosTz } from "@/utils/helperFunction";
 import { differenceInMinutes, isAfter, isBefore } from "date-fns";
+import { useLazyGetChatFilesQuery } from "@/lib/features/users/services/chat/chat";
 type Props = {
   close: () => void;
   opened?: string;
@@ -19,6 +20,7 @@ type Props = {
   type?: "user" | "consultant" | "admin";
   isTime: boolean;
   sessionOver: boolean;
+  orderId?: string;
 };
 
 export interface IFilesData {
@@ -53,8 +55,16 @@ const CustomerChatRight = ({
   data,
   openRight,
   opened,
+  orderId,
   type,
 }: Props) => {
+  const [getChatFiles, {}] = useLazyGetChatFilesQuery();
+
+  useEffect(() => {
+    if (orderId) {
+      getChatFiles(orderId);
+    }
+  }, [orderId]);
   return (
     <div
       className={`border-l ${

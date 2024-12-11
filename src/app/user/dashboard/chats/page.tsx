@@ -119,6 +119,7 @@ const ChatsPage = (props: Props) => {
               openRight={() => setCloseRight(false)}
               isTime={isTime}
               sessionOver={sessionOver}
+              orderId={result.data?.orderId}
             />
           </section>
         </section>

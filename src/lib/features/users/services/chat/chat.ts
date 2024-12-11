@@ -30,7 +30,10 @@ export const chatApi = createApi({
       query: ({ date, expertise }) =>
         `/api/users/gethours?expertise=${expertise}&date=${date}`,
     }),
+    getChatFiles: build.query<unknown, string>({
+      query: (room_id) =>  `/api/chat/files/${room_id}`
+    })
   }),
 });
 
-export const { useInitializeChatWithAProTransactionMutation, useLazyGetAvailabilityHoursQuery } = chatApi;
+export const { useInitializeChatWithAProTransactionMutation, useLazyGetAvailabilityHoursQuery, useLazyGetChatFilesQuery  } = chatApi;
