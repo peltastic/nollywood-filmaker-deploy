@@ -98,9 +98,9 @@ const ChatRoom = (props: Props) => {
       }
     );
 
-    // chat_socket.on("fileMessage", (data) => {
-    //   console.log(data);
-    // });
+    chat_socket.on("fileMessage", (data) => {
+      console.log(data);
+    });
 
     return () => {
       chat_socket.removeListener();
