@@ -58,13 +58,13 @@ const CustomerChatRight = ({
   orderId,
   type,
 }: Props) => {
-  const [getChatFiles, {}] = useLazyGetChatFilesQuery();
+  // const [getChatFiles, {}] = useLazyGetChatFilesQuery();
 
-  useEffect(() => {
-    if (orderId) {
-      getChatFiles(orderId);
-    }
-  }, [orderId]);
+  // useEffect(() => {
+  //   if (orderId) {
+  //     getChatFiles(orderId);
+  //   }
+  // }, [orderId]);
   return (
     <div
       className={`border-l ${
