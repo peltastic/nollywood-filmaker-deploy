@@ -66,10 +66,10 @@ const ChatMessage = ({ user, text, prevUser, index, lastmessage }: Props) => {
         >
           <p className="break-words">
             {text.split("\n").map((line, index) => (
-              <>
+              <div className="" key={index}>
                 {line}
                 <br />
-              </>
+              </div>
             ))}
           </p>
         </div>

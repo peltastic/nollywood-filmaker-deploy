@@ -10,7 +10,6 @@ import { RootState } from "@/lib/store";
 import {
   chat_socket,
   joinChatRoom,
-  leaveRoom,
   sendChatMessageEvent,
   sendFileMessage,
 } from "@/lib/socket";
@@ -73,6 +72,12 @@ const ChatRoom = (props: Props) => {
           chatRoomId: searchVal as string,
         },
       });
+      props.updateChatHandlerProps({
+        text: inputValue,
+        user: props.type,
+        id: Math.floor(Math.random() * 100000).toString(),
+      });
+      setInputValue("")
     }
   };
 
@@ -88,13 +93,14 @@ const ChatRoom = (props: Props) => {
         };
         message: string;
       }) => {
+        console.log("received chat event")
+        if (props.userData?.id === data.sender.userid) return () => {};
         if (searchVal === data.sender.chatRoomId) {
           props.updateChatHandlerProps({
             text: data.message,
             user: data.sender.role,
             id: Math.floor(Math.random() * 100000).toString(),
           });
-          setInputValue("");
         }
       }
     );
@@ -104,7 +110,6 @@ const ChatRoom = (props: Props) => {
     });
 
     return () => {
-      leaveRoom()
       chat_socket.off("message");
       chat_socket.off("fileMessage");
     };
@@ -173,17 +178,6 @@ const ChatRoom = (props: Props) => {
                   <UnstyledButton
                     clicked={() => {
                       if (base64File && props.userData) {
-                        console.log({
-                          fileData: base64File,
-                          fileName: fileInputValue.name,
-                          room: props.orderId,
-                          sender: {
-                            name: `${props.userData.fname} ${props.userData.lname}`,
-                            role: props.type,
-                            userid: props.userData.id,
-                            chatRoomId: searchVal as string,
-                          },
-                        });
                         sendFileMessage({
                           fileData: base64File,
                           fileName: fileInputValue.name,
@@ -228,6 +222,12 @@ const ChatRoom = (props: Props) => {
               <form className="w-full" onSubmit={(e) => e.preventDefault()}>
                 <div className="w-full relative">
                   <Textarea
+                  onKeyDown={(e) => {
+                   if (e.key === "Enter" && !e.shiftKey) {
+                   e.preventDefault()
+                    sendMessageHandler()
+                   }
+                  }}
                     minRows={0}
                     autosize
                     size="md"
