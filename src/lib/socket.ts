@@ -30,3 +30,17 @@ export function sendChatMessageEvent(data: {
 }) {
   chat_socket.emit("chatMessage", data);
 }
+
+export function sendFileMessage(data: {
+  room: string;
+  fileName: string;
+  fileData: string | ArrayBuffer 
+  sender: {
+    userid: string;
+    name: string;
+    role: "user" | "consultant" | "admin";
+    chatRoomId: string;
+  };
+}) {
+  chat_socket.emit("sendFile", data);
+}

@@ -39,14 +39,13 @@ const ChatTimer = (props: Props) => {
       differenceInMinutes(
         // convertToAfricaLagosTz(props.timeData.endTime),
         props.timeData.endTime,
-        momentTz(new Date()).tz("Africa/Lagos").format()
+        new Date()
       ) <= 10
     ) {
       setShowTimer(true);
       props.openRight && props.openRight();
       notify("error", "", "time is almost up");
-      // if (!props.sessionOver) {
-      // }
+
       interval.stop();
     }
   }, 1000);
@@ -56,7 +55,7 @@ const ChatTimer = (props: Props) => {
       return () => {};
     }
     if (props.type === "consultant") {
-      return () => {}
+      return () => {};
     }
     if (
       props.isTime &&
@@ -78,7 +77,7 @@ const ChatTimer = (props: Props) => {
     }
 
     if (props.isTime) {
-      setShowTimer(false)
+      setShowTimer(false);
       interval.start();
     }
 
@@ -89,6 +88,15 @@ const ChatTimer = (props: Props) => {
       setShowTimer(false);
     }
   }, [props.type]);
+
+  useEffect(() => {
+    if (props.isTime) {
+      interval.start()
+    }
+    if (props.isTime && props.type === "consultant") {
+      setShowTimer(true);
+    }
+  }, [props.isTime]);
 
   return (
     <>

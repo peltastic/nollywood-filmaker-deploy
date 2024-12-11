@@ -62,7 +62,7 @@ const DashboardHomePgae = (props: Props) => {
 
   useEffect(() => {
     if (data) {
-      const formattedData = data.request.map((el) => {
+      const formattedData = data.requests.map((el) => {
         return {
           name: el.movie_title,
           date: moment(el.date).format("ll"),

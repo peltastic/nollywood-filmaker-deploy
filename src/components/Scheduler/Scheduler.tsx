@@ -17,29 +17,121 @@ import { IoIosArrowForward } from "react-icons/io";
 import { getMonthName } from "@/utils/helperFunction";
 import { days } from "@/utils/constants/constants";
 import SchedulerSlots from "./SchedulerSlots";
+import { IGetCalendarAppointmentResponse } from "@/interfaces/consultants/calendar/calendar";
 
 type Props = {
   value?: Date;
   setValue: (val: Date) => void;
-  data: {
-    date: string;
-    time: {
-      hours: number;
-      minutes: number;
-      seconds: number;
-    };
-  }[];
+  data:IGetCalendarAppointmentResponse[];
+  
 };
 
+// const time_slots = [
+//   "09:00 AM",
+//   "10:00 AM",
+//   "11:00 AM",
+//   "12:00 PM",
+//   "01:00 PM",
+//   "02:00 PM",
+//   "03:00 PM",
+//   "04:00 PM",
+//   "05:00 PM",
+//   "06:00 PM",
+//   "07:00 PM",
+//   "08:00 PM",
+//   "09:00 PM",
+//   "10:00 PM",
+//   "11:00 PM",
+//   "12:00 PM",
+//   "01:00 AM",
+// ];
+
 const time_slots = [
-  "09:00 AM",
-  "10:00 AM",
-  "11:00 AM",
-  "12:00 PM",
-  "01:00 PM",
-  "02:00 PM",
-  "03:00 PM",
-  "04:00 PM",
+  {
+    time: "09:00 AM",
+    upperBound: 7,
+    lowerBound: 1,
+  },
+  {
+    time: "10:00 AM",
+    upperBound: 14,
+    lowerBound: 8,
+  },
+  {
+    time: "11:00 AM",
+    upperBound: 21,
+    lowerBound: 15,
+  },
+  {
+    time: "12:00 PM",
+    upperBound: 28,
+    lowerBound: 22,
+  },
+  {
+    time: "01:00 PM",
+    upperBound: 35,
+    lowerBound: 29,
+  },
+  {
+    time: "02:00 PM",
+    upperBound: 42,
+    lowerBound: 36,
+  },
+  {
+    time: "03:00 PM",
+    upperBound: 49,
+    lowerBound: 43,
+  },
+  {
+    time: "04:00 PM",
+    upperBound: 56,
+    lowerBound: 50,
+  },
+  {
+    time: "05:00 PM",
+    upperBound: 63,
+    lowerBound: 57,
+  },
+  {
+    time: "06:00 PM",
+    upperBound: 70,
+    lowerBound: 64,
+  },
+  {
+    time: "07:00 PM",
+    upperBound: 77,
+    lowerBound: 71,
+  },
+  {
+    time: "08:00 PM",
+    upperBound: 84,
+    lowerBound: 78,
+  },
+  {
+    time: "09:00 PM",
+    upperBound: 91,
+    lowerBound: 85,
+  },
+  {
+    time: "10:00 PM",
+    upperBound: 98,
+    lowerBound: 92,
+  },
+  {
+    time: "11:00 PM",
+    upperBound: 105,
+    lowerBound: 99,
+  },
+  {
+    time: "12:00 AM",
+    upperBound: 112,
+    lowerBound: 106,
+  },
+  {
+    time: "01:00 AM",
+    upperBound: 119,
+    lowerBound: 113,
+  },
 ];
 
 const Scheduler = ({ value = new Date(), setValue, data }: Props) => {
@@ -47,7 +139,6 @@ const Scheduler = ({ value = new Date(), setValue, data }: Props) => {
   const [startOfWeekState, setStartOfWeekState] = useState<Date>(
     startOfWeek(value, { weekStartsOn: 0 })
   );
-
 
   useEffect(() => {
     setStartOfWeekState(startOfWeek(value, { weekStartsOn: 0 }));
@@ -115,9 +206,9 @@ const Scheduler = ({ value = new Date(), setValue, data }: Props) => {
           {time_slots.map((el) => (
             <div
               className="border-b border-b-stroke-10 font-bold text-black-2 h-[4rem] text-[0.75rem] flex items-center justify-center"
-              key={el}
+              key={el.upperBound}
             >
-              <p>{el}</p>
+              <p>{el.time}</p>
             </div>
           ))}
         </div>
@@ -148,13 +239,14 @@ const Scheduler = ({ value = new Date(), setValue, data }: Props) => {
           {fromStartWeekCounter && (
             <>
               {Array.from({
-                length: days.length * time_slots.length
+                length: days.length * time_slots.length,
               }).map((el, index) => {
                 const no = index + 1;
                 const slotValue = no % 7 || 7;
 
                 return (
                   <SchedulerSlots
+                    time_slots={time_slots}
                     key={index}
                     allocatedTime={
                       no < 8

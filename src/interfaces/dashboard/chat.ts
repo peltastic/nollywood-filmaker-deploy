@@ -9,6 +9,7 @@ export interface IGetUserConversations {
     } 
     startTime: string
     endTime: string
+    booktime: string
     date: string
     nameofservice: "Chat With A Professional"
     chat_title: string

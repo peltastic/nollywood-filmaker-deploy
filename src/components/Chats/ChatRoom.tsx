@@ -7,12 +7,21 @@ import { Textarea } from "@mantine/core";
 import { useSendChatMessageMutation } from "@/lib/features/users/dashboard/chat/chat";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
-import { chat_socket, joinChatRoom, sendChatMessageEvent } from "@/lib/socket";
+import {
+  chat_socket,
+  joinChatRoom,
+  sendChatMessageEvent,
+  sendFileMessage,
+} from "@/lib/socket";
 import { ChatPayload } from "./CustomerChat/CutomerChatMiddle";
 import ConsultantChatMessage from "./ConsultantChatMessage";
 import { IUserInfoData } from "@/interfaces/auth/auth";
 import { useParams, useSearchParams } from "next/navigation";
 import { MdInfoOutline } from "react-icons/md";
+import FileButtonComponent from "../FileButton/FileButtonComponent";
+import UnstyledButton from "../Button/UnstyledButton";
+import { FaFile } from "react-icons/fa";
+import { RiSendPlane2Line } from "react-icons/ri";
 
 type Props = {
   type: "user" | "consultant" | "admin";
@@ -29,59 +38,12 @@ export interface IChatMessagesData {
   user: "admin" | "user" | "consultant";
 }
 
-const chat_data: IChatMessagesData[] = [
-  {
-    text: "omg, this is amazing",
-    user: "admin",
-  },
-  {
-    text: "perfect! ✅",
-    user: "admin",
-  },
-  {
-    text: "Wow, this is really epic",
-    user: "admin",
-  },
-  {
-    text: "How are you?",
-    user: "user",
-  },
-  {
-    text: "just ideas for next time",
-    user: "admin",
-  },
-  {
-    text: "I'll be there in 2 mins ⏰",
-    user: "admin",
-  },
-  {
-    text: "woohoooo",
-    user: "user",
-  },
-  {
-    text: "Haha oh man",
-    user: "user",
-  },
-  {
-    text: "Haha that's terrifying 😂",
-    user: "user",
-  },
-  {
-    text: "aww",
-    user: "admin",
-  },
-  {
-    text: "omg, this is amazing",
-    user: "admin",
-  },
-  {
-    text: "woohoooo 🔥",
-    user: "admin",
-  },
-];
-
 const ChatRoom = (props: Props) => {
   const [sendUserChatMessage, {}] = useSendChatMessageMutation();
+  const [fileInputValue, setFileInputValue] = useState<File | null>(null);
+  const [base64File, setBase64File] = useState<string | ArrayBuffer | null>(
+    null
+  );
   const [inputValue, setInputValue] = useState<string>("");
   const search = useSearchParams();
   const searchVal = search.get("chat");
@@ -99,13 +61,6 @@ const ChatRoom = (props: Props) => {
 
   const sendMessageHandler = () => {
     if (props.userData) {
-      // sendUserChatMessage({
-      //   message: inputValue,
-      //   name: `${props.userData.fname} ${props.userData.lname}`,
-      //   role: props.type,
-      //   room: props.orderId,
-      //   uid: props.userData.id,
-      // });
       sendChatMessageEvent({
         room: props.orderId,
         message: inputValue,
@@ -118,10 +73,8 @@ const ChatRoom = (props: Props) => {
       });
     }
   };
-  // console.log(props.sessionOver, props.isTime)
 
   useEffect(() => {
-  
     chat_socket.on(
       "message",
       (data: {
@@ -133,21 +86,40 @@ const ChatRoom = (props: Props) => {
         };
         message: string;
       }) => {
-       
+        console.log(data)
         if (searchVal === data.sender.chatRoomId) {
           props.updateChatHandlerProps({
             text: data.message,
             user: data.sender.role,
+            id: Math.floor(Math.random() * 100000).toString(),
           });
-          setInputValue("")
+          setInputValue("");
         }
       }
     );
-    return () => {
 
+    // chat_socket.on("fileMessage", (data) => {
+    //   console.log(data);
+    // });
+
+    return () => {
       chat_socket.removeListener();
     };
   }, []);
+
+  const getBase64 = (file: File) => {
+    return new Promise((resolve) => {
+      let fileInfo;
+      let baseUrl: string | ArrayBuffer | null = "";
+      let reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        // Make a fileInfo Object
+        baseUrl = reader.result;
+        resolve(baseUrl);
+      };
+    });
+  };
 
   return (
     <div className=" py-6  h-full  relative bg-white">
@@ -163,6 +135,7 @@ const ChatRoom = (props: Props) => {
                     user={el.user}
                     prevUser={index ? props.data[index - 1].user : null}
                     index={index}
+                    lastmessage={props.data[props.data.length - 1].id === el.id}
                   />
                 ) : (
                   <ConsultantChatMessage
@@ -170,6 +143,7 @@ const ChatRoom = (props: Props) => {
                     text={el.text}
                     user={el.user}
                     prevUser={index ? props.data[index - 1].user : null}
+                    lastmessage={props.data[props.data.length - 1].id === el.id}
                     index={index}
                   />
                 )}
@@ -178,24 +152,73 @@ const ChatRoom = (props: Props) => {
           </>
         )}
       </div>
-      {props.sessionOver ? (
-        <div className="flex items-center text-[0.88rem] bg-gray-bg-7 border mx-4 mt-8 py-2 rounded-md px-4 border-border-gray">
-          <MdInfoOutline className="text-gray-4 mr-4 text-xl " />
-          <p className="text-gray-4">This conversation has ended</p>
-        </div>
-      ) : props.isTime ? (
-        <div className="h-[5rem] relative">
-          <div className="w-full px-6 flex items-center absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2">
-            <div className="mr-10">
-              <Image src={AttachIcon} alt="attach-icon" />
+
+      <div className="min-h-[5rem] relative">
+        <div className="w-full px-6  absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2">
+          {fileInputValue && (
+            <div className=" flex items-center mb-6 ">
+              <div className="max-w-[30rem] flex items-center break-words ml-10 border w-fit py-3 px-3 text-white rounded-md bg-gray-1 ">
+                <FaFile className="mr-4" />
+                <p>{fileInputValue.name}</p>
+              </div>
+              <div className="ml-2">
+                <UnstyledButton
+                  clicked={() => {
+                    if (base64File && props.userData) {
+                      console.log({
+                        fileData: base64File,
+                        fileName: fileInputValue.name,
+                        room: props.orderId,
+                        sender: {
+                          name: `${props.userData.fname} ${props.userData.lname}`,
+                          role: props.type,
+                          userid: props.userData.id,
+                          chatRoomId: searchVal as string,
+                        },
+                      })
+                      sendFileMessage({
+                        fileData: base64File,
+                        fileName: fileInputValue.name,
+                        room: props.orderId,
+                        sender: {
+                          name: `${props.userData.fname} ${props.userData.lname}`,
+                          role: props.type,
+                          userid: props.userData.id,
+                          chatRoomId: searchVal as string,
+                        },
+                      });
+                    }
+                  }}
+                  class="flex hover:bg-blue-1 transition-all items-center bg-black-2 text-white py-2 px-4 rounded-md"
+                >
+                  <p className="mr-2">Send</p>
+                  <RiSendPlane2Line className=" text-xl" />
+                </UnstyledButton>
+              </div>
             </div>
+          )}
+          <div className="flex items-center">
+            <UnstyledButton>
+              <FileButtonComponent
+                accept="application/pdf, .docx"
+                setFile={(file) => {
+                  setFileInputValue(file);
+                  if (file) {
+                    getBase64(file).then((res) => {
+                      if (res) {
+                        setBase64File(res as any);
+                      }
+                    });
+                  }
+                }}
+              >
+                <div className="mr-10">
+                  <Image src={AttachIcon} alt="attach-icon" />
+                </div>
+              </FileButtonComponent>
+            </UnstyledButton>
             <form className="w-full" onSubmit={(e) => e.preventDefault()}>
-              <div className="w-full">
-                {/* <input
-                type="text"
-                placeholder="Type a message"
-                className="outline-none border-2 px-4 pr-10 py-3 w-full rounded-xl border-stroke-7 placeholder:text-[#0000005f] text-[0.88rem]"
-              /> */}
+              <div className="w-full relative">
                 <Textarea
                   minRows={0}
                   autosize
@@ -207,7 +230,7 @@ const ChatRoom = (props: Props) => {
                 <button
                   onClick={sendMessageHandler}
                   disabled={!inputValue}
-                  className="w-fit disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer absolute right-10 -translate-y-1/2 top-1/2"
+                  className="w-fit disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer absolute right-3 -translate-y-1/2 top-1/2"
                 >
                   <Image src={SendImg} alt="send-img" />
                 </button>
@@ -215,9 +238,10 @@ const ChatRoom = (props: Props) => {
             </form>
           </div>
         </div>
-      ) : (
+      </div>
+      {/* ) : (
         <div className=""></div>
-      )}
+      )} */}
     </div>
   );
 };

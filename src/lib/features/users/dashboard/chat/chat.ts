@@ -15,7 +15,7 @@ export const dashboardChatApi = createApi({
       query: (id) => `/api/users/conversations/${id}`,
     }),
     fetchSingleConversationData: build.query<
-      { request: IGetUserConversations },
+       IGetUserConversations ,
       string
     >({
       query: (orderId) => `/api/users/conversation/${orderId}`,

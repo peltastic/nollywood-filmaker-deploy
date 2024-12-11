@@ -9,7 +9,7 @@ import ChatTimer from "../ChatTimer";
 import momentTz from "moment-timezone";
 import { IGetUserConversations } from "@/interfaces/dashboard/chat";
 import { convertToAfricaLagosTz } from "@/utils/helperFunction";
-import { differenceInMinutes } from "date-fns";
+import { differenceInMinutes, isAfter, isBefore } from "date-fns";
 type Props = {
   close: () => void;
   opened?: string;
@@ -17,6 +17,8 @@ type Props = {
   data?: IGetUserConversations;
   openRight?: () => void;
   type?: "user" | "consultant" | "admin";
+  isTime: boolean;
+  sessionOver: boolean;
 };
 
 export interface IFilesData {
@@ -43,62 +45,43 @@ const reviewed_request_file_data: IFilesData[] = [
   },
 ];
 
-const CustomerChatRight = (props: Props) => {
-  const [isTime, setIsTime] = useState<boolean>(false);
-  const [sessionOver, setSessionOver] = useState<boolean>(false);
-  useEffect(() => {
-    if (props.data) {
-      const startTime = convertToAfricaLagosTz(props.data.startTime);
-      const endTime = convertToAfricaLagosTz(props.data.endTime);
-      const diff = differenceInMinutes(
-        momentTz(new Date()).tz("Africa/Lagos").format(),
-        startTime
-      );
-      const diffEndTime = differenceInMinutes(
-        endTime,
-        momentTz(new Date()).tz("Africa/Lagos").format()
-      );
-      if (diffEndTime < 0) {
-        setSessionOver(true);
-      } else {
-        setSessionOver(false);
-      }
-
-      if (diff >= 0) {
-        setIsTime(true);
-      } else {
-        setIsTime(false);
-      }
-    }
-  }, [props.data]);
-
+const CustomerChatRight = ({
+  close,
+  isTime,
+  sessionOver,
+  closeRight,
+  data,
+  openRight,
+  opened,
+  type,
+}: Props) => {
   return (
     <div
       className={`border-l ${
-        props.closeRight ? "hidden" : null
+        closeRight ? "hidden" : null
       }  border-l-stroke-8 h-full`}
     >
       <header className="w-full font-semibold flex items-center px-6 py-8  border-b border-b-stroke-8">
         <h1 className=" text-[1.25rem] mr-auto">Directory</h1>
         <div
-          onClick={props.close}
+          onClick={close}
           className=" hover:bg-stroke-4 transition-all rounded-md cursor-pointer"
         >
           <Image src={HamburgerIcon} alt="hamburger-icons" />
         </div>
       </header>
       <section>
-        {props.data && (
+        {data && (
           <ChatTimer
             timeData={{
-              startTime: convertToAfricaLagosTz(props.data.startTime),
-              endTime: convertToAfricaLagosTz(props.data.endTime),
+              startTime: data.startTime,
+              endTime: data.endTime,
             }}
             isTime={isTime}
-            opened={!props.closeRight}
+            opened={!closeRight}
             sessionOver={sessionOver}
-            openRight={props.openRight}
-            type={props.type}
+            openRight={openRight}
+            type={type}
           />
         )}
       </section>

@@ -4,44 +4,38 @@ import React, { useEffect, useState } from "react";
 import TestImage from "/public/assets/test-avatar.png";
 import HoverCardComponent from "../HoverCard/HoverCardComponent";
 import SchedulerPopUp from "./SchedulerPopUp";
+import { time_slots } from "@/utils/constants/constants";
+import { IGetCalendarAppointmentResponse } from "@/interfaces/consultants/calendar/calendar";
+import { truncateStr } from "@/utils/helperFunction";
 
 type Props = {
   allocatedTime: string;
   index: number;
-  data: {
-    date: string;
-    time: {
-      hours: number;
-      minutes: number;
-      seconds: number;
-    };
-  }[];
+  data: IGetCalendarAppointmentResponse[];
+  time_slots: { time: string; upperBound: number; lowerBound: number }[];
 
   date: Date;
 };
 
 const SchedulerSlots = (props: Props) => {
-  // const [timeSlot, ]
+  const [slotData, setSlotData] = useState<IGetCalendarAppointmentResponse>()
   const [isTime, setIsTime] = useState<boolean>(false);
 
   useEffect(() => {
-    const slotTimeStamp =
-      moment(props.date).format("YYYY-MM-DD") + props.allocatedTime;
-    const isDate = props.data.find(
-      (el) =>
-        moment(el.date).format("YYYY-MM-DD") +
-          `${el.time.hours}:${
-            el.time.minutes < 10 ? `0${el.time.minutes}` : el.time.minutes
-          }` ===
-        slotTimeStamp
+    const at = props.time_slots.filter(
+      (el) => el.upperBound >= props.index && el.lowerBound <= props.index
     );
 
-    if (isDate) {
+    const slotTimeStamp =`${moment(props.date).format("YYYY-MM-DD")}T${moment(at[0].time, ["h:mm A"]).format("HH:mm")}:00+01:00`;
+      console.log(slotTimeStamp)
+      const isDate = props.data.find((el) => el.booktime === slotTimeStamp);
+      if (isDate) {
+      setSlotData(isDate)
       setIsTime(true);
     } else {
       setIsTime(false);
     }
-  }, [props.date, props.allocatedTime]);
+  }, [props.date]);
   return (
     <div
       className={`
@@ -50,7 +44,7 @@ const SchedulerSlots = (props: Props) => {
     >
       {isTime && (
         <HoverCardComponent
-          closeDelay={1000}
+          closeDelay={500}
           target={
             <div
               className={` ${
@@ -70,7 +64,7 @@ const SchedulerSlots = (props: Props) => {
                   </div>
                 </div>
                 <p className="text-[0.63rem] font-bold mt-1">
-                  No Country for Old Men
+                 {slotData?.chat_title && truncateStr(slotData.chat_title, 25)}
                 </p>
                 <div className="flex absolute bottom-1">
                   <Image
@@ -88,7 +82,7 @@ const SchedulerSlots = (props: Props) => {
             </div>
           }
         >
-          <SchedulerPopUp />
+          <SchedulerPopUp data={slotData} />
         </HoverCardComponent>
       )}
     </div>

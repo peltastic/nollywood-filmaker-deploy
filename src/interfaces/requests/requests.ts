@@ -10,5 +10,5 @@ export interface IActiveRequestData {
 
 
 export interface IActiveRequestDataResposne {
-    request: IActiveRequestData[]
+    requests: IActiveRequestData[]
 }

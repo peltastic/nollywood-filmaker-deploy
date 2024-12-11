@@ -1,4 +1,4 @@
-import React, { use } from "react";
+import React, { use, useEffect, useRef } from "react";
 import TestImage from "/public/assets/test-avatar-big.png";
 import AdminProfileImg from "/public/assets/dashboard/admin-profile-img.svg";
 import Image from "next/image";
@@ -8,12 +8,27 @@ type Props = {
   user: "admin" | "user" | "consultant";
   prevUser: "admin" | "user" | "consultant" | null;
   index: number;
+  lastmessage?: boolean;
 };
 
-const ChatMessage = ({ user, text, prevUser, index }: Props) => {
+const ChatMessage = ({ user, text, prevUser, index, lastmessage }: Props) => {
   const noPfpRow = prevUser === user;
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) return () => {};
+    if (lastmessage) {
+      ref.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "end"
+        
+      });
+    }
+  }, []);
+
   return (
-    <div className="flex mb-3 px-4 w-full">
+    <div className="flex mb-3 px-4 w-full" ref={ref}>
       <div
         className={`${
           user === "user" ? "flex-row-reverse ml-auto" : ""
@@ -47,9 +62,16 @@ const ChatMessage = ({ user, text, prevUser, index }: Props) => {
             user === "admin" || user === "consultant"
               ? "bg-admin-chat-bg text-black"
               : "bg-black-3 text-white mr-2"
-          } text-[0.88rem] py-2 px-2 rounded-xl`}
+          } text-[0.88rem] py-2 px-2 rounded-xl max-w-[20rem]`}
         >
-          <p>{text}</p>
+          <p className="break-words">
+            {text.split("\n").map((line, index) => (
+              <>
+                {line}
+                <br />
+              </>
+            ))}
+          </p>
         </div>
       </div>
     </div>

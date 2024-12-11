@@ -21,6 +21,7 @@ export interface IChatData {
   end_time: string;
   orderId: string;
   date: string;
+  booktime: string
   time: {
     hours: number;
     minutes: number;

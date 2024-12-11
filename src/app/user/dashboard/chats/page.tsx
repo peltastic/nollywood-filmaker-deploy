@@ -19,6 +19,8 @@ import { useSelector } from "react-redux";
 type Props = {};
 
 const ChatsPage = (props: Props) => {
+  const [isTime, setIsTime] = useState<boolean>(false);
+  const [sessionOver, setSessionOver] = useState<boolean>(false);
   const userId = useSelector(
     (state: RootState) => state.persistedState.user.user?.id
   );
@@ -48,6 +50,7 @@ const ChatsPage = (props: Props) => {
 
   useEffect(() => {
     if (conversationsRes.data) {
+      console.log(conversationsRes.data)
       const transformed_data: IChatData[] = conversationsRes.data.requests.map(
         (el) => {
           return {
@@ -59,6 +62,7 @@ const ChatsPage = (props: Props) => {
             name: el.chat_title,
             service: el.nameofservice,
             status: el.stattusof,
+            booktime: el.booktime,
             time: el.time,
             type:
               el.nameofservice === "Chat With A Professional"
@@ -94,8 +98,12 @@ const ChatsPage = (props: Props) => {
               open={() => setCloseRight(false)}
               orderId={searchVal}
               isFetching={result.isFetching}
-              data={result.data?.request}
+              data={result.data}
               type="user"
+              isTime={isTime}
+              sessionOver={sessionOver}
+              setIsSessionOverProps={(val) => setSessionOver(val)}
+              setIsTimeProps={(val) => setIsTime(val)}
             />
           </section>
           <section
@@ -105,10 +113,12 @@ const ChatsPage = (props: Props) => {
           >
             <CustomerChatRight
               type="user"
-              data={result.data?.request}
+              data={result.data}
               closeRight={closeRight}
               close={() => setCloseRight(true)}
               openRight={() => setCloseRight(false)}
+              isTime={isTime}
+              sessionOver={sessionOver}
             />
           </section>
         </section>

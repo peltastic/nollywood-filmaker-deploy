@@ -124,6 +124,7 @@ export function get12HTime(hour: number): "AM" | "PM" {
 }
 
 export function convertToAfricaLagosTz(time: string) {
+
   const hour = Number(time.split("T")[1].split(":")[0]) - 1;
   const hour_time = hour < 10 ? "0" + hour : hour;
   return `${time.split("T")[0]}T${hour_time}:00:00+01:00`;

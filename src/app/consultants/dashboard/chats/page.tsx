@@ -18,6 +18,8 @@ import { useSelector } from "react-redux";
 type Props = {};
 
 const ConsultantChastPage = (props: Props) => {
+  const [isTime, setIsTime] = useState<boolean>(false);
+  const [sessionOver, setSessionOver] = useState<boolean>(false);
   const consultantId = useSelector(
     (state: RootState) => state.persistedState.consultant.user?.id
   );
@@ -54,6 +56,7 @@ const ConsultantChastPage = (props: Props) => {
             service: el.nameofservice,
             status: el.stattusof,
             time: el.time,
+            booktime: el.booktime,
             type:
               el.nameofservice === "Chat With A Professional"
                 ? "Chat"
@@ -89,7 +92,11 @@ const ConsultantChastPage = (props: Props) => {
               open={() => setCloseRight(false)}
               orderId={searchVal}
               isFetching={result.isFetching}
-              data={result.data?.request}
+              data={result.data}
+              isTime={isTime}
+              sessionOver={sessionOver}
+              setIsSessionOverProps={(val) => setSessionOver(val)}
+              setIsTimeProps={(val) => setIsTime(val)}
             />
           </section>
           <section
@@ -99,8 +106,10 @@ const ConsultantChastPage = (props: Props) => {
           >
             <CustomerChatRight
               type="consultant"
-              data={result.data?.request}
+              data={result.data}
               close={() => setCloseRight(true)}
+              isTime={isTime}
+              sessionOver={sessionOver}
             />
           </section>
         </section>

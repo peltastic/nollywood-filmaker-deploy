@@ -32,25 +32,24 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
       : "bg-light-yellow text-dark-yellow border border-light-yellow";
 
   useEffect(() => {
-    const startTime = convertToAfricaLagosTz(data.start_time);
-    const endTime = convertToAfricaLagosTz(data.end_time);
-    const currTime = momentTz(new Date()).tz("Africa/Lagos").format();
-    const differenceInDaysVal = differenceInDays(currTime, new Date(startTime));
-    const timeIsAfterStartTime = isAfter(
-      momentTz(new Date()).tz("Africa/Lagos").format(),
-      startTime
-    );
-    const timeIsBeforeEndTime = isBefore(
-      momentTz(new Date()).tz("Africa/Lagos").format(),
-      endTime
-    );
+    const now = new Date();
+    const startTime = data.booktime;
+    const endTime = data.end_time;
+
+    const isBeforeEndtime = isBefore(now, endTime);
+    const isAfterStartTime = isAfter(now, startTime);
+
+    const differenceInDaysVal = differenceInDays(now, startTime);
+    const isAfterEndTime = isAfter(now, endTime);
     if (differenceInDaysVal > 1) {
       setChatTimeStatus(moment(data.date).format("DD/MM/YYYY"));
     } else {
-      if (timeIsAfterStartTime && timeIsBeforeEndTime) {
+      if (isAfterStartTime && isBeforeEndtime) {
         setChatTimeStatus("Chat Active");
-      } else {
+      } else if (isAfterEndTime) {
         setChatTimeStatus(moment(endTime).fromNow());
+      } else {
+        setChatTimeStatus(moment(startTime).fromNow());
       }
     }
   }, [data]);

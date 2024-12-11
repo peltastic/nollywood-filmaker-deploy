@@ -34,16 +34,7 @@ const ConsultantCalendarPage = (props: Props) => {
             <>
               {data && (
                 <Scheduler
-                  data={
-                    data.appointments
-                      ? data?.appointments.map((el) => {
-                          return {
-                            date: el.date,
-                            time: el.time,
-                          };
-                        })
-                      : [ ]
-                  }
+                  data={data.appointments || []}
                   setValue={(val) => setCurrentDay(val)}
                   value={currentDay}
                 />

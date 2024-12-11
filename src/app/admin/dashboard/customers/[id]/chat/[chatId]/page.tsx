@@ -18,19 +18,19 @@ const CustomerChatPage = (props: Props) => {
               closeRight ? "w-[100%]" : "w-[70%]"
             } transition-all hidden chatbp:block`}
           >
-            <CustomerChatMiddle
+            {/* <CustomerChatMiddle
             type='admin'
             admin
               opened={closeRight}
               open={() => setCloseRight(false)}
-            />
+            /> */}
           </section>
           <section
             className={`transition-all ${
               closeRight ? "w-[0%] invisible " : "w-[27%] visible ml-3  "
             }  hidden chatbp:block `}
           >
-            <CustomerChatRight close={() => setCloseRight(true)} />
+            {/* <CustomerChatRight close={() => setCloseRight(true)} /> */}
           </section>
             </section>
         </DashboardBodyLayout>
