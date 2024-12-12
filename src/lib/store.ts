@@ -29,6 +29,7 @@ import { adminRequestApi } from "./features/admin/requests/request";
 import { dashboardChatApi } from "./features/users/dashboard/chat/chat";
 import { consultantDashboardChatApi } from "./features/consultants/dashboard/chat/chat";
 import { adminCustomersApi } from "./features/admin/customers/customers";
+import { resolveApi } from "./features/consultants/dashboard/resolve";
 
 const persistConfig = {
   key: "root",
@@ -69,6 +70,7 @@ export const store = configureStore({
     [consultantDashboardChatApi.reducerPath]:
       consultantDashboardChatApi.reducer,
     [adminCustomersApi.reducerPath]: adminCustomersApi.reducer,
+    [resolveApi.reducerPath]: resolveApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -89,6 +91,7 @@ export const store = configureStore({
       dashboardChatApi.middleware,
       consultantDashboardChatApi.middleware,
       adminCustomersApi.middleware,
+      resolveApi.middleware,
     ]),
   devTools: process.env.NODE_ENV !== "production",
 });

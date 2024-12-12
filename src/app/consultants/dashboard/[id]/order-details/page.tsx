@@ -66,6 +66,11 @@ const OrderDetails = (props: Props) => {
               statusValue={data?.request.stattusof}
               consultant
               orderId={data?.request.orderId}
+              chat_title={data?.request.movie_title}
+              summary={data?.request.summary || data?.request.synopsis || ""}
+              userId={data?.request.userId}
+              nameofservice={data?.request.nameofservice}
+              expertise={data?.request.expertise}
             />
             <div className="flex  flex-wrap lg:flex-nowrap items-start">
               <div className=" w-full lg:w-[15%] mt-6">

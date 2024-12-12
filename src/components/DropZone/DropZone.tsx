@@ -2,11 +2,15 @@ import React, { PropsWithChildren } from "react";
 
 import { Dropzone } from "@mantine/dropzone";
 
-interface Props extends PropsWithChildren {}
+interface Props extends PropsWithChildren {
+  setFiles: (filee: File[]) => void;
+}
 
 const DropZoneComponent = (props: Props) => {
   return (
-    <Dropzone onDrop={(files) => console.log(files)}>{props.children}</Dropzone>
+    <Dropzone onDrop={(files) => props.setFiles(files)}>
+      {props.children}
+    </Dropzone>
   );
 };
 

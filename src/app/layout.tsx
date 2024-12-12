@@ -7,6 +7,7 @@ import Providers from "@/components/Providers/Providers";
 import '@mantine/tiptap/styles.css';
 import '@mantine/notifications/styles.css';
 import '@mantine/nprogress/styles.css';
+import '@mantine/dropzone/styles.css';
 import { Notifications } from '@mantine/notifications';
 import { NavigationProgress } from '@mantine/nprogress';
 

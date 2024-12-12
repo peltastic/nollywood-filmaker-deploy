@@ -17,12 +17,13 @@ type Props = {
   status?: "pending" | "ongoing" | "ready" | "completed" | string;
   consultantId?: string;
   isChat?: boolean;
+  open: () => void;
 };
 
 const ConsultantMenuContent = (props: Props) => {
-  const [opened, { open, close }] = useDisclosure();
   const [acceptRequest, { isLoading, isSuccess, isError, data, error }] =
     useAcceptRequestMutation();
+
   const [declineRequest, result] = useDeclineRequestMutation();
   useEffect(() => {
     if (isError) {
@@ -47,15 +48,6 @@ const ConsultantMenuContent = (props: Props) => {
   }, [result.isError, result.isSuccess]);
   return (
     <>
-      <ModalComponent
-        opened={opened}
-        centered
-        onClose={close}
-        withCloseButton={false}
-        size="xl"
-      >
-        <ResolveRequestModal close={close} />
-      </ModalComponent>
       <div className="bg-white ">
         {props.status === "pending" ? (
           <>
@@ -101,12 +93,12 @@ const ConsultantMenuContent = (props: Props) => {
             <ul className="px-1 text-gray-6 text-[0.88rem]">
               {props.status === "ongoing" && !props.isChat && (
                 <li
-                  onClick={open}
+                  onClick={props.open}
                   className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
                 >
                   Resolve service request
                 </li>
-              )}
+               )}
               {(props.isChat || props.status === "ready") && (
                 <li className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4">
                   Go to chat

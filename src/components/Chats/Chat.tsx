@@ -60,12 +60,12 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
         onClick={() =>
           router.push(
             type === "consultant"
-              ? `/consultants/dashboard/chats?chat=${data.id}`
-              : `/user/dashboard/chats?chat=${data.id}`
+              ? `/consultants/dashboard/chats?chat=${data.orderId}`
+              : `/user/dashboard/chats?chat=${data.orderId}`
           )
         }
         className={`${
-          orderId === data.id ? "bg-[#615EF00F]" : ""
+          orderId === data.orderId ? "bg-[#615EF00F]" : ""
         } hidden chatbp:flex rounded-md transition-all hover:bg-[#615EF00F] items-start py-4 mb-2 px-4 cursor-pointer `}
       >
         <div className="w-[3rem] mr-3 h-[3rem] rounded-full bg-black flex items-center justify-center">

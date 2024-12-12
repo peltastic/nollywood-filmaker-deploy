@@ -72,7 +72,7 @@ const CustomTime = (props: Props) => {
               disabled={!el.isAvailable}
               onClick={() => props.setSelected && props.setSelected(el.time)}
               key={el.time}
-              className={`w-full\ ${
+              className={`w-full ${
                 el.time === props.selectedTime
                   ? "bg-black-2 text-white"
                   : "text-black-2 bg-white"

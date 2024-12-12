@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { GoDotFill } from "react-icons/go";
 import { IoIosArrowBack, IoIosArrowDown } from "react-icons/io";
 import UnstyledButton from "../Button/UnstyledButton";
@@ -20,14 +20,18 @@ import { nprogress } from "@mantine/nprogress";
 import { notify } from "@/utils/notification";
 import { capitalizeFirstLetter } from "@/utils/helperFunction";
 import ConsultantMenuContent from "../Menu/MenuContent/ConsultantMenuContent";
+import SetChatDate from "../ModalPages/SetChatDate";
 
 type Props = {
   isChat?: boolean;
+  chat_title?: string;
   status?: "ready" | "completed" | "ongoing" | "pending" | string;
   statusValue?: string;
   consultant?: boolean;
   admin?: boolean;
+  userId?: string;
   customerReqOrderId?: string;
+  summary?: string;
   orderId?: string;
   expertise?: string;
   chat_appointment_data?: {
@@ -48,6 +52,15 @@ type Props = {
       | "Draft Legal documents"
       | "Create a Production budget";
   };
+  nameofservice?:
+    | "Chat With A Professional"
+    | "Read my Script and advice"
+    | "Watch the Final cut of my film and advice"
+    | "Look at my Budget and advice"
+    | "Create a Marketing budget"
+    | "Create a Pitch based on my Script"
+    | "Draft Legal documents"
+    | "Create a Production budget";
 };
 
 const OrderDetailsHeader = ({
@@ -59,10 +72,17 @@ const OrderDetailsHeader = ({
   expertise,
   chat_appointment_data,
   isChat,
+  chat_title,
+  summary,
+  nameofservice,
+  userId,
 }: Props) => {
+  const [opened, { open, close }] = useDisclosure();
   const router = useRouter();
 
   const [assignReqOpened, assingReqOptions] = useDisclosure();
+
+  const [showChatDate, setShowChatDate] = useState<boolean>(true);
 
   const consultantId = useSelector(
     (state: RootState) => state.persistedState.consultant.user?.id
@@ -119,8 +139,43 @@ const OrderDetailsHeader = ({
       break;
   }
 
+
+
   return (
     <>
+      <ModalComponent
+        opened={opened}
+        centered
+        onClose={close}
+        withCloseButton={false}
+        size="xl"
+      >
+        {showChatDate &&
+        chat_title &&
+        expertise &&
+        nameofservice &&
+        summary &&
+        userId &&
+        orderId ? (
+          <SetChatDate
+            data={{
+              chat_title,
+              expertise,
+              nameofservice: nameofservice,
+              summary,
+              userId,
+              orderId,
+            }}
+            close={close}
+          />
+        ) : (
+          <ResolveRequestModal
+            orderId={orderId}
+            showChat={() => setShowChatDate(true)}
+            close={close}
+          />
+        )}
+      </ModalComponent>
       <ModalComponent
         opened={assignReqOpened}
         centered
@@ -179,6 +234,7 @@ const OrderDetailsHeader = ({
                   chatId={""}
                   consultantId={consultantId}
                   orderId={orderId}
+                  open={open}
                 />
               ) : (
                 <div className="bg-white ">

@@ -118,7 +118,7 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
       // const
       return (
         <>
-          <ModalComponent
+          {/* <ModalComponent
             onClose={close}
             withCloseButton={false}
             opened={opened}
@@ -126,7 +126,7 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
             centered
           >
             <SetChatDate open={open} close={close} />
-          </ModalComponent>
+          </ModalComponent> */}
           <MenuComponent
             target={
               <div>
@@ -139,12 +139,12 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
           >
             <div className="bg-white ">
               <ul className="px-1 text-gray-6 text-[0.88rem]">
-                <li
+                {/* <li
                   onClick={open}
                   className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
                 >
                   Go to Chat
-                </li>
+                </li> */}
                 <li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
                   <Link
                     href={`/user/dashboard/order-details/${row.original.orderId}`}
