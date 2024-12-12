@@ -82,7 +82,7 @@ const OrderDetailsHeader = ({
 
   const [assignReqOpened, assingReqOptions] = useDisclosure();
 
-  const [showChatDate, setShowChatDate] = useState<boolean>(true);
+  const [showChatDate, setShowChatDate] = useState<boolean>(false);
 
   const consultantId = useSelector(
     (state: RootState) => state.persistedState.consultant.user?.id
