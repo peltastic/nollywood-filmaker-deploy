@@ -69,7 +69,7 @@ const ChatTime = (props: Props) => {
           })}
         />
       </div>
-      <div className="w-full flex mt-14 mb-14">
+      <div className="w-full flex mt-20 mb-14">
         <UnstyledButton
           type="button"
           clicked={() => props.setPageProps("1")}
