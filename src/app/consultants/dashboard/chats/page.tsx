@@ -9,6 +9,7 @@ import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import {
   useLazyFetchConsultantsConversationsQuery,
   useLazyFetchSingleConversationDataQuery,
+  useLazyGetConsultantChatFilesQuery,
 } from "@/lib/features/consultants/dashboard/chat/chat";
 import { RootState } from "@/lib/store";
 import { useSearchParams } from "next/navigation";

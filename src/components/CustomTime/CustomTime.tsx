@@ -57,6 +57,8 @@ const CustomTime = (props: Props) => {
             <Skeleton height={50} />
           </div>
         </>
+      ) : !props.time_slots ? (
+        <div className="text-[0.8rem] bg-white disabled:cursor-not-allowed relative transition-all cursor-pointer font-medium mx-0 md:mx-auto  rounded-md py-3 px-3 mb-2">No Slots Available</div>
       ) : (
         <>
           {props.time_slots?.map((el) => (

@@ -1,9 +1,12 @@
-import { IFetchCustomerRequestsResponse } from "@/interfaces/admin/requests/requests";
+import {
+  IAssignServiceToConsultantPayload,
+  IFetchCustomerRequestsResponse,
+} from "@/interfaces/admin/requests/requests";
 import {
   IAppointConsultantPayload,
   IFetchConsultantsResponse,
 } from "@/interfaces/consultants/dashboard/request";
-import {  adminBaseQueryWithReauth } from "@/lib/baseQuery";
+import { adminBaseQueryWithReauth } from "@/lib/baseQuery";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const adminRequestApi = createApi({
@@ -22,7 +25,7 @@ export const adminRequestApi = createApi({
     >({
       query: ({ limit, order, page, sort, type }) => {
         return {
-          url: `/api/admin/pullrequests?order=${order}&type=Chat`,
+          url: `/api/admin/pullrequests?order=${order}`,
         };
       },
     }),
@@ -38,6 +41,16 @@ export const adminRequestApi = createApi({
         body,
       }),
     }),
+    assignServiceToConsultant: build.mutation<
+      unknown,
+      IAssignServiceToConsultantPayload
+    >({
+      query: (body) => ({
+        url: "/api/admin/create/task",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -45,4 +58,5 @@ export const {
   useLazyFetchCustomerRequestQuery,
   useFetchConsultantsByExpertiseQuery,
   useAppointConsultantMutation,
+  useAssignServiceToConsultantMutation
 } = adminRequestApi;

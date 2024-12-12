@@ -10,6 +10,7 @@ import {
   useLazyFetchSingleConversationDataQuery,
   useLazyFetchUserConversationsQuery,
 } from "@/lib/features/users/dashboard/chat/chat";
+import { useLazyGetChatFilesQuery } from "@/lib/features/users/services/chat/chat";
 import { RootState } from "@/lib/store";
 import { convertToAfricaLagosTz } from "@/utils/helperFunction";
 import { useSearchParams } from "next/navigation";
@@ -34,6 +35,7 @@ const ChatsPage = (props: Props) => {
 
   const [fetchConversation, conversationsRes] =
     useLazyFetchUserConversationsQuery();
+  
 
   useEffect(() => {
     if (userId) {

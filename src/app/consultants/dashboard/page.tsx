@@ -25,6 +25,7 @@ import { ICustomerRequestData } from "@/interfaces/consultants/dashboard/request
 import {
   useFetchCustomerRequestsQuery,
   useGetActiveRequestQuery,
+  useLazyGetServiceRequestsQuery,
 } from "@/lib/features/consultants/dashboard/request";
 import { RootState } from "@/lib/store";
 import moment from "moment";
@@ -145,41 +146,6 @@ const bar_chart_data = [
   { month: "Dec", value: 11000 },
 ];
 
-// const customer_req_data: ICustomerReqData[] = [
-//   {
-//     customer: "Jenny Wilson",
-//     date: "22 Jan 2022",
-//     email: "w.lawson@example.com",
-//     script: "Mikolo",
-//     service_type: "Read my script",
-//     status: "Pending",
-//   },
-//   {
-//     customer: "Jenny Wilson",
-//     date: "22 Jan 2022",
-//     email: "w.lawson@example.com",
-//     script: "Mikolo",
-//     service_type: "Read my script",
-//     status: "Ongoing",
-//   },
-//   {
-//     customer: "Jenny Wilson",
-//     date: "22 Jan 2022",
-//     email: "w.lawson@example.com",
-//     script: "Mikolo",
-//     service_type: "Read my script",
-//     status: "Ready",
-//   },
-//   {
-//     customer: "Jenny Wilson",
-//     date: "22 Jan 2022",
-//     email: "w.lawson@example.com",
-//     script: "Mikolo",
-//     service_type: "Read my script",
-//     status: "Completed",
-//   },
-// ];
-
 const DashboardPage = (props: Props) => {
   useProtectRouteConsultantRoute();
   const consultantId = useSelector(
@@ -196,6 +162,9 @@ const DashboardPage = (props: Props) => {
   const [activeReqData, setActiveReqData] = useState<
     IConsultantActiveRequestColumnData[]
   >([]);
+  const [serviceReqData, setServiceReqData] = useState<
+    IConsultantActiveRequestColumnData[]
+  >([]);
 
   const result = useGetActiveRequestQuery(consultantId!, {
     refetchOnMountOrArgChange: true,
@@ -206,24 +175,30 @@ const DashboardPage = (props: Props) => {
       refetchOnMountOrArgChange: true,
     });
 
+  const [fetchServiceReq, serviceReq] = useLazyGetServiceRequestsQuery();
+
   useEffect(() => {
-    if (isSuccess) {
-      const resData: ICustomerReqData[] = data.assignments.map((el) => {
-        return {
-          customer: el.user.fullname,
-          date: moment(el.assignment.createdDate).format("LL"),
-          email: el.user.email,
-          script: el.info.chat_title,
-          service_type: el.info.nameofservice,
-          status: el.assignment.status,
-          imgurl: el.user.profilepics,
-          id: el.assignment._id,
-          orderId: el.assignment.orderId,
-        };
-      });
-      setCustomerReqData(resData);
-    }
-  }, [isSuccess, isError]);
+    fetchServiceReq(consultantId!);
+  }, []);
+
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     const resData: ICustomerReqData[] = data.assignments.map((el) => {
+  //       return {
+  //         customer: el.user.fullname,
+  //         date: moment(el.assignment.createdDate).format("LL"),
+  //         email: el.user.email,
+  //         script: el.info.chat_title,
+  //         service_type: el.info.nameofservice,
+  //         status: el.assignment.status,
+  //         imgurl: el.user.profilepics,
+  //         id: el.assignment._id,
+  //         orderId: el.assignment.orderId,
+  //       };
+  //     });
+  //     setCustomerReqData(resData);
+  //   }
+  // }, [isSuccess, isError]);
 
   useEffect(() => {
     if (result.isSuccess) {
@@ -231,18 +206,41 @@ const DashboardPage = (props: Props) => {
         const resData: IConsultantActiveRequestColumnData[] =
           result.data.appointments.map((el) => {
             return {
-              customer: "Jenny Wilson",
+              customer: `${el.user.fname} ${el.user.lname}`,
               date: moment(el.date).format("LL"),
-              email: "email@email.com",
+              email: el.user.email,
               script: el.request.chat_title || el.request.movie_title,
               service_type: el.request.nameofservice,
               status: el.request.stattusof,
+              profilepic: el.user.profilepics,
+              orderId: el.orderId
             };
           });
         setActiveReqData(resData);
       }
     }
   }, [result.isSuccess]);
+
+  useEffect(() => {
+    if (serviceReq.isSuccess) {
+      if (serviceReq.data.tasks) {
+        const resData: IConsultantActiveRequestColumnData[] =
+          serviceReq.data.tasks.map((el) => {
+            return {
+              customer: "Jenny Wilson",
+              date: moment(el.date).format("LL"),
+              email: "email.email.com",
+              profilepic: "https://nwfm-api.onrender.com/uploads/account.png",
+              script: "service-1",
+              service_type: el.nameofservice,
+              status: el.status,
+              orderId: el.orderId
+            };
+          });
+        setServiceReqData(resData);
+      }
+    }
+  }, [serviceReq.isSuccess]);
   return (
     <ServiceLayout consultant>
       <DashboardBodyLayout>
@@ -293,7 +291,7 @@ const DashboardPage = (props: Props) => {
           </div>
           <div className="mt-16">
             <DataTable
-              title="Active Requests"
+              title="Active Chat Requests"
               columns={consultant_active_requests_columns}
               data={activeReqData}
               isFetching={result.isFetching}
@@ -302,13 +300,22 @@ const DashboardPage = (props: Props) => {
           </div>
           <div className="mt-16">
             <DataTable
+              title="Active Service Requests"
+              columns={consultant_active_requests_columns}
+              data={serviceReqData}
+              isFetching={serviceReq.isFetching}
+              loaderLength={5}
+            />
+          </div>
+          {/* <div className="mt-16">
+            <DataTable
               title="Customer Requests"
               isFetching={isFetching}
               columns={customer_req_columns}
               data={customerReqData}
               loaderLength={5}
             />
-          </div>
+          </div> */}
         </div>
         <div className="mt-16 px-6 chatbp:px-0">
           <DashboardPlate

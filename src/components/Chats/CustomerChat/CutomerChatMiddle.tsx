@@ -20,14 +20,15 @@ import { RootState } from "@/lib/store";
 import { truncateStr } from "@/utils/helperFunction";
 import { differenceInMilliseconds, isAfter, isBefore } from "date-fns";
 import { notify } from "@/utils/notification";
+import { useLazyFetchConsultantChatMessagesQuery } from "@/lib/features/consultants/dashboard/chat/chat";
 
 export interface ChatPayload {
   text: string;
   user: "user" | "consultant" | "admin";
   id: string;
-  // fileUrl: string
-  // fileName: string
-  // type: "text" | "file"
+  file: string;
+  filename: string;
+  type: "text" | "file";
 }
 
 type Props = {
@@ -66,10 +67,16 @@ const CustomerChatMiddle = ({
   const router = useRouter();
 
   const [fetchUserChatMessages, result] = useLazyFetchChatMessagesQuery();
+  const [fetchConsultantChatMessages, consultantRes] =
+    useLazyFetchConsultantChatMessagesQuery();
 
   useEffect(() => {
     if (data) {
-      fetchUserChatMessages(data.orderId);
+      if (type === "user") {
+        fetchUserChatMessages(data.orderId);
+      } else {
+        fetchConsultantChatMessages(data.orderId);
+      }
     }
   }, [data]);
 
@@ -137,11 +144,30 @@ const CustomerChatMiddle = ({
           text: el.message,
           user: el.role,
           id: el._id,
+          file: el.type === "file" ? el.message : "",
+          filename: el.type === "file" ? el.filename : "",
+          type: el.type,
         };
       });
       setChatData(chat_data);
     }
   }, [result.data]);
+
+  useEffect(() => {
+    if (consultantRes.data) {
+      const chat_data: ChatPayload[] = consultantRes.data.messages.map((el) => {
+        return {
+          text: el.message,
+          user: el.role,
+          id: el._id,
+          file: el.type === "file" ? el.message : "",
+          filename: el.type === "file" ? el.filename : "",
+          type: el.type,
+        };
+      });
+      setChatData(chat_data);
+    }
+  }, [consultantRes.data]);
 
   useEffect(() => {
     if (isFetching) {

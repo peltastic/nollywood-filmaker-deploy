@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from "react";
 import TestImage from "/public/assets/test-avatar-big.png";
 import AdminProfileImg from "/public/assets/dashboard/admin-profile-img.svg";
 import Image from "next/image";
+import Link from "next/link";
+import { FaDownload } from "react-icons/fa";
 
 type Props = {
   text: string;
@@ -9,6 +11,9 @@ type Props = {
   prevUser: "admin" | "user" | "consultant" | null;
   index: number;
   lastmessage?: boolean;
+  type: "text" | "file";
+  filename: string;
+  file: string;
 };
 
 const ConsultantChatMessage = ({
@@ -17,6 +22,9 @@ const ConsultantChatMessage = ({
   text,
   prevUser,
   index,
+  file,
+  filename,
+  type,
 }: Props) => {
   const noPfpRow = prevUser === user;
   const ref = useRef<HTMLDivElement>(null);
@@ -63,19 +71,34 @@ const ConsultantChatMessage = ({
               ? "mr-[3.2rem]"
               : ""
           } ${
-            user === "user"
+            type === "file" && user === "user"
+              ? "bg-admin-chat-bg  text-black hover:bg-gray-2 transition-all"
+              : user === "user"
               ? "bg-admin-chat-bg text-black"
               : "bg-black-3 text-white mr-2"
           } text-[0.88rem] py-2 px-2 rounded-xl max-w-[20rem]`}
         >
-          {" "}
           <p className="break-words">
-            {text.split("\n").map((line, index) => (
+            {type === "file" ? (
+              <Link href={file}>
+                <div className="cursor-pointer py-2 px-2">
+                  <p>{filename || "file message"}</p>
+                  <div className=" flex mt-2 items-center">
+                    <p>file download</p>
+                    <FaDownload className="ml-2" />
+                  </div>
+                </div>
+              </Link>
+            ) : (
               <>
-                {line}
-                <br />
+                {text.split("\n").map((line, index) => (
+                  <div className="" key={index}>
+                    {line}
+                    <br />
+                  </div>
+                ))}
               </>
-            ))}
+            )}
           </p>
         </div>
       </div>

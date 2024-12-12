@@ -1,4 +1,4 @@
-import { IChatWithProPayload, ITimeSlotsResponse } from "@/interfaces/chat/chat";
+import { IChatFilesResponse, IChatWithProPayload, ITimeSlotsResponse } from "@/interfaces/chat/chat";
 import { baseQueryWithReauth } from "@/lib/baseQuery";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
@@ -30,7 +30,7 @@ export const chatApi = createApi({
       query: ({ date, expertise }) =>
         `/api/users/gethours?expertise=${expertise}&date=${date}`,
     }),
-    getChatFiles: build.query<unknown, string>({
+    getChatFiles: build.query<IChatFilesResponse, string>({
       query: (room_id) =>  `/api/chat/files/${room_id}`
     })
   }),

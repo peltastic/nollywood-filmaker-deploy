@@ -20,7 +20,6 @@ import { RootState } from "@/lib/store";
 import { initializeTransactionListener } from "@/lib/socket";
 import { nprogress } from "@mantine/nprogress";
 import Spinner from "@/app/Spinner/Spinner";
-import { convert12HT24 } from "@/utils/helperFunction";
 
 type Props = {};
 

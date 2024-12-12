@@ -6,6 +6,7 @@ import CustomSelect from "../Select/CustomSelect";
 import UnstyledButton from "../Button/UnstyledButton";
 import {
   useAppointConsultantMutation,
+  useAssignServiceToConsultantMutation,
   useFetchConsultantsByExpertiseQuery,
 } from "@/lib/features/admin/requests/request";
 import { Skeleton } from "@mantine/core";
@@ -25,6 +26,15 @@ type Props = {
     };
     userId: string;
     date: string;
+    nameofservice:
+      | "Chat With A Professional"
+      | "Read my Script and advice"
+      | "Watch the Final cut of my film and advice"
+      | "Look at my Budget and advice"
+      | "Create a Marketing budget"
+      | "Create a Pitch based on my Script"
+      | "Draft Legal documents"
+      | "Create a Production budget";
   };
 };
 
@@ -42,6 +52,8 @@ const AssignRequestModal = (props: Props) => {
   const { data, isFetching } = useFetchConsultantsByExpertiseQuery(
     props.expertise
   );
+  const [assign, assignRes] = useAssignServiceToConsultantMutation();
+
   useEffect(() => {
     if (data) {
       const transformed_data: {
@@ -59,6 +71,7 @@ const AssignRequestModal = (props: Props) => {
       setDropDownData(transformed_data);
     }
   }, [data]);
+
   useEffect(() => {
     if (result.isError) {
       nprogress.complete();
@@ -78,6 +91,27 @@ const AssignRequestModal = (props: Props) => {
       props.close();
     }
   }, [result.isError, result.isSuccess]);
+
+  useEffect(() => {
+    if (assignRes.isError) {
+      nprogress.complete();
+      notify(
+        "error",
+        "",
+        (assignRes.error as any).data?.message || "An Error Occured"
+      );
+    }
+
+    if (assignRes.isSuccess) {
+      notify(
+        "success",
+        "Successful",
+        "Service assigned to consultant successfully"
+      );
+      props.close()
+    }
+  }, [assignRes.isError, assignRes.isSuccess]);
+
   return (
     <section className="px-2 sm:px-6 py-6 h-screen">
       <div className="flex">
@@ -117,19 +151,35 @@ const AssignRequestModal = (props: Props) => {
         </UnstyledButton>
         <UnstyledButton
           clicked={() => {
-            appointConsultant({
-              orderId: props.orderId,
-              expertise: props.expertise,
-              cid: consultantId,
-              date: props.chat_appointment_data.date,
-              time: props.chat_appointment_data.time,
-              uid: props.chat_appointment_data.userId,
-            });
+            if (
+              props.chat_appointment_data.nameofservice ===
+              "Chat With A Professional"
+            ) {
+              appointConsultant({
+                orderId: props.orderId,
+                expertise: props.expertise,
+                cid: consultantId,
+                date: props.chat_appointment_data.date,
+                time: props.chat_appointment_data.time,
+                uid: props.chat_appointment_data.userId,
+              });
+            } else {
+              assign({
+                cid: consultantId,
+                date: props.chat_appointment_data.date,
+                expertise: props.expertise,
+                nameofservice: props.chat_appointment_data.nameofservice,
+                orderId: props.orderId,
+                type: "request",
+                uid: props.chat_appointment_data.userId,
+                status: "pending"
+              });
+            }
           }}
-          disabled={!consultantId || result.isLoading}
+          disabled={!consultantId || result.isLoading || assignRes.isLoading}
           class="w-[10rem] flex py-2 px-4 disabled:opacity-50 transition-all rounded-md justify-center items-center text-white border border-black-3 disabled:border-black-2  bg-black-3 text-[0.88rem] disabled:bg-black-2"
         >
-          {result.isLoading ? (
+          {result.isLoading || assignRes.isLoading ? (
             <div className="py-1 w-[1rem]">
               <Spinner />
             </div>

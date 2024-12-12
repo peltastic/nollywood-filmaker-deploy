@@ -19,8 +19,10 @@ import { RootState } from "@/lib/store";
 import { nprogress } from "@mantine/nprogress";
 import { notify } from "@/utils/notification";
 import { capitalizeFirstLetter } from "@/utils/helperFunction";
+import ConsultantMenuContent from "../Menu/MenuContent/ConsultantMenuContent";
 
 type Props = {
+  isChat?: boolean;
   status?: "ready" | "completed" | "ongoing" | "pending" | string;
   statusValue?: string;
   consultant?: boolean;
@@ -36,6 +38,15 @@ type Props = {
     };
     userId: string;
     date: string;
+    nameofservice:
+      | "Chat With A Professional"
+      | "Read my Script and advice"
+      | "Watch the Final cut of my film and advice"
+      | "Look at my Budget and advice"
+      | "Create a Marketing budget"
+      | "Create a Pitch based on my Script"
+      | "Draft Legal documents"
+      | "Create a Production budget";
   };
 };
 
@@ -47,42 +58,15 @@ const OrderDetailsHeader = ({
   orderId,
   expertise,
   chat_appointment_data,
+  isChat,
 }: Props) => {
   const router = useRouter();
 
-  const [opened, { open, close }] = useDisclosure();
-
   const [assignReqOpened, assingReqOptions] = useDisclosure();
-
-  const [acceptRequest, { isLoading, isSuccess, isError, data, error }] =
-    useAcceptRequestMutation();
-  const [declineRequest, result] = useDeclineRequestMutation();
 
   const consultantId = useSelector(
     (state: RootState) => state.persistedState.consultant.user?.id
   );
-
-  useEffect(() => {
-    if (isError) {
-      nprogress.complete();
-      notify("error", "", (error as any)?.data.message || "An error occured");
-    }
-    if (isSuccess) {
-      nprogress.complete();
-      notify("success", "Successful", "Customer request accepted successfully");
-    }
-  }, [isError, isSuccess]);
-
-  useEffect(() => {
-    if (result.isError) {
-      nprogress.complete();
-      notify("error", "", (error as any)?.data.message || "An error occured");
-    }
-    if (result.isSuccess) {
-      nprogress.complete();
-      notify("success", "Successful", "Customer request declined successfully");
-    }
-  }, [result.isError, result.isSuccess]);
 
   const statusClassname =
     status === "ready"
@@ -135,94 +119,8 @@ const OrderDetailsHeader = ({
       break;
   }
 
-  let consultantMenuContent = <div></div>;
-
-  switch (status) {
-    case "pending":
-      consultantMenuContent = (
-        <MenuContent
-          data={[
-            {
-              name: "Accept",
-              link: "/",
-              disabled: isLoading,
-              function: () => {
-                if (consultantId && orderId) {
-                  nprogress.start();
-                  acceptRequest({
-                    consultant_id: consultantId,
-                    order_id: orderId,
-                  });
-                }
-              },
-            },
-            {
-              name: "Reject",
-              link: "/",
-              disabled: result.isLoading,
-              function: () => {
-                if (consultantId && orderId) {
-                  nprogress.start();
-                  declineRequest({
-                    consultant_id: consultantId,
-                    order_id: orderId,
-                  });
-                }
-              },
-            },
-          ]}
-        />
-      );
-      break;
-    case "ongoing":
-      consultantMenuContent = (
-        <MenuContent
-          data={[
-            {
-              name: "Resolve service request",
-              link: "/",
-              function: () => {
-                open();
-              },
-            },
-            {
-              name: "Go to chat",
-              link: "/",
-              function: () => {},
-            },
-          ]}
-        />
-      );
-      break;
-    case "ready":
-      consultantMenuContent = (
-        <MenuContent
-          data={[
-            {
-              name: "Go to  chat",
-              link: "/",
-              function: () => {
-                router.push("/consultants/dashboard/chats");
-              },
-            },
-          ]}
-        />
-      );
-      break;
-    default:
-      break;
-  }
   return (
     <>
-      <ModalComponent
-        opened={opened}
-        centered
-        onClose={close}
-        withCloseButton={false}
-        size="xl"
-      >
-        <ResolveRequestModal close={close} />
-      </ModalComponent>
       <ModalComponent
         opened={assignReqOpened}
         centered
@@ -275,7 +173,13 @@ const OrderDetailsHeader = ({
               {admin ? (
                 adminMenuContent
               ) : consultant ? (
-                consultantMenuContent
+                <ConsultantMenuContent
+                  status={status}
+                  isChat={isChat}
+                  chatId={""}
+                  consultantId={consultantId}
+                  orderId={orderId}
+                />
               ) : (
                 <div className="bg-white ">
                   <ul className="px-1 text-gray-6 text-[0.88rem]">

@@ -80,6 +80,7 @@ const CustomerOrderDetailsPage = (props: Props) => {
                         : 0,
                     },
                     userId: data.request.userId,
+                    nameofservice: data.request.nameofservice
                   }}
                 />
               )}
@@ -93,13 +94,6 @@ const CustomerOrderDetailsPage = (props: Props) => {
                     <p className="text-[0.88rem]">{data?.user.fullName}</p>
                   </div>
 
-                  <p className="text-[0.88rem] font-medium mt-4">Assigned to</p>
-                  <div className="flex items-center w-fit py-1 px-2 rounded-md bg-border-gray">
-                    <div className="w-[1.2rem] mr-1">
-                      <Image src={TestImg} alt="test-image" />
-                    </div>
-                    <p className="text-[0.88rem]">Damilola Emmanuel</p>
-                  </div>
                 </div>
                 <div className="mb-10 px-3 sm:px-4 lg:px-0 w-full chatbp::w-[80%]">
                   <OrderDetailsTop

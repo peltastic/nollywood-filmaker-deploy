@@ -6,7 +6,7 @@ import ReadMyScriptDarkImg from "/public/assets/services/read-my-script-dark.svg
 import TestImage from "/public/assets/dashboard/issues-img-1.png";
 import { useRouter } from "next/navigation";
 import UnstyledButton from "@/components/Button/UnstyledButton";
-import { Rating } from "@mantine/core";
+import { AspectRatio, Rating } from "@mantine/core";
 import { ICustomerRequest } from "@/interfaces/admin/requests/requests";
 import moment from "moment";
 
@@ -30,8 +30,16 @@ export const admin_reqs_columns: ColumnDef<ICustomerRequest>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center w-[20rem] xl:w-auto">
-          <div className="mr-2">
-            <Image src={TestImage} alt="image" />
+          <div className="mr-2 h-[2.5rem] w-[2.5rem]">
+            <AspectRatio ratio={1800/1800}>
+              <Image
+                src={row.original.user.profilepics}
+                width={100}
+                height={100}
+                alt="image"
+                className="rounded-full h-full w-full"
+              />
+            </AspectRatio>
           </div>
           <div className="">
             <h1 className=" text-black-4 font-medium">
@@ -133,7 +141,7 @@ export const admin_reqs_columns: ColumnDef<ICustomerRequest>[] = [
               `/admin/dashboard/customers/${row.original.orderId}/order-details?status=${row.original.stattusof}`
             )
           }
-          class="bg-black-3 text-[0.88rem] text-white py-2 px-4 rounded-md"
+          class="bg-black-3 text-[0.88rem] hover:bg-blue-1 transition-all text-white py-2 px-4 rounded-md"
         >
           Open
         </UnstyledButton>

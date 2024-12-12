@@ -1,4 +1,9 @@
-import { IChatMessages, IChatMessagesResponse, ISendChatMessagePayload } from "@/interfaces/chat/chat";
+import {
+  IChatFilesResponse,
+  IChatMessages,
+  IChatMessagesResponse,
+  ISendChatMessagePayload,
+} from "@/interfaces/chat/chat";
 import {
   IGetUserConversations,
   IGetUserConversationsResponse,
@@ -14,10 +19,7 @@ export const dashboardChatApi = createApi({
     fetchUserConversations: build.query<IGetUserConversationsResponse, string>({
       query: (id) => `/api/users/conversations/${id}`,
     }),
-    fetchSingleConversationData: build.query<
-       IGetUserConversations ,
-      string
-    >({
+    fetchSingleConversationData: build.query<IGetUserConversations, string>({
       query: (orderId) => `/api/users/conversation/${orderId}`,
     }),
     sendChatMessage: build.mutation<unknown, ISendChatMessagePayload>({
@@ -37,7 +39,7 @@ export const dashboardChatApi = createApi({
         };
       },
     }),
-    fetchChatFiles: build.query<unknown, string>({
+    fetchChatFiles: build.query<IChatFilesResponse, string>({
       query: (id) => `/api/chat/files/${id}`,
     }),
     fetchChatMessages: build.query<IChatMessagesResponse, string>({
@@ -52,5 +54,5 @@ export const {
   useSendChatMessageMutation,
   useSendChatMessageFileMutation,
   useFetchChatFilesQuery,
-  useLazyFetchChatMessagesQuery
+  useLazyFetchChatMessagesQuery,
 } = dashboardChatApi;

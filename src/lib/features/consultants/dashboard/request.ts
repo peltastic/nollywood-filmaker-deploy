@@ -1,8 +1,11 @@
 import config from "@/config/config";
-import { IConsultantActiveReqResponse, ICustomerReqDetails, ICustomerRequestDataResponse } from "@/interfaces/consultants/dashboard/request";
 import {
-  consultantBaseQueryWithReauth,
-} from "@/lib/baseQuery";
+  IConsultantActiveReqResponse,
+  ICustomerReqDetails,
+  ICustomerRequestDataResponse,
+  IServiceRequest,
+} from "@/interfaces/consultants/dashboard/request";
+import { consultantBaseQueryWithReauth } from "@/lib/baseQuery";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
 export const consultantRequestsApi = createApi({
@@ -42,6 +45,9 @@ export const consultantRequestsApi = createApi({
     getActiveRequest: build.query<IConsultantActiveReqResponse, string>({
       query: (id) => `/api/consultants/activerequest/${id}`,
     }),
+    getServiceRequests: build.query<{ tasks: IServiceRequest[] }, string>({
+      query: (id) => `/api/consultants/fetchtask/${id}`,
+    }),
   }),
 });
 
@@ -51,5 +57,6 @@ export const {
   useDeclineRequestMutation,
   useGetCustomerRequestDetailQuery,
   useGetActiveRequestQuery,
-  useLazyGetCustomerRequestDetailQuery
+  useLazyGetCustomerRequestDetailQuery,
+  useLazyGetServiceRequestsQuery,
 } = consultantRequestsApi;

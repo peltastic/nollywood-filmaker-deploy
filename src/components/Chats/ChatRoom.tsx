@@ -49,8 +49,9 @@ const ChatRoom = (props: Props) => {
   const searchVal = search.get("chat");
 
   useEffect(() => {
-    if (props.sessionOver) return () => {};
+    // if (props.sessionOver) return () => {};
     if (props.userData) {
+      console.log("hey");
       joinChatRoom({
         room: props.orderId,
         name: `${props.userData.fname} ${props.userData.lname}`,
@@ -76,8 +77,11 @@ const ChatRoom = (props: Props) => {
         text: inputValue,
         user: props.type,
         id: Math.floor(Math.random() * 100000).toString(),
+        file: "",
+        filename: "",
+        type: "text",
       });
-      setInputValue("")
+      setInputValue("");
     }
   };
 
@@ -93,21 +97,48 @@ const ChatRoom = (props: Props) => {
         };
         message: string;
       }) => {
-        console.log("received chat event")
-        if (props.userData?.id === data.sender.userid) return () => {};
-        if (searchVal === data.sender.chatRoomId) {
-          props.updateChatHandlerProps({
-            text: data.message,
-            user: data.sender.role,
-            id: Math.floor(Math.random() * 100000).toString(),
-          });
+        if (props.userData?.id === data.sender.userid) {
+        } else {
+          if (searchVal === data.sender.chatRoomId) {
+            props.updateChatHandlerProps({
+              text: data.message,
+              user: data.sender.role,
+              id: Math.floor(Math.random() * 100000).toString(),
+              type: "text",
+              file: "",
+              filename: "",
+            });
+          }
         }
       }
     );
 
-    chat_socket.on("fileMessage", (data) => {
-      console.log(data);
-    });
+    chat_socket.on(
+      "fileMessage",
+      (data: {
+        fileUrl: string;
+        sender: {
+          chatRoomId: string;
+          name: string;
+          role: "user" | "consultant" | "admin";
+          userid: string;
+        };
+      }) => {
+        if (props.userData?.id === data.sender.userid) {
+        } else {
+          if (searchVal === data.sender.chatRoomId) {
+            props.updateChatHandlerProps({
+              text: "file message",
+              user: data.sender.role,
+              id: Math.floor(Math.random() * 100000).toString(),
+              type: "file",
+              file: data.fileUrl,
+              filename: "file message",
+            });
+          }
+        }
+      }
+    );
 
     return () => {
       chat_socket.off("message");
@@ -135,9 +166,12 @@ const ChatRoom = (props: Props) => {
         {props.data && (
           <>
             {props.data.map((el, index) => (
-              <>
+              <div key={el.id}>
                 {props.type === "user" ? (
                   <ChatMessage
+                    file={el.file}
+                    filename={el.filename}
+                    type={el.type}
                     key={el.text + index.toString()}
                     text={el.text}
                     user={el.user}
@@ -147,6 +181,9 @@ const ChatRoom = (props: Props) => {
                   />
                 ) : (
                   <ConsultantChatMessage
+                    file={el.file}
+                    filename={el.filename}
+                    type={el.type}
                     key={el.text + index.toString()}
                     text={el.text}
                     user={el.user}
@@ -155,7 +192,7 @@ const ChatRoom = (props: Props) => {
                     index={index}
                   />
                 )}
-              </>
+              </div>
             ))}
           </>
         )}
@@ -166,92 +203,99 @@ const ChatRoom = (props: Props) => {
           <p className="text-gray-4">This conversation has ended</p>
         </div>
       ) : props.isTime ? (
-        <div className="min-h-[5rem] relative">
-          <div className="w-full px-6  absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2">
-            {fileInputValue && (
-              <div className=" flex items-center mb-6 ">
-                <div className="max-w-[30rem] flex items-center break-words ml-10 border w-fit py-3 px-3 text-white rounded-md bg-gray-1 ">
-                  <FaFile className="mr-4" />
-                  <p>{fileInputValue.name}</p>
-                </div>
-                <div className="ml-2">
-                  <UnstyledButton
-                    clicked={() => {
-                      if (base64File && props.userData) {
-                        sendFileMessage({
-                          fileData: base64File,
-                          fileName: fileInputValue.name,
-                          room: props.orderId,
-                          sender: {
-                            name: `${props.userData.fname} ${props.userData.lname}`,
-                            role: props.type,
-                            userid: props.userData.id,
-                            chatRoomId: searchVal as string,
-                          },
-                        });
-                      }
-                    }}
-                    class="flex hover:bg-blue-1 transition-all items-center bg-black-2 text-white py-2 px-4 rounded-md"
-                  >
-                    <p className="mr-2">Send</p>
-                    <RiSendPlane2Line className=" text-xl" />
-                  </UnstyledButton>
-                </div>
+      <div className="min-h-[5rem] relative">
+        <div className="w-full px-6  absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2">
+          {fileInputValue && (
+            <div className=" flex items-center mb-6 ">
+              <div className="max-w-[30rem] flex items-center break-words ml-10 border w-fit py-3 px-3 text-white rounded-md bg-gray-1 ">
+                <FaFile className="mr-4" />
+                <p>{fileInputValue.name}</p>
               </div>
-            )}
-            <div className="flex items-center">
-              <UnstyledButton>
-                <FileButtonComponent
-                  accept="application/pdf, .docx"
-                  setFile={(file) => {
-                    setFileInputValue(file);
-                    if (file) {
-                      getBase64(file).then((res) => {
-                        if (res) {
-                          setBase64File(res as any);
-                        }
+              <div className="ml-2">
+                <UnstyledButton
+                  clicked={() => {
+                    if (base64File && props.userData) {
+                      sendFileMessage({
+                        fileData: base64File,
+                        // fileName: fileInputValue.name,
+                        room: props.orderId,
+                        sender: {
+                          name: `${props.userData.fname} ${props.userData.lname}`,
+                          role: props.type,
+                          userid: props.userData.id,
+                          chatRoomId: searchVal as string,
+                        },
                       });
+                      props.updateChatHandlerProps({
+                        text: fileInputValue.name,
+                        user: props.type,
+                        id: Math.floor(Math.random() * 100000).toString(),
+                        file: base64File as string,
+                        filename: fileInputValue.name,
+                        type: "file",
+                      });
+                      setFileInputValue(null);
                     }
                   }}
+                  class="flex hover:bg-blue-1 transition-all items-center bg-black-2 text-white py-2 px-4 rounded-md"
                 >
-                  <div className="mr-10">
-                    <Image src={AttachIcon} alt="attach-icon" />
-                  </div>
-                </FileButtonComponent>
-              </UnstyledButton>
-              <form className="w-full" onSubmit={(e) => e.preventDefault()}>
-                <div className="w-full relative">
-                  <Textarea
-                  onKeyDown={(e) => {
-                   if (e.key === "Enter" && !e.shiftKey) {
-                   e.preventDefault()
-                    sendMessageHandler()
-                   }
-                  }}
-                    minRows={0}
-                    autosize
-                    size="md"
-                    radius={"md"}
-                    value={inputValue}
-                    onChange={(event) =>
-                      setInputValue(event.currentTarget.value)
-                    }
-                  />
-                  <button
-                    onClick={sendMessageHandler}
-                    disabled={!inputValue}
-                    className="w-fit disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer absolute right-3 -translate-y-1/2 top-1/2"
-                  >
-                    <Image src={SendImg} alt="send-img" />
-                  </button>
-                </div>
-              </form>
+                  <p className="mr-2">Send</p>
+                  <RiSendPlane2Line className=" text-xl" />
+                </UnstyledButton>
+              </div>
             </div>
+          )}
+          <div className="flex items-center">
+            <UnstyledButton>
+              <FileButtonComponent
+                accept="application/pdf, .docx"
+                setFile={(file) => {
+                  setFileInputValue(file);
+                  if (file) {
+                    getBase64(file).then((res) => {
+                      if (res) {
+                        setBase64File(res as any);
+                      }
+                    });
+                  }
+                }}
+              >
+                <div className="mr-10">
+                  <Image src={AttachIcon} alt="attach-icon" />
+                </div>
+              </FileButtonComponent>
+            </UnstyledButton>
+            <form className="w-full" onSubmit={(e) => e.preventDefault()}>
+              <div className="w-full relative">
+                <Textarea
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      sendMessageHandler();
+                    }
+                  }}
+                  minRows={0}
+                  autosize
+                  size="md"
+                  radius={"md"}
+                  value={inputValue}
+                  onChange={(event) => setInputValue(event.currentTarget.value)}
+                />
+                <button
+                  onClick={sendMessageHandler}
+                  disabled={!inputValue}
+                  className="w-fit disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer absolute right-3 -translate-y-1/2 top-1/2"
+                >
+                  <Image src={SendImg} alt="send-img" />
+                </button>
+              </div>
+            </form>
           </div>
         </div>
-      ) : (
-        <div className=""></div>
-      )}
+      </div>
+       ) : (
+         <div className=""></div>
+       )}
     </div>
   );
 };

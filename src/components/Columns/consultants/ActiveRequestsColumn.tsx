@@ -9,14 +9,25 @@ import MenuComponent from "@/components/Menu/MenuComponent";
 import { IoIosArrowDown } from "react-icons/io";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import Link from "next/link";
+import { AspectRatio } from "@mantine/core";
 
 export interface IConsultantActiveRequestColumnData {
   customer: string;
   email: string;
   script: string;
-  service_type: "Chat With A Professional";
+  service_type:
+    | "Chat With A Professional"
+    | "Read my Script and advice"
+    | "Watch the Final cut of my film and advice"
+    | "Look at my Budget and advice"
+    | "Create a Marketing budget"
+    | "Create a Pitch based on my Script"
+    | "Draft Legal documents"
+    | "Create a Production budget";
   date: string;
   status: "ready" | "ongoing" | "completed" | "pending";
+  profilepic: string;
+  orderId: string
 }
 
 export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequestColumnData>[] =
@@ -40,8 +51,16 @@ export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequ
       cell: ({ row }) => {
         return (
           <div className="flex items-center w-[20rem] xl:w-auto">
-            <div className="mr-2">
-              <Image src={TestImage} alt="image" />
+            <div className="mr-2 w-[2.5rem] h-[2.5rem]">
+              <AspectRatio ratio={1800 / 1800}>
+                <Image
+                  src={row.original.profilepic}
+                  width={100}
+                  height={100}
+                  alt="image"
+                  className="w-full h-full rounded-full"
+                />
+              </AspectRatio>
             </div>
             <div className="">
               <h1 className=" text-black-4 font-medium">
@@ -111,7 +130,7 @@ export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequ
     },
     {
       id: "actions",
-      cell: ({}) => {
+      cell: ({row}) => {
         // const [opened, { open, close }] = useDisclosure();
         // const
         return (
@@ -135,7 +154,7 @@ export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequ
                     Go to Chat
                   </li>
                   <li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
-                    <Link href={"/user/dashboard/order-details/1"}>
+                    <Link href={`/consultants/dashboard/${row.original.orderId}/order-details`}>
                       See Details
                     </Link>
                   </li>

@@ -103,8 +103,33 @@ export interface IConsultantActiveReq {
     nameofservice: "Chat With A Professional";
     stattusof: "ready" | "ongoing" | "completed" | "pending";
   };
+  user: {
+    fname: string
+    lname: string
+    profilepics: string
+    email: string
+  }
 }
 
 export interface IConsultantActiveReqResponse {
   appointments?: IConsultantActiveReq[];
+}
+
+
+export interface IServiceRequest {
+  _id: string
+  date: string
+  uid: string
+  cid: string
+  orderId: string
+  nameofservice: 
+  | "Chat With A Professional"
+  | "Read my Script and advice"
+  | "Watch the Final cut of my film and advice"
+  | "Look at my Budget and advice"
+  | "Create a Marketing budget"
+  | "Create a Pitch based on my Script"
+  | "Draft Legal documents"
+  | "Create a Production budget";
+  status: "ready" | "ongoing" | "completed" | "pending";
 }

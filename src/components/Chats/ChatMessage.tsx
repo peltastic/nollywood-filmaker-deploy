@@ -2,6 +2,8 @@ import React, { use, useEffect, useRef } from "react";
 import TestImage from "/public/assets/test-avatar-big.png";
 import AdminProfileImg from "/public/assets/dashboard/admin-profile-img.svg";
 import Image from "next/image";
+import { FaDownload } from "react-icons/fa";
+import Link from "next/link";
 
 type Props = {
   text: string;
@@ -9,9 +11,21 @@ type Props = {
   prevUser: "admin" | "user" | "consultant" | null;
   index: number;
   lastmessage?: boolean;
+  type: "text" | "file";
+  filename: string;
+  file: string;
 };
 
-const ChatMessage = ({ user, text, prevUser, index, lastmessage }: Props) => {
+const ChatMessage = ({
+  user,
+  text,
+  prevUser,
+  index,
+  lastmessage,
+  file,
+  filename,
+  type,
+}: Props) => {
   const noPfpRow = prevUser === user;
   const ref = useRef<HTMLDivElement>(null);
 
@@ -21,8 +35,7 @@ const ChatMessage = ({ user, text, prevUser, index, lastmessage }: Props) => {
       ref.current.scrollIntoView({
         behavior: "smooth",
         block: "nearest",
-        inline: "end"
-        
+        inline: "end",
       });
     }
   }, []);
@@ -32,7 +45,7 @@ const ChatMessage = ({ user, text, prevUser, index, lastmessage }: Props) => {
       <div
         className={`${
           user === "user" ? "flex-row-reverse ml-auto" : ""
-        } flex items-center`}
+        } flex items-start`}
       >
         {prevUser === user && index + 1 !== 1 ? null : (
           <>
@@ -59,18 +72,34 @@ const ChatMessage = ({ user, text, prevUser, index, lastmessage }: Props) => {
               ? "mr-[3.2rem]"
               : ""
           } ${
-            user === "admin" || user === "consultant"
+            type === "file"
+              ? "bg-black-2 text-white hover:bg-black-9 transition-all"
+              : user === "admin" || user === "consultant"
               ? "bg-admin-chat-bg text-black"
               : "bg-black-3 text-white mr-2"
           } text-[0.88rem] py-2 px-2 rounded-xl max-w-[20rem]`}
         >
           <p className="break-words">
-            {text.split("\n").map((line, index) => (
-              <div className="" key={index}>
-                {line}
-                <br />
-              </div>
-            ))}
+            {type === "file" ? (
+              <Link href={file}>
+                <div className="cursor-pointer py-2 px-2">
+                  <p>{filename || "file message"}</p>
+                  <div className=" flex mt-2 items-center">
+                    <p>file download</p>
+                    <FaDownload className="ml-2" />
+                  </div>
+                </div>
+              </Link>
+            ) : (
+              <>
+                {text.split("\n").map((line, index) => (
+                  <div className="" key={index}>
+                    {line}
+                    <br />
+                  </div>
+                ))}
+              </>
+            )}
           </p>
         </div>
       </div>

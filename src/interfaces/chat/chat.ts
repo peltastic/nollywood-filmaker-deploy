@@ -42,14 +42,22 @@ export interface IChatMessages {
   room: string;
   message: string;
   timestamp: string;
+  type: "text" | "file";
+  filename: string;
 }
 
 export interface IChatMessagesResponse {
   messages: IChatMessages[];
 }
 
-
 export interface IChatFiles {
-  _id: string
-  path: string
+  _id: string;
+  path: string;
+  filename?: string;
+  filesize: string
+}
+
+
+export interface IChatFilesResponse {
+  files: IChatFiles[]
 }

@@ -19,6 +19,7 @@ import { useProtectRoute } from "@/hooks/useProtectRoute";
 import { setLogoutType } from "@/lib/slices/logoutSlice";
 import { RootState } from "@/lib/store";
 import { truncateStr } from "@/utils/helperFunction";
+import { AspectRatio } from "@mantine/core";
 
 type Props = {};
 
@@ -32,7 +33,17 @@ const UserprofileMenu = (props: Props) => {
     <div className="bg-white w-[15rem]   py-3 text-gray-3">
       <div className="flex items-center px-3">
         {userData?.profilepics ? (
-          <Image src={TestImage} alt="test-image" className="mr-4 w-[3rem]" />
+          <div className="md:mr-4">
+            <AspectRatio ratio={1800 / 1800}>
+              <Image
+                src={userData.profilepics}
+                width={100}
+                height={100}
+                alt="test-image"
+                className=" rounded-full w-[3rem] h-[3rem]"
+              />
+            </AspectRatio>
+          </div>
         ) : (
           <div className="bg-black-3 font-bold text-[0.7rem] mr-4 h-[2.5rem] flex items-center justify-center w-[2.5rem] rounded-full text-white">
             {userData?.fname[0]} {userData?.lname[0]}
@@ -42,7 +53,9 @@ const UserprofileMenu = (props: Props) => {
           <h1 className="font-bold text-gray-3">
             {userData?.fname} {userData?.lname}
           </h1>
-          <p className="text-gray-1">{truncateStr(userData?.email || "", 20)}</p>
+          <p className="text-gray-1">
+            {truncateStr(userData?.email || "", 20)}
+          </p>
         </div>
       </div>
       <ul className="text-[0.88rem] mt-2 py-3 border-t border-b border-profile-menu-border">
