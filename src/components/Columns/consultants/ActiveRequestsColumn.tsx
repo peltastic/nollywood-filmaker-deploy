@@ -149,12 +149,16 @@ export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequ
               <div className="bg-white ">
                 <ul className="px-1 text-gray-6 text-[0.88rem]">
                   {row.original.type === "chat" ? (
-                    <li
-                      // onClick={open}
-                      className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
+                    <Link
+                      href={`/consultants/dashboard/chats?chat=${row.original.orderId}`}
                     >
-                      Go to Chat
-                    </li>
+                      <li
+                        // onClick={open}
+                        className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
+                      >
+                        Go to Chat
+                      </li>
+                    </Link>
                   ) : null}
                   <li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
                     <Link

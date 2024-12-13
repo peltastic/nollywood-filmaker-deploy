@@ -35,6 +35,7 @@ export function sendChatMessageEvent(data: {
 export function sendFileMessage(data: {
   room: string;
   fileData: string | ArrayBuffer;
+  fileName: string
   sender: {
     userid: string;
     name: string;

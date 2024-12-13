@@ -82,6 +82,8 @@ const OrderDetailsHeader = ({
 
   const [assignReqOpened, assingReqOptions] = useDisclosure();
 
+  const [setAsCompleted, setAsCompletedOptions] = useDisclosure()
+
   const [showChatDate, setShowChatDate] = useState<boolean>(false);
 
   const consultantId = useSelector(

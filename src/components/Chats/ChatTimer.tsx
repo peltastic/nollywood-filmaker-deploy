@@ -37,7 +37,6 @@ const ChatTimer = (props: Props) => {
     if (
       props.timeData &&
       differenceInMinutes(
-        // convertToAfricaLagosTz(props.timeData.endTime),
         props.timeData.endTime,
         new Date()
       ) <= 10
@@ -61,7 +60,6 @@ const ChatTimer = (props: Props) => {
       props.isTime &&
       props.timeData &&
       differenceInMinutes(
-        // convertToAfricaLagosTz(props.timeData.endTime),
         props.timeData.endTime,
         momentTz(new Date()).tz("Africa/Lagos").format()
       ) <= 10

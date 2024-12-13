@@ -108,7 +108,7 @@ const CustomerChatRight = ({
         </div>
       </header>
       <section>
-        {data && (
+        {data && isTime && (
           <ChatTimer
             timeData={{
               startTime: data.startTime,

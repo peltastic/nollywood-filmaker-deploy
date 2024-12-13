@@ -17,9 +17,9 @@ const ChatRight = (props: Props) => {
   return (
     <div className="">
       <h1 className="font-bold text-[1.5rem]">Let’s start with your details</h1>
-      <h2 className="text-[1.13rem]">
+      {/* <h2 className="text-[1.13rem]">
         Lorem ipsum dolor sit amet consectetur adipisc.
-      </h2>
+      </h2> */}
       <div className="  mt-10">
         <CustomCalender value={props.dateProps} onChange={props.setDateProps} />
       </div>

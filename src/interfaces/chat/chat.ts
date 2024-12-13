@@ -61,3 +61,11 @@ export interface IChatFiles {
 export interface IChatFilesResponse {
   files: IChatFiles[]
 }
+
+export interface IRequestExtensionPayload {
+  title: "Extension Purchase",
+  userId: string
+  type: "time_extension",
+  length: number
+  orderId: string
+}

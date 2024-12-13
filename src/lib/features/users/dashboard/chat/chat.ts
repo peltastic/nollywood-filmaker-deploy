@@ -2,6 +2,7 @@ import {
   IChatFilesResponse,
   IChatMessages,
   IChatMessagesResponse,
+  IRequestExtensionPayload,
   ISendChatMessagePayload,
 } from "@/interfaces/chat/chat";
 import {
@@ -45,6 +46,13 @@ export const dashboardChatApi = createApi({
     fetchChatMessages: build.query<IChatMessagesResponse, string>({
       query: (id) => `/api/chat/fetchmessage/${id}`,
     }),
+    requestExtension: build.mutation<unknown, IRequestExtensionPayload>({
+      query: (body) => ({
+        body,
+        method: "POST",
+        url: "/api/users/extendmytime"
+      })
+    })
   }),
 });
 

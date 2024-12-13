@@ -21,6 +21,10 @@ import { truncateStr } from "@/utils/helperFunction";
 import { differenceInMilliseconds, isAfter, isBefore } from "date-fns";
 import { notify } from "@/utils/notification";
 import { useLazyFetchConsultantChatMessagesQuery } from "@/lib/features/consultants/dashboard/chat/chat";
+import ModalComponent from "@/components/Modal/Modal";
+import RequestExtension from "../ModalComponents/RequestExtension";
+import ReportAnIssue from "../ModalComponents/ReportAnIssue";
+import { useDisclosure } from "@mantine/hooks";
 
 export interface ChatPayload {
   text: string;
@@ -179,122 +183,153 @@ const CustomerChatMiddle = ({
     setChatData((prev) => [...prev, newEntry]);
   };
 
-  return (
-    <div className=" bg-white border-r relative border-r-stroke-8 border-l border-l-stroke-8  h-full">
-      {!orderId ? (
-        <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2">
-          <Image src={Logo} alt="logo image" className="w-[10rem] opacity-50" />
-          <p className="text-center font-semibold text-gray-4">
-            Please select a conversation
-          </p>
-        </div>
-      ) : (
-        <div className="">
-          {isFetching ? (
-            <div className="w-[5rem] absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2">
-              <Spinner dark />
-            </div>
-          ) : (
-            <>
-              <header className="flex items-center py-[1.4rem] px-2 sm:px-6 border-b border-b-stroke-8">
-                <div
-                  className="block chatbp:hidden"
-                  onClick={() => router.back()}
-                >
-                  <IoIosArrowBack className="text-2xl mr-2" />
-                </div>
-                <div className="w-[2.5rem] mr-3 h-[2.5rem] rounded-full bg-black flex items-center justify-center">
-                  <Image src={AdminProfileImg} alt="admin-alt-profile" />
-                </div>
-                <div className="">
-                  <h1 className="font-semibold text-[1.25rem]">
-                    {data?.chat_title && truncateStr(data.chat_title, 25)}
-                  </h1>
-                  <p className="text-[#00000082] text-[0.75rem] font-semibold">
-                    {data?.nameofservice}
-                  </p>
-                </div>
-                <div className="flex items-center ml-auto">
-                  {(isTime || sessionOver) && (
-                    <MenuComponent
-                      target={
-                        <div className="">
-                          <UnstyledButton class="px-4 py-2 rounded-md items-center bg-black-3 hover:bg-blue-1  text-white flex">
-                            <p className="mr-1 font-medium text-[0.88rem]">
-                              Actions
-                            </p>
-                            <IoIosArrowDown />
-                          </UnstyledButton>
-                        </div>
-                      }
-                    >
-                      {admin ? (
-                        <div className="">
-                          <ul className="px-1 text-gray-6 text-[0.88rem]">
-                            <li className="py-2 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
-                              Re-open chat
-                            </li>
-                          </ul>
-                        </div>
-                      ) : (
-                        <UserChatMenu />
-                      )}
-                    </MenuComponent>
-                  )}
-                  {isTime || sessionOver ? (
-                    <div className="hidden lg:block">
-                      {opened ? (
-                        <div
-                          onClick={open}
-                          className=" hover:bg-stroke-4 transition-all ml-6 rounded-md cursor-pointer"
-                        >
-                          <Image src={HamburgerIcon} alt="hamburger-icons" />
-                        </div>
-                      ) : null}
-                    </div>
-                  ) : null}
-                  {(isTime || sessionOver) && (
-                    <div
-                      onClick={open}
-                      className="block lg:hidden hover:bg-stroke-4 transition-all ml-6 rounded-md cursor-pointer"
-                    >
-                      <Image src={HamburgerIcon} alt="hamburger-icons" />
-                    </div>
-                  )}
-                </div>
-              </header>
+  const [extensionOpened, extensionOpenedFuncs] = useDisclosure();
+  const [reportModOpened, funcs] = useDisclosure();
 
-              <div className="h-full bg-white relative">
-                {data && (isTime || sessionOver) ? (
-                  <ChatRoom
-                    userData={type === "user" ? userData : consultantData}
-                    orderId={data.orderId}
-                    updateChatHandlerProps={updateChatDataHandler}
-                    type={type}
-                    data={chatData}
-                    isTime={isTime}
-                    sessionOver={sessionOver}
-                  />
-                ) : (
-                  <div className="h-[90vh] w-full">
-                    <div className="absolute left-[50%] top-[50%]  -translate-x-1/2 z-10 -translate-y-1/2">
-                      <Image
-                        src={Logo}
-                        alt="logo image"
-                        className="w-[10rem] opacity-50 mx-auto"
-                      />
-                      <p className="text-center font-semibold text-gray-4">
-                        Session with consultant hasn't started yet
-                      </p>
-                    </div>
-                  </div>
-                )}
+  return (
+    <>
+      <ModalComponent
+        onClose={close}
+        opened={extensionOpened}
+        centered
+        withCloseButton={false}
+        size="xl"
+      >
+        <RequestExtension close={close} />
+      </ModalComponent>
+      <ModalComponent
+        onClose={funcs.close}
+        opened={reportModOpened}
+        centered
+        withCloseButton={false}
+        size="xl"
+      >
+        <ReportAnIssue close={funcs.close} />
+      </ModalComponent>
+      <div className=" bg-white border-r relative border-r-stroke-8 border-l border-l-stroke-8  h-full">
+        {!orderId ? (
+          <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2">
+            <Image
+              src={Logo}
+              alt="logo image"
+              className="w-[10rem] opacity-50"
+            />
+            <p className="text-center font-semibold text-gray-4">
+              Please select a conversation
+            </p>
+          </div>
+        ) : (
+          <div className="">
+            {isFetching ? (
+              <div className="w-[5rem] absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2">
+                <Spinner dark />
               </div>
-            </>
-          )}
-        </div>
-      )}
-    </div>
+            ) : (
+              <>
+                <header className="flex items-center py-[1.4rem] px-2 sm:px-6 border-b border-b-stroke-8">
+                  <div
+                    className="block chatbp:hidden"
+                    onClick={() => router.back()}
+                  >
+                    <IoIosArrowBack className="text-2xl mr-2" />
+                  </div>
+                  <div className="w-[2.5rem] mr-3 h-[2.5rem] rounded-full bg-black flex items-center justify-center">
+                    <Image src={AdminProfileImg} alt="admin-alt-profile" />
+                  </div>
+                  <div className="">
+                    <h1 className="font-semibold text-[1.25rem]">
+                      {data?.chat_title && truncateStr(data.chat_title, 25)}
+                    </h1>
+                    <p className="text-[#00000082] text-[0.75rem] font-semibold">
+                      {data?.nameofservice}
+                    </p>
+                  </div>
+                  <div className="flex items-center ml-auto">
+                    {(isTime || sessionOver) && (
+                      <MenuComponent
+                        target={
+                          <div className="">
+                            <UnstyledButton class="px-4 py-2 rounded-md items-center bg-black-3 hover:bg-blue-1  text-white flex">
+                              <p className="mr-1 font-medium text-[0.88rem]">
+                                Actions
+                              </p>
+                              <IoIosArrowDown />
+                            </UnstyledButton>
+                          </div>
+                        }
+                      >
+                        {admin ? (
+                          <div className="">
+                            <ul className="px-1 text-gray-6 text-[0.88rem]">
+                              <li className="py-2 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
+                                Re-open chat
+                              </li>
+                            </ul>
+                          </div>
+                        ) : (
+                          <UserChatMenu
+                            openExtension={extensionOpenedFuncs.open}
+                            openReportIssue={funcs.open}
+                            type={type}
+                          />
+                        )}
+                      </MenuComponent>
+                    )}
+                    {isTime || sessionOver ? (
+                      <div className="hidden lg:block">
+                        {opened ? (
+                          <div
+                            onClick={open}
+                            className=" hover:bg-stroke-4 transition-all ml-6 rounded-md cursor-pointer"
+                          >
+                            <Image src={HamburgerIcon} alt="hamburger-icons" />
+                          </div>
+                        ) : null}
+                      </div>
+                    ) : null}
+                    {(isTime || sessionOver) && (
+                      <div
+                        onClick={open}
+                        className="block lg:hidden hover:bg-stroke-4 transition-all ml-6 rounded-md cursor-pointer"
+                      >
+                        <Image src={HamburgerIcon} alt="hamburger-icons" />
+                      </div>
+                    )}
+                  </div>
+                </header>
+
+                <div className="h-full bg-white relative">
+                  {data && (isTime || sessionOver) ? (
+                    <ChatRoom
+                      userData={type === "user" ? userData : consultantData}
+                      orderId={data.orderId}
+                      updateChatHandlerProps={updateChatDataHandler}
+                      type={type}
+                      data={chatData}
+                      isTime={isTime}
+                      sessionOver={sessionOver}
+                    />
+                  ) : (
+                    <div className="h-[90vh] w-full">
+                      <div className="absolute left-[50%] top-[50%]  -translate-x-1/2 z-10 -translate-y-1/2">
+                        <Image
+                          src={Logo}
+                          alt="logo image"
+                          className="w-[10rem] opacity-50 mx-auto"
+                        />
+                        <p className="text-center font-semibold text-gray-4">
+                          Session with consultant hasn't started yet
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

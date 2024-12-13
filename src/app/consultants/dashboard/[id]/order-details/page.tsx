@@ -60,7 +60,8 @@ const OrderDetails = (props: Props) => {
           <>
             <OrderDetailsHeader
               isChat={
-                data?.request.nameofservice === "Chat With A Professional"
+                data?.request.nameofservice === "Chat With A Professional" ||
+                data?.request.type === "Chat"
               }
               status={data?.request.stattusof}
               statusValue={data?.request.stattusof}

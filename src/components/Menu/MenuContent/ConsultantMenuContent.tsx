@@ -98,10 +98,19 @@ const ConsultantMenuContent = (props: Props) => {
                 >
                   Resolve service request
                 </li>
-               )}
+              )}
               {(props.isChat || props.status === "ready") && (
+                <Link
+                  href={`/consultants/dashboard/chats?chat=${props.orderId}`}
+                >
+                  <li className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4">
+                    Go to chat
+                  </li>
+                </Link>
+              )}
+              {props.status === "ongoing" && props.isChat && (
                 <li className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4">
-                  Go to chat
+                  Set service as complete
                 </li>
               )}
             </ul>

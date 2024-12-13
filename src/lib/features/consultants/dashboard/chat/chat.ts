@@ -27,7 +27,8 @@ export const consultantDashboardChatApi = createApi({
     }),
     getConsultantChatFiles: build.query<IChatFilesResponse, string>({
       query: (room_id) =>  `/api/chat/files/${room_id}`
-    })
+    }),
+    
   }),
 });
 

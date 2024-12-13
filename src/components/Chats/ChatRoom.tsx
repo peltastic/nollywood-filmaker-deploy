@@ -5,8 +5,8 @@ import Image from "next/image";
 import SendImg from "/public/assets/chats/send-icon.svg";
 import { Textarea } from "@mantine/core";
 import { useSendChatMessageMutation } from "@/lib/features/users/dashboard/chat/chat";
-import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import { MdCancel } from "react-icons/md";
+
 import {
   chat_socket,
   joinChatRoom,
@@ -49,7 +49,7 @@ const ChatRoom = (props: Props) => {
   const searchVal = search.get("chat");
 
   useEffect(() => {
-    // if (props.sessionOver) return () => {};
+    if (props.sessionOver) return () => {};
     if (props.userData) {
       console.log("hey");
       joinChatRoom({
@@ -117,6 +117,7 @@ const ChatRoom = (props: Props) => {
       "fileMessage",
       (data: {
         fileUrl: string;
+        fileName: string;
         sender: {
           chatRoomId: string;
           name: string;
@@ -128,7 +129,7 @@ const ChatRoom = (props: Props) => {
         } else {
           if (searchVal === data.sender.chatRoomId) {
             props.updateChatHandlerProps({
-              text: "file message",
+              text: data.fileName,
               user: data.sender.role,
               id: Math.floor(Math.random() * 100000).toString(),
               type: "file",
@@ -203,99 +204,110 @@ const ChatRoom = (props: Props) => {
           <p className="text-gray-4">This conversation has ended</p>
         </div>
       ) : props.isTime ? (
-      <div className="min-h-[5rem] relative">
-        <div className="w-full px-6  absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2">
-          {fileInputValue && (
-            <div className=" flex items-center mb-6 ">
-              <div className="max-w-[30rem] flex items-center break-words ml-10 border w-fit py-3 px-3 text-white rounded-md bg-gray-1 ">
-                <FaFile className="mr-4" />
-                <p>{fileInputValue.name}</p>
-              </div>
-              <div className="ml-2">
-                <UnstyledButton
-                  clicked={() => {
-                    if (base64File && props.userData) {
-                      sendFileMessage({
-                        fileData: base64File,
-                        // fileName: fileInputValue.name,
-                        room: props.orderId,
-                        sender: {
-                          name: `${props.userData.fname} ${props.userData.lname}`,
-                          role: props.type,
-                          userid: props.userData.id,
-                          chatRoomId: searchVal as string,
-                        },
-                      });
-                      props.updateChatHandlerProps({
-                        text: fileInputValue.name,
-                        user: props.type,
-                        id: Math.floor(Math.random() * 100000).toString(),
-                        file: base64File as string,
-                        filename: fileInputValue.name,
-                        type: "file",
-                      });
-                      setFileInputValue(null);
-                    }
+        <div className="min-h-[5rem] relative">
+          <div className="w-full px-6  absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2">
+            {fileInputValue && (
+              <div className=" flex items-center mb-6 bg-white shadow-[rgba(0,0,10,0.1)_2px_2px_2px_4px] ml-10 w-fit py-4 px-6 rounded-md">
+                <div
+                  className=""
+                  onClick={() => {
+                    setFileInputValue(null);
+                    setBase64File(null);
                   }}
-                  class="flex hover:bg-blue-1 transition-all items-center bg-black-2 text-white py-2 px-4 rounded-md"
                 >
-                  <p className="mr-2">Send</p>
-                  <RiSendPlane2Line className=" text-xl" />
-                </UnstyledButton>
-              </div>
-            </div>
-          )}
-          <div className="flex items-center">
-            <UnstyledButton>
-              <FileButtonComponent
-                accept="application/pdf, .docx"
-                setFile={(file) => {
-                  setFileInputValue(file);
-                  if (file) {
-                    getBase64(file).then((res) => {
-                      if (res) {
-                        setBase64File(res as any);
-                      }
-                    });
-                  }
-                }}
-              >
-                <div className="mr-10">
-                  <Image src={AttachIcon} alt="attach-icon" />
+                  <MdCancel className="text-2xl text-red-1 mr-2 cursor-pointer" />
                 </div>
-              </FileButtonComponent>
-            </UnstyledButton>
-            <form className="w-full" onSubmit={(e) => e.preventDefault()}>
-              <div className="w-full relative">
-                <Textarea
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      sendMessageHandler();
+                <div className="max-w-[30rem] flex items-center break-words  border w-fit py-3 px-2 text-white rounded-md bg-black-2 ">
+                  <FaFile className="mr-4" />
+                  <p>{fileInputValue.name}</p>
+                </div>
+                <div className="ml-2">
+                  <UnstyledButton
+                    clicked={() => {
+                      if (base64File && props.userData) {
+                        sendFileMessage({
+                          fileData: base64File,
+                          fileName: fileInputValue.name,
+                          room: props.orderId,
+                          sender: {
+                            name: `${props.userData.fname} ${props.userData.lname}`,
+                            role: props.type,
+                            userid: props.userData.id,
+                            chatRoomId: searchVal as string,
+                          },
+                        });
+                        props.updateChatHandlerProps({
+                          text: fileInputValue.name,
+                          user: props.type,
+                          id: Math.floor(Math.random() * 100000).toString(),
+                          file: base64File as string,
+                          filename: fileInputValue.name,
+                          type: "file",
+                        });
+                        setFileInputValue(null);
+                      }
+                    }}
+                    class="flex hover:bg-blue-1 transition-all items-center bg-black-2 text-white py-2 px-4 rounded-md"
+                  >
+                    <p className="mr-2">Send</p>
+                    <RiSendPlane2Line className=" text-xl" />
+                  </UnstyledButton>
+                </div>
+              </div>
+            )}
+            <div className="flex items-center">
+              <UnstyledButton>
+                <FileButtonComponent
+                  accept="application/pdf, .docx"
+                  setFile={(file) => {
+                    setFileInputValue(file);
+                    if (file) {
+                      getBase64(file).then((res) => {
+                        if (res) {
+                          setBase64File(res as any);
+                        }
+                      });
                     }
                   }}
-                  minRows={0}
-                  autosize
-                  size="md"
-                  radius={"md"}
-                  value={inputValue}
-                  onChange={(event) => setInputValue(event.currentTarget.value)}
-                />
-                <button
-                  onClick={sendMessageHandler}
-                  disabled={!inputValue}
-                  className="w-fit disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer absolute right-3 -translate-y-1/2 top-1/2"
                 >
-                  <Image src={SendImg} alt="send-img" />
-                </button>
-              </div>
-            </form>
+                  <div className="mr-10">
+                    <Image src={AttachIcon} alt="attach-icon" />
+                  </div>
+                </FileButtonComponent>
+              </UnstyledButton>
+              <form className="w-full" onSubmit={(e) => e.preventDefault()}>
+                <div className="w-full relative">
+                  <Textarea
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessageHandler();
+                      }
+                    }}
+                    minRows={0}
+                    autosize
+                    size="md"
+                    radius={"md"}
+                    value={inputValue}
+                    onChange={(event) =>
+                      setInputValue(event.currentTarget.value)
+                    }
+                  />
+                  <button
+                    onClick={sendMessageHandler}
+                    disabled={!inputValue}
+                    className="w-fit disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer absolute right-3 -translate-y-1/2 top-1/2"
+                  >
+                    <Image src={SendImg} alt="send-img" />
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-       ) : (
-         <div className=""></div>
-       )}
+      ) : (
+        <div className=""></div>
+      )}
     </div>
   );
 };

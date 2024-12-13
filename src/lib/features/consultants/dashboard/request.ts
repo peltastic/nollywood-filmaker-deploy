@@ -48,6 +48,15 @@ export const consultantRequestsApi = createApi({
     getServiceRequests: build.query<{ tasks: IServiceRequest[] }, string>({
       query: (id) => `/api/consultants/fetchtask/${id}`,
     }),
+    setChatAsComplete: build.mutation<unknown, string>({
+      query: (orderId) => ({
+        url: `/api/consultants/requests/complete`,
+        method: "POST",
+        body: {
+          orderId,
+        },
+      }),
+    }),
   }),
 });
 
@@ -59,4 +68,5 @@ export const {
   useGetActiveRequestQuery,
   useLazyGetCustomerRequestDetailQuery,
   useLazyGetServiceRequestsQuery,
+  useSetChatAsCompleteMutation
 } = consultantRequestsApi;
