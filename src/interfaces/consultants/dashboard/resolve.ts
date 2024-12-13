@@ -9,7 +9,7 @@ export interface IServiceToChatPayload {
     | "Draft Legal documents"
     | "Create a Production budget";
   userId: string;
-  type: "chat";
+  type: "Chat";
   chat_title: string;
   date: string;
   time: string;
