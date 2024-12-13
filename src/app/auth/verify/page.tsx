@@ -56,7 +56,7 @@ const VerifyEmail = (props: Props) => {
           <p className="text-center mt-6">{message}</p>
           {status === "success" && (
             <div className="flex justify-center">
-              <UnstyledButton clicked={() => router.push("/auth/login")} class="w-[15rem] mx-auto rounded-md text-center bg-black-3 text-white py-2 mt-6">
+              <UnstyledButton clicked={() => router.push("/auth/login")} class="w-[15rem] hover:bg-blue-1 mx-auto rounded-md text-center bg-black-3 text-white py-2 mt-6">
                 Log in
               </UnstyledButton>
             </div>

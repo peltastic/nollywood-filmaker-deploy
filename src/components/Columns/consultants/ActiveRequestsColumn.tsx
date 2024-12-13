@@ -27,7 +27,8 @@ export interface IConsultantActiveRequestColumnData {
   date: string;
   status: "ready" | "ongoing" | "completed" | "pending";
   profilepic: string;
-  orderId: string
+  orderId: string;
+  type: "service" | "chat";
 }
 
 export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequestColumnData>[] =
@@ -130,7 +131,7 @@ export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequ
     },
     {
       id: "actions",
-      cell: ({row}) => {
+      cell: ({ row }) => {
         // const [opened, { open, close }] = useDisclosure();
         // const
         return (
@@ -147,18 +148,22 @@ export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequ
             >
               <div className="bg-white ">
                 <ul className="px-1 text-gray-6 text-[0.88rem]">
-                  <li
-                    // onClick={open}
-                    className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
-                  >
-                    Go to Chat
-                  </li>
+                  {row.original.type === "chat" ? (
+                    <li
+                      // onClick={open}
+                      className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
+                    >
+                      Go to Chat
+                    </li>
+                  ) : null}
                   <li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
-                    <Link href={`/consultants/dashboard/${row.original.orderId}/order-details`}>
+                    <Link
+                      href={`/consultants/dashboard/${row.original.orderId}/order-details`}
+                    >
                       See Details
                     </Link>
                   </li>
-                  <li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
+                  {/* {<li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
                     <Link
                       href={
                         "/user/dashboard/order-details/1?page_type=download_files"
@@ -166,7 +171,7 @@ export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequ
                     >
                       Download files
                     </Link>
-                  </li>
+                  </li>} */}
                 </ul>
               </div>
             </MenuComponent>

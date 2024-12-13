@@ -126,37 +126,22 @@ const SetChatDate = ({ close, data }: Props) => {
         <UnstyledButton
           disabled={isLoading || !selectedTime}
           clicked={() => {
-            console.log({
-              chat_title: data.chat_title || "",
-              cid: consultantId!,
-              consultant: data.expertise || "",
-              date: moment(selectedDate).format("YYYY-MM-DD"),
-              time: `${moment(selectedDate).format("YYYY-MM-DD")}T${moment(
-                selectedTime,
-                ["h:mm A"]
-              ).format("HH:mm")}:00+01:00`,
-              originalOrderId: "",
-              summary: data.summary || "",
-              title: data.nameofservice || "",
-              type: "chat",
-              userId: data.userId || "",
-            })
             if (data && data.nameofservice) {
               nprogress.start();
               serviceToChat({
-                chat_title: data.chat_title || "",
+                chat_title: data.chat_title,
                 cid: consultantId!,
-                consultant: data.expertise || "",
+                consultant: data.expertise ,
                 date: moment(selectedDate).format("YYYY-MM-DD"),
                 time: `${moment(selectedDate).format("YYYY-MM-DD")}T${moment(
                   selectedTime,
                   ["h:mm A"]
                 ).format("HH:mm")}:00+01:00`,
-                originalOrderId: "",
-                summary: data.summary || "",
-                title: data.nameofservice || "",
+                originalOrderId: data.orderId,
+                summary: data.summary ,
+                title: data.nameofservice ,
                 type: "chat",
-                userId: data.userId || "",
+                userId: data.userId ,
               });
             }
           }}

@@ -156,9 +156,9 @@ const DashboardPage = (props: Props) => {
     (state: RootState) => state.persistedState.consultant.user
   );
 
-  const [customerReqData, setCustomerReqData] = useState<ICustomerReqData[]>(
-    []
-  );
+  // const [customerReqData, setCustomerReqData] = useState<ICustomerReqData[]>(
+  //   []
+  // );
   const [activeReqData, setActiveReqData] = useState<
     IConsultantActiveRequestColumnData[]
   >([]);
@@ -213,7 +213,8 @@ const DashboardPage = (props: Props) => {
               service_type: el.request.nameofservice,
               status: el.request.stattusof,
               profilepic: el.user.profilepics,
-              orderId: el.orderId
+              orderId: el.orderId,
+              type: "chat",
             };
           });
         setActiveReqData(resData);
@@ -227,14 +228,15 @@ const DashboardPage = (props: Props) => {
         const resData: IConsultantActiveRequestColumnData[] =
           serviceReq.data.tasks.map((el) => {
             return {
-              customer: "Jenny Wilson",
+              customer: `${el.user_info.fname} ${el.user_info.lname}`,
               date: moment(el.date).format("LL"),
-              email: "email.email.com",
-              profilepic: "https://nwfm-api.onrender.com/uploads/account.png",
-              script: "service-1",
+              email: `${el.user_info.email}`,
+              profilepic: `${el.user_info.profilepics}`,
+              script: el.movie_title,
               service_type: el.nameofservice,
               status: el.status,
-              orderId: el.orderId
+              orderId: el.orderId,
+              type: "service",
             };
           });
         setServiceReqData(resData);

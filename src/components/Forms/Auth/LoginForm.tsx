@@ -66,10 +66,10 @@ const LoginForm = (props: Props) => {
   useEffect(() => {
     if (isError) {
       nprogress.complete();
-      if (!(error as any).data.isverified) {
-        notify("message", "Please verify your account before logging in");
-        return router.push("/auth/email-verification");
-      }
+      // if (!(error as any).data.isverified) {
+      //   notify("message", "Please verify your account before logging in");
+      //   return router.push("/auth/email-verification");
+      // }
       setErrorMessage((error as any).data?.message || "An Error Occured");
     }
     if (isSuccess) {

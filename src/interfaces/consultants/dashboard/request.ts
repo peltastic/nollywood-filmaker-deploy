@@ -44,11 +44,11 @@ export interface ICustomerReqDetails {
       seconds: number;
     };
     date: string;
-    summary: string
+    summary: string;
     filename?: string;
     chat_title: string;
-    productionCompany: string
-    contactInfo: string
+    productionCompany: string;
+    contactInfo: string;
     movie_title: string;
     link: string;
     consultant: string;
@@ -56,11 +56,11 @@ export interface ICustomerReqDetails {
     expertise: string;
     info: string;
     actors: string;
-    days: string
+    days: string;
     budgetrange: string;
-    socialTarget: string
-    oohTarget: string
-    visualStyle: string
+    socialTarget: string;
+    oohTarget: string;
+    visualStyle: string;
   };
   user: {
     fullName: string;
@@ -104,32 +104,38 @@ export interface IConsultantActiveReq {
     stattusof: "ready" | "ongoing" | "completed" | "pending";
   };
   user: {
-    fname: string
-    lname: string
-    profilepics: string
-    email: string
-  }
+    fname: string;
+    lname: string;
+    profilepics: string;
+    email: string;
+  };
 }
 
 export interface IConsultantActiveReqResponse {
   appointments?: IConsultantActiveReq[];
 }
 
-
 export interface IServiceRequest {
-  _id: string
-  date: string
-  uid: string
-  cid: string
-  orderId: string
-  nameofservice: 
-  | "Chat With A Professional"
-  | "Read my Script and advice"
-  | "Watch the Final cut of my film and advice"
-  | "Look at my Budget and advice"
-  | "Create a Marketing budget"
-  | "Create a Pitch based on my Script"
-  | "Draft Legal documents"
-  | "Create a Production budget";
+  _id: string;
+  date: string;
+  uid: string;
+  cid: string;
+  orderId: string;
+  nameofservice:
+    | "Chat With A Professional"
+    | "Read my Script and advice"
+    | "Watch the Final cut of my film and advice"
+    | "Look at my Budget and advice"
+    | "Create a Marketing budget"
+    | "Create a Pitch based on my Script"
+    | "Draft Legal documents"
+    | "Create a Production budget";
   status: "ready" | "ongoing" | "completed" | "pending";
+  user_info: {
+    fname: string;
+    lname: string;
+    email: string;
+    profilepics: string;
+  };
+  movie_title: string;
 }
