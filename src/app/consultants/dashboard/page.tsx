@@ -271,20 +271,20 @@ const DashboardPage = (props: Props) => {
                 <div className="mt-10 lg:mt-0 w-full lg:w-[50%]">
                   <UpcomingConversations
                     data={[
-                      {
-                        name: "Jenny Wilson",
-                        email: "w.lawson@example.com",
-                        date: "Today",
-                        time: "12:00pm",
-                        id: "1",
-                      },
-                      {
-                        name: "Jenny Wilson",
-                        email: "w.lawson@example.com",
-                        date: "Tomorrow",
-                        time: "12:00pm",
-                        id: "2",
-                      },
+                      // {
+                      //   name: "Jenny Wilson",
+                      //   email: "w.lawson@example.com",
+                      //   date: "Today",
+                      //   time: "12:00pm",
+                      //   id: "1",
+                      // },
+                      // {
+                      //   name: "Jenny Wilson",
+                      //   email: "w.lawson@example.com",
+                      //   date: "Tomorrow",
+                      //   time: "12:00pm",
+                      //   id: "2",
+                      // },
                     ]}
                   />
                 </div>
