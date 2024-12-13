@@ -140,7 +140,7 @@ const SetChatDate = ({ close, data }: Props) => {
                 originalOrderId: data.orderId,
                 summary: data.summary ,
                 title: data.nameofservice ,
-                type: "chat",
+                type: "Chat",
                 userId: data.userId ,
               });
             }
