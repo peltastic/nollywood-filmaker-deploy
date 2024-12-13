@@ -234,7 +234,7 @@ const OrderDetailsHeader = ({
             )}
             {user && status === "ongoing" && !isChat ? null : (
               <>
-                {status !== "pending" && (
+                {(status !== "pending" || admin) && (
                   <MenuComponent
                     target={
                       <div>
