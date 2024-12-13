@@ -18,6 +18,7 @@ type Props = {
   consultantId?: string;
   isChat?: boolean;
   open: () => void;
+  openSetAsCompleted: () => void;
 };
 
 const ConsultantMenuContent = (props: Props) => {
@@ -109,7 +110,10 @@ const ConsultantMenuContent = (props: Props) => {
                 </Link>
               )}
               {props.status === "ongoing" && props.isChat && (
-                <li className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4">
+                <li
+                  onClick={props.openSetAsCompleted}
+                  className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
+                >
                   Set service as complete
                 </li>
               )}

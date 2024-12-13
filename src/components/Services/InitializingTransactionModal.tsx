@@ -8,7 +8,7 @@ import ServiceInfo from "../ServiceInfo/ServiceInfo";
 type Props = {
   status: "initialized" | "pending" | "completed";
   paymentUrl?: string;
-  info?: string
+  info?: string;
 };
 
 const InitializingTransactionModal = (props: Props) => {
@@ -26,10 +26,7 @@ const InitializingTransactionModal = (props: Props) => {
         }}
         className="w-full md:w-[80%] px-10 xl:w-[50%] h-[100%] md:h-auto z-20 py-[5rem] rounded-md fixed left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2 bg-white"
       >
-        <ServiceInfo
-          activeColor
-          content={props.info}
-        />
+        {props.info && <ServiceInfo activeColor content={props.info} />}
 
         <div className="flex mt-10 items-center">
           <div className="w-[1.5rem]">

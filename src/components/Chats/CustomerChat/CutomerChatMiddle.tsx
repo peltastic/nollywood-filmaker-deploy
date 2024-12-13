@@ -11,7 +11,10 @@ import HamburgerIcon from "/public/assets/chats/hamburger.svg";
 
 import { useRouter } from "next/navigation";
 import UserChatMenu from "../Menu/UserChatMenu";
-import { useLazyFetchChatMessagesQuery } from "@/lib/features/users/dashboard/chat/chat";
+import {
+  useLazyFetchChatMessagesQuery,
+  useRequestExtensionMutation,
+} from "@/lib/features/users/dashboard/chat/chat";
 import Logo from "/public/assets/nav/logo.svg";
 import Spinner from "@/app/Spinner/Spinner";
 import { IGetUserConversations } from "@/interfaces/dashboard/chat";
@@ -189,13 +192,13 @@ const CustomerChatMiddle = ({
   return (
     <>
       <ModalComponent
-        onClose={close}
+        onClose={extensionOpenedFuncs.close}
         opened={extensionOpened}
         centered
         withCloseButton={false}
         size="xl"
       >
-        <RequestExtension close={close} />
+        {orderId && <RequestExtension close={extensionOpenedFuncs.close} orderId={orderId} />}
       </ModalComponent>
       <ModalComponent
         onClose={funcs.close}

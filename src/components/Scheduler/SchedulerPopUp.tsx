@@ -9,9 +9,10 @@ import Image from "next/image";
 import { IGetCalendarAppointmentResponse } from "@/interfaces/consultants/calendar/calendar";
 import { truncateStr } from "@/utils/helperFunction";
 import moment from "moment";
+import Link from "next/link";
 
 type Props = {
-  data?: IGetCalendarAppointmentResponse;
+  data: IGetCalendarAppointmentResponse;
 };
 
 const SchedulerPopUp = (props: Props) => {
@@ -25,22 +26,30 @@ const SchedulerPopUp = (props: Props) => {
       <div className="flex items-center font-bold py-4 border-t-stroke-11 border-t-2">
         <div className="flex w-[50%] items-start border-r-2 border-r-stroke-11">
           <HiOutlineCalendar className="mr-3 text-xl" />
-          <p className="text-[0.75rem]">{moment(props.data?.booktime).format("YYYY-MM-DD")}</p>
+          <p className="text-[0.75rem]">
+            {moment(props.data?.booktime).format("YYYY-MM-DD")}
+          </p>
         </div>
         <div className="flex items-center w-[50%]  pl-4">
           <Image src={Time} alt="" className="mr-2" />
           <p className="text-[0.75rem]">
-          {moment(props.data?.booktime).format("LT")}</p>
+            {moment(props.data?.booktime).format("LT")}
+          </p>
         </div>
       </div>
       <div className="flex items-center font-bold py-4 border-t-stroke-11 border-t-2">
         <MdPeopleAlt className="mr-3 text-xl" />
-        <p className="text-[0.75rem]">You, Niyi@gmail.com</p>
+        <p className="text-[0.75rem]">You, {props.data.user.fname} {props.data.user.lname} - {props.data.user.email}</p>
       </div>
-      <div className="flex items-center font-bold py-4 border-t-stroke-11 border-t-2">
+      <div className="">
+        <Link href={`/consultants/dashboard/chats?chat=${props.data.orderId}`}>
+          <p className="text-[0.88rem] underline hover:text-blue-1 font-medium">Go to chat</p>
+        </Link>
+      </div>
+      {/* <div className="flex items-center font-bold py-4 border-t-stroke-11 border-t-2">
         <BsFillPencilFill className="mr-3 text-xl" />
         <p className="text-[0.75rem]">I don’t have any notes at the moment</p>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -152,15 +152,17 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
                     See Details
                   </Link>
                 </li>
-                <li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
-                  <Link
-                    href={
-                      "/user/dashboard/order-details/1?page_type=download_files"
-                    }
-                  >
-                    Download files
-                  </Link>
-                </li>
+                {row.original.status !== "pending" && (
+                  <li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
+                    <Link
+                      href={
+                        "/user/dashboard/order-details/1?page_type=download_files"
+                      }
+                    >
+                      Download files
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
           </MenuComponent>

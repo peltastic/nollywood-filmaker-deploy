@@ -21,6 +21,7 @@ import { notify } from "@/utils/notification";
 import { capitalizeFirstLetter } from "@/utils/helperFunction";
 import ConsultantMenuContent from "../Menu/MenuContent/ConsultantMenuContent";
 import SetChatDate from "../ModalPages/SetChatDate";
+import SetAsCompletedModal from "../Consultants/SetAsCompletedModal";
 
 type Props = {
   isChat?: boolean;
@@ -30,6 +31,7 @@ type Props = {
   consultant?: boolean;
   admin?: boolean;
   userId?: string;
+  user?: boolean;
   customerReqOrderId?: string;
   summary?: string;
   orderId?: string;
@@ -76,13 +78,14 @@ const OrderDetailsHeader = ({
   summary,
   nameofservice,
   userId,
+  user,
 }: Props) => {
   const [opened, { open, close }] = useDisclosure();
   const router = useRouter();
 
   const [assignReqOpened, assingReqOptions] = useDisclosure();
 
-  const [setAsCompleted, setAsCompletedOptions] = useDisclosure()
+  const [setAsCompleted, setAsCompletedOptions] = useDisclosure();
 
   const [showChatDate, setShowChatDate] = useState<boolean>(false);
 
@@ -141,8 +144,6 @@ const OrderDetailsHeader = ({
       break;
   }
 
-
-
   return (
     <>
       <ModalComponent
@@ -194,6 +195,20 @@ const OrderDetailsHeader = ({
           />
         )}
       </ModalComponent>
+      <ModalComponent
+        opened={setAsCompleted}
+        onClose={setAsCompletedOptions.close}
+        withCloseButton={false}
+        centered
+        size="lg"
+      >
+        {orderId && (
+          <SetAsCompletedModal
+            close={setAsCompletedOptions.close}
+            orderId={orderId}
+          />
+        )}
+      </ModalComponent>
       <div>
         <header className="flex flex-wrap items-center px-2 chatbg:mx-0 py-4 chatbg:py-0 ">
           <div className="flex items-center w-full md:w-auto text-[1.5rem] mr-auto">
@@ -217,51 +232,62 @@ const OrderDetailsHeader = ({
                 {capitalizeFirstLetter(statusValue)}
               </p>
             )}
-            <MenuComponent
-              target={
-                <div>
-                  <UnstyledButton class="ml-6 px-4 py-2 hover:bg-blue-1 rounded-md items-center bg-black-3 text-white flex">
-                    <p className="mr-1 font-medium text-[0.88rem]">Actions</p>
-                    <IoIosArrowDown />
-                  </UnstyledButton>
-                </div>
-              }
-            >
-              {admin ? (
-                adminMenuContent
-              ) : consultant ? (
-                <ConsultantMenuContent
-                  status={status}
-                  isChat={isChat}
-                  chatId={""}
-                  consultantId={consultantId}
-                  orderId={orderId}
-                  open={open}
-                />
-              ) : (
-                <div className="bg-white ">
-                  <ul className="px-1 text-gray-6 text-[0.88rem]">
-                    <li className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4">
-                      Go to Chat
-                    </li>
-                    <li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
-                      <Link href={"/user/dashboard/order-details/1"}>
-                        See Details
-                      </Link>
-                    </li>
-                    <li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
-                      <Link
+            {user && status === "ongoing" && !isChat ? null : (
+              <>
+                {status !== "pending" && (
+                  <MenuComponent
+                    target={
+                      <div>
+                        <UnstyledButton class="ml-6 px-4 py-2 hover:bg-blue-1 rounded-md items-center bg-black-3 text-white flex">
+                          <p className="mr-1 font-medium text-[0.88rem]">
+                            Actions
+                          </p>
+                          <IoIosArrowDown />
+                        </UnstyledButton>
+                      </div>
+                    }
+                  >
+                    {admin ? (
+                      adminMenuContent
+                    ) : consultant ? (
+                      <ConsultantMenuContent
+                        status={status}
+                        isChat={isChat}
+                        chatId={""}
+                        consultantId={consultantId}
+                        orderId={orderId}
+                        open={open}
+                        openSetAsCompleted={setAsCompletedOptions.open}
+                      />
+                    ) : (
+                      <div className="bg-white ">
+                        <ul className="px-1 text-gray-6 text-[0.88rem]">
+                          {isChat && (
+                            <Link
+                              href={`/user/dashboard/chats?chat=${orderId}`}
+                            >
+                              <li className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4">
+                                Go to Chat
+                              </li>
+                            </Link>
+                          )}
+
+                          {/* <li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
+                        <Link
                         href={
                           "/user/dashboard/order-details/1?page_type=download_files"
                         }
-                      >
+                        >
                         Download files
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </MenuComponent>
+                        </Link>
+                      </li> */}
+                        </ul>
+                      </div>
+                    )}
+                  </MenuComponent>
+                )}
+              </>
+            )}
           </div>
         </header>
       </div>

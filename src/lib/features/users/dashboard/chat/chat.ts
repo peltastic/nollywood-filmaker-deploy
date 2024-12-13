@@ -63,4 +63,5 @@ export const {
   useSendChatMessageFileMutation,
   useFetchChatFilesQuery,
   useLazyFetchChatMessagesQuery,
+  useRequestExtensionMutation
 } = dashboardChatApi;

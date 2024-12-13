@@ -6,7 +6,7 @@ import { Menu } from "@mantine/core";
 
 type Props = {
   data: {
-    value: string;
+    value: string ;
     label: string;
     caption: string;
   }[];

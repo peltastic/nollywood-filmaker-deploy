@@ -7,6 +7,7 @@ import SchedulerPopUp from "./SchedulerPopUp";
 import { time_slots } from "@/utils/constants/constants";
 import { IGetCalendarAppointmentResponse } from "@/interfaces/consultants/calendar/calendar";
 import { truncateStr } from "@/utils/helperFunction";
+import { AspectRatio } from "@mantine/core";
 
 type Props = {
   allocatedTime: string;
@@ -18,7 +19,7 @@ type Props = {
 };
 
 const SchedulerSlots = (props: Props) => {
-  const [slotData, setSlotData] = useState<IGetCalendarAppointmentResponse>()
+  const [slotData, setSlotData] = useState<IGetCalendarAppointmentResponse>();
   const [isTime, setIsTime] = useState<boolean>(false);
 
   useEffect(() => {
@@ -26,11 +27,14 @@ const SchedulerSlots = (props: Props) => {
       (el) => el.upperBound >= props.index && el.lowerBound <= props.index
     );
 
-    const slotTimeStamp =`${moment(props.date).format("YYYY-MM-DD")}T${moment(at[0].time, ["h:mm A"]).format("HH:mm")}:00+01:00`;
-      console.log(slotTimeStamp)
-      const isDate = props.data.find((el) => el.booktime === slotTimeStamp);
-      if (isDate) {
-      setSlotData(isDate)
+    const slotTimeStamp = `${moment(props.date).format("YYYY-MM-DD")}T${moment(
+      at[0].time,
+      ["h:mm A"]
+    ).format("HH:mm")}:00+01:00`;
+    console.log(slotTimeStamp);
+    const isDate = props.data.find((el) => el.booktime === slotTimeStamp);
+    if (isDate) {
+      setSlotData(isDate);
       setIsTime(true);
     } else {
       setIsTime(false);
@@ -64,25 +68,26 @@ const SchedulerSlots = (props: Props) => {
                   </div>
                 </div>
                 <p className="text-[0.63rem] font-bold mt-1">
-                 {slotData?.chat_title && truncateStr(slotData.chat_title, 25)}
+                  {slotData?.chat_title && truncateStr(slotData.chat_title, 25)}
                 </p>
-                <div className="flex absolute bottom-1">
-                  <Image
-                    src={TestImage}
-                    alt="test-image"
-                    className="w-[1.5rem] h-[1.5rem] mr-1"
-                  />
-                  <Image
-                    src={TestImage}
-                    alt="test-image"
-                    className="w-[1.5rem] h-[1.5rem]"
-                  />
-                </div>
+                {slotData && (
+                  <div className="flex absolute bottom-1">
+                    <AspectRatio ratio={1800/1800}>
+                      <Image
+                        src={slotData.user.profilepics}
+                        alt="test-image"
+                        className="w-[1.5rem] h-[1.5rem] rounded-full"
+                        width={50}
+                        height={50}
+                      />
+                    </AspectRatio>
+                  </div>
+                )}
               </div>
             </div>
           }
         >
-          <SchedulerPopUp data={slotData} />
+          {slotData && <SchedulerPopUp data={slotData} />}
         </HoverCardComponent>
       )}
     </div>

@@ -59,7 +59,6 @@ const OrderDetailsPage = (props: Props) => {
     }
   }, [params]);
 
-
   return (
     <ServiceLayout>
       <DashboardBodyLayout>
@@ -67,7 +66,16 @@ const OrderDetailsPage = (props: Props) => {
           <OrderDetailsPageSkeleton />
         ) : (
           <>
-            <OrderDetailsHeader status="pending" statusValue="Pending" />
+            <OrderDetailsHeader
+              status={data?.request.stattusof}
+              statusValue={data?.request.stattusof}
+              isChat={
+                data?.request.nameofservice === "Chat With A Professional" ||
+                data?.request.type === "Chat"
+              }
+              orderId={data?.request.orderId}
+              user
+            />
             <div className="w-[90%] lg:w-[82%] mx-auto">
               <OrderDetailsTop
                 order_date={data?.request.date}

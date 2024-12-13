@@ -10,4 +10,10 @@ export interface IGetCalendarAppointmentResponse {
   nameofservice: string;
   orderId: string;
   chat_title: string;
+  user: {
+    fname: string
+    lname: string
+    email: string
+    profilepics: string
+  }
 }

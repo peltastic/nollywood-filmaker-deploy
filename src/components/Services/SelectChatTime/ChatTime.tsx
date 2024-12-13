@@ -64,6 +64,7 @@ const ChatTime = (props: Props) => {
             );
             return {
               time: moment(el.time, ["HH:mm"]).format("h:mm A"),
+              // isAvailable:  el.isAvailable,
               isAvailable: isBeforeNow ? false : el.isAvailable,
             };
           })}
