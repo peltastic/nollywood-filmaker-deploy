@@ -57,6 +57,9 @@ export const consultantRequestsApi = createApi({
         },
       }),
     }),
+    fetchReqHistory: build.query<unknown, string>({
+      query: (id) => `/api/consultants/assignments/${id}`
+    })
   }),
 });
 
@@ -68,5 +71,6 @@ export const {
   useGetActiveRequestQuery,
   useLazyGetCustomerRequestDetailQuery,
   useLazyGetServiceRequestsQuery,
-  useSetChatAsCompleteMutation
+  useSetChatAsCompleteMutation,
+  useLazyFetchReqHistoryQuery
 } = consultantRequestsApi;

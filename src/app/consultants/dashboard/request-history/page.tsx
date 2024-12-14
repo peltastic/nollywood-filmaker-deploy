@@ -6,7 +6,11 @@ import {
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import { DataTable } from "@/components/Tables/DataTable";
-import React from "react";
+import { useProtectRouteConsultantRoute } from "@/hooks/useProtectConsultantRoute";
+import { useLazyFetchReqHistoryQuery } from "@/lib/features/consultants/dashboard/request";
+import { RootState } from "@/lib/store";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 type Props = {};
 
@@ -104,6 +108,17 @@ const reqHistoryData: ReqHistoryColumnData[] = [
 ];
 
 const RequestHistoryPage = (props: Props) => {
+  useProtectRouteConsultantRoute();
+  const consultantId = useSelector(
+    (state: RootState) => state.persistedState.consultant.user?.id
+  );
+  const [fetchReqHistory, { isSuccess, data }] = useLazyFetchReqHistoryQuery();
+
+  useEffect(() => {
+    fetchReqHistory(consultantId!);
+  }, []);
+
+
   return (
     <ServiceLayout consultant>
       <DashboardBodyLayout>
@@ -111,7 +126,7 @@ const RequestHistoryPage = (props: Props) => {
           <DataTable
             title="Requst History"
             subtitle="Keep track of all your past requests"
-            data={reqHistoryData}
+            data={[]}
             columns={request_history_column}
           />
         </div>

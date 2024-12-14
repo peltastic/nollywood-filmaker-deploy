@@ -4,6 +4,7 @@ import {
 } from "@/interfaces/admin/requests/requests";
 import {
   IAppointConsultantPayload,
+  ICustomerReqDetails,
   IFetchConsultantsResponse,
 } from "@/interfaces/consultants/dashboard/request";
 import { adminBaseQueryWithReauth } from "@/lib/baseQuery";
@@ -51,6 +52,9 @@ export const adminRequestApi = createApi({
         body,
       }),
     }),
+    getCustomerRequestDetail: build.query<ICustomerReqDetails, string>({
+      query: (id) => `/api/consultants/orderdetail/${id}`,
+    }),
   }),
 });
 
@@ -58,5 +62,6 @@ export const {
   useLazyFetchCustomerRequestQuery,
   useFetchConsultantsByExpertiseQuery,
   useAppointConsultantMutation,
-  useAssignServiceToConsultantMutation
+  useAssignServiceToConsultantMutation,
+  useLazyGetCustomerRequestDetailQuery
 } = adminRequestApi;

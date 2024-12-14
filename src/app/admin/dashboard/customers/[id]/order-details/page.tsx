@@ -8,9 +8,10 @@ import React, { useEffect, useState } from "react";
 import TestImg from "/public/assets/test-avatar.png";
 import OrderDetailsTop from "@/components/OrderDetails/OrderDetailsTop";
 import OrderDetailsBody from "@/components/OrderDetails/OrderDetailsBody";
-import { useLazyGetCustomerRequestDetailQuery } from "@/lib/features/consultants/dashboard/request";
+
 import OrderDetailsPageSkeleton from "@/components/Skeletons/OrderDetailsPageSkeleton";
 import moment from "moment";
+import { useLazyGetCustomerRequestDetailQuery } from "@/lib/features/admin/requests/request";
 type Props = {};
 
 const CustomerOrderDetailsPage = (props: Props) => {

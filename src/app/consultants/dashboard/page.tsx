@@ -351,7 +351,7 @@ const DashboardPage = (props: Props) => {
             </section>
           </DashboardPlate>
         </div>
-        <div className="mt-16 px-6 chatbp:px-0">
+        {/* <div className="mt-16 px-6 chatbp:px-0">
           <DataTable
             showMoreBtnContent="See all"
             link="/consultants/dashboard/request-history"
@@ -360,7 +360,7 @@ const DashboardPage = (props: Props) => {
             columns={request_history_column}
             data={reqHistory}
           />
-        </div>
+        </div> */}
       </DashboardBodyLayout>
     </ServiceLayout>
   );
