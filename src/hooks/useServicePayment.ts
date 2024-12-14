@@ -51,6 +51,9 @@ export const useServicePayment = (
           }
         }
       );
+      return () => {
+        primary_socket.off("completed");
+      };
     }
   }, [paymentStatus]);
 
