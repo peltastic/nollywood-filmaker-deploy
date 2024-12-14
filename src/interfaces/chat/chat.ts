@@ -69,3 +69,10 @@ export interface IRequestExtensionPayload {
   length: number
   orderId: string
 }
+
+export interface IRequestExtensionResponse {
+  authorization_url: string
+  transaction: {
+    reference: string
+  }
+}
