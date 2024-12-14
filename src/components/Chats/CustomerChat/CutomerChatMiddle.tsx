@@ -214,6 +214,7 @@ const CustomerChatMiddle = ({
         chat_socket.emit("triggerRefresh", {
           room: orderId,
         });
+        transFunc.close()
         refreshChat();
       }
     }
