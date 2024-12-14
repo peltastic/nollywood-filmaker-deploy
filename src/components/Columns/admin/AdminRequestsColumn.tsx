@@ -138,7 +138,7 @@ export const admin_reqs_columns: ColumnDef<ICustomerRequest>[] = [
         <UnstyledButton
           clicked={() =>
             router.push(
-              `/admin/dashboard/customers/${row.original.orderId}/order-details?status=${row.original.stattusof}`
+              `/admin/dashboard/customers/${row.original.orderId}/order-details`
             )
           }
           class="bg-black-3 text-[0.88rem] hover:bg-blue-1 transition-all text-white py-2 px-4 rounded-md"
