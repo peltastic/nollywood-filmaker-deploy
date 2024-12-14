@@ -72,9 +72,11 @@ const ChatMessage = ({
               ? "mr-[3.2rem]"
               : ""
           } ${
-            type === "file"
+            type === "file" && user === "user"
               ? "bg-black-2 text-white hover:bg-black-9 transition-all"
-              : user === "admin" || user === "consultant"
+              : type === "file" && user !== "user"
+              ? "bg-admin-chat-bg  text-black hover:bg-gray-2 transition-al"
+              : user !== "user"
               ? "bg-admin-chat-bg text-black"
               : "bg-black-3 text-white mr-2"
           } text-[0.88rem] py-2 px-2 rounded-xl max-w-[20rem]`}

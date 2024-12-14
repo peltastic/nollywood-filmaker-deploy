@@ -84,7 +84,7 @@ const CustomerChatRight = ({
     if (result.data) {
       setChatFiles(result.data.files);
     }
-  }, [result]);
+  }, [result.data]);
 
   useEffect(() => {
     if (res.data) {

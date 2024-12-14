@@ -51,7 +51,6 @@ const ChatRoom = (props: Props) => {
   useEffect(() => {
     if (props.sessionOver) return () => {};
     if (props.userData) {
-      console.log("hey");
       joinChatRoom({
         room: props.orderId,
         name: `${props.userData.fname} ${props.userData.lname}`,
@@ -134,7 +133,7 @@ const ChatRoom = (props: Props) => {
               id: Math.floor(Math.random() * 100000).toString(),
               type: "file",
               file: data.fileUrl,
-              filename: "file message",
+              filename: data.fileName,
             });
           }
         }
@@ -305,7 +304,7 @@ const ChatRoom = (props: Props) => {
             </div>
           </div>
         </div>
-      ) : (
+       ) : (
         <div className=""></div>
       )}
     </div>

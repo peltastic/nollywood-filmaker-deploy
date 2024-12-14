@@ -21,8 +21,6 @@ const ChatTime = (props: Props) => {
   const [getAvailableHours, { data, isFetching }] =
     useLazyGetAvailabilityHoursQuery();
 
-  // console.log(moment("9:00", ["HH:mm"]).format("h:mm A"))
-
   useEffect(() => {
     if (props.consultantType) {
       getAvailableHours({
@@ -64,8 +62,8 @@ const ChatTime = (props: Props) => {
             );
             return {
               time: moment(el.time, ["HH:mm"]).format("h:mm A"),
-              // isAvailable:  el.isAvailable,
-              isAvailable: isBeforeNow ? false : el.isAvailable,
+              isAvailable:  el.isAvailable,
+              // isAvailable: isBeforeNow ? false : el.isAvailable,
             };
           })}
         />

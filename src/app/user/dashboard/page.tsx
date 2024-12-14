@@ -13,41 +13,20 @@ import {
   ReqHistoryColumnData,
 } from "@/components/Columns/RequestHistoryColumns";
 import moment from "moment";
-import { useFetchActiveRequestsQuery } from "@/lib/features/users/dashboard/requests/requests";
+import {
+  useFetchActiveRequestsQuery,
+  useLazyFetchUserRequestHistoryQuery,
+} from "@/lib/features/users/dashboard/requests/requests";
 import { useProtectRoute } from "@/hooks/useProtectRoute";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 
 type Props = {};
 
-const reqHistoryData: ReqHistoryColumnData[] = [
-  {
-    name: "Mikolo",
-    date: "22 Jan 2022",
-    progress: 100,
-    rating: 5,
-    service_type: "Read my script",
-    status: "Completed",
-  },
-  {
-    name: "Jagun Jagun",
-    date: "22 Jan 2022",
-    progress: 100,
-    rating: 5,
-    service_type: "Watch the Final cut of my film",
-    status: "Completed",
-  },
-  {
-    name: "Criminal",
-    date: "22 Jan 2022",
-    progress: 100,
-    rating: 5,
-    service_type: "Create a production Budget",
-    status: "Completed",
-  },
-];
-
 const DashboardHomePgae = (props: Props) => {
+  const [reqHistoryData, setReqHistoryData] = useState<ReqHistoryColumnData[]>(
+    []
+  );
   const userData = useSelector(
     (state: RootState) => state.persistedState.user.user
   );
@@ -59,6 +38,11 @@ const DashboardHomePgae = (props: Props) => {
   const { data, isFetching } = useFetchActiveRequestsQuery(null, {
     refetchOnMountOrArgChange: true,
   });
+  const userId = useSelector(
+    (state: RootState) => state.persistedState.user.user?.id
+  );
+
+  const [fetchRequestHistory, result] = useLazyFetchUserRequestHistoryQuery();
 
   useEffect(() => {
     if (data) {
@@ -83,6 +67,26 @@ const DashboardHomePgae = (props: Props) => {
       setActiveReqData(formattedData);
     }
   }, [data]);
+
+  useEffect(() => {
+    fetchRequestHistory({ userId: userId!, limit: 5 });
+  }, []);
+  useEffect(() => {
+    if (result.isSuccess) {
+      const modData: ReqHistoryColumnData[] = result.data.requests.map((el) => {
+        return {
+          date: moment(el.date).format("ll"),
+          name: el.movie_title || el.chat_title,
+          progress: 100,
+          rating: 5,
+          service_type: el.nameofservice,
+          status: el.stattusof,
+          orderId: el.orderId,
+        };
+      });
+      setReqHistoryData(modData);
+    }
+  }, [result.isSuccess]);
   return (
     <ServiceLayout>
       <DashboardBodyLayout>
@@ -104,11 +108,15 @@ const DashboardHomePgae = (props: Props) => {
           </div>
           <div className="mt-14">
             <DataTable
+              link="/user/dashboard/request-history"
+              showMoreBtnContent="See All"
               title="Request History"
               subtitle="Keep track of all your past requests"
               columns={request_history_columns}
               // data={reqHistoryData}
-              data={[]}
+              isFetching={result.isFetching}
+              loaderLength={5}
+              data={reqHistoryData}
             />
           </div>
         </div>

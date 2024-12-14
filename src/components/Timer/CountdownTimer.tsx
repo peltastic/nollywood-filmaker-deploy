@@ -16,7 +16,7 @@ const CountdownTimer = (props: Props) => {
         const currentTime = new Date().getTime();
         const eventTime = new Date(props.endTime).getTime();
         let remainingTime = eventTime - currentTime;
-        if (Math.floor((remainingTime / (1000 * 60)) % 60) <= 10) {
+        if (Math.floor((remainingTime / (1000 * 60)) % 60) <= 10 && Math.floor((remainingTime / (1000 * 60 * 60)) % 24) < 1 ) {
           setFinalMinutes(true);
         }
 

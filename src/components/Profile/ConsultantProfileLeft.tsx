@@ -38,13 +38,7 @@ const ConsultantProfileLeft = (props: Props) => {
             </h1>
             <p>Consultant</p>
           </div>
-          {/* <div className="text-center mt-8">
-            <p className="font-bold">Average rating</p>
-            <div className="flex items-center justify-center mt-1">
-              <Rating color="#F8C51B" />
-              <p className="font-bold ml-2">5.0</p>
-            </div>
-          </div> */}
+         
         </div>
       </div>
     </div>

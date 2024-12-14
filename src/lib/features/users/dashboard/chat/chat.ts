@@ -3,6 +3,7 @@ import {
   IChatMessages,
   IChatMessagesResponse,
   IRequestExtensionPayload,
+  IRequestExtensionResponse,
   ISendChatMessagePayload,
 } from "@/interfaces/chat/chat";
 import {
@@ -46,13 +47,27 @@ export const dashboardChatApi = createApi({
     fetchChatMessages: build.query<IChatMessagesResponse, string>({
       query: (id) => `/api/chat/fetchmessage/${id}`,
     }),
-    requestExtension: build.mutation<unknown, IRequestExtensionPayload>({
+    requestExtension: build.mutation<
+      {result: IRequestExtensionResponse},
+      IRequestExtensionPayload
+    >({
       query: (body) => ({
         body,
         method: "POST",
-        url: "/api/users/extendmytime"
-      })
-    })
+        url: "/api/users/extendmytime",
+      }),
+    }),
+    extentTime: build.query<
+      unknown,
+      {
+        length: number;
+        transRef: string;
+        orderId: string;
+      }
+    >({
+      query: ({ length, orderId, transRef }) =>
+        `/api/users/gettranstat/${transRef}?orderId=${orderId}&length=${length}`,
+    }),
   }),
 });
 
@@ -63,5 +78,6 @@ export const {
   useSendChatMessageFileMutation,
   useFetchChatFilesQuery,
   useLazyFetchChatMessagesQuery,
-  useRequestExtensionMutation
+  useRequestExtensionMutation,
+  useLazyExtentTimeQuery,
 } = dashboardChatApi;

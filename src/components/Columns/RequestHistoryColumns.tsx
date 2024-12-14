@@ -17,16 +17,22 @@ import CustomTime from "../CustomTime/CustomTime";
 export interface ReqHistoryColumnData {
   name: string;
   service_type:
-    | "Read my script"
-    | "Watch the Final cut of my film"
-    | "Create a production Budget";
+    | "Chat With A Professional"
+    | "Read my Script and advice"
+    | "Watch the Final cut of my film and advice"
+    | "Look at my Budget and advice"
+    | "Create a Marketing budget"
+    | "Create a Pitch based on my Script"
+    | "Draft Legal documents"
+    | "Create a Production budget";
   progress: number;
   rating: number;
   date: string;
-  status: "Ready" | "Ongoing" | "Completed";
+  status: "pending" | "ongoing" | "ready" | "completed";
+  orderId: string;
 }
 
-export const request_history_columns: ColumnDef<IActiveRequestColumnData>[] = [
+export const request_history_columns: ColumnDef<ReqHistoryColumnData>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -63,7 +69,7 @@ export const request_history_columns: ColumnDef<IActiveRequestColumnData>[] = [
     header: "Progress chart",
     cell: ({ row }) => {
       return (
-        <div className="flex items-center py-4">
+        <div className="flex items-center py-8">
           <div className="w-[15rem] mr-2">
             <Progress value={row.getValue("progress")} color="#181818" />
           </div>
@@ -131,27 +137,19 @@ export const request_history_columns: ColumnDef<IActiveRequestColumnData>[] = [
           </ModalComponent>
           <MenuComponent
             target={
-              <UnstyledButton class="px-4 py-2 hover:bg-blue-1 rounded-md items-center bg-black-3 text-white flex">
-                <p className="mr-1 font-medium text-[0.88rem]">Actions</p>
-                <IoIosArrowDown />
-              </UnstyledButton>
+              <div>
+                <UnstyledButton class="px-4 py-2 hover:bg-blue-1 rounded-md items-center bg-black-3 text-white flex">
+                  <p className="mr-1 font-medium text-[0.88rem]">Actions</p>
+                  <IoIosArrowDown />
+                </UnstyledButton>
+              </div>
             }
           >
-            <div className="shadow-xl border bg-white border-[#1925321A]">
-              <ul>
-                <li className="cursor-pointer" onClick={open}>
-                  Go to Chat
-                </li>
-                <li>
-                  <Link href={"/user/dashboard/order-details/1"}>
-                    See Details
-                  </Link>
-                </li>
+            <div className="sborder bg-white ">
+              <ul className="px-1 text-gray-6 text-[0.88rem]">
                 <li>
                   <Link
-                    href={
-                      "/user/dashboard/order-details/1?page_type=download_files"
-                    }
+                    href={`/user/dashboard/order-details/${row.original.orderId}`}
                   >
                     See Details
                   </Link>

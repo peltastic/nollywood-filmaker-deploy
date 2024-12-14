@@ -12,6 +12,7 @@ import HamburgerIcon from "/public/assets/chats/hamburger.svg";
 import { useRouter } from "next/navigation";
 import UserChatMenu from "../Menu/UserChatMenu";
 import {
+  useLazyExtentTimeQuery,
   useLazyFetchChatMessagesQuery,
   useRequestExtensionMutation,
 } from "@/lib/features/users/dashboard/chat/chat";
@@ -28,6 +29,9 @@ import ModalComponent from "@/components/Modal/Modal";
 import RequestExtension from "../ModalComponents/RequestExtension";
 import ReportAnIssue from "../ModalComponents/ReportAnIssue";
 import { useDisclosure } from "@mantine/hooks";
+import InitializingTransactionModal from "@/components/Services/InitializingTransactionModal";
+import { chat_socket, primary_socket } from "@/lib/socket";
+import { nprogress } from "@mantine/nprogress";
 
 export interface ChatPayload {
   text: string;
@@ -48,6 +52,7 @@ type Props = {
   type: "user" | "consultant" | "admin";
   isTime: boolean;
   sessionOver: boolean;
+  refreshChat: () => void;
   setIsTimeProps: (val: boolean) => void;
   setIsSessionOverProps: (val: boolean) => void;
 };
@@ -64,6 +69,7 @@ const CustomerChatMiddle = ({
   data,
   isFetching,
   orderId,
+  refreshChat,
 }: Props) => {
   const userData = useSelector(
     (state: RootState) => state.persistedState.user.user
@@ -72,8 +78,16 @@ const CustomerChatMiddle = ({
     (state: RootState) => state.persistedState.consultant.user
   );
   const router = useRouter();
+  const [extendTime, res] = useLazyExtentTimeQuery();
 
   const [fetchUserChatMessages, result] = useLazyFetchChatMessagesQuery();
+  const [extensionAuthUrl, setExtensionAuthUrl] = useState("");
+  const [extentionValue, setExtensionValue] = useState<string>("");
+  const [transref, setTransRef] = useState<string>("");
+
+  const [paymentStatus, setPaymentStatus] = useState<
+    "initialized" | "pending" | "completed"
+  >("initialized");
   const [fetchConsultantChatMessages, consultantRes] =
     useLazyFetchConsultantChatMessagesQuery();
 
@@ -188,9 +202,72 @@ const CustomerChatMiddle = ({
 
   const [extensionOpened, extensionOpenedFuncs] = useDisclosure();
   const [reportModOpened, funcs] = useDisclosure();
+  const [transOpened, transFunc] = useDisclosure();
+
+  useEffect(() => {
+    if (res.isError) {
+      notify("error", "could not extend time, something went wrong");
+    }
+    if (res.isSuccess) {
+      nprogress.complete();
+      if (orderId) {
+        chat_socket.emit("triggerRefresh", {
+          room: orderId,
+        });
+        refreshChat();
+      }
+    }
+  }, [res.isSuccess, res.isError]);
+
+  useEffect(() => {
+    if (paymentStatus === "pending") {
+      transFunc.open();
+      primary_socket.on(
+        "completed",
+        (data: {
+          transaction: {
+            status: "completed";
+          };
+        }) => {
+          if (data.transaction.status === "completed") {
+            if (orderId) {
+              extendTime({
+                orderId: orderId,
+                length: Number(extentionValue),
+                transRef: transref,
+              });
+            }
+          }
+        }
+      );
+    }
+  }, [paymentStatus]);
+
+  useEffect(() => {
+    if (type === "consultant") {
+      chat_socket.on("refresh", () => {
+        notify(
+          "message",
+          "Customer extended session, chat will refresh to update time"
+        );
+        const timer = setTimeout(() => {
+          refreshChat();
+        }, 3000);
+        return () => {
+          clearTimeout(timer);
+        };
+      });
+    }
+  }, [type]);
 
   return (
     <>
+      {transOpened ? (
+        <InitializingTransactionModal
+          paymentUrl={extensionAuthUrl}
+          status={paymentStatus}
+        />
+      ) : null}
       <ModalComponent
         onClose={extensionOpenedFuncs.close}
         opened={extensionOpened}
@@ -198,7 +275,16 @@ const CustomerChatMiddle = ({
         withCloseButton={false}
         size="xl"
       >
-        {orderId && <RequestExtension close={extensionOpenedFuncs.close} orderId={orderId} />}
+        {orderId && (
+          <RequestExtension
+            setExtensionValue={(val) => setExtensionValue(val)}
+            setTransRef={(val) => setTransRef(val)}
+            close={extensionOpenedFuncs.close}
+            orderId={orderId}
+            setAuthUrl={(val) => setExtensionAuthUrl(val)}
+            setPaymentStatus={(val) => setPaymentStatus(val)}
+          />
+        )}
       </ModalComponent>
       <ModalComponent
         onClose={funcs.close}

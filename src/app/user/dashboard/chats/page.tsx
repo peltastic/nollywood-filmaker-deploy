@@ -35,7 +35,6 @@ const ChatsPage = (props: Props) => {
 
   const [fetchConversation, conversationsRes] =
     useLazyFetchUserConversationsQuery();
-  
 
   useEffect(() => {
     if (userId) {
@@ -74,6 +73,12 @@ const ChatsPage = (props: Props) => {
     }
   }, [conversationsRes.data]);
 
+  const refresh = () => {
+    if (searchVal) {
+      fetchConversationData(searchVal);
+    }
+  };
+
   const [closeRight, setCloseRight] = useState<boolean>(true);
 
   return (
@@ -93,6 +98,7 @@ const ChatsPage = (props: Props) => {
             } transition-all h-full hidden chatbp:block bg-white`}
           >
             <CustomerChatMiddle
+              refreshChat={refresh}
               opened={closeRight}
               open={() => setCloseRight(false)}
               orderId={searchVal}

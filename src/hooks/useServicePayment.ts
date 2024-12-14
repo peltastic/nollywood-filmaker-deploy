@@ -18,7 +18,7 @@ export const useServicePayment = (
     "initialized" | "pending" | "completed"
   >("initialized");
   const router = useRouter();
-  const dispatch  = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
     if (isError) {
       close();
@@ -46,7 +46,7 @@ export const useServicePayment = (
         }) => {
           if (data.transaction.status === "completed") {
             nprogress.complete();
-            dispatch(setFallbackRoute(null))
+            dispatch(setFallbackRoute(null));
             router.push(successRoute);
           }
         }

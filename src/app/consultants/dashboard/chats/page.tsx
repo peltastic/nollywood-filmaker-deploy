@@ -69,6 +69,12 @@ const ConsultantChastPage = (props: Props) => {
     }
   }, [conversationsRes.data]);
 
+  const refresh = () => {
+    if (searchVal) {
+      fetchConversationData(searchVal);
+    }
+  };
+
   const [closeRight, setCloseRight] = useState<boolean>(true);
   return (
     <ServiceLayout consultant>
@@ -88,6 +94,7 @@ const ConsultantChastPage = (props: Props) => {
             } transition-all hidden chatbp:block`}
           >
             <CustomerChatMiddle
+              refreshChat={refresh}
               type="consultant"
               opened={closeRight}
               open={() => setCloseRight(false)}

@@ -334,6 +334,10 @@ export const time_slots = [
     label: "11:00 PM",
     value: "11:00 PM",
   },
+  {
+    label: "1:00 AM",
+    value: "1:00 AM"
+  }
 ];
 
 export const loaderColor = "#d9d0d5";
