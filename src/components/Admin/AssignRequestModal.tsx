@@ -50,9 +50,7 @@ const AssignRequestModal = (props: Props) => {
   const [appointConsultant, result] = useAppointConsultantMutation();
   const [consultantId, setConsultantId] = useState<string>("");
   const { data, isFetching } = useFetchConsultantsByExpertiseQuery(
-    props.chat_appointment_data.nameofservice === "Chat With A Professional"
-      ? props.expertise
-      : ""
+    props.expertise
   );
   const [assign, assignRes] = useAssignServiceToConsultantMutation();
 
