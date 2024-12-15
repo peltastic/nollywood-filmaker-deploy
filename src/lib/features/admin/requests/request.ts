@@ -26,13 +26,19 @@ export const adminRequestApi = createApi({
     >({
       query: ({ limit, order, page, sort, type }) => {
         return {
-          url: `/api/admin/pullrequests?order=${order}`,
+          url: `/api/admin/pullrequests?order=${order}&status=pending`,
         };
       },
     }),
     fetchConsultantsByExpertise: build.query<IFetchConsultantsResponse, string>(
       {
-        query: (expertise) => `/api/admin/consultants?expertise=${expertise}`,
+        query: (expertise) => {
+          let query = "";
+          if (expertise) {
+            query = `?expertise=${expertise}`;
+          }
+          return { url: `/api/admin/consultants${query}` };
+        },
       }
     ),
     appointConsultant: build.mutation<unknown, IAppointConsultantPayload>({
@@ -63,5 +69,5 @@ export const {
   useFetchConsultantsByExpertiseQuery,
   useAppointConsultantMutation,
   useAssignServiceToConsultantMutation,
-  useLazyGetCustomerRequestDetailQuery
+  useLazyGetCustomerRequestDetailQuery,
 } = adminRequestApi;

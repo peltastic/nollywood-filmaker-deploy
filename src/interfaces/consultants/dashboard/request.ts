@@ -98,6 +98,7 @@ export interface IConsultantActiveReq {
   cid: string;
   orderId: string;
   date: string;
+  creationDate: string
   request: {
     chat_title?: string;
     movie_title: string;
@@ -122,6 +123,7 @@ export interface IServiceRequest {
   uid: string;
   cid: string;
   orderId: string;
+  creationDate: string
   nameofservice:
     | "Chat With A Professional"
     | "Read my Script and advice"

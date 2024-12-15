@@ -71,6 +71,7 @@ const DashboardHomePgae = (props: Props) => {
   useEffect(() => {
     fetchRequestHistory({ userId: userId!, limit: 5 });
   }, []);
+
   useEffect(() => {
     if (result.isSuccess) {
       const modData: ReqHistoryColumnData[] = result.data.requests.map((el) => {
@@ -113,7 +114,6 @@ const DashboardHomePgae = (props: Props) => {
               title="Request History"
               subtitle="Keep track of all your past requests"
               columns={request_history_columns}
-              // data={reqHistoryData}
               isFetching={result.isFetching}
               loaderLength={5}
               data={reqHistoryData}

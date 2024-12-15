@@ -19,6 +19,7 @@ type Props = {
   isChat?: boolean;
   open: () => void;
   openSetAsCompleted: () => void;
+  setChat?: boolean;
 };
 
 const ConsultantMenuContent = (props: Props) => {
@@ -97,7 +98,7 @@ const ConsultantMenuContent = (props: Props) => {
                   onClick={props.open}
                   className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
                 >
-                  Resolve service request
+                  {props.setChat ? "Set chat date" : "Resolve service request"}
                 </li>
               )}
               {(props.isChat || props.status === "ready") && (

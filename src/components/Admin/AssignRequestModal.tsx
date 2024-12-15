@@ -50,7 +50,9 @@ const AssignRequestModal = (props: Props) => {
   const [appointConsultant, result] = useAppointConsultantMutation();
   const [consultantId, setConsultantId] = useState<string>("");
   const { data, isFetching } = useFetchConsultantsByExpertiseQuery(
-    props.expertise
+    props.chat_appointment_data.nameofservice === "Chat With A Professional"
+      ? props.expertise
+      : ""
   );
   const [assign, assignRes] = useAssignServiceToConsultantMutation();
 
@@ -108,7 +110,7 @@ const AssignRequestModal = (props: Props) => {
         "Successful",
         "Service assigned to consultant successfully"
       );
-      props.close()
+      props.close();
     }
   }, [assignRes.isError, assignRes.isSuccess]);
 
@@ -172,7 +174,7 @@ const AssignRequestModal = (props: Props) => {
                 orderId: props.orderId,
                 type: "request",
                 uid: props.chat_appointment_data.userId,
-                status: "pending"
+                status: "pending",
               });
             }
           }}

@@ -4,14 +4,8 @@ import {
   IConsultantActiveRequestColumnData,
   consultant_active_requests_columns,
 } from "@/components/Columns/consultants/ActiveRequestsColumn";
-import {
-  ICustomerReqData,
-  customer_req_columns,
-} from "@/components/Columns/consultants/CustomerRequestsColumn";
-import {
-  ReqHistoryColumnData,
-  request_history_column,
-} from "@/components/Columns/consultants/RequestHistoryColumn";
+
+import { ReqHistoryColumnData } from "@/components/Columns/consultants/RequestHistoryColumn";
 import DashboardInfoCard from "@/components/Dashboard/DashboardInfoCard";
 import DashboardPlate from "@/components/Dashboard/DashboardPlate";
 import Header from "@/components/Dashboard/Header";
@@ -20,8 +14,6 @@ import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import { DataTable } from "@/components/Tables/DataTable";
 import { useProtectRouteConsultantRoute } from "@/hooks/useProtectConsultantRoute";
-import { useProtectRoute } from "@/hooks/useProtectRoute";
-import { ICustomerRequestData } from "@/interfaces/consultants/dashboard/request";
 import {
   useFetchCustomerRequestsQuery,
   useGetActiveRequestQuery,
@@ -215,6 +207,7 @@ const DashboardPage = (props: Props) => {
               profilepic: el.user.profilepics,
               orderId: el.orderId,
               type: "chat",
+              creation_date: el.creationDate
             };
           });
         setActiveReqData(resData);
@@ -237,6 +230,7 @@ const DashboardPage = (props: Props) => {
               status: el.status,
               orderId: el.orderId,
               type: "service",
+              creation_date: el.creationDate
             };
           });
         setServiceReqData(resData);
@@ -270,22 +264,24 @@ const DashboardPage = (props: Props) => {
                 </div>
                 <div className="mt-10 lg:mt-0 w-full lg:w-[50%]">
                   <UpcomingConversations
-                    data={[
-                      // {
-                      //   name: "Jenny Wilson",
-                      //   email: "w.lawson@example.com",
-                      //   date: "Today",
-                      //   time: "12:00pm",
-                      //   id: "1",
-                      // },
-                      // {
-                      //   name: "Jenny Wilson",
-                      //   email: "w.lawson@example.com",
-                      //   date: "Tomorrow",
-                      //   time: "12:00pm",
-                      //   id: "2",
-                      // },
-                    ]}
+                    data={
+                      [
+                        // {
+                        //   name: "Jenny Wilson",
+                        //   email: "w.lawson@example.com",
+                        //   date: "Today",
+                        //   time: "12:00pm",
+                        //   id: "1",
+                        // },
+                        // {
+                        //   name: "Jenny Wilson",
+                        //   email: "w.lawson@example.com",
+                        //   date: "Tomorrow",
+                        //   time: "12:00pm",
+                        //   id: "2",
+                        // },
+                      ]
+                    }
                   />
                 </div>
               </section>

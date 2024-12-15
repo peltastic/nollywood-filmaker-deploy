@@ -118,7 +118,7 @@ const SetChatDate = ({ close, data }: Props) => {
       </div>
       <div className="my-8 flex items-center font-medium text-[0.88rem] px-6">
         <UnstyledButton
-          clicked={open}
+          clicked={close}
           class="ml-auto border border-black-3 rounded-md py-2 px-2 mr-3"
         >
           Cancel

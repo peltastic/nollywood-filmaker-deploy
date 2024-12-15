@@ -160,6 +160,7 @@ const ServiceNavbar = (props: Props) => {
                   <Link
                     className="py-6 px-2 block hover:text-blue-1 transition-all duration-200"
                     href={el.link}
+                    prefetch={true}
                   >
                     {el.name}
                   </Link>

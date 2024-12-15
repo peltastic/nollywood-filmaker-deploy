@@ -31,26 +31,7 @@ const CustomerOrderDetailsPage = (props: Props) => {
 
   const searchVal = search.get("status") || "Pending";
 
-  useEffect(() => {
-    if (data) {
-      if (data.request.nameofservice === "Chat With A Professional") {
-        setBodyData([
-          {
-            title: "Conversation title",
-            content: data.request.chat_title,
-          },
-          {
-            title: "Quick summary",
-            content: data.request.summary,
-          },
-          {
-            title: "Consultant type",
-            content: data.request.consultant,
-          },
-        ]);
-      }
-    }
-  });
+ 
 
   return (
     <ServiceLayout admin>

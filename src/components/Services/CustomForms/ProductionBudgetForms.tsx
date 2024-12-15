@@ -52,7 +52,7 @@ const ProductionBudgetForm = ({
             Upload your script
           </label>
           <FileInput accept="" setFile={(file) => setFileProps(file)}>
-            <div className="border rounded-md border-stroke-2 py-[0.35rem] px-[0.4rem] flex items-center">
+            <div className="cursor-pointer border rounded-md border-stroke-2 py-[0.35rem] px-[0.4rem] flex items-center">
               <div className=" py-2 px-3 rounded-[0.25rem] text-white font-medium text-[0.6rem] bg-black-2">
                 Browse
               </div>

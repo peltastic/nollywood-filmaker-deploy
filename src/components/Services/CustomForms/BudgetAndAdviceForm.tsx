@@ -83,7 +83,7 @@ const BudgetAndAdviceForm = ({
           </label>
           <FileInput accept="" setFile={(file) => setFileProps(file)}>
             <div className="border rounded-md border-stroke-2 py-[0.35rem] px-[0.4rem] flex items-center">
-              <div className=" py-2 px-3 rounded-[0.25rem] text-white font-medium text-[0.6rem] bg-black-2">
+              <div className=" cursor-pointer py-2 px-3 rounded-[0.25rem] text-white font-medium text-[0.6rem] bg-black-2">
                 Browse
               </div>
               <p className="text-gray-6 text-[0.88rem] ml-4">

@@ -11,11 +11,19 @@ import Link from "next/link";
 import ModalComponent from "../Modal/Modal";
 import { useDisclosure } from "@mantine/hooks";
 import SetChatDate from "../ModalPages/SetChatDate";
-import { capitalizeFirstLetter } from "@/utils/helperFunction";
+import { capitalizeFirstLetter, isResolveFile } from "@/utils/helperFunction";
 
 export interface IActiveRequestColumnData {
   name: string;
-  service_type: "Chat With A Professional";
+  service_type:
+    | "Chat With A Professional"
+    | "Read my Script and advice"
+    | "Watch the Final cut of my film and advice"
+    | "Look at my Budget and advice"
+    | "Create a Marketing budget"
+    | "Create a Pitch based on my Script"
+    | "Draft Legal documents"
+    | "Create a Production budget";
   progress: number;
   chat_title?: string;
   date: string;
@@ -118,15 +126,6 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
       // const
       return (
         <>
-          {/* <ModalComponent
-            onClose={close}
-            withCloseButton={false}
-            opened={opened}
-            size="xl"
-            centered
-          >
-            <SetChatDate open={open} close={close} />
-          </ModalComponent> */}
           <MenuComponent
             target={
               <div>
@@ -152,17 +151,18 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
                     See Details
                   </Link>
                 </li>
-                {row.original.status !== "pending" && (
-                  <li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
-                    <Link
-                      href={
-                        "/user/dashboard/order-details/1?page_type=download_files"
-                      }
-                    >
-                      Download files
-                    </Link>
-                  </li>
-                )}
+                {row.original.status !== "pending" &&
+                  isResolveFile(row.original.service_type) && (
+                    <li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
+                      <Link
+                        href={
+                          "/user/dashboard/order-details/1?page_type=download_files"
+                        }
+                      >
+                        Download files
+                      </Link>
+                    </li>
+                  )}
               </ul>
             </div>
           </MenuComponent>

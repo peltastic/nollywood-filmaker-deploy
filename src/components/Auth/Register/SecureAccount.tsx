@@ -66,7 +66,7 @@ const SecureAccount = ({ setPageProps, data }: Props) => {
         onSubmit={(values) => {
           nprogress.start();
           registerUser({
-            email: data.email,
+            email: data.email.trim(),
             expertise: data.expertise,
             fname: data.fname,
             lname: data.lname,

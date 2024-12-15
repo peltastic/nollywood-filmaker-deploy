@@ -29,6 +29,7 @@ export interface IConsultantActiveRequestColumnData {
   profilepic: string;
   orderId: string;
   type: "service" | "chat";
+  creation_date: string
 }
 
 export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequestColumnData>[] =

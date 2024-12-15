@@ -34,10 +34,9 @@ const ResolveRequestModal = (props: Props) => {
       notify(
         "success",
         "Files uploaded successfully",
-        "Please select a chat date"
       );
       nprogress.complete();
-      props.showChat()
+      props.close()
     }
   }, [isError, isSuccess]);
   return (

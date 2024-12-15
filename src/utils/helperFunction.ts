@@ -1,5 +1,5 @@
 import { nprogress } from "@mantine/nprogress";
-import { monthNames } from "./constants/constants";
+import { monthNames, resolve_file_services } from "./constants/constants";
 
 export function getMonthName(code: number): string | null {
   const monthObj = monthNames.find((el) => el.code === code);
@@ -124,7 +124,6 @@ export function get12HTime(hour: number): "AM" | "PM" {
 }
 
 export function convertToAfricaLagosTz(time: string) {
-
   const hour = Number(time.split("T")[1].split(":")[0]) - 1;
   const hour_time = hour < 10 ? "0" + hour : hour;
   return `${time.split("T")[0]}T${hour_time}:00:00+01:00`;
@@ -134,4 +133,22 @@ export function truncateStr(word: string, length: number) {
   const str = word.substring(0, length);
 
   return word.length <= length ? word : str + "...";
+}
+
+export function isResolveFile(
+  val:
+    | "Chat With A Professional"
+    | "Read my Script and advice"
+    | "Watch the Final cut of my film and advice"
+    | "Look at my Budget and advice"
+    | "Create a Marketing budget"
+    | "Create a Pitch based on my Script"
+    | "Draft Legal documents"
+    | "Create a Production budget"
+): boolean {
+  console.log(val)
+  const isTrue = resolve_file_services.find((el) => el === val);
+
+
+  return isTrue ? true : false;
 }

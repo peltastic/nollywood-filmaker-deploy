@@ -341,3 +341,11 @@ export const time_slots = [
 ];
 
 export const loaderColor = "#d9d0d5";
+
+
+export const resolve_file_services = [
+  "Create a Production budget",
+  "Create a Marketing budget",
+  "Create a Pitch based on my Script",
+  "Draft Legal documents"
+]

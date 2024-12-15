@@ -18,7 +18,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { nprogress } from "@mantine/nprogress";
 import { notify } from "@/utils/notification";
-import { capitalizeFirstLetter } from "@/utils/helperFunction";
+import { capitalizeFirstLetter, isResolveFile } from "@/utils/helperFunction";
 import ConsultantMenuContent from "../Menu/MenuContent/ConsultantMenuContent";
 import SetChatDate from "../ModalPages/SetChatDate";
 import SetAsCompletedModal from "../Consultants/SetAsCompletedModal";
@@ -93,6 +93,16 @@ const OrderDetailsHeader = ({
     (state: RootState) => state.persistedState.consultant.user?.id
   );
 
+  useEffect(() => {
+    if (nameofservice) {
+      const isResolve = isResolveFile(nameofservice);
+      if (isResolve) {
+        setShowChatDate(false);
+      } else {
+        setShowChatDate(true);
+      }
+    }
+  }, [nameofservice]);
   const statusClassname =
     status === "ready"
       ? "bg-light-blue text-dark-blue"
@@ -153,31 +163,34 @@ const OrderDetailsHeader = ({
         withCloseButton={false}
         size="xl"
       >
-        {showChatDate &&
-        chat_title &&
-        expertise &&
-        nameofservice &&
-        summary &&
-        userId &&
-        orderId ? (
-          <SetChatDate
-            data={{
-              chat_title,
-              expertise,
-              nameofservice: nameofservice,
-              summary,
-              userId,
-              orderId,
-            }}
-            close={close}
-          />
-        ) : (
-          <ResolveRequestModal
-            orderId={orderId}
-            showChat={() => setShowChatDate(true)}
-            close={close}
-          />
-        )}
+        {chat_title &&
+          expertise &&
+          nameofservice &&
+          summary &&
+          userId &&
+          orderId && (
+            <>
+              {showChatDate ? (
+                <SetChatDate
+                  data={{
+                    chat_title,
+                    expertise,
+                    nameofservice: nameofservice,
+                    summary,
+                    userId,
+                    orderId,
+                  }}
+                  close={close}
+                />
+              ) : (
+                <ResolveRequestModal
+                  orderId={orderId}
+                  showChat={() => setShowChatDate(true)}
+                  close={close}
+                />
+              )}
+            </>
+          )}
       </ModalComponent>
       <ModalComponent
         opened={assignReqOpened}
@@ -257,6 +270,7 @@ const OrderDetailsHeader = ({
                         consultantId={consultantId}
                         orderId={orderId}
                         open={open}
+                        setChat={showChatDate}
                         openSetAsCompleted={setAsCompletedOptions.open}
                       />
                     ) : (
