@@ -27,7 +27,7 @@ type Props = {
       | "Create a Pitch based on my Script"
       | "Draft Legal documents"
       | "Create a Production budget";
-    summary: string;
+    summary?: string;
     userId: string;
     orderId: string;
   };
@@ -138,7 +138,7 @@ const SetChatDate = ({ close, data }: Props) => {
                   ["h:mm A"]
                 ).format("HH:mm")}:00+01:00`,
                 originalOrderId: data.orderId,
-                summary: data.summary ,
+                summary: data.summary || "" ,
                 title: data.nameofservice ,
                 type: "Chat",
                 userId: data.userId ,

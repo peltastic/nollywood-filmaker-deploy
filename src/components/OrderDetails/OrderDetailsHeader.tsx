@@ -163,34 +163,29 @@ const OrderDetailsHeader = ({
         withCloseButton={false}
         size="xl"
       >
-        {chat_title &&
-          expertise &&
-          nameofservice &&
-          summary &&
-          userId &&
-          orderId && (
-            <>
-              {showChatDate ? (
-                <SetChatDate
-                  data={{
-                    chat_title,
-                    expertise,
-                    nameofservice: nameofservice,
-                    summary,
-                    userId,
-                    orderId,
-                  }}
-                  close={close}
-                />
-              ) : (
-                <ResolveRequestModal
-                  orderId={orderId}
-                  showChat={() => setShowChatDate(true)}
-                  close={close}
-                />
-              )}
-            </>
-          )}
+        {chat_title && expertise && nameofservice && userId && orderId && (
+          <>
+            {showChatDate ? (
+              <SetChatDate
+                data={{
+                  chat_title,
+                  expertise,
+                  nameofservice: nameofservice,
+                  summary,
+                  userId,
+                  orderId,
+                }}
+                close={close}
+              />
+            ) : (
+              <ResolveRequestModal
+                orderId={orderId}
+                showChat={() => setShowChatDate(true)}
+                close={close}
+              />
+            )}
+          </>
+        )}
       </ModalComponent>
       <ModalComponent
         opened={assignReqOpened}
