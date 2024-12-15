@@ -117,10 +117,7 @@ const ReadMyScriptPage = (props: Props) => {
               <PaymentWindow successRoute="/success-page/read-my-script" />
             </div>
           ) : (
-            <ServiceRight
-              subtitle=""
-              title="Let’s start with your details"
-            >
+            <ServiceRight subtitle="" title="Let’s start with your details">
               {
                 <ReadMyScriptForm
                   proceed={() => {
@@ -135,7 +132,7 @@ const ReadMyScriptPage = (props: Props) => {
                         concerns: scriptData.concerns,
                         type: "request",
                         files: file,
-                        fileName: file?.name || ""
+                        fileName: file?.name || "",
                       });
                       initializeTransactionListener(userId);
                       nprogress.start();

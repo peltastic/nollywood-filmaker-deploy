@@ -145,7 +145,7 @@ const SetChatDate = ({ close, data }: Props) => {
               });
             }
           }}
-          class="w-[8rem] bg-black-3 disabled:opacity-50  text-white py-2 px-2 border border-black-3 rounded-md"
+          class="w-[8rem] flex items-center justify-center bg-black-3 disabled:opacity-50  text-white py-2 px-2 border border-black-3 rounded-md"
         >
           {isLoading ? (
             <div className="py-1 w-[1rem]">

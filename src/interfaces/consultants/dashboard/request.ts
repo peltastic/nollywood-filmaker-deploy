@@ -43,6 +43,7 @@ export interface ICustomerReqDetails {
       minutes: number;
       seconds: number;
     };
+    booktime: string
     type: "Chat" | "request";
     date: string;
     summary: string;

@@ -37,7 +37,7 @@ const OrderDetailsTop = ({
           <div className="mr-auto">
             <h1 className="font-bold mb-1">Order Date</h1>
             <p className="text-[0.88rem]">
-              {moment(order_date).format("YYYY-MM-DD")}
+              {moment(order_date).format("YYYY-MM-DD")} @ {moment(order_date).format("LT")} <span className="font-semibold">GMT +1</span> 
             </p>
           </div>
         </div>

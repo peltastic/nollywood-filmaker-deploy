@@ -240,7 +240,7 @@ const OrderDetailsHeader = ({
                 {capitalizeFirstLetter(statusValue)}
               </p>
             )}
-            {user && status === "ongoing" && !isChat ? null : (
+            {user && (status === "ongoing" || status === "ready") && !isChat ? null : (
               <>
                 {(status !== "pending" || admin) && (
                   <MenuComponent
@@ -280,16 +280,6 @@ const OrderDetailsHeader = ({
                               </li>
                             </Link>
                           )}
-
-                          {/* <li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
-                        <Link
-                        href={
-                          "/user/dashboard/order-details/1?page_type=download_files"
-                        }
-                        >
-                        Download files
-                        </Link>
-                      </li> */}
                         </ul>
                       </div>
                     )}

@@ -20,6 +20,7 @@ import {
 import { useProtectRoute } from "@/hooks/useProtectRoute";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
+import { useSearchParams } from "next/navigation";
 
 type Props = {};
 
@@ -42,7 +43,11 @@ const DashboardHomePgae = (props: Props) => {
     (state: RootState) => state.persistedState.user.user?.id
   );
 
+
   const [fetchRequestHistory, result] = useLazyFetchUserRequestHistoryQuery();
+
+
+
 
   useEffect(() => {
     if (data) {
@@ -107,7 +112,7 @@ const DashboardHomePgae = (props: Props) => {
               isFetching={isFetching}
             />
           </div>
-          <div className="mt-14">
+          <div className="mt-14" >
             <DataTable
               link="/user/dashboard/request-history"
               showMoreBtnContent="See All"

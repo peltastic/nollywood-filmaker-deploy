@@ -1,5 +1,7 @@
+import { ICustomerReqDetails } from "@/interfaces/consultants/dashboard/request";
 import {
   IActiveRequestDataResposne,
+  IResolveFiles,
   IUserRequestHistoryResponse,
 } from "@/interfaces/requests/requests";
 import { baseQueryWithReauth } from "@/lib/baseQuery";
@@ -33,10 +35,18 @@ export const requestsApi = createApi({
         return { url: `/api/users/requests/completed/${userId}${query}` };
       },
     }),
+    fetchResolvedFiles: build.query<IResolveFiles, string>({
+      query: (id) => `/api/consultants/resolve/${id}`
+    }),
+    getCustomerRequestDetail: build.query<ICustomerReqDetails, string>({
+      query: (id) => `/api/consultants/orderdetail/${id}`,
+    }),
   }),
 });
 
 export const {
   useFetchActiveRequestsQuery,
   useLazyFetchUserRequestHistoryQuery,
+  useLazyFetchResolvedFilesQuery,
+  useLazyGetCustomerRequestDetailQuery
 } = requestsApi;

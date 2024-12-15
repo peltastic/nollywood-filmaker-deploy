@@ -29,3 +29,13 @@ export interface IUserRequestHistoryResponse {
     stattusof: "pending" | "ongoing" | "ready" | "completed";
     chat_title: string   
 }
+
+export interface IResolveFiles {
+  orderId: string
+  files: {
+    filename: string
+    filepath: string
+    size: number
+    createdAt: string
+  }[]
+}

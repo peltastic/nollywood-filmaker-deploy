@@ -155,9 +155,7 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
                   isResolveFile(row.original.service_type) && (
                     <li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
                       <Link
-                        href={
-                          "/user/dashboard/order-details/1?page_type=download_files"
-                        }
+                        href={`/user/dashboard/order-details/${row.original.orderId}?type=download`}
                       >
                         Download files
                       </Link>
