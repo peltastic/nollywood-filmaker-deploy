@@ -93,6 +93,7 @@ const OrderDetails = (props: Props) => {
                   order_date={data?.request.date}
                   order_no="O-NG240629806487"
                   order_type={data?.request.nameofservice}
+                  isChat={ data?.request.type === "Chat"}
                 />
                 <OrderDetailsBody
                   chat={
