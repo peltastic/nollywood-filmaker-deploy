@@ -207,19 +207,19 @@ const LoginForm = (props: Props) => {
                 password
               />
             </div>
-            {props.admin && (
+            {(props.loginType === "user" || props.loginType === "admin") && (
               <div className="flex items-center text-black-5 mt-8">
-                <div className="mr-auto">
+                {/* <div className="mr-auto">
                   <CheckboxComponent
                     label={
                       <p className="text-[0.88rem] font-medium">Remember me</p>
                     }
                   />
-                </div>
+                </div> */}
                 <Link
                   href={props.forgotPasswordLink || "/auth/forgot-password"}
                 >
-                  <p className="text-[0.88rem] font-semibold">
+                  <p className="text-[0.88rem] font-semibold hover:text-blue-1 hover:underline">
                     Forgot Password?
                   </p>
                 </Link>

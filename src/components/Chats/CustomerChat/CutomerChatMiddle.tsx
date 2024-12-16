@@ -400,7 +400,7 @@ const CustomerChatMiddle = ({
                       sessionOver={sessionOver}
                     />
                   ) : (
-                    <div className="h-[90vh] w-full">
+                    <div className="h-[90vh] max-h-[120rem] w-full">
                       <div className="absolute left-[50%] top-[50%]  -translate-x-1/2 z-10 -translate-y-1/2">
                         <Image
                           src={Logo}

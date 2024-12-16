@@ -7,6 +7,7 @@ export interface ICustomerRequest {
   chat_title?: string;
   movie_title?: string;
   rating?: string;
+  createdAt: string;
   user: {
     fname: string;
     lname: string;

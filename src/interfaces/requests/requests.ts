@@ -6,6 +6,7 @@ export interface IActiveRequestData {
   nameofservice: "Chat With A Professional";
   chat_title?: string;
   orderId: string;
+  createdAt: string
 }
 
 export interface IActiveRequestDataResposne {
@@ -16,6 +17,7 @@ export interface IUserRequestHistoryResponse {
   _id: string;
   orderId: string;
   movie_title: string;
+  createdAt: string
   nameofservice:
     | "Chat With A Professional"
     | "Read my Script and advice"

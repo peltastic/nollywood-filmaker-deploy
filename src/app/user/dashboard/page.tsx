@@ -54,7 +54,7 @@ const DashboardHomePgae = (props: Props) => {
       const formattedData = data.requests.map((el) => {
         return {
           name: el.movie_title,
-          date: moment(el.date).format("ll"),
+          date: moment(el.createdAt).format("ll"),
           status: el.stattusof,
           service_type: el.nameofservice,
           chat_title: el.chat_title,
@@ -81,7 +81,7 @@ const DashboardHomePgae = (props: Props) => {
     if (result.isSuccess) {
       const modData: ReqHistoryColumnData[] = result.data.requests.map((el) => {
         return {
-          date: moment(el.date).format("ll"),
+          date: moment(el.createdAt).format("ll"),
           name: el.movie_title || el.chat_title,
           progress: 100,
           rating: 5,

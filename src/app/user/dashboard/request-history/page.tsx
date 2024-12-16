@@ -35,7 +35,7 @@ const RequestHistoryPage = (props: Props) => {
     if (isSuccess) {
       const modData: ReqHistoryColumnData[] = data.requests.map((el) => {
         return {
-          date: moment(el.date).format("ll"),
+          date: moment(el.createdAt).format("ll"),
           name: el.movie_title || el.chat_title,
           progress: 100,
           rating: 5,

@@ -83,7 +83,7 @@ export const admin_reqs_columns: ColumnDef<ICustomerRequest>[] = [
       return (
         <div className=" w-[10rem] xl:w-auto">
           <p className="text-gray-1 text-[0.88rem]">
-            {moment(row.getValue("date")).format("ll")}
+            {moment(row.original.createdAt).format("ll")}
           </p>
         </div>
       );

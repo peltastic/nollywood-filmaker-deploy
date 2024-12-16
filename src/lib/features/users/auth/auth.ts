@@ -1,5 +1,9 @@
 import config from "@/config/config";
-import { ILoginData, ILoginResponse, IRegisterdata } from "@/interfaces/auth/auth";
+import {
+  ILoginData,
+  ILoginResponse,
+  IRegisterdata,
+} from "@/interfaces/auth/auth";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const authApi = createApi({
@@ -23,9 +27,39 @@ export const authApi = createApi({
       }),
     }),
     verifyEmail: builder.query<unknown, string>({
-      query: (code) => `/api/users/verify/${code}`
-    })
+      query: (code) => `/api/users/verify/${code}`,
+    }),
+    forgotPassword: builder.mutation<unknown, string>({
+      query: (email) => ({
+        url: "/api/users/forgotpassword",
+        method: "POST",
+        body: {
+          email,
+        },
+      }),
+    }),
+    resetPassword: builder.mutation<
+      unknown,
+      {
+        token: string;
+        password: string;
+      }
+    >({
+      query: ({ password, token }) => ({
+        method: "POST",
+        url: `/api/users/resetpassword/${token}`,
+        body: {
+          newPassword: password,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation, useLazyVerifyEmailQuery } = authApi;
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useLazyVerifyEmailQuery,
+  useForgotPasswordMutation,
+  useResetPasswordMutation
+} = authApi;
