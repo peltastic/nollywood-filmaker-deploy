@@ -83,9 +83,35 @@ const ChatRoom = (props: Props) => {
       setInputValue("");
     }
   };
-  
+
   useEffect(() => {
-    console.log("message - connected")
+    if (props.sessionOver) return () => {};
+    if (props.isTime) {
+      const interval = setInterval(() => {
+        chat_socket.emit("triggerPing", {
+          room: props.orderId,
+        });
+      }, 30000);
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [props.isTime, props.sessionOver]);
+
+  useEffect(() => {
+    if (props.sessionOver) return () => {};
+    if (props.isTime) {
+      chat_socket.on("roomPing", () => {
+        console.log("received");
+      });
+      return () => {
+        chat_socket.off("roomPing");
+      };
+    }
+  }, [props.isTime, props.sessionOver]);
+
+  useEffect(() => {
+    console.log("message - connected");
     chat_socket.on(
       "message",
       (data: {
@@ -112,15 +138,15 @@ const ChatRoom = (props: Props) => {
         }
       }
     );
-    
+
     return () => {
-      console.log("disconnected - message")
+      console.log("disconnected - message");
       chat_socket.off("message");
     };
   }, []);
-  
+
   useEffect(() => {
-    console.log("file - connected")
+    console.log("file - connected");
     chat_socket.on(
       "fileMessage",
       (data: {
@@ -149,7 +175,7 @@ const ChatRoom = (props: Props) => {
       }
     );
     return () => {
-      console.log("disconnected - filemessage")
+      console.log("disconnected - filemessage");
       chat_socket.off("fileMessage");
     };
   }, []);
