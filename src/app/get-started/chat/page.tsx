@@ -97,6 +97,7 @@ const GetStartedChatPage = (props: Props) => {
         <div className="flex flex-wrap items-start">
           <ServiceLeft
             title="Chat with a professional"
+            cost="50,000"
             body={[
               {
                 title: "Date",
