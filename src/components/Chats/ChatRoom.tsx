@@ -83,8 +83,9 @@ const ChatRoom = (props: Props) => {
       setInputValue("");
     }
   };
-
+  
   useEffect(() => {
+    console.log("message - connected")
     chat_socket.on(
       "message",
       (data: {
@@ -111,7 +112,15 @@ const ChatRoom = (props: Props) => {
         }
       }
     );
-
+    
+    return () => {
+      console.log("disconnected - message")
+      chat_socket.off("message");
+    };
+  }, []);
+  
+  useEffect(() => {
+    console.log("file - connected")
     chat_socket.on(
       "fileMessage",
       (data: {
@@ -139,16 +148,14 @@ const ChatRoom = (props: Props) => {
         }
       }
     );
-
     return () => {
-      chat_socket.off("message");
+      console.log("disconnected - filemessage")
       chat_socket.off("fileMessage");
     };
   }, []);
 
   const getBase64 = (file: File) => {
     return new Promise((resolve) => {
-      let fileInfo;
       let baseUrl: string | ArrayBuffer | null = "";
       let reader = new FileReader();
       reader.readAsDataURL(file);
@@ -304,7 +311,7 @@ const ChatRoom = (props: Props) => {
             </div>
           </div>
         </div>
-       ) : (
+      ) : (
         <div className=""></div>
       )}
     </div>
