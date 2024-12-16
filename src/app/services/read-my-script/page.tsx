@@ -81,7 +81,7 @@ const ReadMyScriptPage = (props: Props) => {
           info="Script reading can take between 1-2 weeks. You will be mailed with
           calendar dates to choose a chat"
         />
-      ) : null}
+       ) : null} 
       <ServiceLayout nonDashboard>
         <div className="flex flex-wrap items-start">
           <ServiceLeft

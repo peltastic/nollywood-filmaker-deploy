@@ -92,7 +92,7 @@ const GetStartedChatPage = (props: Props) => {
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
         />
-      ) : null}
+       ) : null}
       <ServiceLayout nonDashboard>
         <div className="flex flex-wrap items-start">
           <ServiceLeft
