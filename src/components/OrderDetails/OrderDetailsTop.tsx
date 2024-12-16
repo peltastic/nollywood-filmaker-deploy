@@ -41,7 +41,7 @@ const OrderDetailsTop = ({
             <p className="text-[0.88rem]">
               {moment(order_date).format("YYYY-MM-DD")}{" "}
               {isChat && "@"+ " " + moment(order_date).format("LT")}{" "}
-              {isChat && <span className="font-semibold">GMT +1</span>}
+              {isChat && <span className="font-semibold">WAT</span>}
             </p>
           </div>
         </div>

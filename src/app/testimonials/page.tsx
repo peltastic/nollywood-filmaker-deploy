@@ -17,11 +17,11 @@ const TestimonialPage = (props: Props) => {
       <div className="absolute top-[10rem] left-[2rem]">
         <Image src={Vector1} alt="vector-1" />
       </div>
-      <HomeTitleHeader
+      {/* <HomeTitleHeader
         subTitle="Here’s what people say about us   "
         title="Testimonials"
-      />
-      <div className="px-[2rem] sm:px-[4rem] mt-[7rem] flex-wrap justify-center lg:flex-nowrap flex items-center">
+      /> */}
+      {/* <div className="px-[2rem] sm:px-[4rem] mt-[7rem] flex-wrap justify-center lg:flex-nowrap flex items-center">
         <div className="w-full md:w-[80%] lg:w-[50%]">
           <VideoBox />
         </div>
@@ -43,7 +43,7 @@ const TestimonialPage = (props: Props) => {
         <TestimonalVideo />
         <TestimonalVideo />
         <TestimonalVideo />
-      </div>
+      </div> */}
     </HomeLayout>
   );
 };
