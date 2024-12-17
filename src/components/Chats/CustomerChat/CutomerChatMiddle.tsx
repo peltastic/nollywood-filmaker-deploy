@@ -214,7 +214,7 @@ const CustomerChatMiddle = ({
         chat_socket.emit("triggerRefresh", {
           room: orderId,
         });
-        transFunc.close()
+        transFunc.close();
         refreshChat();
       }
     }
@@ -358,9 +358,12 @@ const CustomerChatMiddle = ({
                           </div>
                         ) : (
                           <UserChatMenu
+                            isTime={isTime}
                             openExtension={extensionOpenedFuncs.open}
                             openReportIssue={funcs.open}
                             type={type}
+                            chat_title={data?.chat_title}
+                            orderId={orderId}
                           />
                         )}
                       </MenuComponent>

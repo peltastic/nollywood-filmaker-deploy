@@ -1,4 +1,8 @@
-import { IChatFilesResponse, IChatWithProPayload, ITimeSlotsResponse } from "@/interfaces/chat/chat";
+import {
+  IChatFilesResponse,
+  IChatWithProPayload,
+  ITimeSlotsResponse,
+} from "@/interfaces/chat/chat";
 import { baseQueryWithReauth } from "@/lib/baseQuery";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
@@ -31,9 +35,20 @@ export const chatApi = createApi({
         `/api/users/gethours?expertise=${expertise}&date=${date}`,
     }),
     getChatFiles: build.query<IChatFilesResponse, string>({
-      query: (room_id) =>  `/api/chat/files/${room_id}`
-    })
+      query: (room_id) => `/api/chat/files/${room_id}`,
+    }),
+    exportUserChat: build.query<Blob, string>({
+      query: (room_id) => ({
+        url: `/api/chat/export/${room_id}`,
+        responseHandler: (res) => res.blob(),
+      }),
+    }),
   }),
 });
 
-export const { useInitializeChatWithAProTransactionMutation, useLazyGetAvailabilityHoursQuery, useLazyGetChatFilesQuery  } = chatApi;
+export const {
+  useInitializeChatWithAProTransactionMutation,
+  useLazyGetAvailabilityHoursQuery,
+  useLazyGetChatFilesQuery,
+  useLazyExportUserChatQuery,
+} = chatApi;

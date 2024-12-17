@@ -1,5 +1,6 @@
 import { nprogress } from "@mantine/nprogress";
 import { monthNames, resolve_file_services } from "./constants/constants";
+import moment from "moment";
 
 export function getMonthName(code: number): string | null {
   const monthObj = monthNames.find((el) => el.code === code);
@@ -146,9 +147,27 @@ export function isResolveFile(
     | "Draft Legal documents"
     | "Create a Production budget"
 ): boolean {
-  console.log(val)
   const isTrue = resolve_file_services.find((el) => el === val);
 
-
   return isTrue ? true : false;
+}
+
+export function downloadCSV(blob: Blob, filename?: string) {
+  const link = document.createElement("a");
+  const url = URL.createObjectURL(blob);
+  link.href = url;
+
+  // Set the file name
+  link.setAttribute(
+    "download",
+    `${filename || "data"}-${moment().format("MMMM Do YYYY, h:mm:ss")}.csv`
+  );
+
+  // Trigger download
+  document.body.appendChild(link);
+  link.click();
+
+  // Clean up
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }

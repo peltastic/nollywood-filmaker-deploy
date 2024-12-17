@@ -31,8 +31,6 @@ const CustomerOrderDetailsPage = (props: Props) => {
 
   const searchVal = search.get("status") || "Pending";
 
- 
-
   return (
     <ServiceLayout admin>
       <DashboardBodyLayout>
@@ -49,9 +47,7 @@ const CustomerOrderDetailsPage = (props: Props) => {
                   orderId={data?.request.orderId}
                   expertise={data?.request.expertise}
                   chat_appointment_data={{
-                    date: data.request.date
-                      ? moment(data.request.date).format("YYYY-MM-DD")
-                      : "",
+                    date: data.request.booktime,
                     time: {
                       hours: data.request.time ? data.request.time.hours : 0,
                       minutes: data.request.time
@@ -62,7 +58,7 @@ const CustomerOrderDetailsPage = (props: Props) => {
                         : 0,
                     },
                     userId: data.request.userId,
-                    nameofservice: data.request.nameofservice
+                    nameofservice: data.request.nameofservice,
                   }}
                 />
               )}
@@ -75,14 +71,13 @@ const CustomerOrderDetailsPage = (props: Props) => {
                     </div>
                     <p className="text-[0.88rem]">{data?.user.fullName}</p>
                   </div>
-
                 </div>
                 <div className="mb-10 px-3 sm:px-4 lg:px-0 w-full chatbp::w-[80%]">
                   <OrderDetailsTop
-                    order_date={ data?.request.booktime || data?.request.date}
+                    order_date={data?.request.booktime || data?.request.date}
                     order_no="O-NG240629806487"
                     order_type={data?.request.nameofservice}
-                    isChat={ data?.request.type === "Chat"}
+                    isChat={data?.request.type === "Chat"}
                     // rating="5"
                   />
                   <OrderDetailsBody

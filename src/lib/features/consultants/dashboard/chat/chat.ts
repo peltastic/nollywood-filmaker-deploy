@@ -1,4 +1,7 @@
-import { IChatFilesResponse, IChatMessagesResponse } from "@/interfaces/chat/chat";
+import {
+  IChatFilesResponse,
+  IChatMessagesResponse,
+} from "@/interfaces/chat/chat";
 import {
   IGetUserConversations,
   IGetUserConversationsResponse,
@@ -16,19 +19,21 @@ export const consultantDashboardChatApi = createApi({
     >({
       query: (id) => `/api/consultants/conversations/${id}`,
     }),
-    fetchSingleConversationData: build.query<
-      IGetUserConversations ,
-      string
-    >({
+    fetchSingleConversationData: build.query<IGetUserConversations, string>({
       query: (orderId) => `/api/users/conversation/${orderId}`,
     }),
     fetchConsultantChatMessages: build.query<IChatMessagesResponse, string>({
       query: (id) => `/api/chat/fetchmessage/${id}`,
     }),
     getConsultantChatFiles: build.query<IChatFilesResponse, string>({
-      query: (room_id) =>  `/api/chat/files/${room_id}`
+      query: (room_id) => `/api/chat/files/${room_id}`,
     }),
-    
+    exportConsultantChat: build.query<Blob, string>({
+      query: (room_id) => ({
+        url: `/api/chat/export/${room_id}`,
+        responseHandler: (res) => res.blob(),
+      }),
+    }),
   }),
 });
 
@@ -36,5 +41,6 @@ export const {
   useLazyFetchConsultantsConversationsQuery,
   useLazyFetchSingleConversationDataQuery,
   useLazyFetchConsultantChatMessagesQuery,
-  useLazyGetConsultantChatFilesQuery
+  useLazyGetConsultantChatFilesQuery,
+  useLazyExportConsultantChatQuery
 } = consultantDashboardChatApi;
