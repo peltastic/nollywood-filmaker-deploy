@@ -90,11 +90,11 @@ const OrderDetails = (props: Props) => {
               </div>
               <div className="mb-10 px-3 sm:px-4 lg:px-0 w-full lg:w-[80%] ml-auto">
                 <OrderDetailsTop
-                  order_date={data?.request.booktime || data?.request.date}
+                  order_date={data?.request.date}
                   order_no="O-NG240629806487"
                   order_type={data?.request.nameofservice}
                   isChat={ data?.request.type === "Chat"}
-                />
+                  />
                 <OrderDetailsBody
                   chat={
                     data?.request.nameofservice === "Chat With A Professional"
@@ -104,6 +104,7 @@ const OrderDetails = (props: Props) => {
                   genre={data?.request.genre}
                   platform={data?.request.platform}
                   synopsis={data?.request.synopsis}
+                  isChat={ data?.request.type === "Chat"}
                   summary={data?.request.summary}
                   script={
                     data?.request.nameofservice ===
@@ -130,6 +131,7 @@ const OrderDetails = (props: Props) => {
                   visual={data?.request.visualStyle}
                   company={data?.request.productionCompany}
                   contact_info={data?.request.contactInfo}
+                  booktime={data?.request.booktime}
                 />
               </div>
             </div>

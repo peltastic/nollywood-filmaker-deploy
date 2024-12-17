@@ -1,4 +1,5 @@
 import { truncateStr } from "@/utils/helperFunction";
+import moment from "moment";
 import Link from "next/link";
 import React from "react";
 import { IoMdDownload } from "react-icons/io";
@@ -25,6 +26,8 @@ type Props = {
   visual?: string;
   company?: string;
   contact_info?: string;
+  isChat?: boolean;
+  booktime?: string;
 };
 
 const OrderDetailsBody = ({
@@ -49,6 +52,8 @@ const OrderDetailsBody = ({
   visual,
   company,
   contact_info,
+  isChat,
+  booktime,
 }: Props) => {
   return (
     <div className="text-black-2 bg-white px-6 py-6 mt-8 rounded-2xl border border-stroke-5 shadow-md shadow-[#1018280F]">
@@ -83,6 +88,28 @@ const OrderDetailsBody = ({
           <p className="text-[0.88rem]">{chat_title}</p>
         </div>
       )}
+      <>
+        {isChat && (
+          <div className="">
+            {booktime && (
+              <div className="mt-4 border-b border-b-stroke-4 pb-4">
+                <h1 className="font-bold mb-1">Chat Date</h1>
+                <p className="text-[0.88rem]">
+                  {moment(booktime).format("YYYY-MM-DD")}
+                </p>
+              </div>
+            )}
+            {booktime && (
+              <div className="mt-4 border-b border-b-stroke-4 pb-4">
+                <h1 className="font-bold mb-1">Chat Time</h1>
+                <p className="text-[0.88rem]">
+                  {moment(booktime).format("LT")}&nbsp;WAT
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+      </>
       {summary && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Summary</h1>

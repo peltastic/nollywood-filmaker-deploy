@@ -39,9 +39,7 @@ const OrderDetailsTop = ({
           <div className="mr-auto">
             <h1 className="font-bold mb-1">Order Date</h1>
             <p className="text-[0.88rem]">
-              {moment(order_date).format("YYYY-MM-DD")}{" "}
-              {isChat && "@"+ " " + moment(order_date).format("LT")}{" "}
-              {isChat && <span className="font-semibold">WAT</span>}
+              {moment(order_date).format("YYYY-MM-DD")}
             </p>
           </div>
         </div>

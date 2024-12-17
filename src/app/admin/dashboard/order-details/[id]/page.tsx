@@ -74,16 +74,17 @@ const CustomerOrderDetailsPage = (props: Props) => {
                 </div>
                 <div className="mb-10 px-3 sm:px-4 lg:px-0 w-full chatbp::w-[80%]">
                   <OrderDetailsTop
-                    order_date={data?.request.booktime || data?.request.date}
+                    order_date={data?.request.date}
                     order_no="O-NG240629806487"
                     order_type={data?.request.nameofservice}
                     isChat={data?.request.type === "Chat"}
                     // rating="5"
-                  />
+                    />
                   <OrderDetailsBody
                     chat={
                       data?.request.nameofservice === "Chat With A Professional"
                     }
+                    isChat={data?.request.type === "Chat"}
                     concerns={data?.request.concerns}
                     consultant_type={data?.request.consultant}
                     genre={data?.request.genre}
@@ -114,6 +115,7 @@ const CustomerOrderDetailsPage = (props: Props) => {
                     target_social={data?.request.socialTarget}
                     visual={data?.request.visualStyle}
                     company={data?.request.productionCompany}
+                    booktime={data?.request.booktime}
                     contact_info={data?.request.contactInfo}
                   />
                   {/* <OrderDetailsBody

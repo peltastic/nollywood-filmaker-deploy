@@ -22,8 +22,6 @@ import { isResolveFile } from "@/utils/helperFunction";
 
 type Props = {};
 
-
-
 const OrderDetailsPage = (props: Props) => {
   const [resolveFilesData, setResolveFilesData] = useState<
     IResolveFilesColumnData[]
@@ -104,10 +102,10 @@ const OrderDetailsPage = (props: Props) => {
             />
             <div className="w-[90%] lg:w-[82%] mx-auto">
               <OrderDetailsTop
-                order_date={data?.request.booktime || data?.request.date}
+                order_date={data?.request.date}
                 order_no="O-NG240629806487"
                 order_type={data?.request.nameofservice}
-                isChat={ data?.request.type === "Chat"}
+                isChat={data?.request.type === "Chat"}
               />
               <OrderDetailsBody
                 chat={
@@ -118,6 +116,7 @@ const OrderDetailsPage = (props: Props) => {
                 genre={data?.request.genre}
                 platform={data?.request.platform}
                 synopsis={data?.request.synopsis}
+                isChat={data?.request.type === "Chat"}
                 summary={data?.request.summary}
                 script={
                   data?.request.nameofservice === "Read my Script and advice" ||
@@ -143,6 +142,7 @@ const OrderDetailsPage = (props: Props) => {
                 visual={data?.request.visualStyle}
                 company={data?.request.productionCompany}
                 contact_info={data?.request.contactInfo}
+                booktime={data?.request.booktime}
               />
               {isResolveFileState && (
                 <div className="mt-14" ref={ref}>
