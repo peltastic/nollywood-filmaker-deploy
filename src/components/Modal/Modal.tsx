@@ -30,6 +30,10 @@ const ModalComponent = ({
       onClose={onClose}
       size={size}
       fullScreen={fullscreen}
+      // transitionProps={{
+      //   transition: "rotate-left",
+       
+      // }}
     >
       {children}
     </Modal>

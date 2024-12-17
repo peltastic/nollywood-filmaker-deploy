@@ -1,16 +1,49 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CancelImg from "/public/assets/cancel.svg";
 import Image from "next/image";
 import SelectEmoji, { IEmojiData } from "./SelectEmoji";
-import TextArea from "@/components/TextArea/TextArea";
 import CheckboxComponent from "@/components/Checkbox/Checkbox";
 import UnstyledButton from "@/components/Button/UnstyledButton";
+import { useSendFeedbackMutation } from "@/lib/features/users/dashboard/chat/chat";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
+import Spinner from "@/app/Spinner/Spinner";
+import { nprogress } from "@mantine/nprogress";
+import { notify } from "@/utils/notification";
 
 type Props = {
   close: () => void;
+  orderId: string;
 };
 
 const RateYourExperience = (props: Props) => {
+  const [sendFeedback, { isError, isSuccess, data, error, isLoading }] =
+    useSendFeedbackMutation();
+  const [checked, setChecked] = useState<boolean>(false);
+  const [ratingData, setRatingData] = useState<{
+    quality: string;
+    speed: string;
+  }>({
+    quality: "",
+    speed: "",
+  });
+  const [reason, setReason] = useState<string>("");
+  const userId = useSelector(
+    (state: RootState) => state.persistedState.user.user?.id
+  );
+
+  useEffect(() => {
+    if (isError) {
+      nprogress.complete();
+      notify("error", "", (error as any).data?.message || "An Error Occcured");
+    }
+    if (isSuccess) {
+      notify("success", "You feedback has been saved");
+      nprogress.complete();
+      props.close();
+    }
+  }, [isError, isSuccess]);
+
   const quality: IEmojiData[] = [
     {
       emotion: "Terrible",
@@ -34,6 +67,28 @@ const RateYourExperience = (props: Props) => {
     },
   ];
 
+  const updateRatingHandler = (key: string, val: string) => {
+    setRatingData((prev) => {
+      return {
+        ...prev,
+        [key]: val,
+      };
+    });
+  };
+
+  const sendFeedbackHandler = () => {
+    if (userId) {
+      nprogress.start();
+      sendFeedback({
+        orderId: props.orderId,
+        quality: Number(ratingData.quality),
+        reason,
+        speed: Number(ratingData.speed),
+        userId,
+      });
+    }
+  };
+
   return (
     <section className="px-6">
       <div className="flex">
@@ -47,12 +102,14 @@ const RateYourExperience = (props: Props) => {
       </div>
       <div className="mt-4">
         <SelectEmoji
+          setEmojiProps={(val) => updateRatingHandler("quality", val)}
           data={quality}
           title="How do you feel about the quality of our delivery?"
         />
       </div>
       <div className="mt-4">
         <SelectEmoji
+          setEmojiProps={(val) => updateRatingHandler("speed", val)}
           data={quality}
           title="How do you feel about the speed of our delivery?"
         />
@@ -62,12 +119,16 @@ const RateYourExperience = (props: Props) => {
           What are the main reasons for your rating?
         </h1>
         <textarea
+          onChange={(e) => setReason(e.target.value)}
+          value={reason}
           className="outline-none border border-stroke-2 rounded-md w-full py-4 px-4"
           placeholder="Text"
         ></textarea>
       </div>
       <div className="my-4">
         <CheckboxComponent
+          checked={checked}
+          setCheckedProps={(val) => setChecked(val)}
           color="#181818"
           label={
             <p className="font-medium text-[0.88rem] text-black-5">
@@ -78,10 +139,19 @@ const RateYourExperience = (props: Props) => {
       </div>
       <div className="my-8 flex">
         <UnstyledButton
-          clicked={() => {}}
-          class="ml-auto py-2 px-4 transition-all rounded-md items-center text-white  bg-black-3 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
+          disabled={
+            !ratingData.quality || !ratingData.speed || !checked || isLoading
+          }
+          clicked={sendFeedbackHandler}
+          class="w-[13rem] flex justify-center ml-auto py-2 px-4 transition-all rounded-md items-center text-white  bg-black-3 disabled:opacity-50 text-[0.88rem] "
         >
-          <p>Submit my feedback</p>
+          {isLoading ? (
+            <div className="py-1 w-[1rem]">
+              <Spinner />
+            </div>
+          ) : (
+            <p>Submit my feedback</p>
+          )}
         </UnstyledButton>
       </div>
     </section>

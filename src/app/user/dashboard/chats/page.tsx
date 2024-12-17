@@ -27,6 +27,7 @@ const ChatsPage = (props: Props) => {
   );
   const [fetchConversationData, result] =
     useLazyFetchSingleConversationDataQuery();
+  const [getChatFiles, res] = useLazyGetChatFilesQuery();
 
   const search = useSearchParams();
   const searchVal = search.get("chat");
@@ -44,6 +45,7 @@ const ChatsPage = (props: Props) => {
   useEffect(() => {
     if (searchVal) {
       fetchConversationData(searchVal);
+      getChatFiles(searchVal);
     }
   }, [searchVal]);
 
@@ -98,6 +100,11 @@ const ChatsPage = (props: Props) => {
             } transition-all h-full hidden chatbp:block bg-white`}
           >
             <CustomerChatMiddle
+              refetch={() => {
+                if (searchVal) {
+                  getChatFiles(searchVal);
+                }
+              }}
               refreshChat={refresh}
               opened={closeRight}
               open={() => setCloseRight(false)}
@@ -125,6 +132,8 @@ const ChatsPage = (props: Props) => {
               isTime={isTime}
               sessionOver={sessionOver}
               orderId={result.data?.orderId}
+              isLoading={res.isFetching}
+              res={res.data?.files}
             />
           </section>
         </section>

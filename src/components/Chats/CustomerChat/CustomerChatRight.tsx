@@ -25,6 +25,8 @@ type Props = {
   isTime: boolean;
   sessionOver: boolean;
   orderId?: string;
+  isLoading?: boolean;
+  res?: IChatFiles[];
 };
 
 export interface IFilesData {
@@ -61,34 +63,18 @@ const CustomerChatRight = ({
   opened,
   orderId,
   type,
+  isLoading,
+  res,
 }: Props) => {
   const userData = useSelector(
     (state: RootState) => state.persistedState.user.user
   );
-  const [getConsultantChatFiles, res] = useLazyGetConsultantChatFilesQuery();
 
-  const [getChatFiles, result] = useLazyGetChatFilesQuery();
   const [chatFiles, setChatFiles] = useState<IChatFiles[]>([]);
 
   useEffect(() => {
-    if (data) {
-      if (type === "user") {
-        getChatFiles(data.orderId);
-      } else {
-        getConsultantChatFiles(data.orderId);
-      }
-    }
-  }, [data]);
-
-  useEffect(() => {
-    if (result.data) {
-      setChatFiles(result.data.files);
-    }
-  }, [result.data]);
-
-  useEffect(() => {
-    if (res.data) {
-      setChatFiles(res.data.files);
+    if (res) {
+      setChatFiles(res);
     }
   }, [res]);
 

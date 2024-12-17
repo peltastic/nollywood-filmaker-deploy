@@ -5,6 +5,7 @@ import {
   IRequestExtensionPayload,
   IRequestExtensionResponse,
   ISendChatMessagePayload,
+  ISendFeedbackPayload,
 } from "@/interfaces/chat/chat";
 import {
   IGetUserConversations,
@@ -48,7 +49,7 @@ export const dashboardChatApi = createApi({
       query: (id) => `/api/chat/fetchmessage/${id}`,
     }),
     requestExtension: build.mutation<
-      {result: IRequestExtensionResponse},
+      { result: IRequestExtensionResponse },
       IRequestExtensionPayload
     >({
       query: (body) => ({
@@ -68,6 +69,19 @@ export const dashboardChatApi = createApi({
       query: ({ length, orderId, transRef }) =>
         `/api/users/gettranstat/${transRef}?orderId=${orderId}&length=${length}`,
     }),
+    exportUserChat: build.query<Blob, string>({
+      query: (room_id) => ({
+        url: `/api/chat/export/${room_id}`,
+        responseHandler: (res) => res.blob(),
+      }),
+    }),
+    sendFeedback: build.mutation<unknown, ISendFeedbackPayload>({
+      query: (body) => ({
+        url: "api/chat/feedback/register",
+        body,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -80,4 +94,6 @@ export const {
   useLazyFetchChatMessagesQuery,
   useRequestExtensionMutation,
   useLazyExtentTimeQuery,
+  useLazyExportUserChatQuery,
+  useSendFeedbackMutation,
 } = dashboardChatApi;

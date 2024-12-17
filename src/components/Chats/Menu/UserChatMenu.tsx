@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { useLazyExportUserChatQuery } from "@/lib/features/users/services/chat/chat";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import { nprogress } from "@mantine/nprogress";
 import { notify } from "@/utils/notification";
 import { downloadCSV } from "@/utils/helperFunction";
 import { useLazyExportConsultantChatQuery } from "@/lib/features/consultants/dashboard/chat/chat";
+import { useLazyExportUserChatQuery } from "@/lib/features/users/dashboard/chat/chat";
 
 type Props = {
   type: "user" | "consultant" | "admin";

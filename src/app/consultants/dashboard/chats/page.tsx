@@ -31,6 +31,7 @@ const ConsultantChastPage = (props: Props) => {
   const search = useSearchParams();
   const searchVal = search.get("chat");
   const [chatData, setChatData] = useState<IChatData[]>([]);
+  const [getChatFiles, res] = useLazyGetConsultantChatFilesQuery();
 
   useEffect(() => {
     if (consultantId) {
@@ -40,8 +41,14 @@ const ConsultantChastPage = (props: Props) => {
   useEffect(() => {
     if (searchVal) {
       fetchConversationData(searchVal);
+      getChatFiles(searchVal);
     }
   }, [searchVal]);
+  useEffect(() => {
+    if (isTime) {
+      setCloseRight(false);
+    }
+  }, [isTime]);
 
   useEffect(() => {
     if (conversationsRes.data) {
@@ -94,6 +101,11 @@ const ConsultantChastPage = (props: Props) => {
             } transition-all hidden chatbp:block`}
           >
             <CustomerChatMiddle
+              refetch={() => {
+                if (searchVal) {
+                  getChatFiles(searchVal);
+                }
+              }}
               refreshChat={refresh}
               type="consultant"
               opened={closeRight}
@@ -118,6 +130,8 @@ const ConsultantChastPage = (props: Props) => {
               close={() => setCloseRight(true)}
               isTime={isTime}
               sessionOver={sessionOver}
+              res={res.data?.files}
+              isLoading={res.isFetching}
             />
           </section>
         </section>

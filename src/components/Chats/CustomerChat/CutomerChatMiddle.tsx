@@ -4,7 +4,6 @@ import Image from "next/image";
 import MenuComponent from "@/components/Menu/MenuComponent";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import { IoIosArrowDown } from "react-icons/io";
-import Link from "next/link";
 import { IoIosArrowBack } from "react-icons/io";
 import ChatRoom from "../ChatRoom";
 import HamburgerIcon from "/public/assets/chats/hamburger.svg";
@@ -14,7 +13,6 @@ import UserChatMenu from "../Menu/UserChatMenu";
 import {
   useLazyExtentTimeQuery,
   useLazyFetchChatMessagesQuery,
-  useRequestExtensionMutation,
 } from "@/lib/features/users/dashboard/chat/chat";
 import Logo from "/public/assets/nav/logo.svg";
 import Spinner from "@/app/Spinner/Spinner";
@@ -32,6 +30,7 @@ import { useDisclosure } from "@mantine/hooks";
 import InitializingTransactionModal from "@/components/Services/InitializingTransactionModal";
 import { chat_socket, primary_socket } from "@/lib/socket";
 import { nprogress } from "@mantine/nprogress";
+import RateYourExperience from "../ModalComponents/RateYourExperience";
 
 export interface ChatPayload {
   text: string;
@@ -55,6 +54,7 @@ type Props = {
   refreshChat: () => void;
   setIsTimeProps: (val: boolean) => void;
   setIsSessionOverProps: (val: boolean) => void;
+  refetch: () => void
 };
 
 const CustomerChatMiddle = ({
@@ -70,6 +70,7 @@ const CustomerChatMiddle = ({
   isFetching,
   orderId,
   refreshChat,
+  refetch
 }: Props) => {
   const userData = useSelector(
     (state: RootState) => state.persistedState.user.user
@@ -170,7 +171,17 @@ const CustomerChatMiddle = ({
           type: el.type,
         };
       });
-      setChatData(chat_data);
+      setChatData([
+        {
+          text: "Hi... This is Nollywood filmmaker how can we help you",
+          user: type === "user" ? "consultant" : "user",
+          id: "nollywood-filmaker",
+          type: "text",
+          file: "",
+          filename: "",
+        },
+        ...chat_data,
+      ]);
     }
   }, [result.data]);
 
@@ -186,7 +197,17 @@ const CustomerChatMiddle = ({
           type: el.type,
         };
       });
-      setChatData(chat_data);
+      setChatData([
+        {
+          text: "Hi... This is Nollywood filmmaker how can we help you",
+          user: type === "user" ? "consultant" : "user",
+          id: "nollywood-filmaker",
+          type: "text",
+          file: "",
+          filename: "",
+        },
+        ...chat_data,
+      ]);
     }
   }, [consultantRes.data]);
 
@@ -269,6 +290,7 @@ const CustomerChatMiddle = ({
           status={paymentStatus}
         />
       ) : null}
+
       <ModalComponent
         onClose={extensionOpenedFuncs.close}
         opened={extensionOpened}
@@ -394,12 +416,14 @@ const CustomerChatMiddle = ({
                 <div className="h-full bg-white relative">
                   {data && (isTime || sessionOver) ? (
                     <ChatRoom
+                    refetch={refetch}
                       userData={type === "user" ? userData : consultantData}
                       orderId={data.orderId}
                       updateChatHandlerProps={updateChatDataHandler}
                       type={type}
                       data={chatData}
                       isTime={isTime}
+                      endTime={data.endTime}
                       sessionOver={sessionOver}
                     />
                   ) : (

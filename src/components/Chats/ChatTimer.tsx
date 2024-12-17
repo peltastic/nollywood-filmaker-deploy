@@ -98,7 +98,7 @@ const ChatTimer = (props: Props) => {
 
   return (
     <>
-      <ModalComponent
+      {/* <ModalComponent
         opened={opened}
         onClose={close}
         withCloseButton={false}
@@ -106,7 +106,7 @@ const ChatTimer = (props: Props) => {
         size="xl"
       >
         <RateYourExperience close={close} />
-      </ModalComponent>
+      </ModalComponent> */}
       {props.timeData && props.isTime && showTimer && (
         <div className="px-4 border-b border-b-stroke-8 pt-3 pb-6">
           <div className="flex items-center py-6">

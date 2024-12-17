@@ -15,9 +15,10 @@ export interface IEmojiData {
 type Props = {
   data: IEmojiData[];
   title: string;
+  setEmojiProps: (value: string) => void;
 };
 
-const SelectEmoji = ({ data, title }: Props) => {
+const SelectEmoji = ({ data, title, setEmojiProps }: Props) => {
   const [selectedQualityEmoji, setSelectedQualityEmoji] = useState<string>("");
   return (
     <div className="">
@@ -25,7 +26,10 @@ const SelectEmoji = ({ data, title }: Props) => {
       <div className="grid grid-cols-5 gap-6 ">
         {data.map((el) => (
           <div
-            onClick={() => setSelectedQualityEmoji(el.value)}
+            onClick={() => {
+              setEmojiProps(el.value);
+              setSelectedQualityEmoji(el.value);
+            }}
             className={` ${
               selectedQualityEmoji === el.value ? "bg-black-3" : ""
             } border  border-stroke-9 h-[7.2rem] flex items-center justify-center rounded-md cursor-pointer`}

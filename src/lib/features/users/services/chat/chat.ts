@@ -37,12 +37,7 @@ export const chatApi = createApi({
     getChatFiles: build.query<IChatFilesResponse, string>({
       query: (room_id) => `/api/chat/files/${room_id}`,
     }),
-    exportUserChat: build.query<Blob, string>({
-      query: (room_id) => ({
-        url: `/api/chat/export/${room_id}`,
-        responseHandler: (res) => res.blob(),
-      }),
-    }),
+
   }),
 });
 
@@ -50,5 +45,5 @@ export const {
   useInitializeChatWithAProTransactionMutation,
   useLazyGetAvailabilityHoursQuery,
   useLazyGetChatFilesQuery,
-  useLazyExportUserChatQuery,
+
 } = chatApi;
