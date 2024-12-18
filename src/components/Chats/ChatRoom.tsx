@@ -50,8 +50,11 @@ export interface IChatMessagesData {
 }
 
 const ChatRoom = (props: Props) => {
-  const {  message, setReconnectMessage } =
-    useChatConnectionEvent(props.refreshChat, props.sessionOver, props.isTime);
+  const { message, setReconnectMessage } = useChatConnectionEvent(
+    props.refreshChat,
+    props.sessionOver,
+    props.isTime
+  );
   const [messageQueue, setMessageQueue] = useState<ChatPayload[]>([]);
   const [fileInputValue, setFileInputValue] = useState<File | null>(null);
   const [base64File, setBase64File] = useState<string | ArrayBuffer | null>(
@@ -106,6 +109,19 @@ const ChatRoom = (props: Props) => {
           room: props.orderId,
         });
       }, 30000);
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [props.isTime, props.sessionOver]);
+  useEffect(() => {
+    if (props.sessionOver) return () => {};
+    if (props.isTime) {
+      const interval = setInterval(() => {
+        chat_socket.emit("ping", {
+          room: props.orderId,
+        });
+      }, 10000);
       return () => {
         clearInterval(interval);
       };
