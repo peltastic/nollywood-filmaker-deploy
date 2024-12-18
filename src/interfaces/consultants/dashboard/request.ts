@@ -43,7 +43,7 @@ export interface ICustomerReqDetails {
       minutes: number;
       seconds: number;
     };
-    booktime: string
+    booktime: string;
     type: "Chat" | "request";
     date: string;
     summary: string;
@@ -99,7 +99,7 @@ export interface IConsultantActiveReq {
   cid: string;
   orderId: string;
   date: string;
-  creationDate: string
+  creationDate: string;
   request: {
     chat_title?: string;
     movie_title: string;
@@ -124,7 +124,7 @@ export interface IServiceRequest {
   uid: string;
   cid: string;
   orderId: string;
-  creationDate: string
+  creationDate: string;
   nameofservice:
     | "Chat With A Professional"
     | "Read my Script and advice"
@@ -142,4 +142,32 @@ export interface IServiceRequest {
     profilepics: string;
   };
   movie_title: string;
+}
+
+export interface IRequestHistoryResponse {
+  request: {
+    _id: string;
+    stattusof: "ready" | "ongoing" | "completed" | "pending";
+    nameofservice:
+      | "Chat With A Professional"
+      | "Read my Script and advice"
+      | "Watch the Final cut of my film and advice"
+      | "Look at my Budget and advice"
+      | "Create a Marketing budget"
+      | "Create a Pitch based on my Script"
+      | "Draft Legal documents"
+      | "Create a Production budget";
+    date: string;
+    createdAt: string;
+    chat_title: string;
+    movie_title: string;
+    orderId: string
+  };
+  userInfo: {
+    _id: string;
+    fname: string;
+    lname: string;
+    email: string
+    profilepics: string;
+  };
 }

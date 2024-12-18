@@ -3,7 +3,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import TestImage from "/public/assets/dashboard/issues-img-1.png";
 import Image from "next/image";
 import ReadMyScriptDarkImg from "/public/assets/services/read-my-script-dark.svg";
-import { Rating } from "@mantine/core";
+import { AspectRatio, Rating } from "@mantine/core";
 import MenuComponent from "@/components/Menu/MenuComponent";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import { IoIosArrowDown } from "react-icons/io";
@@ -12,13 +12,23 @@ import { GoDotFill } from "react-icons/go";
 
 export interface ReqHistoryColumnData {
   script: string;
-  service_type: string;
+  service_type:
+    | "Chat With A Professional"
+    | "Read my Script and advice"
+    | "Watch the Final cut of my film and advice"
+    | "Look at my Budget and advice"
+    | "Create a Marketing budget"
+    | "Create a Pitch based on my Script"
+    | "Draft Legal documents"
+    | "Create a Production budget";
   customer: string;
   email: string;
   rating: number;
   date: string;
-  status: "Ready" | "Ongoing" | "Completed";
+  status: "ready" | "ongoing" | "completed" | "pending";
   type?: "consultant" | "user";
+  profilepics: string;
+  orderId: string;
 }
 
 export const request_history_column: ColumnDef<ReqHistoryColumnData>[] = [
@@ -41,8 +51,16 @@ export const request_history_column: ColumnDef<ReqHistoryColumnData>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center w-[20rem] xl:w-auto">
-          <div className="mr-2">
-            <Image src={TestImage} alt="image" />
+          <div className="mr-2 w-[2.5rem] h-[2.5rem]">
+            <AspectRatio ratio={1800 / 1800}>
+              <Image
+                src={row.original.profilepics}
+                width={100}
+                height={100}
+                alt="image"
+                className="w-full h-full rounded-full"
+              />
+            </AspectRatio>
           </div>
           <div className="">
             <h1 className=" text-black-4 font-medium">
@@ -59,7 +77,7 @@ export const request_history_column: ColumnDef<ReqHistoryColumnData>[] = [
     header: () => <div className="">Service name</div>,
     cell: ({ row }) => {
       return (
-        <div className="flex items-center w-[20rem] xl:w-auto py-4">
+        <div className="flex items-center w-[20rem] xl:w-auto py-6">
           <div className="bg-gray-bg-3 h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4">
             <Image src={ReadMyScriptDarkImg} alt="name-img" />
           </div>
@@ -87,9 +105,9 @@ export const request_history_column: ColumnDef<ReqHistoryColumnData>[] = [
     header: "Status",
     cell: ({ row }) => {
       const className =
-        row.original.status === "Ready"
+        row.original.status === "ready"
           ? "bg-light-blue text-dark-blue"
-          : row.original.status === "Completed"
+          : row.original.status === "completed"
           ? "bg-light-green text-dark-green"
           : "bg-light-yellow text-dark-yellow";
       return (
@@ -125,14 +143,26 @@ export const request_history_column: ColumnDef<ReqHistoryColumnData>[] = [
         <>
           <MenuComponent
             target={
-              <UnstyledButton class="px-4 py-2 hover:bg-blue-1 rounded-md items-center bg-black-3 text-white flex">
-                <p className="mr-1 font-medium text-[0.88rem]">Actions</p>
-                <IoIosArrowDown />
-              </UnstyledButton>
+              <div>
+                <UnstyledButton class="px-4 py-2 hover:bg-blue-1 rounded-md items-center bg-black-3 text-white flex">
+                  <p className="mr-1 font-medium text-[0.88rem]">Actions</p>
+                  <IoIosArrowDown />
+                </UnstyledButton>
+              </div>
             }
           >
             {row.original.type === "consultant" ? (
-              <div className=""></div>
+              <div className="">
+                <ul className="px-2 py-1 text-gray-6 text-[0.88rem]">
+                  <li>
+                    <Link
+                      href={`/consultants/dashboard/${row.original.orderId}/order-details`}
+                    >
+                      See Details
+                    </Link>
+                  </li>
+                </ul>
+              </div>
             ) : (
               <div className="shadow-xl border bg-white border-[#1925321A]">
                 <ul>

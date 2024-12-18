@@ -3,6 +3,7 @@ import {
   IConsultantActiveReqResponse,
   ICustomerReqDetails,
   ICustomerRequestDataResponse,
+  IRequestHistoryResponse,
   IServiceRequest,
 } from "@/interfaces/consultants/dashboard/request";
 import { consultantBaseQueryWithReauth } from "@/lib/baseQuery";
@@ -57,9 +58,14 @@ export const consultantRequestsApi = createApi({
         },
       }),
     }),
-    fetchReqHistory: build.query<unknown, string>({
-      query: (id) => `/api/consultants/assignments/${id}`
-    })
+    fetchReqHistory: build.query<
+      {
+        completedRequests: IRequestHistoryResponse[]
+      },
+      string
+    >({
+      query: (id) => `/api/consultants/assignments/${id}`,
+    }),
   }),
 });
 
@@ -72,5 +78,5 @@ export const {
   useLazyGetCustomerRequestDetailQuery,
   useLazyGetServiceRequestsQuery,
   useSetChatAsCompleteMutation,
-  useLazyFetchReqHistoryQuery
+  useLazyFetchReqHistoryQuery,
 } = consultantRequestsApi;

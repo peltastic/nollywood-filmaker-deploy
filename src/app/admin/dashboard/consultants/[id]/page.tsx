@@ -82,35 +82,35 @@ const ConsultantDetailsPage = (props: Props) => {
     },
   ];
 
-  const reqHistory: ReqHistoryColumnData[] = [
-    {
-      customer: "Jenny Wilson",
-      date: "22 Jan 2022",
-      email: "w.lawson@example.com",
-      script: "Mikolo",
-      service_type: "Read my script",
-      status: "Completed",
-      rating: 5,
-    },
-    {
-      customer: "Devon Lane",
-      date: "26 Jan 2022",
-      email: "dat.roberts@example.com",
-      script: "Jagun Jagun",
-      service_type: "Watch the Final cut of my film",
-      status: "Completed",
-      rating: 4,
-    },
-    {
-      customer: "Jane Cooper",
-      date: "18 Jan 2022",
-      email: "jgraham@example.com",
-      script: "Criminal",
-      service_type: "Create a production Budget",
-      status: "Completed",
-      rating: 3,
-    },
-  ];
+  // const reqHistory: ReqHistoryColumnData[] = [
+  //   {
+  //     customer: "Jenny Wilson",
+  //     date: "22 Jan 2022",
+  //     email: "w.lawson@example.com",
+  //     script: "Mikolo",
+  //     service_type: "Read my script",
+  //     status: "Completed",
+  //     rating: 5,
+  //   },
+  //   {
+  //     customer: "Devon Lane",
+  //     date: "26 Jan 2022",
+  //     email: "dat.roberts@example.com",
+  //     script: "Jagun Jagun",
+  //     service_type: "Watch the Final cut of my film",
+  //     status: "Completed",
+  //     rating: 4,
+  //   },
+  //   {
+  //     customer: "Jane Cooper",
+  //     date: "18 Jan 2022",
+  //     email: "jgraham@example.com",
+  //     script: "Criminal",
+  //     service_type: "Create a production Budget",
+  //     status: "Completed",
+  //     rating: 3,
+  //   },
+  // ];
 
   const bar_chart_data = [
     { month: "Jan", value: 25000 },
@@ -266,7 +266,7 @@ const ConsultantDetailsPage = (props: Props) => {
               title="Request History"
               subtitle="Keep track of all your past requests"
               columns={request_history_column}
-              data={reqHistory}
+              data={[]}
             />
           </div>
         </div>

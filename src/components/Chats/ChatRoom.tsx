@@ -5,6 +5,7 @@ import Image from "next/image";
 import SendImg from "/public/assets/chats/send-icon.svg";
 import { Textarea } from "@mantine/core";
 import { MdCancel } from "react-icons/md";
+import CancelImg from "/public/assets/cancel.svg";
 
 import {
   chat_socket,
@@ -25,6 +26,9 @@ import { useDisclosure } from "@mantine/hooks";
 import RateYourExperience from "./ModalComponents/RateYourExperience";
 import ModalComponent from "../Modal/Modal";
 import { differenceInMilliseconds, isAfter } from "date-fns";
+import Spinner from "@/app/Spinner/Spinner";
+import { useChatConnectionEvent } from "@/hooks/useChatConnectionEvent";
+import { notify } from "@/utils/notification";
 
 type Props = {
   type: "user" | "consultant" | "admin";
@@ -36,6 +40,8 @@ type Props = {
   sessionOver?: boolean;
   endTime: string;
   refetch: () => void;
+  refreshChat: () => void;
+  status: "ongoing" | "completed" | "pending" | "ready";
 };
 
 export interface IChatMessagesData {
@@ -44,6 +50,9 @@ export interface IChatMessagesData {
 }
 
 const ChatRoom = (props: Props) => {
+  const {  message, setReconnectMessage } =
+    useChatConnectionEvent(props.refreshChat, props.sessionOver, props.isTime);
+  const [messageQueue, setMessageQueue] = useState<ChatPayload[]>([]);
   const [fileInputValue, setFileInputValue] = useState<File | null>(null);
   const [base64File, setBase64File] = useState<string | ArrayBuffer | null>(
     null
@@ -53,7 +62,6 @@ const ChatRoom = (props: Props) => {
   const searchVal = search.get("chat");
 
   const [opened, { open, close }] = useDisclosure();
-
   useEffect(() => {
     if (props.sessionOver) return () => {};
     if (props.userData) {
@@ -164,7 +172,7 @@ const ChatRoom = (props: Props) => {
           userid: string;
         };
       }) => {
-        props.refetch()
+        props.refetch();
         if (props.userData?.id === data.sender.userid) {
         } else {
           if (searchVal === data.sender.chatRoomId) {
@@ -202,16 +210,8 @@ const ChatRoom = (props: Props) => {
   useEffect(() => {
     if (props.endTime && props.type === "user") {
       const now = new Date();
-      const isAfterEndtime = isAfter(now, props.endTime);
-      if (isAfterEndtime) {
-        open();
-      }
-    }
-  }, [props.endTime]);
-
-  useEffect(() => {
-    if (props.endTime && props.type === "user") {
-      const now = new Date();
+      const isAfterEndTime = isAfter(now, props.endTime);
+      if (isAfterEndTime) return () => {};
       const delay = differenceInMilliseconds(props.endTime, now);
       const timer = setTimeout(() => {
         open();
@@ -234,6 +234,26 @@ const ChatRoom = (props: Props) => {
         <RateYourExperience orderId={props.orderId} close={close} />
       </ModalComponent>
       <div className=" py-6  h-full  relative bg-white">
+        {message && (
+          <div className="h-[3rem] absolute left-0 top-0 w-full flex items-center px-8 text-white  bg-[#d14d4deb]">
+            <p className="mr-4">
+              {message}{" "}
+              <span
+                className="underlin cursor-pointere"
+                onClick={() => props.refreshChat()}
+              >
+                Retry
+              </span>
+            </p>
+
+            <div
+              onClick={() => setReconnectMessage("")}
+              className="w-[1rem] cursor-pointer ml-auto"
+            >
+              <Image src={CancelImg} alt="cancel-img" />
+            </div>
+          </div>
+        )}
         <div className="h-[45rem] overflow-scroll w-full">
           {props.data && (
             <>

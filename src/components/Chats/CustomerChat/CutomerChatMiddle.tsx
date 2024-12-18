@@ -31,6 +31,7 @@ import InitializingTransactionModal from "@/components/Services/InitializingTran
 import { chat_socket, primary_socket } from "@/lib/socket";
 import { nprogress } from "@mantine/nprogress";
 import RateYourExperience from "../ModalComponents/RateYourExperience";
+import { useSetChatAsCompleteMutation } from "@/lib/features/consultants/dashboard/request";
 
 export interface ChatPayload {
   text: string;
@@ -54,7 +55,7 @@ type Props = {
   refreshChat: () => void;
   setIsTimeProps: (val: boolean) => void;
   setIsSessionOverProps: (val: boolean) => void;
-  refetch: () => void
+  refetch: () => void;
 };
 
 const CustomerChatMiddle = ({
@@ -70,7 +71,7 @@ const CustomerChatMiddle = ({
   isFetching,
   orderId,
   refreshChat,
-  refetch
+  refetch,
 }: Props) => {
   const userData = useSelector(
     (state: RootState) => state.persistedState.user.user
@@ -85,6 +86,7 @@ const CustomerChatMiddle = ({
   const [extensionAuthUrl, setExtensionAuthUrl] = useState("");
   const [extentionValue, setExtensionValue] = useState<string>("");
   const [transref, setTransRef] = useState<string>("");
+  const [setAsCompleted, completedRes] = useSetChatAsCompleteMutation();
 
   const [paymentStatus, setPaymentStatus] = useState<
     "initialized" | "pending" | "completed"
@@ -149,6 +151,10 @@ const CustomerChatMiddle = ({
         const timer = setTimeout(() => {
           setIsTimeProps(false);
           setIsSessionOverProps(true);
+          if (orderId && type === "consultant") {
+            console.log("set-as-completed-triggered-timer")
+            setAsCompleted(orderId);
+          }
         }, delay);
         return () => {
           clearTimeout(timer);
@@ -174,7 +180,7 @@ const CustomerChatMiddle = ({
       setChatData([
         {
           text: "Hi... This is Nollywood filmmaker how can we help you",
-          user: type === "user" ? "consultant" : "user",
+          user: "consultant",
           id: "nollywood-filmaker",
           type: "text",
           file: "",
@@ -200,7 +206,7 @@ const CustomerChatMiddle = ({
       setChatData([
         {
           text: "Hi... This is Nollywood filmmaker how can we help you",
-          user: type === "user" ? "consultant" : "user",
+          user: "consultant",
           id: "nollywood-filmaker",
           type: "text",
           file: "",
@@ -208,6 +214,7 @@ const CustomerChatMiddle = ({
         },
         ...chat_data,
       ]);
+      const now = new Date();
     }
   }, [consultantRes.data]);
 
@@ -282,6 +289,17 @@ const CustomerChatMiddle = ({
     }
   }, [type]);
 
+  useEffect(() => {
+    const now = new Date();
+    if (data?.endTime && type === "consultant" && orderId) {
+      const isAfterEndtime = isAfter(now, data.endTime);
+      if (isAfterEndtime && data.stattusof === "ongoing") {
+        console.log("set-as-completed-triggered")
+        setAsCompleted(orderId);
+      }
+    }
+  }, [data?.endTime, orderId]);
+
   return (
     <>
       {transOpened ? (
@@ -350,7 +368,7 @@ const CustomerChatMiddle = ({
                   </div>
                   <div className="">
                     <h1 className="font-semibold text-[1.25rem]">
-                      {data?.chat_title && truncateStr(data.chat_title, 25)}
+                      {data?.chat_title && truncateStr(data?.chat_title, 25)}
                     </h1>
                     <p className="text-[#00000082] text-[0.75rem] font-semibold">
                       {data?.nameofservice}
@@ -416,7 +434,14 @@ const CustomerChatMiddle = ({
                 <div className="h-full bg-white relative">
                   {data && (isTime || sessionOver) ? (
                     <ChatRoom
-                    refetch={refetch}
+                      refreshChat={() => {
+                        if (type === "user") {
+                          fetchUserChatMessages(data.orderId);
+                        } else {
+                          fetchConsultantChatMessages(data.orderId);
+                        }
+                      }}
+                      refetch={refetch}
                       userData={type === "user" ? userData : consultantData}
                       orderId={data.orderId}
                       updateChatHandlerProps={updateChatDataHandler}
@@ -425,6 +450,7 @@ const CustomerChatMiddle = ({
                       isTime={isTime}
                       endTime={data.endTime}
                       sessionOver={sessionOver}
+                      status={data.stattusof}
                     />
                   ) : (
                     <div className="h-[90vh] max-h-[120rem] w-full">

@@ -9,115 +9,47 @@ import { DataTable } from "@/components/Tables/DataTable";
 import { useProtectRouteConsultantRoute } from "@/hooks/useProtectConsultantRoute";
 import { useLazyFetchReqHistoryQuery } from "@/lib/features/consultants/dashboard/request";
 import { RootState } from "@/lib/store";
-import React, { useEffect } from "react";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 type Props = {};
 
-const reqHistoryData: ReqHistoryColumnData[] = [
-  {
-    script: "Mikolo",
-    date: "22 Jan 2022",
-    customer: "Jenny Wilson",
-    email: "w.lawson@example.com",
-    type: "consultant",
-    rating: 5,
-    service_type: "Read my script",
-    status: "Completed",
-  },
-  {
-    script: "Jagun Jagun",
-    date: "22 Jan 2022",
-    customer: "Jenny Wilson",
-    email: "w.lawson@example.com",
-    type: "consultant",
-    rating: 5,
-    service_type: "Watch the Final cut of my film",
-    status: "Completed",
-  },
-  {
-    script: "Criminal",
-    date: "22 Jan 2022",
-    customer: "Jenny Wilson",
-    email: "w.lawson@example.com",
-    type: "consultant",
-    rating: 5,
-    service_type: "Create a production Budget",
-    status: "Completed",
-  },
-  {
-    script: "Mikolo",
-    date: "22 Jan 2022",
-    customer: "Jenny Wilson",
-    email: "w.lawson@example.com",
-    type: "consultant",
-    rating: 5,
-    service_type: "Read my script",
-    status: "Completed",
-  },
-  {
-    script: "Jagun Jagun",
-    date: "22 Jan 2022",
-    customer: "Jenny Wilson",
-    email: "w.lawson@example.com",
-    type: "consultant",
-    rating: 5,
-    service_type: "Watch the Final cut of my film",
-    status: "Completed",
-  },
-  {
-    script: "Criminal",
-    date: "22 Jan 2022",
-    customer: "Jenny Wilson",
-    email: "w.lawson@example.com",
-    type: "consultant",
-    rating: 5,
-    service_type: "Create a production Budget",
-    status: "Completed",
-  },
-  {
-    script: "Mikolo",
-    date: "22 Jan 2022",
-    customer: "Jenny Wilson",
-    email: "w.lawson@example.com",
-    type: "consultant",
-    rating: 5,
-    service_type: "Read my script",
-    status: "Completed",
-  },
-  {
-    script: "Jagun Jagun",
-    date: "22 Jan 2022",
-    customer: "Jenny Wilson",
-    email: "w.lawson@example.com",
-    type: "consultant",
-    rating: 5,
-    service_type: "Watch the Final cut of my film",
-    status: "Completed",
-  },
-  {
-    script: "Criminal",
-    date: "22 Jan 2022",
-    customer: "Jenny Wilson",
-    email: "w.lawson@example.com",
-    type: "consultant",
-    rating: 5,
-    service_type: "Create a production Budget",
-    status: "Completed",
-  },
-];
-
 const RequestHistoryPage = (props: Props) => {
   useProtectRouteConsultantRoute();
+  const [reqHistoryData, setReqHistoryData] = useState<ReqHistoryColumnData[]>(
+    []
+  );
   const consultantId = useSelector(
     (state: RootState) => state.persistedState.consultant.user?.id
   );
-  const [fetchReqHistory, { isSuccess, data }] = useLazyFetchReqHistoryQuery();
+  const [fetchReqHistory, { isSuccess, data, isFetching }] =
+    useLazyFetchReqHistoryQuery();
 
   useEffect(() => {
     fetchReqHistory(consultantId!);
   }, []);
 
+  useEffect(() => {
+    if (data) {
+      const transformed_data: ReqHistoryColumnData[] =
+        data.completedRequests.map((el) => {
+          return {
+            customer: `${el.userInfo.fname} ${el.userInfo.lname}`,
+            date: moment(el.request.createdAt).format("ll"),
+            email: el.userInfo.email,
+            rating: 5,
+            script: el.request.chat_title || el.request.movie_title,
+            service_type: el.request.nameofservice,
+            status: el.request.stattusof,
+            type: "consultant",
+            profilepics: el.userInfo.profilepics,
+            orderId: el.request.orderId,
+          };
+        });
+    setReqHistoryData(transformed_data);
+    }
+  }, [data]);
 
   return (
     <ServiceLayout consultant>
@@ -126,7 +58,9 @@ const RequestHistoryPage = (props: Props) => {
           <DataTable
             title="Requst History"
             subtitle="Keep track of all your past requests"
-            data={[]}
+            data={reqHistoryData}
+            loaderLength={10}
+            isFetching={isFetching}
             columns={request_history_column}
           />
         </div>
