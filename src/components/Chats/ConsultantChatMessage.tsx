@@ -72,7 +72,7 @@ const ConsultantChatMessage = ({
               : ""
           } ${
             type === "file" && user === "user"
-              ? "bg-admin-chat-bg  text-black hover:bg-gray-2 transition-all":
+              ? "bg-admin-chat-bg mr-2 text-black hover:bg-gray-2 transition-all":
               type === "file" &&  user !== "user" ? "bg-black-2 text-white hover:bg-black-9 transition-all"  : user === "user"
               ? "bg-admin-chat-bg text-black"
               : "bg-black-3 text-white mr-2"

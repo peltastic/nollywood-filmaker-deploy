@@ -108,7 +108,7 @@ const ChatRoom = (props: Props) => {
         chat_socket.emit("triggerPing", {
           room: props.orderId,
         });
-      }, 30000);
+      }, 7000);
       return () => {
         clearInterval(interval);
       };
@@ -121,7 +121,7 @@ const ChatRoom = (props: Props) => {
         chat_socket.emit("ping", {
           room: props.orderId,
         });
-      }, 10000);
+      }, 5000);
       return () => {
         clearInterval(interval);
       };
