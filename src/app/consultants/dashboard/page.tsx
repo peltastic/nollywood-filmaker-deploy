@@ -63,35 +63,6 @@ const dashboard_data: {
   },
 ];
 
-const reqHistory: ReqHistoryColumnData[] = [
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Completed",
-    rating: 5,
-  },
-  {
-    customer: "Devon Lane",
-    date: "26 Jan 2022",
-    email: "dat.roberts@example.com",
-    script: "Jagun Jagun",
-    service_type: "Watch the Final cut of my film",
-    status: "Completed",
-    rating: 4,
-  },
-  {
-    customer: "Jane Cooper",
-    date: "18 Jan 2022",
-    email: "jgraham@example.com",
-    script: "Criminal",
-    service_type: "Create a production Budget",
-    status: "Completed",
-    rating: 3,
-  },
-];
 
 const plate_data: {
   change?: "increase" | "decrease";
