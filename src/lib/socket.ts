@@ -24,8 +24,8 @@ export function joinChatRoom(data: {
 export function sendChatMessageEvent(data: {
   room: string;
   message: string;
-  type: "text"
   sender: {
+    type: "text";
     userid: string;
     name: string;
     role: "user" | "consultant" | "admin";
@@ -39,8 +39,8 @@ export function sendFileMessage(data: {
   room: string;
   fileData: string | ArrayBuffer;
   fileName: string;
-  type: "img" | "file";
   sender: {
+    type: "img" | "file";
     userid: string;
     name: string;
     role: "user" | "consultant" | "admin";
