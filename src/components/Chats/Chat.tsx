@@ -42,57 +42,34 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
       const isBeforeStartTime = isBefore(now, data.start_time);
       if (isBeforeStartTime) {
         setStatus("pending");
+        setChatTimeStatus(moment(data.start_time).fromNow());
+        const delay = differenceInMilliseconds(data.start_time, now);
+        const beforeTimeTimeout = setTimeout(() => {
+          setStatus("ongoing");
+          setChatTimeStatus("Chat active")
+        }, delay);
+        return () => {
+          clearTimeout(beforeTimeTimeout);
+        };
       } else {
         const isBeforeEndtime = isBefore(now, data.end_time);
         if (isBeforeEndtime) {
+          setChatTimeStatus("Chat active")
           setStatus("ongoing");
           const delay = differenceInMilliseconds(data.end_time, now);
           const timeout = setTimeout(() => {
             setStatus("completed");
+            setChatTimeStatus(moment(data.end_time).fromNow())
           }, delay);
           return clearTimeout(timeout);
         } else {
-          setStatus('completed')
+          setChatTimeStatus(moment(data.end_time).fromNow())
+          setStatus("completed");
         }
       }
     }
   }, [data]);
 
-  useEffect(() => {
-    const now = new Date();
-    const startTime = data.booktime;
-    const endTime = data.end_time;
-
-    const isBeforeEndtime = isBefore(now, endTime);
-    const isAfterStartTime = isAfter(now, startTime);
-
-    const differenceInDaysVal = differenceInDays(now, startTime);
-    const isAfterEndTime = isAfter(now, endTime);
-    if (isAfterEndTime) {
-      setChatTimeStatus(moment(endTime).fromNow());
-    } else {
-      const interval = setInterval(() => {
-        if (differenceInDaysVal > 1) {
-          setChatTimeStatus(moment(data.date).format("DD/MM/YYYY"));
-        } else {
-          if (isAfterStartTime && isBeforeEndtime) {
-            setChatTimeStatus("Chat Active");
-          } else if (isAfterEndTime) {
-            setChatTimeStatus(moment(endTime).fromNow());
-            return () => {
-              clearInterval(interval);
-            };
-          } else {
-            setChatTimeStatus(moment(startTime).fromNow());
-          }
-        }
-      }, 10000);
-
-      return () => {
-        clearInterval(interval);
-      };
-    }
-  }, [data]);
 
   return (
     <>
