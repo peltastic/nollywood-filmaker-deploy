@@ -506,7 +506,7 @@ const ChatRoom = (props: Props) => {
                       >
                         <Image src={SendImg} alt="send-img" />
                       </button>
-                      <div className="text-2xl ml-2">
+                      {/* <div className="text-2xl ml-2">
                         <FileButtonComponent
                           accept="image/*"
                           setFile={(file) => {
@@ -523,7 +523,7 @@ const ChatRoom = (props: Props) => {
                         >
                           <MdInsertPhoto />
                         </FileButtonComponent>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </form>
