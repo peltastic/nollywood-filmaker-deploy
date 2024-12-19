@@ -61,8 +61,8 @@ const ChatRoom = (props: Props) => {
     {
       room: string;
       message: string;
-      type: "text";
       sender: {
+        type: "text";
         userid: string;
         name: string;
         role: "user" | "consultant" | "admin";
@@ -76,8 +76,8 @@ const ChatRoom = (props: Props) => {
       room: string;
       fileData: string | ArrayBuffer;
       fileName: string;
-      type: "img" | "file";
       sender: {
+        type: "img" | "file";
         userid: string;
         name: string;
         role: "user" | "consultant" | "admin";
@@ -158,8 +158,8 @@ const ChatRoom = (props: Props) => {
       const payload: {
         room: string;
         message: string;
-        type: "text";
         sender: {
+          type: "text";
           userid: string;
           name: string;
           role: "user" | "consultant" | "admin";
@@ -168,8 +168,8 @@ const ChatRoom = (props: Props) => {
       } = {
         room: props.orderId,
         message: inputValue,
-        type: "text",
         sender: {
+          type: "text",
           name: `${props.userData.fname} ${props.userData.lname}`,
           role: props.type,
           userid: props.userData.id,
@@ -438,8 +438,8 @@ const ChatRoom = (props: Props) => {
                             fileData: base64File,
                             fileName: fileInputValue.name,
                             room: props.orderId,
-                            type: fileType,
                             sender: {
+                              type: fileType,
                               name: `${props.userData.fname} ${props.userData.lname}`,
                               role: props.type,
                               userid: props.userData.id,

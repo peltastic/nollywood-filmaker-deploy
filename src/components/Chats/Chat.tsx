@@ -53,6 +53,7 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
         };
       } else {
         const isBeforeEndtime = isBefore(now, data.end_time);
+        console.log(isBeforeEndtime, data.end_time)
         if (isBeforeEndtime) {
           setChatTimeStatus("Chat active")
           setStatus("ongoing");
