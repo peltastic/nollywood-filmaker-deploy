@@ -51,27 +51,27 @@ const data: IAdminWithdrawalRequestColumnData[] = [
 const plate_data: {
   change?: "increase" | "decrease";
   title: string;
-  value: number;
+  value: string;
   percentage: number;
   id: string;
 }[] = [
   {
     title: "revenue",
-    value: 0,
+    value: "0",
     percentage: 36,
     change: "increase",
     id: "1",
   },
   {
     title: "pending commissions",
-    value: 0,
+    value: "0",
     percentage: 14,
     change: "decrease",
     id: "2",
   },
   {
     title: "claimed revenue",
-    value: 0,
+    value: "0",
     percentage: 36,
     change: "increase",
     id: "3",

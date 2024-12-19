@@ -171,3 +171,8 @@ export function downloadCSV(blob: Blob, filename?: string) {
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
 }
+
+
+export function numberWithCommas(value: number) {
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}

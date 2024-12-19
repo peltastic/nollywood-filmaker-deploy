@@ -24,34 +24,34 @@ type Props = {};
 const plate_data: {
   change?: "increase" | "decrease";
   title: string;
-  value: number;
+  value: string;
   percentage: number;
   id: string;
 }[] = [
   {
     title: "requests created",
-    value: 0,
+    value: "0",
     percentage: 36,
     change: "increase",
     id: "1",
   },
   {
     title: "chats created",
-    value: 0,
+    value: "0",
     percentage: 36,
     change: "increase",
     id: "4",
   },
   {
     title: "total spent",
-    value: 0,
+    value: "0",
     percentage: 14,
     change: "increase",
     id: "2",
   },
   {
     title: "average rating",
-    value: 0,
+    value: "0",
     percentage: 36,
     change: "increase",
     id: "3",

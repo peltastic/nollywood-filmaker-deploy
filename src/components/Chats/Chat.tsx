@@ -32,6 +32,7 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
       : "bg-light-yellow text-dark-yellow";
 
   useEffect(() => {
+    console.log("i ran")
     let beforeTimeTimeout: NodeJS.Timeout | undefined;
     let timeout: NodeJS.Timeout | undefined;
     if (data) {

@@ -29,7 +29,7 @@ type Props = {};
 const dashboard_data: {
   change?: "increase" | "decrease";
   title: string;
-  value: number;
+  value: string;
   percentage: number;
   id: string;
 }[] = [
@@ -37,28 +37,28 @@ const dashboard_data: {
     change: "increase",
     percentage: 36,
     title: "Accepted Requests",
-    value: 0,
+    value: "0",
     id: "1",
   },
   {
     change: "decrease",
     percentage: 14,
     title: "Rejected Requests",
-    value: 0,
+    value: "0",
     id: "2",
   },
   {
     change: "increase",
     percentage: 36,
     title: "Completed Requests",
-    value: 0,
+    value: "0",
     id: "3",
   },
   {
     change: "increase",
     percentage: 36,
     title: "Conversations held",
-    value: 0,
+    value: "0",
     id: "4",
   },
 ];
@@ -67,27 +67,27 @@ const dashboard_data: {
 const plate_data: {
   change?: "increase" | "decrease";
   title: string;
-  value: number;
+  value: string;
   percentage: number;
   id: string;
 }[] = [
   {
     title: "all-time revenue",
-    value: 0,
+    value: "0",
     percentage: 36,
     change: "increase",
     id: "1",
   },
   {
     title: "all-time pending revenue",
-    value: 0,
+    value: "0",
     percentage: 14,
     change: "decrease",
     id: "2",
   },
   {
     title: "all-time claimed revenue",
-    value: 0,
+    value: "0",
     percentage: 36,
     change: "increase",
     id: "3",

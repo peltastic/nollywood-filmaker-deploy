@@ -14,79 +14,28 @@ import { DataTable } from "@/components/Tables/DataTable";
 import { LineChart } from "@mantine/charts";
 import { Progress, Rating } from "@mantine/core";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReadMyScriptDarkImg from "/public/assets/services/read-my-script-dark.svg";
 import TestImage from "/public/assets/dashboard/issues-img-1.png";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { useProtectAdmin } from "@/hooks/useProtectAdminRoute";
+import {
+  useFetchTotalCustomersAndConsultantsQuery,
+  useFetchTransactionStatsQuery,
+} from "@/lib/features/admin/dashboard/stats";
+import DashboardStatsSkeleton from "@/components/Skeletons/DashboardStatsSkeleton";
+import { numberWithCommas } from "@/utils/helperFunction";
 
 type Props = {};
 
-const overview_data: {
+interface IOverviewData {
   change?: "increase" | "decrease";
   title: string;
-  value: number;
+  value: string;
   percentage: number;
   id: string;
-}[] = [
-  {
-    change: "increase",
-    percentage: 36,
-    title: "Accepted Requests",
-    value: 1800,
-    id: "1",
-  },
-  {
-    change: "decrease",
-    percentage: 14,
-    title: "Rejected Requests",
-    value: 200,
-    id: "2",
-  },
-  {
-    change: "increase",
-    percentage: 36,
-    title: "Completed Requests",
-    value: 1800,
-    id: "3",
-  },
-  {
-    change: "increase",
-    percentage: 36,
-    title: "Conversations held",
-    value: 1500,
-    id: "4",
-  },
-  {
-    change: "increase",
-    percentage: 36,
-    title: "Total Customers",
-    value: 280,
-    id: "",
-  },
-  {
-    change: "increase",
-    percentage: 36,
-    title: "Total Consultants",
-    value: 89,
-    id: "",
-  },
-  {
-    change: "increase",
-    percentage: 36,
-    title: "Total Revenue",
-    value: 200765878,
-    id: "",
-  },
-  {
-    change: "increase",
-    percentage: 36,
-    title: "Average Rating",
-    value: 0,
-    id: "",
-  },
-];
+}
 
 const linechartData = [
   {
@@ -161,7 +110,7 @@ const line_series = [
   },
 ];
 
-const data: {
+const user_data: {
   name: string;
   email: string;
   date: string;
@@ -306,10 +255,136 @@ const top_countries: {
 ];
 
 const AdminDashboardPage = (props: Props) => {
-  useProtectAdmin()
+  useProtectAdmin();
+  const [overviewData, setOverviewData] = useState<IOverviewData[]>([
+    {
+      change: "increase",
+      percentage: 0,
+      title: "Accepted Requests",
+      value: "0",
+      id: "1",
+    },
+    {
+      change: "increase",
+      percentage: 0,
+      title: "Rejected Requests",
+      value: "0",
+      id: "2",
+    },
+    {
+      change: "increase",
+      percentage: 0,
+      title: "Completed Requests",
+      value: "0",
+      id: "3",
+    },
+    {
+      change: "increase",
+      percentage: 0,
+      title: "Conversations held",
+      value: "0",
+      id: "4",
+    },
+    {
+      change: "increase",
+      percentage: 0,
+      title: "Total Customers",
+      value: "0",
+      id: "5",
+    },
+    {
+      change: "increase",
+      percentage: 0,
+      title: "Total Consultants",
+      value: "0",
+      id: "6",
+    },
+    {
+      change: "increase",
+      percentage: 0,
+      title: "Total Revenue",
+      value: "0",
+      id: "7",
+    },
+    {
+      change: "increase",
+      percentage: 0,
+      title: "Average Rating",
+      value: "0",
+      id: "8",
+    },
+  ]);
+
   const adminUserData = useSelector(
     (state: RootState) => state.persistedState.adminuser.user
   );
+  const { data, isFetching } = useFetchTotalCustomersAndConsultantsQuery();
+  const result = useFetchTransactionStatsQuery();
+
+  useEffect(() => {
+    if (data && result.data) {
+      setOverviewData([
+        {
+          change: "increase",
+          percentage: 0,
+          title: "Accepted Requests",
+          value: "0",
+          id: "1",
+        },
+        {
+          change: "increase",
+          percentage: 0,
+          title: "Rejected Requests",
+          value: "0",
+          id: "2",
+        },
+        {
+          change: "increase",
+          percentage: 0,
+          title: "Completed Requests",
+          value: numberWithCommas(result.data.completedCount),
+          id: "3",
+        },
+        {
+          change: "increase",
+          percentage: 0,
+          title: "Conversations held",
+          value: "0",
+          id: "4",
+        },
+        {
+          change: "increase",
+          percentage: 0,
+          title: "Total Customers",
+          value: data.totalUsers.toString(),
+          id: "5",
+        },
+        {
+          change: "increase",
+          percentage: 0,
+          title: "Total Consultants",
+          value: data.totalConsultants.toString(),
+          id: "6",
+        },
+        {
+          change: "increase",
+          percentage: 0,
+          title: "Total Revenue",
+          value: numberWithCommas(result.data.totalCompletedPrice),
+
+          id: "7",
+        },
+        {
+          change: "increase",
+          percentage: 0,
+          title: "Average Rating",
+          value: "0",
+          id: "8",
+        },
+      ]);
+    }
+  }, [data, result.data]);
+
   return (
     <ServiceLayout admin>
       <DashboardBodyLayout>
@@ -323,15 +398,30 @@ const AdminDashboardPage = (props: Props) => {
           <div className="mt-16">
             <DashboardPlate title="Overview">
               <div className="w-full my-8  md:grid-cols-2 xl:grid-cols-4 grid gap-6">
-                {overview_data.map((el) => (
-                  <DashboardInfoCard
-                    key={el.id}
-                    percentage={el.percentage}
-                    title={el.title}
-                    value={el.value}
-                    change={el.change}
-                  />
-                ))}
+                {isFetching || result.isFetching ? (
+                  <>
+                    <DashboardStatsSkeleton />
+                    <DashboardStatsSkeleton />
+                    <DashboardStatsSkeleton />
+                    <DashboardStatsSkeleton />
+                    <DashboardStatsSkeleton />
+                    <DashboardStatsSkeleton />
+                    <DashboardStatsSkeleton />
+                    <DashboardStatsSkeleton />
+                  </>
+                ) : (
+                  <>
+                    {overviewData.map((el) => (
+                      <DashboardInfoCard
+                        key={el.id}
+                        percentage={el.percentage}
+                        title={el.title}
+                        value={el.value}
+                        change={el.change}
+                      />
+                    ))}
+                  </>
+                )}
               </div>
             </DashboardPlate>
           </div>
@@ -346,7 +436,7 @@ const AdminDashboardPage = (props: Props) => {
             <div className=" mt-10 xl:mt-0 w-full xl:w-[35%]">
               <DashboardPlate title="Latest customers">
                 <div className="pb-7">
-                  {data.map((el) => (
+                  {user_data.map((el) => (
                     <CustomerFeed
                       date={el.date}
                       email={el.email}

@@ -4,6 +4,7 @@ import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import Scheduler from "@/components/Scheduler/Scheduler";
 import CalendarSkeleton from "@/components/Skeletons/CalendarSkeleton";
+import { useProtectRouteConsultantRoute } from "@/hooks/useProtectConsultantRoute";
 import { useLazyFetchCalendarAppointmentsQuery } from "@/lib/features/consultants/calendar/calendar";
 import { RootState } from "@/lib/store";
 import React, { useEffect, useState } from "react";
@@ -12,6 +13,7 @@ import { useSelector } from "react-redux";
 type Props = {};
 
 const ConsultantCalendarPage = (props: Props) => {
+  useProtectRouteConsultantRoute()
   const consultantId = useSelector(
     (state: RootState) => state.persistedState.consultant.user?.id
   );

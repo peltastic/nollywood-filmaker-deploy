@@ -4,7 +4,7 @@ import { IoIosArrowRoundDown, IoIosArrowRoundUp } from "react-icons/io";
 type Props = {
   change?: "increase" | "decrease";
   title: string
-  value: number
+  value: string
   percentage: number
 };
 

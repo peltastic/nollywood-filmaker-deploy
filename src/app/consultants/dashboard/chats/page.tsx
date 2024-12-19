@@ -6,6 +6,7 @@ import CustomerChatRight from "@/components/Chats/CustomerChat/CustomerChatRight
 import CustomerChatMiddle from "@/components/Chats/CustomerChat/CutomerChatMiddle";
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
+import { useProtectRouteConsultantRoute } from "@/hooks/useProtectConsultantRoute";
 import {
   useLazyFetchConsultantsConversationsQuery,
   useLazyFetchSingleConversationDataQuery,
@@ -19,6 +20,7 @@ import { useSelector } from "react-redux";
 type Props = {};
 
 const ConsultantChastPage = (props: Props) => {
+  useProtectRouteConsultantRoute()
   const [isTime, setIsTime] = useState<boolean>(false);
   const [sessionOver, setSessionOver] = useState<boolean>(false);
   const consultantId = useSelector(

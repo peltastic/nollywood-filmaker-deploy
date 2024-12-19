@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 type Props = {};
 
 const RequestHistoryPage = (props: Props) => {
+  useProtectRoute()
   const [reqHistoryData, setReqHistoryData] = useState<ReqHistoryColumnData[]>(
     []
   );

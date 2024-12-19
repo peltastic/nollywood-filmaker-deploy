@@ -55,27 +55,27 @@ const ConsultantDetailsPage = (props: Props) => {
   const plate_data: {
     change?: "increase" | "decrease";
     title: string;
-    value: number;
+    value: string;
     percentage: number;
     id: string;
   }[] = [
     {
       title: "all-time revenue",
-      value: 0,
+      value: "0",
       percentage: 36,
       change: "increase",
       id: "1",
     },
     {
       title: "all-time pending revenue",
-      value: 0,
+      value: "0",
       percentage: 36,
       change: "increase",
       id: "4",
     },
     {
       title: "all-time claimed revenue",
-      value: 0,
+      value: "0",
       percentage: 14,
       change: "increase",
       id: "2",

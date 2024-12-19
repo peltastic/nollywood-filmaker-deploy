@@ -25,6 +25,7 @@ import { useSearchParams } from "next/navigation";
 type Props = {};
 
 const DashboardHomePgae = (props: Props) => {
+  useProtectRoute()
   const [reqHistoryData, setReqHistoryData] = useState<ReqHistoryColumnData[]>(
     []
   );
