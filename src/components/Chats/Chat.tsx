@@ -28,9 +28,13 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
 
   const router = useRouter();
   const className =
-    status === "completed"
-      ? "bg-light-green text-dark-green border border-light-green"
-      : "bg-light-yellow text-dark-yellow border border-light-yellow";
+    status === "ready"
+      ? "bg-light-blue text-dark-blue"
+      : status === "completed"
+      ? "bg-light-green text-dark-green"
+      : status === "pending"
+      ? "bg-stroke-4 text-black-6"
+      : "bg-light-yellow text-dark-yellow";
 
   useEffect(() => {
     if (data) {
@@ -47,6 +51,8 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
             setStatus("completed");
           }, delay);
           return clearTimeout(timeout);
+        } else {
+          setStatus('completed')
         }
       }
     }
@@ -144,7 +150,7 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
             <div
               className={`${className} text-[0.75rem] font-semibold py-[0.15rem] px-2 rounded-full`}
             >
-              <p>{data.status}</p>
+              <p>{status}</p>
             </div>
           </div>
         </div>
