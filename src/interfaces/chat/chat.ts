@@ -42,7 +42,7 @@ export interface IChatMessages {
   room: string;
   message: string;
   timestamp: string;
-  type: "text" | "file";
+  type: "text" | "file" | "img";
   filename: string;
 }
 

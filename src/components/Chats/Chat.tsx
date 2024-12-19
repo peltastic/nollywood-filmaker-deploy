@@ -4,15 +4,13 @@ import AdminProfileImg from "/public/assets/dashboard/admin-profile-img.svg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import moment from "moment";
-import momentTz from "moment-timezone";
 import {
   differenceInDays,
-  differenceInHours,
-  differenceInMinutes,
+  differenceInMilliseconds,
   isAfter,
   isBefore,
 } from "date-fns";
-import { convertToAfricaLagosTz, truncateStr } from "@/utils/helperFunction";
+import { truncateStr } from "@/utils/helperFunction";
 
 type Props = {
   data: IChatData;
@@ -23,13 +21,36 @@ type Props = {
 };
 
 const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
+  const [status, setStatus] = useState<
+    "ready" | "ongoing" | "completed" | "pending"
+  >("pending");
   const [chatTimeStatus, setChatTimeStatus] = useState<string>("");
 
   const router = useRouter();
   const className =
-    data.status === "completed"
+    status === "completed"
       ? "bg-light-green text-dark-green border border-light-green"
       : "bg-light-yellow text-dark-yellow border border-light-yellow";
+
+  useEffect(() => {
+    if (data) {
+      const now = new Date();
+      const isBeforeStartTime = isBefore(now, data.start_time);
+      if (isBeforeStartTime) {
+        setStatus("pending");
+      } else {
+        const isBeforeEndtime = isBefore(now, data.end_time);
+        if (isBeforeEndtime) {
+          setStatus("ongoing");
+          const delay = differenceInMilliseconds(data.end_time, now);
+          const timeout = setTimeout(() => {
+            setStatus("completed");
+          }, delay);
+          return clearTimeout(timeout);
+        }
+      }
+    }
+  }, [data]);
 
   useEffect(() => {
     const now = new Date();
@@ -41,16 +62,29 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
 
     const differenceInDaysVal = differenceInDays(now, startTime);
     const isAfterEndTime = isAfter(now, endTime);
-    if (differenceInDaysVal > 1) {
-      setChatTimeStatus(moment(data.date).format("DD/MM/YYYY"));
+    if (isAfterEndTime) {
+      setChatTimeStatus(moment(endTime).fromNow());
     } else {
-      if (isAfterStartTime && isBeforeEndtime) {
-        setChatTimeStatus("Chat Active");
-      } else if (isAfterEndTime) {
-        setChatTimeStatus(moment(endTime).fromNow());
-      } else {
-        setChatTimeStatus(moment(startTime).fromNow());
-      }
+      const interval = setInterval(() => {
+        if (differenceInDaysVal > 1) {
+          setChatTimeStatus(moment(data.date).format("DD/MM/YYYY"));
+        } else {
+          if (isAfterStartTime && isBeforeEndtime) {
+            setChatTimeStatus("Chat Active");
+          } else if (isAfterEndTime) {
+            setChatTimeStatus(moment(endTime).fromNow());
+            return () => {
+              clearInterval(interval);
+            };
+          } else {
+            setChatTimeStatus(moment(startTime).fromNow());
+          }
+        }
+      }, 10000);
+
+      return () => {
+        clearInterval(interval);
+      };
     }
   }, [data]);
 

@@ -11,7 +11,7 @@ type Props = {
   prevUser: "admin" | "user" | "consultant" | null;
   index: number;
   lastmessage?: boolean;
-  type: "text" | "file";
+  type: "text" | "file" | "img";
   filename: string;
   file: string;
 };

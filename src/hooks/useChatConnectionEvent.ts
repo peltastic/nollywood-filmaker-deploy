@@ -15,7 +15,7 @@ export const useChatConnectionEvent = (
     if (sessionOver) return () => {};
     chat_socket.on("disconnect", () => {
       chat_socket.connect();
-      setReconnectMessage("No Internet Connection, Disconnected");
+      setReconnectMessage("Network error, Disconnected.");
     });
     return () => {
       chat_socket.off("disconnect");

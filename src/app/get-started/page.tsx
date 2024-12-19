@@ -26,9 +26,16 @@ const GetStartedPage = (props: Props) => {
     <HomeLayout>
       <div className="mx-auto md:absolute mt-[5rem] w-[80%] sm:w-[60%] md:w-auto md:-translate-x-1/2 md:-translate-y-1/2 md:left-1/2 md:top-1/2">
         <div className="text-black-2">
-          <h1 className="font-bold text-[1.5rem] mb-[4rem]">Welcome</h1>
-          <h1 className="font-bold text-[1.5rem]">What do you want to do?</h1>
-          <p className="text-[1.13rem]">Please select a service</p>
+          <h1 className="font-bold text-[1.5rem] mb-[4rem]">
+            Welcome to Nollywood Filmaker
+          </h1>
+          <h1 className="font-bold text-[1.3rem]">
+            Let us help you make successful films
+          </h1>
+          <p className="text-[1rem]">
+            You can choose one of film-related services or set a chat date with
+            one of our top-rated industry consultants.
+          </p>
         </div>
         <div className="flex flex-wrap md:flex-nowrap mt-10 gap-8">
           <button

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ChatMessage from "./ChatMessage";
 import AttachIcon from "/public/assets/chats/attach-icon.svg";
 import Image from "next/image";
@@ -26,9 +26,8 @@ import { useDisclosure } from "@mantine/hooks";
 import RateYourExperience from "./ModalComponents/RateYourExperience";
 import ModalComponent from "../Modal/Modal";
 import { differenceInMilliseconds, isAfter } from "date-fns";
-import Spinner from "@/app/Spinner/Spinner";
-import { useChatConnectionEvent } from "@/hooks/useChatConnectionEvent";
-import { notify } from "@/utils/notification";
+import { MdInsertPhoto } from "react-icons/md";
+import classes from "@/app/styles/Input.module.css";
 
 type Props = {
   type: "user" | "consultant" | "admin";
@@ -50,12 +49,40 @@ export interface IChatMessagesData {
 }
 
 const ChatRoom = (props: Props) => {
-  const { message, setReconnectMessage } = useChatConnectionEvent(
-    props.refreshChat,
-    props.sessionOver,
-    props.isTime
-  );
-  const [messageQueue, setMessageQueue] = useState<ChatPayload[]>([]);
+  const [missedPongs, setMissedPongs] = useState(0);
+  // const { message, setReconnectMessage } = useChatConnectionEvent(
+  //   props.refreshChat,
+  //   props.sessionOver,
+  //   props.isTime
+  // );
+  const [fileType, setFileType] = useState<"file" | "img">("file");
+
+  const messageQueueRef = useRef<
+    {
+      room: string;
+      message: string;
+      sender: {
+        userid: string;
+        name: string;
+        role: "user" | "consultant" | "admin";
+        chatRoomId: string;
+      };
+    }[]
+  >([]);
+
+  const fileQueueRef = useRef<
+    {
+      room: string;
+      fileData: string | ArrayBuffer;
+      fileName: string;
+      sender: {
+        userid: string;
+        name: string;
+        role: "user" | "consultant" | "admin";
+        chatRoomId: string;
+      };
+    }[]
+  >([]);
   const [fileInputValue, setFileInputValue] = useState<File | null>(null);
   const [base64File, setBase64File] = useState<string | ArrayBuffer | null>(
     null
@@ -65,6 +92,51 @@ const ChatRoom = (props: Props) => {
   const searchVal = search.get("chat");
 
   const [opened, { open, close }] = useDisclosure();
+
+  ////////////////CUSTOM CHAT LISTENERS - OPEN///////////////////////////
+
+  useEffect(() => {
+    chat_socket.on("connect", () => {
+      while (messageQueueRef.current.length > 0) {
+        const queuedMessage = messageQueueRef.current.shift();
+        if (queuedMessage) {
+          sendChatMessageEvent(queuedMessage);
+        }
+      }
+      while (fileQueueRef.current.length > 0) {
+        const fileMessage = fileQueueRef.current.shift();
+        if (fileMessage) {
+          sendFileMessage(fileMessage);
+        }
+      }
+    });
+
+    return () => {
+      chat_socket.off("connect");
+    };
+  }, []);
+
+  useEffect(() => {
+    chat_socket.on("reconnect_attempt", () => {
+      console.log("reconnecting...");
+    });
+    return () => {
+      chat_socket.off("reconnect_attempt");
+    };
+  }, []);
+  useEffect(() => {
+    chat_socket.on("reconnect", () => {
+      console.log("reconnected");
+    });
+    return () => {
+      chat_socket.off("reconnect");
+    };
+  }, []);
+
+  ////////////////CUSTOM CHAT LISTENERS - CLOSE///////////////////////
+
+  //join room
+
   useEffect(() => {
     if (props.sessionOver) return () => {};
     if (props.userData) {
@@ -77,9 +149,11 @@ const ChatRoom = (props: Props) => {
     }
   }, [props.isTime, props.sessionOver]);
 
+  //send message
+
   const sendMessageHandler = () => {
     if (props.userData) {
-      sendChatMessageEvent({
+      const payload = {
         room: props.orderId,
         message: inputValue,
         sender: {
@@ -88,7 +162,12 @@ const ChatRoom = (props: Props) => {
           userid: props.userData.id,
           chatRoomId: searchVal as string,
         },
-      });
+      };
+      if (chat_socket.connected) {
+        sendChatMessageEvent(payload);
+      } else {
+        messageQueueRef.current.push(payload);
+      }
       props.updateChatHandlerProps({
         text: inputValue,
         user: props.type,
@@ -101,27 +180,19 @@ const ChatRoom = (props: Props) => {
     }
   };
 
+  //custom ping interval
+
   useEffect(() => {
     if (props.sessionOver) return () => {};
     if (props.isTime) {
       const interval = setInterval(() => {
-        chat_socket.emit("triggerPing", {
-          room: props.orderId,
-        });
+        if (chat_socket.connected) {
+          chat_socket.emit("triggerPing", {
+            room: props.orderId,
+          });
+          setMissedPongs((prev) => prev + 1);
+        }
       }, 7000);
-      return () => {
-        clearInterval(interval);
-      };
-    }
-  }, [props.isTime, props.sessionOver]);
-  useEffect(() => {
-    if (props.sessionOver) return () => {};
-    if (props.isTime) {
-      const interval = setInterval(() => {
-        chat_socket.emit("ping", {
-          room: props.orderId,
-        });
-      }, 5000);
       return () => {
         clearInterval(interval);
       };
@@ -133,12 +204,15 @@ const ChatRoom = (props: Props) => {
     if (props.isTime) {
       chat_socket.on("roomPing", () => {
         console.log("received");
+        setMissedPongs(0);
       });
       return () => {
         chat_socket.off("roomPing");
       };
     }
   }, [props.isTime, props.sessionOver]);
+
+  //socket listener for new messages
 
   useEffect(() => {
     chat_socket.on(
@@ -169,13 +243,21 @@ const ChatRoom = (props: Props) => {
     );
 
     return () => {
-      console.log("disconnected - message");
       chat_socket.off("message");
     };
   }, []);
 
   useEffect(() => {
-    console.log("file - connected");
+    if (missedPongs > 3) {
+      chat_socket.connect();
+      setMissedPongs(0);
+      ("reconnecting..");
+    }
+  }, [missedPongs]);
+
+  //socket listener for new files
+
+  useEffect(() => {
     chat_socket.on(
       "fileMessage",
       (data: {
@@ -205,10 +287,11 @@ const ChatRoom = (props: Props) => {
       }
     );
     return () => {
-      console.log("disconnected - filemessage");
       chat_socket.off("fileMessage");
     };
   }, []);
+
+  //get base64 for chat files to be uploaded
 
   const getBase64 = (file: File) => {
     return new Promise((resolve) => {
@@ -222,6 +305,8 @@ const ChatRoom = (props: Props) => {
       };
     });
   };
+
+  //open feedback after chat session is over
 
   useEffect(() => {
     if (props.endTime && props.type === "user") {
@@ -250,12 +335,12 @@ const ChatRoom = (props: Props) => {
         <RateYourExperience orderId={props.orderId} close={close} />
       </ModalComponent>
       <div className=" py-6  h-full  relative bg-white">
-        {message && (
+        {/* {message && (
           <div className="h-[3rem] absolute left-0 top-0 w-full flex items-center px-8 text-white  bg-[#d14d4deb]">
             <p className="mr-4">
               {message}{" "}
               <span
-                className="underlin cursor-pointere"
+                className="underline cursor-pointer"
                 onClick={() => props.refreshChat()}
               >
                 Retry
@@ -269,7 +354,7 @@ const ChatRoom = (props: Props) => {
               <Image src={CancelImg} alt="cancel-img" />
             </div>
           </div>
-        )}
+        )} */}
         <div className="h-[45rem] overflow-scroll w-full">
           {props.data && (
             <>
@@ -336,7 +421,7 @@ const ChatRoom = (props: Props) => {
                     <UnstyledButton
                       clicked={() => {
                         if (base64File && props.userData) {
-                          sendFileMessage({
+                          const payload = {
                             fileData: base64File,
                             fileName: fileInputValue.name,
                             room: props.orderId,
@@ -346,14 +431,19 @@ const ChatRoom = (props: Props) => {
                               userid: props.userData.id,
                               chatRoomId: searchVal as string,
                             },
-                          });
+                          };
+                          if (chat_socket.connected) {
+                            sendFileMessage(payload);
+                          } else {
+                            fileQueueRef.current.push(payload);
+                          }
                           props.updateChatHandlerProps({
                             text: fileInputValue.name,
                             user: props.type,
                             id: Math.floor(Math.random() * 100000).toString(),
                             file: base64File as string,
                             filename: fileInputValue.name,
-                            type: "file",
+                            type: fileType,
                           });
                           setFileInputValue(null);
                         }
@@ -369,8 +459,9 @@ const ChatRoom = (props: Props) => {
               <div className="flex items-center">
                 <UnstyledButton>
                   <FileButtonComponent
-                    accept="application/pdf, .docx"
+                    accept=""
                     setFile={(file) => {
+                      setFileType("file");
                       setFileInputValue(file);
                       if (file) {
                         getBase64(file).then((res) => {
@@ -403,14 +494,37 @@ const ChatRoom = (props: Props) => {
                       onChange={(event) =>
                         setInputValue(event.currentTarget.value)
                       }
+                      classNames={{
+                        input: classes.input,
+                      }}
                     />
-                    <button
-                      onClick={sendMessageHandler}
-                      disabled={!inputValue}
-                      className="w-fit disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer absolute right-3 -translate-y-1/2 top-1/2"
-                    >
-                      <Image src={SendImg} alt="send-img" />
-                    </button>
+                    <div className=" flex items-center absolute right-6 -translate-y-1/2 top-1/2">
+                      <button
+                        onClick={sendMessageHandler}
+                        disabled={!inputValue}
+                        className="w-fit disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                      >
+                        <Image src={SendImg} alt="send-img" />
+                      </button>
+                      <div className="text-2xl ml-2">
+                        <FileButtonComponent
+                          accept="image/*"
+                          setFile={(file) => {
+                            setFileType("img");
+                            setFileInputValue(file);
+                            if (file) {
+                              getBase64(file).then((res) => {
+                                if (res) {
+                                  setBase64File(res as any);
+                                }
+                              });
+                            }
+                          }}
+                        >
+                          <MdInsertPhoto />
+                        </FileButtonComponent>
+                      </div>
+                    </div>
                   </div>
                 </form>
               </div>

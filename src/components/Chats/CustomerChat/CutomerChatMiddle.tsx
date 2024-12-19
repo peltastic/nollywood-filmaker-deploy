@@ -39,7 +39,7 @@ export interface ChatPayload {
   id: string;
   file: string;
   filename: string;
-  type: "text" | "file";
+  type: "text" | "file" | "img";
 }
 
 type Props = {

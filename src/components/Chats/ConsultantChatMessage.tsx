@@ -11,7 +11,7 @@ type Props = {
   prevUser: "admin" | "user" | "consultant" | null;
   index: number;
   lastmessage?: boolean;
-  type: "text" | "file";
+  type: "text" | "file" | "img";
   filename: string;
   file: string;
 };
@@ -72,8 +72,10 @@ const ConsultantChatMessage = ({
               : ""
           } ${
             type === "file" && user === "user"
-              ? "bg-admin-chat-bg mr-2 text-black hover:bg-gray-2 transition-all":
-              type === "file" &&  user !== "user" ? "bg-black-2 text-white hover:bg-black-9 transition-all"  : user === "user"
+              ? "bg-admin-chat-bg mr-2 text-black hover:bg-gray-2 transition-all"
+              : type === "file" && user !== "user"
+              ? "bg-black-2 text-white hover:bg-black-9 transition-all"
+              : user === "user"
               ? "bg-admin-chat-bg text-black"
               : "bg-black-3 text-white mr-2"
           } text-[0.88rem] py-2 px-2 rounded-xl max-w-[20rem]`}
@@ -89,6 +91,8 @@ const ConsultantChatMessage = ({
                   </div>
                 </div>
               </Link>
+            ) : type === "img" ? (
+              <div className="">Image</div> 
             ) : (
               <>
                 {text.split("\n").map((line, index) => (
