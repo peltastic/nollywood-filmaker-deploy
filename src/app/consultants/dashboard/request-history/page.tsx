@@ -56,7 +56,7 @@ const RequestHistoryPage = (props: Props) => {
       <DashboardBodyLayout>
         <div className="px-4 chatbp:px-0 py-4 chatbp:py-0">
           <DataTable
-            title="Requst History"
+            title="Request History"
             subtitle="Keep track of all your past requests"
             data={reqHistoryData}
             loaderLength={10}
