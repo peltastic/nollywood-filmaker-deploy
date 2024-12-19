@@ -4,6 +4,7 @@ import AdminProfileImg from "/public/assets/dashboard/admin-profile-img.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { FaDownload } from "react-icons/fa";
+import { AspectRatio } from "@mantine/core";
 
 type Props = {
   text: string;
@@ -14,6 +15,7 @@ type Props = {
   type: "text" | "file" | "img";
   filename: string;
   file: string;
+  userprofilepic?: string
 };
 
 const ConsultantChatMessage = ({
@@ -25,6 +27,7 @@ const ConsultantChatMessage = ({
   file,
   filename,
   type,
+  userprofilepic
 }: Props) => {
   const noPfpRow = prevUser === user;
   const ref = useRef<HTMLDivElement>(null);
@@ -54,11 +57,17 @@ const ConsultantChatMessage = ({
               </div>
             ) : (
               <div className="w-[2.5rem] h-[2.5rem] mr-3">
-                <Image
-                  src={TestImage}
-                  alt="test-image"
-                  className="w-full h-full"
-                />
+                {userprofilepic && (
+                  <AspectRatio ratio={1800 / 1800}>
+                    <Image
+                      src={userprofilepic}
+                      alt="test-image"
+                      className="w-full h-full rounded-full"
+                      width={100}
+                      height={100}
+                    />
+                  </AspectRatio>
+                )}
               </div>
             )}
           </>

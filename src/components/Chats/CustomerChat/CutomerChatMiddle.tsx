@@ -48,6 +48,7 @@ type Props = {
   admin?: boolean;
   orderId?: string | null;
   isFetching?: boolean;
+  profilepic?: string
   data?: IGetUserConversations;
   type: "user" | "consultant" | "admin";
   isTime: boolean;
@@ -72,6 +73,7 @@ const CustomerChatMiddle = ({
   orderId,
   refreshChat,
   refetch,
+  profilepic
 }: Props) => {
   const userData = useSelector(
     (state: RootState) => state.persistedState.user.user
@@ -451,6 +453,7 @@ const CustomerChatMiddle = ({
                       endTime={data.endTime}
                       sessionOver={sessionOver}
                       status={data.stattusof}
+                      profilepics={profilepic}
                     />
                   ) : (
                     <div className="h-[90vh] max-h-[120rem] w-full">

@@ -41,6 +41,7 @@ type Props = {
   refetch: () => void;
   refreshChat: () => void;
   status: "ongoing" | "completed" | "pending" | "ready";
+  profilepics?: string
 };
 
 export interface IChatMessagesData {
@@ -50,11 +51,6 @@ export interface IChatMessagesData {
 
 const ChatRoom = (props: Props) => {
   const [missedPongs, setMissedPongs] = useState(0);
-  // const { message, setReconnectMessage } = useChatConnectionEvent(
-  //   props.refreshChat,
-  //   props.sessionOver,
-  //   props.isTime
-  // );
   const [fileType, setFileType] = useState<"file" | "img">("file");
 
   const messageQueueRef = useRef<
@@ -400,6 +396,7 @@ const ChatRoom = (props: Props) => {
                         props.data[props.data.length - 1].id === el.id
                       }
                       index={index}
+                      userprofilepic={props.profilepics}
                     />
                   )}
                 </div>

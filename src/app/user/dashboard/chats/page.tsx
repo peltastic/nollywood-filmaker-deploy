@@ -12,7 +12,6 @@ import {
 } from "@/lib/features/users/dashboard/chat/chat";
 import { useLazyGetChatFilesQuery } from "@/lib/features/users/services/chat/chat";
 import { RootState } from "@/lib/store";
-import { convertToAfricaLagosTz } from "@/utils/helperFunction";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";

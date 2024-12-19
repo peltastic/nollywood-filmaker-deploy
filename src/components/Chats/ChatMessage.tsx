@@ -4,6 +4,9 @@ import AdminProfileImg from "/public/assets/dashboard/admin-profile-img.svg";
 import Image from "next/image";
 import { FaDownload } from "react-icons/fa";
 import Link from "next/link";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
+import { AspectRatio } from "@mantine/core";
 
 type Props = {
   text: string;
@@ -28,6 +31,9 @@ const ChatMessage = ({
 }: Props) => {
   const noPfpRow = prevUser === user;
   const ref = useRef<HTMLDivElement>(null);
+  const userImage = useSelector(
+    (state: RootState) => state.persistedState.user.user?.profilepics
+  );
 
   useEffect(() => {
     if (!ref.current) return () => {};
@@ -55,11 +61,17 @@ const ChatMessage = ({
               </div>
             ) : (
               <div className="w-[2.5rem] h-[2.5rem] mr-3">
-                <Image
-                  src={TestImage}
-                  alt="test-image"
-                  className="w-full h-full"
-                />
+                {userImage && (
+                  <AspectRatio ratio={1800 / 1800}>
+                    <Image
+                      src={userImage}
+                      alt="test-image"
+                      className="w-full h-full rounded-full"
+                      width={100}
+                      height={100}
+                    />
+                  </AspectRatio>
+                )}
               </div>
             )}
           </>

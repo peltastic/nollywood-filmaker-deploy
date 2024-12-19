@@ -114,6 +114,7 @@ const ConsultantChastPage = (props: Props) => {
               isFetching={result.isFetching}
               data={result.data}
               isTime={isTime}
+              profilepic={result.data?.userinfo.profilepics}
               sessionOver={sessionOver}
               setIsSessionOverProps={(val) => setSessionOver(val)}
               setIsTimeProps={(val) => setIsTime(val)}
