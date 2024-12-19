@@ -15,6 +15,8 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { AspectRatio } from "@mantine/core";
+import { useLazyGetCustomerRequestDetailQuery } from "@/lib/features/consultants/dashboard/request";
+import { truncateStr } from "@/utils/helperFunction";
 type Props = {
   close: () => void;
   opened?: string;
@@ -27,6 +29,7 @@ type Props = {
   orderId?: string;
   isLoading?: boolean;
   res?: IChatFiles[];
+  userProfilePic?: string;
 };
 
 export interface IFilesData {
@@ -65,18 +68,27 @@ const CustomerChatRight = ({
   type,
   isLoading,
   res,
+  userProfilePic,
 }: Props) => {
   const userData = useSelector(
     (state: RootState) => state.persistedState.user.user
   );
 
   const [chatFiles, setChatFiles] = useState<IChatFiles[]>([]);
+  const [getCustomerReqDetails, result] =
+    useLazyGetCustomerRequestDetailQuery();
 
   useEffect(() => {
     if (res) {
       setChatFiles(res);
     }
   }, [res]);
+
+  useEffect(() => {
+    if (orderId) {
+      getCustomerReqDetails(orderId);
+    }
+  }, [orderId]);
 
   return (
     <div
@@ -153,6 +165,41 @@ const CustomerChatRight = ({
             </div>
           </div>
         </section>
+      )}
+
+      {type === "consultant" && (
+        <div className="py-6 px-4 border-b border-b-stroke-8">
+          <h1 className=" text-[0.88rem] font-semibold mr-2">Chat info</h1>
+          {result.data && (
+            <div className="py-6">
+              <div className="flex items-center">
+                {userProfilePic && (
+                  <div className="w-[2.5rem] h-[2.5rem] mr-2">
+                    <AspectRatio ratio={1800 / 1800}>
+                      <Image
+                        src={userProfilePic}
+                        alt="user-profile-pic"
+                        width={100}
+                        height={100}
+                        className="w-full h-full rounded-full"
+                      />
+                    </AspectRatio>
+                  </div>
+                )}
+                <div className="text-[0.88rem]">
+                  <p>{result.data.user.fullName}</p>
+                  <p className="text-[0.75rem]">
+                   {result.data.user.email}
+                  </p>
+                </div>
+              </div>
+              <div className="text-[0.75rem] mt-6">
+                <h1 className="font-semibold">Summary</h1>
+                <p>{result.data.request.summary}</p>
+              </div>
+            </div>
+          )}
+        </div>
       )}
 
       <section className="py-6 px-4 border-b border-b-stroke-8 max-h-[25rem] overflow-y-scroll">

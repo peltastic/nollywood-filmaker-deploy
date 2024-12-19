@@ -103,7 +103,7 @@ const OrderDetailsBody = ({
               <div className="mt-4 border-b border-b-stroke-4 pb-4">
                 <h1 className="font-bold mb-1">Chat Time</h1>
                 <p className="text-[0.88rem]">
-                  {moment(booktime).format("LT")}&nbsp;WAT
+                  {moment(booktime).format("LT")}
                 </p>
               </div>
             )}

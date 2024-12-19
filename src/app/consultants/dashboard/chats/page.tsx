@@ -133,6 +133,8 @@ const ConsultantChastPage = (props: Props) => {
               sessionOver={sessionOver}
               res={res.data?.files}
               isLoading={res.isFetching}
+              orderId={result.data?.orderId}
+              userProfilePic={result.data?.userinfo.profilepics}
             />
           </section>
         </section>

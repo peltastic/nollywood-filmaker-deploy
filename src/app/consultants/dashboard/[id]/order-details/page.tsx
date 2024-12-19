@@ -12,9 +12,8 @@ import React, { useEffect, useState } from "react";
 type Props = {};
 
 const OrderDetails = (props: Props) => {
-  const search = useSearchParams();
 
-  const searchVal = search.get("status") || "Pending";
+
   const params = useParams();
 
   const [getCustomerReqDetails, { isFetching, data, isSuccess }] =
@@ -30,26 +29,6 @@ const OrderDetails = (props: Props) => {
     }
   }, [params]);
 
-  useEffect(() => {
-    if (data) {
-      if (data.request.nameofservice === "Chat With A Professional") {
-        setBodyData([
-          {
-            title: "Conversation title",
-            content: data.request.chat_title,
-          },
-          {
-            title: "Quick summary",
-            content: data.request.summary,
-          },
-          {
-            title: "Consultant type",
-            content: data.request.consultant,
-          },
-        ]);
-      }
-    }
-  }, [data]);
 
   return (
     <ServiceLayout consultant>

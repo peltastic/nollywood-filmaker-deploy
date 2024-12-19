@@ -4,12 +4,7 @@ import AdminProfileImg from "/public/assets/dashboard/admin-profile-img.svg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import moment from "moment";
-import {
-  differenceInDays,
-  differenceInMilliseconds,
-  isAfter,
-  isBefore,
-} from "date-fns";
+import { differenceInMilliseconds, isBefore } from "date-fns";
 import { truncateStr } from "@/utils/helperFunction";
 
 type Props = {
@@ -37,6 +32,8 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
       : "bg-light-yellow text-dark-yellow";
 
   useEffect(() => {
+    let beforeTimeTimeout: NodeJS.Timeout | undefined;
+    let timeout: NodeJS.Timeout | undefined;
     if (data) {
       const now = new Date();
       const isBeforeStartTime = isBefore(now, data.start_time);
@@ -44,33 +41,32 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
         setStatus("pending");
         setChatTimeStatus(moment(data.start_time).fromNow());
         const delay = differenceInMilliseconds(data.start_time, now);
-        const beforeTimeTimeout = setTimeout(() => {
+        beforeTimeTimeout = setTimeout(() => {
           setStatus("ongoing");
-          setChatTimeStatus("Chat active")
+          setChatTimeStatus("Chat active");
         }, delay);
-        return () => {
-          clearTimeout(beforeTimeTimeout);
-        };
       } else {
         const isBeforeEndtime = isBefore(now, data.end_time);
-        console.log(isBeforeEndtime, data.end_time)
         if (isBeforeEndtime) {
-          setChatTimeStatus("Chat active")
+          setChatTimeStatus("Chat active");
           setStatus("ongoing");
           const delay = differenceInMilliseconds(data.end_time, now);
-          const timeout = setTimeout(() => {
+          timeout = setTimeout(() => {
             setStatus("completed");
-            setChatTimeStatus(moment(data.end_time).fromNow())
+            setChatTimeStatus(moment(data.end_time).fromNow());
           }, delay);
           return clearTimeout(timeout);
         } else {
-          setChatTimeStatus(moment(data.end_time).fromNow())
+          setChatTimeStatus(moment(data.end_time).fromNow());
           setStatus("completed");
         }
       }
     }
-  }, [data]);
-
+    return () => {
+      if (beforeTimeTimeout) clearTimeout(beforeTimeTimeout);
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [data, status]);
 
   return (
     <>

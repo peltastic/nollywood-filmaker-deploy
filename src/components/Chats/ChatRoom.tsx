@@ -41,7 +41,7 @@ type Props = {
   refetch: () => void;
   refreshChat: () => void;
   status: "ongoing" | "completed" | "pending" | "ready";
-  profilepics?: string
+  profilepics?: string;
 };
 
 export interface IChatMessagesData {
@@ -192,9 +192,10 @@ const ChatRoom = (props: Props) => {
   //custom ping interval
 
   useEffect(() => {
+    let interval: NodeJS.Timeout | undefined;
     if (props.sessionOver) return () => {};
     if (props.isTime) {
-      const interval = setInterval(() => {
+      interval = setInterval(() => {
         if (chat_socket.connected) {
           chat_socket.emit("triggerPing", {
             room: props.orderId,
@@ -202,10 +203,12 @@ const ChatRoom = (props: Props) => {
           setMissedPongs((prev) => prev + 1);
         }
       }, 7000);
-      return () => {
-        clearInterval(interval);
-      };
     }
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
   }, [props.isTime, props.sessionOver]);
 
   useEffect(() => {
@@ -318,18 +321,22 @@ const ChatRoom = (props: Props) => {
   //open feedback after chat session is over
 
   useEffect(() => {
+    let timer: NodeJS.Timeout | undefined;
     if (props.endTime && props.type === "user") {
       const now = new Date();
       const isAfterEndTime = isAfter(now, props.endTime);
       if (isAfterEndTime) return () => {};
       const delay = differenceInMilliseconds(props.endTime, now);
-      const timer = setTimeout(() => {
+      timer = setTimeout(() => {
+
         open();
       }, delay);
-      return () => {
-        clearTimeout(timer);
-      };
     }
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
   }, [props.endTime]);
 
   return (

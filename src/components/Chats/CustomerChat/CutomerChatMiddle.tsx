@@ -154,7 +154,6 @@ const CustomerChatMiddle = ({
           setIsTimeProps(false);
           setIsSessionOverProps(true);
           if (orderId && type === "consultant") {
-            console.log("set-as-completed-triggered-timer")
             setAsCompleted(orderId);
           }
         }, delay);
@@ -216,7 +215,6 @@ const CustomerChatMiddle = ({
         },
         ...chat_data,
       ]);
-      const now = new Date();
     }
   }, [consultantRes.data]);
 
@@ -296,7 +294,7 @@ const CustomerChatMiddle = ({
     if (data?.endTime && type === "consultant" && orderId) {
       const isAfterEndtime = isAfter(now, data.endTime);
       if (isAfterEndtime && data.stattusof === "ongoing") {
-        console.log("set-as-completed-triggered")
+     
         setAsCompleted(orderId);
       }
     }
