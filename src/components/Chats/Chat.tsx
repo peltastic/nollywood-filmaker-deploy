@@ -123,7 +123,7 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
             <div
               className={`${className} text-[0.75rem] font-semibold py-[0.15rem] px-2 rounded-full`}
             >
-              <p>{data.status}</p>
+              <p>{status}</p>
             </div>
           </div>
         </div>
