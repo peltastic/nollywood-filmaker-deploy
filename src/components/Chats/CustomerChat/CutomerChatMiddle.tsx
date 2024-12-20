@@ -48,7 +48,7 @@ type Props = {
   admin?: boolean;
   orderId?: string | null;
   isFetching?: boolean;
-  profilepic?: string
+  profilepic?: string;
   data?: IGetUserConversations;
   type: "user" | "consultant" | "admin";
   isTime: boolean;
@@ -73,7 +73,7 @@ const CustomerChatMiddle = ({
   orderId,
   refreshChat,
   refetch,
-  profilepic
+  profilepic,
 }: Props) => {
   const userData = useSelector(
     (state: RootState) => state.persistedState.user.user
@@ -107,6 +107,7 @@ const CustomerChatMiddle = ({
   }, [data]);
 
   useEffect(() => {
+    let timeout: NodeJS.Timeout | undefined;
     if (data) {
       const now = new Date();
       const startTime = new Date(data.startTime);
@@ -120,15 +121,11 @@ const CustomerChatMiddle = ({
         setIsSessionOverProps(false);
 
         const delay = differenceInMilliseconds(startTime, now);
-        const timer = setTimeout(() => {
+        timeout = setTimeout(() => {
           notify("message", "Chat session has started");
           setIsTimeProps(true);
           setIsSessionOverProps(false);
         }, delay);
-
-        return () => {
-          clearTimeout(timer);
-        };
       } else if (isAfterStartTime && isBeforeEndtime) {
         setIsSessionOverProps(false);
         setIsTimeProps(true);
@@ -137,9 +134,15 @@ const CustomerChatMiddle = ({
         setIsTimeProps(false);
       }
     }
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
   }, [data]);
 
   useEffect(() => {
+    let timeout: NodeJS.Timeout | undefined;
     if (data) {
       const now = new Date();
       const startTime = data.startTime;
@@ -150,18 +153,20 @@ const CustomerChatMiddle = ({
 
       if (isBeforeStartTime || (isAfterStartTime && isBeforeEndtime)) {
         const delay = differenceInMilliseconds(endTime, now);
-        const timer = setTimeout(() => {
+        timeout = setTimeout(() => {
           setIsTimeProps(false);
           setIsSessionOverProps(true);
           if (orderId && type === "consultant") {
             setAsCompleted(orderId);
           }
         }, delay);
-        return () => {
-          clearTimeout(timer);
-        };
       }
     }
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
   }, [data]);
 
   const [chatData, setChatData] = useState<ChatPayload[]>([]);
@@ -294,7 +299,6 @@ const CustomerChatMiddle = ({
     if (data?.endTime && type === "consultant" && orderId) {
       const isAfterEndtime = isAfter(now, data.endTime);
       if (isAfterEndtime && data.stattusof === "ongoing") {
-     
         setAsCompleted(orderId);
       }
     }
