@@ -21,12 +21,13 @@ export const adminRequestApi = createApi({
         page?: number;
         limit?: number;
         sort?: string;
-        order?: "desc";
+        order?: "desc"
+        status?: string
       }
     >({
-      query: ({ limit, order, page, sort, type }) => {
+      query: ({ limit, order, page, sort, type, status }) => {
         return {
-          url: `/api/admin/pullrequests?order=${order}&status=pending`,
+          url: `/api/admin/pullrequests?order=${order}&status=${status}`,
         };
       },
     }),

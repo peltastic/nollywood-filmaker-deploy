@@ -21,6 +21,7 @@ import Image from "next/image";
 import UnstyledButton from "../Button/UnstyledButton";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@mantine/core";
+import SelectComponent from "../Select/SelectComponent";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -33,6 +34,11 @@ interface DataTableProps<TData, TValue> {
   clicked?: () => void;
   loaderLength?: number;
   isFetching?: boolean;
+  dropdownFilter?: boolean;
+  dropdowndata?: { label: string; value: string }[];
+  updateDropdownData?: (val: string) => void;
+  dropdownValue?: string;
+  dropdownDefaultVal?: string
 }
 
 export function DataTable<TData, TValue>({
@@ -46,6 +52,11 @@ export function DataTable<TData, TValue>({
   clicked,
   isFetching,
   loaderLength,
+  dropdownFilter,
+  dropdowndata,
+  updateDropdownData,
+  dropdownValue,
+  dropdownDefaultVal
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -76,6 +87,23 @@ export function DataTable<TData, TValue>({
               {showMoreBtnContent}
             </UnstyledButton>
           )}
+          {dropdownFilter &&
+            dropdowndata &&
+            updateDropdownData &&
+            dropdownValue  && (
+              <SelectComponent
+                value={dropdownValue}
+                data={dropdowndata}
+                label=""
+                defaultValue={dropdownDefaultVal}
+                placeholder=""
+                setValueProps={(val) => {
+                  if (val) {
+                    updateDropdownData(val);
+                  }
+                }}
+              />
+            )}
         </div>
       </div>
       {isFetching ? (

@@ -195,7 +195,7 @@ const CustomerChatRight = ({
               </div>
               <div className="text-[0.75rem] mt-6">
                 <h1 className="font-semibold">Summary</h1>
-                <p>{result.data.request.summary}</p>
+                <p>{truncateStr(result.data.request.summary, 500)}</p>
               </div>
             </div>
           )}

@@ -9,9 +9,30 @@ import { useLazyFetchCustomerRequestQuery } from "@/lib/features/admin/requests/
 import React, { useEffect, useState } from "react";
 
 type Props = {};
+const dropdowndata = [
+  {
+    label: "Pending",
+    value: "pending"
+  },
+  {
+    label: "Ongoing",
+    value: "ongoing"
+  },
+  {
+    label: "Ready",
+    value: "ready"
+  },
+  {
+    label: "Completed",
+    value: "completed"
+  }
+]
 
 const AdminRequests = (props: Props) => {
-  useProtectAdmin()
+  useProtectAdmin();
+  const [status, setStatus] = useState<
+    string
+  >("pending");
   const [fetchCustomerRequests, { data, isFetching }] =
     useLazyFetchCustomerRequestQuery();
   const [customerReqData, setCustomerReqData] = useState<ICustomerRequest[]>(
@@ -21,6 +42,7 @@ const AdminRequests = (props: Props) => {
   useEffect(() => {
     fetchCustomerRequests({
       order: "desc",
+      status
     });
   }, []);
 
@@ -38,6 +60,17 @@ const AdminRequests = (props: Props) => {
           loaderLength={10}
           title="Customer requests"
           columns={admin_reqs_columns}
+          dropdownDefaultVal={status}
+          dropdownValue={status}
+          dropdownFilter
+          updateDropdownData={(val) => {
+            setStatus(val)
+            fetchCustomerRequests({
+              order: "desc",
+              status: val
+            })
+          }}
+          dropdowndata={dropdowndata}
           data={customerReqData}
         />
       </DashboardBodyLayout>
