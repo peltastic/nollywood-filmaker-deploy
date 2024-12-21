@@ -148,7 +148,7 @@ const ChatRoom = (props: Props) => {
         userId: props.userData.id,
       });
     }
-  }, [props.isTime, props.sessionOver]);
+  }, [props.isTime, props.sessionOver, props.orderId]);
 
   //typing listeners
   useEffect(() => {
