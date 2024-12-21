@@ -114,6 +114,10 @@ const ServiceNavbar = (props: Props) => {
     (state: RootState) => state.persistedState.consultant.user
   );
 
+  const adminData = useSelector(
+    (state: RootState) => state.persistedState.consultant.user
+  );
+
   return (
     <>
       <Advert />
@@ -194,16 +198,22 @@ const ServiceNavbar = (props: Props) => {
                       fname={
                         props.consultant
                           ? consultantData?.fname || ""
+                          : props.admin
+                          ? adminData?.fname || ""
                           : userData?.fname || ""
                       }
                       lname={
                         props.consultant
                           ? consultantData?.lname || ""
+                          : props.admin
+                          ? adminData?.lname || ""
                           : userData?.lname || ""
                       }
                       ppicture={
                         props.consultant
                           ? consultantData?.profilepics || ""
+                          : props.admin
+                          ? adminData?.profilepics || ""
                           : userData?.profilepics || ""
                       }
                     />

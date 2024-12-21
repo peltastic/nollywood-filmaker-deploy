@@ -10,6 +10,7 @@ import {
 import {
   IGetUserConversations,
   IGetUserConversationsResponse,
+  IReportIssuePayload,
 } from "@/interfaces/dashboard/chat";
 import { baseQueryWithReauth } from "@/lib/baseQuery";
 import { formDataHandler } from "@/utils/helperFunction";
@@ -82,6 +83,13 @@ export const dashboardChatApi = createApi({
         method: "POST",
       }),
     }),
+    reportAnIssueAsCustomer: build.mutation<unknown, IReportIssuePayload>({
+      query: (body) => ({
+        url: "/api/chat/report/issue",
+        body,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -96,4 +104,5 @@ export const {
   useLazyExtentTimeQuery,
   useLazyExportUserChatQuery,
   useSendFeedbackMutation,
+  useReportAnIssueAsCustomerMutation
 } = dashboardChatApi;

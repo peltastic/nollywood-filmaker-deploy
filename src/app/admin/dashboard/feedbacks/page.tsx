@@ -9,7 +9,9 @@ import DashboardPlate from "@/components/Dashboard/DashboardPlate";
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import { DataTable } from "@/components/Tables/DataTable";
-import React from "react";
+import { useFetchAllFeedbackQuery } from "@/lib/features/admin/feedback/feedback";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
 
 type Props = {};
 
@@ -36,26 +38,48 @@ const ratings = [
   },
 ];
 
-const feedbacks: IFeedbackData[] = [
-  {
-    comment: "The service was splendid!",
-    customer: "Jane Cooper",
-    date: "22 Jan 2022",
-    email: "jgraham@example.com",
-    quality: 5,
-    speed: 5,
-  },
-  {
-    comment: "The service was splendid!",
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    quality: 5,
-    speed: 5,
-  },
-];
+// const feedbacks: IFeedbackData[] = [
+//   {
+//     comment: "The service was splendid!",
+//     customer: "Jane Cooper",
+//     date: "22 Jan 2022",
+//     email: "jgraham@example.com",
+//     quality: 5,
+//     speed: 5,
+//   },
+//   {
+//     comment: "The service was splendid!",
+//     customer: "Jenny Wilson",
+//     date: "22 Jan 2022",
+//     email: "w.lawson@example.com",
+//     quality: 5,
+//     speed: 5,
+//   },
+// ];
 
 const FeedbacksPage = (props: Props) => {
+  const [feedbackData, setFeedbackData] = useState<IFeedbackData[]>([]);
+  const { data, isFetching } = useFetchAllFeedbackQuery(null, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  useEffect(() => {
+    if (data) {
+      const refined_data: IFeedbackData[] = data.feedbacks.map((el) => {
+        return {
+          _id: el._id,
+          comment: el.reason,
+          customer: `Jane Copper`,
+          date: moment(el.createdAt).format("ll"),
+          email: "email@email.com",
+          orderId: el.orderId,
+          quality: el.quality,
+          speed: el.speed,
+        };
+      });
+      setFeedbackData(refined_data);
+    }
+  }, [data]);
   return (
     <ServiceLayout admin>
       <DashboardBodyLayout>
@@ -85,9 +109,11 @@ const FeedbacksPage = (props: Props) => {
           </DashboardPlate>
           <div className="mt-16">
             <DataTable
+              isFetching={isFetching}
+              loaderLength={10}
               title="Customer feedback"
               columns={feedback_column}
-              data={feedbacks}
+              data={feedbackData}
             />
           </div>
         </div>

@@ -7,7 +7,10 @@ import { useRouter } from "next/navigation";
 import TestImage from "/public/assets/dashboard/issues-img-1.png";
 
 export interface IAdminConsultantData {
+  id: string
   consultant: string;
+  fname: string
+  lname: string
   email: string;
   number: string;
   location: string;
@@ -35,8 +38,8 @@ export const admin_consultant_column: ColumnDef<IAdminConsultantData>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center w-[20rem] xl:w-auto">
-          <div className="mr-2">
-            <Image src={TestImage} alt="image" />
+           <div className="bg-black-3 font-bold text-[0.7rem] mr-2 h-[2.5rem] flex items-center justify-center w-[2.5rem] rounded-full text-white">
+            {row.original.fname[0]} {row.original.lname[0]}
           </div>
           <div className="">
             <h1 className=" text-black-4 font-medium">
@@ -84,6 +87,7 @@ export const admin_consultant_column: ColumnDef<IAdminConsultantData>[] = [
               {el}
             </div>
           ))}
+          <p>...</p>
         </div>
       );
     },

@@ -5,13 +5,14 @@ import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import { GoDotFill } from "react-icons/go";
 import UnstyledButton from "../Button/UnstyledButton";
 import { useRouter } from "next/navigation";
+import { AspectRatio } from "@mantine/core";
 
 export interface IssuesColumnData {
   customer: string;
   service_name: string;
   service_body: string;
   date_created: string;
-  status: string;
+  status: "ready" | "ongoing" | "completed" | "pending";
   image: string | StaticImport;
   email: string;
   admin?: boolean;
@@ -37,8 +38,16 @@ export const issues_columns: ColumnDef<IssuesColumnData>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center w-[15rem] xl:w-auto">
-          <div className="mr-2">
-            <Image src={row.original.image} alt="image" />
+          <div className="w-[2.5rem] h-[2.5rem] mr-2">
+            <AspectRatio ratio={1800/1800}>
+              <Image
+                src={row.original.image}
+                alt="image"
+                className="w-full h-full rounded-full"
+                width={100}
+                height={100}
+              />
+            </AspectRatio>
           </div>
           <div className="">
             <h1 className=" text-black-4 font-medium">
@@ -52,7 +61,7 @@ export const issues_columns: ColumnDef<IssuesColumnData>[] = [
   },
   {
     accessorKey: "service_name",
-    header: () => <div className="">Service name</div>,
+    header: () => <div className="">Issue</div>,
     cell: ({ row }) => {
       return (
         <div className="w-[27rem] py-4">
@@ -72,7 +81,7 @@ export const issues_columns: ColumnDef<IssuesColumnData>[] = [
     cell: ({ row }) => {
       return (
         <div className="w-[10rem] xl:w-auto">
-          <p className="text-gray-1">{row.getValue("date_created")}</p>;
+          <p className="text-gray-1">{row.getValue("date_created")}</p>
         </div>
       );
     },
@@ -108,7 +117,7 @@ export const issues_columns: ColumnDef<IssuesColumnData>[] = [
                 : `/user/dashboard/issues/details/1`
             )
           }
-          class="px-4 py-2 rounded-md items-center bg-black-3 text-white flex"
+          class="px-4 hover:bg-blue-1 transition-all py-2 rounded-md items-center bg-black-3 text-white flex"
         >
           <p className="mr-1 font-medium text-[0.88rem]">Open</p>
         </UnstyledButton>

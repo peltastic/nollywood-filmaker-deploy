@@ -10,13 +10,24 @@ export interface IGetUserConversations {
   startTime: string;
   endTime: string;
   booktime: string;
+  userId: string
   date: string;
   nameofservice: "Chat With A Professional";
   chat_title: string;
   userinfo: {
     profilepics: string;
   };
+  consultantId: string
 }
 export interface IGetUserConversationsResponse {
   requests: IGetUserConversations[];
+}
+
+
+export interface IReportIssuePayload {
+  uid: string
+  orderId: string
+  title: string
+  complain: string
+  cid: string
 }

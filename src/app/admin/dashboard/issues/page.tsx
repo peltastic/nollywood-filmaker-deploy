@@ -9,72 +9,48 @@ import { DataTable } from "@/components/Tables/DataTable";
 import Img1 from "/public/assets/dashboard/issues-img-1.png";
 import Img2 from "/public/assets/dashboard/issues-img-2.png";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useLazyFetchAllIssuesQuery } from "@/lib/features/admin/issues/issues";
+import { useProtectAdmin } from "@/hooks/useProtectAdminRoute";
+import moment from "moment";
 
 type Props = {};
 
 const AdminIssuesPage = (props: Props) => {
-  const data: IssuesColumnData[] = [
-    {
-      customer: "Jenny Wilson",
-      date_created: "22 Jan 2022",
-      email: "w.lawson@example.com",
-      image: Img1,
-      service_body:
-        "Hello, admin. I have dropped all the informatioon that was requested of me and have been in communication with the assigned consultant. Unfortunately, it seems this person doesn’t know what to do and instead of passing me oveert o someone who would, they’vr been draggibng their feety.",
-      service_name: "My consultant is slow",
-      status: "Pending",
-      admin: true
-    },
-    {
-        customer: "Devon Lane",
-        date_created: "26 Feb 2022",
-        email: "dat.roberts@example.com",
-        image: Img2,
-        service_body:
-        "Hello, admin. I have dropped all the informatioon that was requested of me and have been in communication with the assigned consultant. Unfortunately, it seems this person doesn’t know what to do and instead of passing me oveert o someone who would, they’vr been draggibng their feety.",
-        service_name: "My consultant is slow",
-        status: "Pending",
-        admin: true
-    },
-    {
-        customer: "Jane Cooper",
-        date_created: "26 Feb 2022",
-        email: "jgraham@example.com",
-        image: Img2,
-        service_body:
-        "Hello, admin. I have dropped all the informatioon that was requested of me and have been in communication with the assigned consultant. Unfortunately, it seems this person doesn’t know what to do and instead of passing me oveert o someone who would, they’vr been draggibng their feety.",
-        service_name: "My consultant is slow",
-        status: "Pending",
-        admin: true
-    },
-    {
-        customer: "Jane Cooper",
-        date_created: "26 Feb 2022",
-        email: "jgraham@example.com",
-        image: Img2,
-        service_body:
-        "Hello, admin. I have dropped all the informatioon that was requested of me and have been in communication with the assigned consultant. Unfortunately, it seems this person doesn’t know what to do and instead of passing me oveert o someone who would, they’vr been draggibng their feety.",
-        service_name: "My consultant is slow",
-        status: "Pending",
-        admin: true
-    },
-    {
-        customer: "Jane Cooper",
-        date_created: "26 Feb 2022",
-        email: "jgraham@example.com",
-        image: Img2,
-        service_body:
-        "Hello, admin. I have dropped all the informatioon that was requested of me and have been in communication with the assigned consultant. Unfortunately, it seems this person doesn’t know what to do and instead of passing me oveert o someone who would, they’vr been draggibng their feety.",
-        service_name: "My consultant is slow",
-        status: "Pending",
-        admin: true
-    },
-];
-return (
+  const [issuesData, setIssuesdData] = useState<IssuesColumnData[]>([]);
+  useProtectAdmin();
+  const [fetchAllIssues, { data, isFetching }] = useLazyFetchAllIssuesQuery();
+  useEffect(() => {
+    fetchAllIssues();
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      const refined_data: IssuesColumnData[] = data.issues.map((el) => {
+        return {
+          customer: `${el.uid.fname} ${el.uid.lname}`,
+          date_created: moment(el.createdAt).format("ll"),
+          email: el.uid.email,
+          image: el.uid.profilepics,
+          service_body: el.complain,
+          service_name: el.title,
+          status: el.status,
+          admin: true,
+        };
+      });
+      setIssuesdData(refined_data);
+    }
+  }, [data]);
+
+  return (
     <ServiceLayout admin>
       <DashboardBodyLayout>
-        <DataTable columns={issues_columns} data={data} />
+        <DataTable
+          columns={issues_columns}
+          isFetching={isFetching}
+          loaderLength={10}
+          data={issuesData}
+        />
       </DashboardBodyLayout>
     </ServiceLayout>
   );

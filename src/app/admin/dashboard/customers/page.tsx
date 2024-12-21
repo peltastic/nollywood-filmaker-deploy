@@ -6,6 +6,7 @@ import {
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import { DataTable } from "@/components/Tables/DataTable";
+import { useProtectAdmin } from "@/hooks/useProtectAdminRoute";
 import { useFetchAllCustomersQuery } from "@/lib/features/admin/customers/customers";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
@@ -13,6 +14,7 @@ import React, { useEffect, useState } from "react";
 type Props = {};
 
 const AdminCustomersPage = (props: Props) => {
+  useProtectAdmin()
   const [customerData, setCustomerData] = useState<IAdminCustomersColumnData[]>(
     []
   );

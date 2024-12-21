@@ -11,6 +11,8 @@ export interface IFeedbackData {
   speed: number;
   comment: string;
   date: string;
+  _id: string
+  orderId: string
 }
 
 export const feedback_column: ColumnDef<IFeedbackData>[] = [
@@ -75,7 +77,7 @@ export const feedback_column: ColumnDef<IFeedbackData>[] = [
       return (
         <div className="w-[20rem] xl:w-auto">
           <p className="text-gray-1 text-[0.88rem]">
-            {row.getValue("comment")}
+            {row.getValue("comment") || "N/A"}
           </p>
         </div>
       );

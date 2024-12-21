@@ -30,7 +30,6 @@ import { useDisclosure } from "@mantine/hooks";
 import InitializingTransactionModal from "@/components/Services/InitializingTransactionModal";
 import { chat_socket, primary_socket } from "@/lib/socket";
 import { nprogress } from "@mantine/nprogress";
-import RateYourExperience from "../ModalComponents/RateYourExperience";
 import { useSetChatAsCompleteMutation } from "@/lib/features/consultants/dashboard/request";
 
 export interface ChatPayload {
@@ -339,7 +338,14 @@ const CustomerChatMiddle = ({
         withCloseButton={false}
         size="xl"
       >
-        <ReportAnIssue close={funcs.close} />
+        {data && (
+          <ReportAnIssue
+            cid={data.consultantId}
+            orderId={data.orderId}
+            userId={data.userId}
+            close={funcs.close}
+          />
+        )}
       </ModalComponent>
       <div className=" bg-white border-r relative border-r-stroke-8 border-l border-l-stroke-8  h-full">
         {!orderId ? (

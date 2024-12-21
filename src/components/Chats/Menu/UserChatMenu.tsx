@@ -48,7 +48,11 @@ const UserChatMenu = (props: Props) => {
   useEffect(() => {
     if (result.isError) {
       nprogress.complete();
-      notify("error", "", (result.error as any)?.data?.message || "An Error Occcured");
+      notify(
+        "error",
+        "",
+        (result.error as any)?.data?.message || "An Error Occcured"
+      );
     }
 
     if (result.isSuccess) {
@@ -76,12 +80,14 @@ const UserChatMenu = (props: Props) => {
               </li>
             </UnstyledButton>
           )}
-          <li
-            onClick={props.openReportIssue}
-            className="py-2 px-4 hover:bg-gray-bg-1 transition-all rounded-md"
-          >
-            Make a report
-          </li>
+          {props.type === "user" && (
+            <li
+              onClick={props.openReportIssue}
+              className="py-2 px-4 hover:bg-gray-bg-1 transition-all rounded-md"
+            >
+              Make a report
+            </li>
+          )}
         </ul>
       </div>
     </>
