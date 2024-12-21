@@ -43,61 +43,61 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
       ? "bg-stroke-4 text-black-6"
       : "bg-light-yellow text-dark-yellow";
 
-  useEffect(() => {
-    const now = new Date();
-    if (data && orderId) {
-      const start_time = data.start_time;
-      const end_time = data.end_time;
-      const isAfterStartTime = isAfter(now, start_time);
-      const isBeforeEndTime = isBefore(now, end_time);
-      if (isAfterStartTime && isBeforeEndTime && orderId !== data.orderId) {
-        console.log("joined-room", data.name, {
-          room: data.orderId,
-          name:
-            type && type === "consultant"
-              ? `${consultantData?.fname} ${consultantData?.lname}`
-              : `${userData?.fname} ${userData?.lname}`,
-          role: type === "consultant" ? "consultant" : "user",
-          userId:
-            type && type === "consultant"
-              ? `${consultantData?.id}`
-              : `${userData?.id}`,
-        });
-        joinChatRoom({
-          room: data.orderId,
-          name:
-            type && type === "consultant"
-              ? `${consultantData?.fname} ${consultantData?.lname}`
-              : `${userData?.fname} ${userData?.lname}`,
-          role: type === "consultant" ? "consultant" : "user",
-          userId:
-            type && type === "consultant"
-              ? `${consultantData?.id}`
-              : `${userData?.id}`,
-        });
-      }
-    }
-  }, [data, orderId]);
+  // useEffect(() => {
+  //   const now = new Date();
+  //   if (data && orderId) {
+  //     const start_time = data.start_time;
+  //     const end_time = data.end_time;
+  //     const isAfterStartTime = isAfter(now, start_time);
+  //     const isBeforeEndTime = isBefore(now, end_time);
+  //     if (isAfterStartTime && isBeforeEndTime && orderId !== data.orderId) {
+  //       console.log("joined-room", data.name, {
+  //         room: data.orderId,
+  //         name:
+  //           type && type === "consultant"
+  //             ? `${consultantData?.fname} ${consultantData?.lname}`
+  //             : `${userData?.fname} ${userData?.lname}`,
+  //         role: type === "consultant" ? "consultant" : "user",
+  //         userId:
+  //           type && type === "consultant"
+  //             ? `${consultantData?.id}`
+  //             : `${userData?.id}`,
+  //       });
+  //       joinChatRoom({
+  //         room: data.orderId,
+  //         name:
+  //           type && type === "consultant"
+  //             ? `${consultantData?.fname} ${consultantData?.lname}`
+  //             : `${userData?.fname} ${userData?.lname}`,
+  //         role: type === "consultant" ? "consultant" : "user",
+  //         userId:
+  //           type && type === "consultant"
+  //             ? `${consultantData?.id}`
+  //             : `${userData?.id}`,
+  //       });
+  //     }
+  //   }
+  // }, [data, orderId]);
 
-  useEffect(() => {
-    const now = new Date();
-    if (data && orderId) {
-      const start_time = data.start_time;
-      const end_time = data.end_time;
-      const isAfterStartTime = isAfter(now, start_time);
-      const isBeforeEndTime = isBefore(now, end_time);
+  // useEffect(() => {
+  //   const now = new Date();
+  //   if (data && orderId) {
+  //     const start_time = data.start_time;
+  //     const end_time = data.end_time;
+  //     const isAfterStartTime = isAfter(now, start_time);
+  //     const isBeforeEndTime = isBefore(now, end_time);
       
-      if (isAfterStartTime && isBeforeEndTime && orderId !== data.orderId) {
-        chat_socket.on("message", (data) => {
-          console.log(data.message);
-          setnewMessage(data.message);
-        });
-        return () => {
-          chat_socket.off("message");
-        };
-      }
-    }
-  }, [orderId, data]);
+  //     if (isAfterStartTime && isBeforeEndTime && orderId !== data.orderId) {
+  //       chat_socket.on("message", (data) => {
+  //         console.log(data.message);
+  //         setnewMessage(data.message);
+  //       });
+  //       return () => {
+  //         chat_socket.off("message");
+  //       };
+  //     }
+  //   }
+  // }, [orderId, data]);
 
   useEffect(() => {
     let beforeTimeTimeout: NodeJS.Timeout | undefined;

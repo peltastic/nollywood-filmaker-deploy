@@ -30,6 +30,7 @@ import ModalComponent from "../Modal/Modal";
 import { differenceInMilliseconds, isAfter } from "date-fns";
 import { MdInsertPhoto } from "react-icons/md";
 import classes from "@/app/styles/Input.module.css";
+import { consultantProfileApi } from "@/lib/features/consultants/profile/profile";
 
 type Props = {
   type: "user" | "consultant" | "admin";
@@ -140,6 +141,7 @@ const ChatRoom = (props: Props) => {
 
   useEffect(() => {
     if (props.sessionOver || !props.isTime) return () => {};
+    console.log(props.orderId)
     if (props.userData) {
       joinChatRoom({
         room: props.orderId,
