@@ -9,6 +9,7 @@ type Props = {
   data: IChatData[];
   orderId?: string | null;
   type?: "consultant" | "admin";
+  
 };
 
 export interface IChatData {

@@ -4,8 +4,12 @@ import AdminProfileImg from "/public/assets/dashboard/admin-profile-img.svg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import moment from "moment";
-import { differenceInMilliseconds, isBefore } from "date-fns";
+import { differenceInMilliseconds, isAfter, isBefore } from "date-fns";
 import { truncateStr } from "@/utils/helperFunction";
+import { chat_socket, joinChatRoom } from "@/lib/socket";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
+import { Socket } from "socket.io-client";
 
 type Props = {
   data: IChatData;
@@ -20,6 +24,14 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
     "ready" | "ongoing" | "completed" | "pending"
   >("pending");
   const [chatTimeStatus, setChatTimeStatus] = useState<string>("");
+  const userData = useSelector(
+    (state: RootState) => state.persistedState.user.user
+  );
+  const consultantData = useSelector(
+    (state: RootState) => state.persistedState.consultant.user
+  );
+
+  const [newMessage, setnewMessage] = useState<string>("");
 
   const router = useRouter();
   const className =
@@ -32,7 +44,62 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
       : "bg-light-yellow text-dark-yellow";
 
   useEffect(() => {
-    console.log("i ran")
+    const now = new Date();
+    if (data && orderId) {
+      const start_time = data.start_time;
+      const end_time = data.end_time;
+      const isAfterStartTime = isAfter(now, start_time);
+      const isBeforeEndTime = isBefore(now, end_time);
+      if (isAfterStartTime && isBeforeEndTime && orderId !== data.orderId) {
+        console.log("joined-room", data.name, {
+          room: data.orderId,
+          name:
+            type && type === "consultant"
+              ? `${consultantData?.fname} ${consultantData?.lname}`
+              : `${userData?.fname} ${userData?.lname}`,
+          role: type === "consultant" ? "consultant" : "user",
+          userId:
+            type && type === "consultant"
+              ? `${consultantData?.id}`
+              : `${userData?.id}`,
+        });
+        joinChatRoom({
+          room: data.orderId,
+          name:
+            type && type === "consultant"
+              ? `${consultantData?.fname} ${consultantData?.lname}`
+              : `${userData?.fname} ${userData?.lname}`,
+          role: type === "consultant" ? "consultant" : "user",
+          userId:
+            type && type === "consultant"
+              ? `${consultantData?.id}`
+              : `${userData?.id}`,
+        });
+      }
+    }
+  }, [data, orderId]);
+
+  useEffect(() => {
+    const now = new Date();
+    if (data && orderId) {
+      const start_time = data.start_time;
+      const end_time = data.end_time;
+      const isAfterStartTime = isAfter(now, start_time);
+      const isBeforeEndTime = isBefore(now, end_time);
+      
+      if (isAfterStartTime && isBeforeEndTime && orderId !== data.orderId) {
+        chat_socket.on("message", (data) => {
+          console.log(data.message);
+          setnewMessage(data.message);
+        });
+        return () => {
+          chat_socket.off("message");
+        };
+      }
+    }
+  }, [orderId, data]);
+
+  useEffect(() => {
     let beforeTimeTimeout: NodeJS.Timeout | undefined;
     let timeout: NodeJS.Timeout | undefined;
     if (data) {
@@ -72,13 +139,14 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
   return (
     <>
       <div
-        onClick={() =>
+        onClick={() => {
+          setnewMessage("");
           router.push(
             type === "consultant"
               ? `/consultants/dashboard/chats?chat=${data.orderId}`
               : `/user/dashboard/chats?chat=${data.orderId}`
-          )
-        }
+          );
+        }}
         className={`${
           orderId === data.orderId ? "bg-[#615EF00F]" : ""
         } hidden chatbp:flex rounded-md transition-all hover:bg-[#615EF00F] items-start py-4 mb-2 px-4 cursor-pointer `}
@@ -91,16 +159,23 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
             {truncateStr(data.name, 15)}
           </h1>
           <p className="text-black-3 text-[0.75rem]">{data.service}</p>
-          <div className="flex items-center mt-3">
-            <div className="mr-2 text-black-3 rounded-full py-[0.15rem] border border-black-3 text-[0.75rem] font-medium px-3">
-              <p>Service</p>
+          {newMessage ? (
+            <div className="flex font-bold text-[0.88rem] items-center">
+              <p className="mr-1">{truncateStr(newMessage, 25)}</p>
+              <p className="text-blue-1">•</p>
             </div>
-            <div
-              className={`${className} text-[0.75rem] font-semibold py-[0.15rem] px-2 rounded-full`}
-            >
-              <p>{status}</p>
+          ) : (
+            <div className="flex items-center mt-3">
+              <div className="mr-2 text-black-3 rounded-full py-[0.15rem] border border-black-3 text-[0.75rem] font-medium px-3">
+                <p>Service</p>
+              </div>
+              <div
+                className={`${className} text-[0.75rem] font-semibold py-[0.15rem] px-2 rounded-full`}
+              >
+                <p>{status}</p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <div className="ml-auto font-semibold text-[#00000056] text-[0.88rem]">
           <p>{chatTimeStatus}</p>
@@ -118,16 +193,23 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
         <div className="">
           <h1 className="font-semibold text-[0.88rem]">{data.name}</h1>
           <p className="text-black-3 text-[0.75rem]">{data.service}</p>
-          <div className="flex items-center mt-3">
-            <div className="mr-2 text-black-3 rounded-full py-[0.15rem] border border-black-3 text-[0.75rem] font-medium px-3">
-              <p>Service</p>
+          {newMessage ? (
+            <div className="flex text-[0.88rem] items-center">
+              <p className="mr-1">{truncateStr(newMessage, 25)}</p>
+              <p className="text-blue-1">•</p>
             </div>
-            <div
-              className={`${className} text-[0.75rem] font-semibold py-[0.15rem] px-2 rounded-full`}
-            >
-              <p>{status}</p>
+          ) : (
+            <div className="flex items-center mt-3">
+              <div className="mr-2 text-black-3 rounded-full py-[0.15rem] border border-black-3 text-[0.75rem] font-medium px-3">
+                <p>Service</p>
+              </div>
+              <div
+                className={`${className} text-[0.75rem] font-semibold py-[0.15rem] px-2 rounded-full`}
+              >
+                <p>{status}</p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <div className="ml-auto font-semibold text-[#00000056] text-[0.88rem]">
           <p>{data.date}</p>

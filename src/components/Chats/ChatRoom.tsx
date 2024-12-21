@@ -9,9 +9,11 @@ import CancelImg from "/public/assets/cancel.svg";
 
 import {
   chat_socket,
+  emitTypingEvent,
   joinChatRoom,
   sendChatMessageEvent,
   sendFileMessage,
+  stopTypingEmit,
 } from "@/lib/socket";
 import { ChatPayload } from "./CustomerChat/CutomerChatMiddle";
 import ConsultantChatMessage from "./ConsultantChatMessage";
@@ -42,6 +44,7 @@ type Props = {
   refreshChat: () => void;
   status: "ongoing" | "completed" | "pending" | "ready";
   profilepics?: string;
+  setTypingPtops: (val: boolean) => void;
 };
 
 export interface IChatMessagesData {
@@ -136,7 +139,7 @@ const ChatRoom = (props: Props) => {
   //join room
 
   useEffect(() => {
-    if (props.sessionOver) return () => {};
+    if (props.sessionOver || !props.isTime) return () => {};
     if (props.userData) {
       joinChatRoom({
         room: props.orderId,
@@ -147,9 +150,31 @@ const ChatRoom = (props: Props) => {
     }
   }, [props.isTime, props.sessionOver]);
 
+  //typing listeners
+  useEffect(() => {
+    if (props.isTime) {
+      chat_socket.on("stoptyping", (data) => {
+        if (data.userId !== props.userData?.id) {
+          props.setTypingPtops(false);
+        }
+      });
+      chat_socket.on("istyping", (data) => {
+        if (data.userId !== props.userData?.id) {
+          props.setTypingPtops(true);
+        }
+      });
+
+      return;
+    }
+  }, [props.isTime]);
+
   //send message
 
   const sendMessageHandler = () => {
+    stopTypingEmit(
+      props.orderId,
+      `${props.userData?.id}`
+    );
     if (props.userData) {
       const payload: {
         room: string;
@@ -328,7 +353,6 @@ const ChatRoom = (props: Props) => {
       if (isAfterEndTime) return () => {};
       const delay = differenceInMilliseconds(props.endTime, now);
       timer = setTimeout(() => {
-
         open();
       }, delay);
     }
@@ -500,6 +524,7 @@ const ChatRoom = (props: Props) => {
                     <Textarea
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {
+                          
                           e.preventDefault();
                           sendMessageHandler();
                         }
@@ -509,9 +534,17 @@ const ChatRoom = (props: Props) => {
                       size="md"
                       radius={"md"}
                       value={inputValue}
-                      onChange={(event) =>
-                        setInputValue(event.currentTarget.value)
-                      }
+                      onChange={(event) => {
+                        console.log(props.orderId)
+                        emitTypingEvent(props.orderId, `${props.userData?.id}`);
+                        setInputValue(event.currentTarget.value);
+                        setTimeout(() => {
+                          stopTypingEmit(
+                            props.orderId,
+                            `${props.userData?.id}`
+                          );
+                        }, 3000);
+                      }}
                       classNames={{
                         input: classes.input,
                       }}

@@ -89,6 +89,7 @@ const CustomerChatMiddle = ({
   const [extentionValue, setExtensionValue] = useState<string>("");
   const [transref, setTransRef] = useState<string>("");
   const [setAsCompleted, completedRes] = useSetChatAsCompleteMutation();
+  const [isTyping, setIsTyping] = useState<boolean>(false);
 
   const [paymentStatus, setPaymentStatus] = useState<
     "initialized" | "pending" | "completed"
@@ -375,7 +376,11 @@ const CustomerChatMiddle = ({
                       {data?.chat_title && truncateStr(data?.chat_title, 25)}
                     </h1>
                     <p className="text-[#00000082] text-[0.75rem] font-semibold">
-                      {data?.nameofservice}
+                      {isTyping ? (
+                        <span className="italic">Typing...</span>
+                      ) : (
+                        <>{data?.nameofservice}</>
+                      )}
                     </p>
                   </div>
                   <div className="flex items-center ml-auto">
@@ -438,6 +443,7 @@ const CustomerChatMiddle = ({
                 <div className="h-full bg-white relative">
                   {data && (isTime || sessionOver) ? (
                     <ChatRoom
+                      setTypingPtops={(val) => setIsTyping(val)}
                       refreshChat={() => {
                         if (type === "user") {
                           fetchUserChatMessages(data.orderId);

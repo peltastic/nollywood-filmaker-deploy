@@ -49,3 +49,21 @@ export function sendFileMessage(data: {
 }) {
   chat_socket.emit("sendFile", data);
 }
+
+export function emitTypingEvent(room: string, userId: string) {
+  chat_socket.emit("typing", {
+    room,
+    sender: {
+      userId,
+    },
+  });
+}
+
+export function stopTypingEmit(room: string, userId: string) {
+  chat_socket.emit("stopped", {
+    room,
+    sender: {
+      userId,
+    },
+  });
+}
