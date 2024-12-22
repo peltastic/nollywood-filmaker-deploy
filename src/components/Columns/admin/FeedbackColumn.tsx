@@ -2,7 +2,7 @@ import CheckboxComponent from "@/components/Checkbox/Checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import TestImage from "/public/assets/dashboard/issues-img-1.png";
-import { Rating } from "@mantine/core";
+import { AspectRatio, Rating } from "@mantine/core";
 
 export interface IFeedbackData {
   customer: string;
@@ -11,8 +11,9 @@ export interface IFeedbackData {
   speed: number;
   comment: string;
   date: string;
-  _id: string
-  orderId: string
+  _id: string;
+  orderId: string;
+  image: string;
 }
 
 export const feedback_column: ColumnDef<IFeedbackData>[] = [
@@ -35,8 +36,18 @@ export const feedback_column: ColumnDef<IFeedbackData>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center py-4  w-[20rem] xl:w-auto">
-          <div className="mr-2">
-            <Image src={TestImage} alt="image" />
+          <div className="mr-2 w-[2.5rem] h-[2.5rem]">
+            {row.original.image && (
+              <AspectRatio ratio={1800 / 1800}>
+                <Image
+                  src={row.original.image}
+                  height={100}
+                  width={100}
+                  className="w-full h-full rounded-full"
+                  alt="image"
+                />
+              </AspectRatio>
+            )}
           </div>
           <div className="">
             <h1 className=" text-black-4 font-medium">

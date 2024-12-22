@@ -1,11 +1,16 @@
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CancelImg from "/public/assets/cancel.svg";
 import { MdInfoOutline } from "react-icons/md";
 import { Form, Formik } from "formik";
 import Field from "../Field/Field";
 import Expertise from "../Expertise/Expertise";
 import UnstyledButton from "../Button/UnstyledButton";
+import { createConsultantSchema } from "@/utils/validation/consultant";
+import { useCreateConsultantMutation } from "@/lib/features/admin/consultants/consultants";
+import Spinner from "@/app/Spinner/Spinner";
+import { nprogress } from "@mantine/nprogress";
+import { notify } from "@/utils/notification";
 
 type Props = {
   close: () => void;
@@ -13,6 +18,35 @@ type Props = {
 };
 
 const CreateNewConsultantModal = (props: Props) => {
+  const [createConsultant, { isLoading, isError, error, isSuccess }] =
+    useCreateConsultantMutation();
+  const [expertiseData, setExpertiseData] = useState<string[]>([]);
+  const setExpertiseHandler = (value: string, type: "add" | "remove") => {
+    const data = [...expertiseData];
+    if (type === "add") {
+      data.push(value);
+    } else {
+      const index = expertiseData.indexOf(value);
+      data.splice(index, 1);
+    }
+    setExpertiseData(data);
+  };
+  useEffect(() => {
+    if (isError) {
+      nprogress.complete();
+      notify("error", "", (error as any).data?.message || "An Error Occured");
+    }
+
+    if (isSuccess) {
+      nprogress.complete();
+      notify(
+        "success",
+        "Consultant created successfully",
+        "An email has been sent to the consultant to create their password"
+      );
+      props.close();
+    }
+  }, [isError, isSuccess]);
   return (
     <section className="px-2 xs:px-6 py-6">
       <div className="flex">
@@ -44,74 +78,103 @@ const CreateNewConsultantModal = (props: Props) => {
           state: "",
           country: "",
         }}
-        onSubmit={() => {}}
+        onSubmit={({ first_name, country, email, last_name, phone, state }) => {
+          nprogress.start();
+          createConsultant({
+            country,
+            email,
+            expertise: expertiseData,
+            fname: first_name,
+            lname: last_name,
+            phone,
+            state,
+          });
+        }}
+        validationSchema={createConsultantSchema}
       >
-        <Form className="mt-6">
-          <div className="grid gap-8 md:grid-cols-2 my-[2rem]">
-            <div className="">
-              <Field
-                placeholder=""
-                classname=" w-full"
-                label="First name"
-                name="first_name"
+        {({ isValid }) => (
+          <Form className="mt-6">
+            <div className="grid gap-8 md:grid-cols-2 my-[2rem]">
+              <div className="">
+                <Field
+                  placeholder=""
+                  classname=" w-full"
+                  label="First name"
+                  name="first_name"
+                />
+              </div>
+              <div className="">
+                <Field
+                  placeholder=""
+                  classname="w-full"
+                  label="Last name"
+                  name="last_name"
+                />
+              </div>
+              <div className="">
+                <Field
+                  placeholder=""
+                  classname=" w-full"
+                  label="Email"
+                  name="email"
+                />
+              </div>
+              <div className="">
+                <Field
+                  placeholder=""
+                  classname="w-full"
+                  label="Phone"
+                  name="phone"
+                />
+              </div>
+              <div className="">
+                <Field
+                  placeholder=""
+                  classname=" w-full"
+                  label="State"
+                  name="state"
+                />
+              </div>
+              <div className="">
+                <Field
+                  placeholder=""
+                  classname="w-full"
+                  label="Country"
+                  name="country"
+                />
+              </div>
+            </div>
+            <div className="mt-10">
+              <Expertise
+                setExpertise={setExpertiseHandler}
+                data={expertiseData}
+                small
+                maximum
               />
             </div>
-            <div className="">
-              <Field
-                placeholder=""
-                classname="w-full"
-                label="Last name"
-                name="last_name"
-              />
+            <div className="  w-full flex flex-wrap mt-[5rem]">
+              <UnstyledButton
+                clicked={props.close}
+                class="mb-4 xs:mb-0 py-2 rounded-md px-4 border-stroke-2 w-full xs:w-auto border ml-auto xs:mr-4"
+              >
+                Cancel
+              </UnstyledButton>
+              <UnstyledButton
+                disabled={!isValid || isLoading || expertiseData.length < 1}
+                class="flex py-2 px-4 transition-all rounded-md w-full xs:w-[8rem] justify-center items-center text-white border border-black-3 disabled:border-black-2  bg-black-3 disabled:opacity-50 text-[0.88rem]"
+              >
+                {" "}
+                {isLoading ? (
+                  <div className="py-1 w-[1rem]">
+                    <Spinner />
+                  </div>
+                ) : (
+                  <p>Create</p>
+                )}
+              </UnstyledButton>
             </div>
-            <div className="">
-              <Field
-                placeholder=""
-                classname=" w-full"
-                label="Email"
-                name="email"
-              />
-            </div>
-            <div className="">
-              <Field
-                placeholder=""
-                classname="w-full"
-                label="Last name"
-                name="phone"
-              />
-            </div>
-            <div className="">
-              <Field
-                placeholder=""
-                classname=" w-full"
-                label="State"
-                name="state"
-              />
-            </div>
-            <div className="">
-              <Field
-                placeholder=""
-                classname="w-full"
-                label="Country"
-                name="country"
-              />
-            </div>
-          </div>
-          <div className="mt-10">
-            <Expertise setExpertise={(value, type) => {}} data={[]} small />
-          </div>
-          <div className="  w-full flex flex-wrap mt-[5rem]">
-            <UnstyledButton
-              clicked={props.close}
-              class="mb-4 xs:mb-0 py-2 rounded-md px-4 border-stroke-2 w-full xs:w-auto border ml-auto xs:mr-4"
-            >
-              Cancel
-            </UnstyledButton>
-            <UnstyledButton class="flex py-2 px-4 transition-all rounded-md w-full xs:w-auto justify-center items-center text-white border border-black-3 disabled:border-black-2  bg-black-3 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2">
-              <p>Create</p>
-            </UnstyledButton>
-          </div>
-        </Form>
+          </Form>
+        )}
       </Formik>
     </section>
   );

@@ -5,6 +5,13 @@ export interface FeedbackResponse {
       quality: number
       speed: number
       reason: string
-      createdAt: string  
+      createdAt: string
+      userId: {
+        fname: string
+        lname: string
+        phone: string
+        email: string
+        profilepics: string
+      }
     }[]
 }

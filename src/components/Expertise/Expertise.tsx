@@ -4,6 +4,7 @@ type Props = {
   setExpertise: (value: string, type: "add" | "remove") => void;
   data: string[];
   small?: boolean
+  maximum?: boolean
 };
 
 const expertise = [
@@ -14,7 +15,7 @@ const expertise = [
   "Editor",
   "Writer",
 ];
-const Expertise = ({ data, setExpertise, small }: Props) => {
+const Expertise = ({ data, setExpertise, small, maximum }: Props) => {
   return (
     <div className="flex flex-wrap gap-y-6 gap-x-3">
       {expertise.map((el) => (
@@ -23,7 +24,7 @@ const Expertise = ({ data, setExpertise, small }: Props) => {
             if (data.includes(el)) {
               return setExpertise(el, "remove");
             }
-            if (data.length >= 3) {
+            if (data.length >= 3 && !maximum) {
               return;
             }
             setExpertise(el, "add");

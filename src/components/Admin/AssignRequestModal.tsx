@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import CancelImg from "/public/assets/cancel.svg";
 import { MdInfoOutline } from "react-icons/md";
 import CustomSelect from "../Select/CustomSelect";
@@ -8,6 +8,8 @@ import {
   useAppointConsultantMutation,
   useAssignServiceToConsultantMutation,
   useFetchConsultantsByExpertiseQuery,
+  useLazyFetchConsultantsByExpertiseQuery,
+  useLazyGetConsultantForTaskQuery,
 } from "@/lib/features/admin/requests/request";
 import { Skeleton } from "@mantine/core";
 import Spinner from "@/app/Spinner/Spinner";
@@ -49,9 +51,9 @@ const AssignRequestModal = (props: Props) => {
   >([]);
   const [appointConsultant, result] = useAppointConsultantMutation();
   const [consultantId, setConsultantId] = useState<string>("");
-  const { data, isFetching } = useFetchConsultantsByExpertiseQuery(
-    props.expertise
-  );
+  const [fetchConsultantByExpertise, { data, isFetching }] =
+    useLazyFetchConsultantsByExpertiseQuery();
+  const [fetchConsultantByTask, res] = useLazyGetConsultantForTaskQuery();
   const [assign, assignRes] = useAssignServiceToConsultantMutation();
 
   useEffect(() => {
@@ -61,16 +63,49 @@ const AssignRequestModal = (props: Props) => {
         value: string;
         caption?: string;
         info?: string;
+        image?: ReactNode;
       }[] = data.consultants.map((el) => {
         return {
           label: `${el.fname} ${el.lname}`,
           value: el._id,
           caption: props.expertise,
+          image: (
+            <div className="bg-black-3 font-bold text-[0.7rem] mr-1 h-[2rem] flex items-center justify-center w-[2rem] rounded-full text-white">
+              {el.fname[0]} {el.lname[0]}
+            </div>
+          ),
         };
       });
       setDropDownData(transformed_data);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (res.data) {
+      const transformed_data = res.data.consultants.map((el) => {
+        return {
+          label: `${el.fname} ${el.lname}`,
+          value: el._id,
+          image: (
+            <div className="bg-black-3 font-bold text-[0.7rem] mr-1 h-[2rem] flex items-center justify-center w-[2rem] rounded-full text-white">
+              {el.fname[0]} {el.lname[0]}
+            </div>
+          ),
+        };
+      });
+      setDropDownData(transformed_data);
+    }
+  }, [res.data]);
+
+  useEffect(() => {
+    if (
+      props.chat_appointment_data.nameofservice === "Chat With A Professional"
+    ) {
+      fetchConsultantByExpertise(props.expertise);
+    } else {
+      fetchConsultantByTask();
+    }
+  }, [props.chat_appointment_data.nameofservice]);
 
   useEffect(() => {
     if (result.isError) {
@@ -133,7 +168,7 @@ const AssignRequestModal = (props: Props) => {
         </div>
       </div>
       <div className=" mt-4">
-        {isFetching ? (
+        {isFetching || res.isFetching ? (
           <Skeleton height={50} />
         ) : (
           <CustomSelect

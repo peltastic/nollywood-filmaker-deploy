@@ -10,14 +10,9 @@ import { useDisclosure } from "@mantine/hooks";
 import ModalComponent from "../Modal/Modal";
 import ResolveRequestModal from "../Consultants/ResolveRequestModal";
 import AssignRequestModal from "../Admin/AssignRequestModal";
-import {
-  useAcceptRequestMutation,
-  useDeclineRequestMutation,
-} from "@/lib/features/consultants/dashboard/request";
+
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
-import { nprogress } from "@mantine/nprogress";
-import { notify } from "@/utils/notification";
 import { capitalizeFirstLetter, isResolveFile } from "@/utils/helperFunction";
 import ConsultantMenuContent from "../Menu/MenuContent/ConsultantMenuContent";
 import SetChatDate from "../ModalPages/SetChatDate";

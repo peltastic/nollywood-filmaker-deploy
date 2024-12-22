@@ -82,7 +82,7 @@ export function DataTable<TData, TValue>({
                 }
                 clicked && clicked();
               }}
-              class="mt-8 sm:mt-0 bg-black-3 text-white px-4 py-2 rounded-md text-[0.88rem]"
+              class="mt-8 sm:mt-0 bg-black-3 text-white px-4 hover:bg-blue-1 transition-all py-2 rounded-md text-[0.88rem]"
             >
               {showMoreBtnContent}
             </UnstyledButton>

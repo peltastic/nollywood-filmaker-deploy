@@ -12,6 +12,8 @@ import { RootState } from "@/lib/store";
 import { notify } from "@/utils/notification";
 import { nprogress } from "@mantine/nprogress";
 import Spinner from "@/app/Spinner/Spinner";
+import { useLazyGetSingleConsultantAvailabilityQuery } from "@/lib/features/consultants/dashboard/request";
+import { isBefore } from "date-fns";
 
 type Props = {
   close: () => void;
@@ -29,6 +31,7 @@ type Props = {
       | "Create a Production budget";
     summary?: string;
     userId: string;
+    consultant_id?: string;
     orderId: string;
   };
 };
@@ -71,9 +74,12 @@ const slots = [
 
 const SetChatDate = ({ close, data }: Props) => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedTime, setSelectedTime] = useState<string>("");
   const [serviceToChat, { isError, isSuccess, isLoading, error }] =
     useChangeServiceToChatMutation();
-  const [selectedTime, setSelectedTime] = useState<string>("");
+
+  const [getConsultantHours, result] =
+    useLazyGetSingleConsultantAvailabilityQuery();
   const consultantId = useSelector(
     (state: RootState) => state.persistedState.consultant.user?.id
   );
@@ -88,6 +94,21 @@ const SetChatDate = ({ close, data }: Props) => {
       close();
     }
   }, [isError, isSuccess]);
+  useEffect(() => {
+    if (data.consultant_id) {
+      getConsultantHours({
+        date: moment(selectedDate).format("YYYY-MM-DD"),
+        id: data.consultant_id,
+      });
+    } else {
+      if (consultantId) {
+        getConsultantHours({
+          date: moment(selectedDate).format("YYYY-MM-DD"),
+          id: consultantId,
+        });
+      }
+    }
+  }, [data.consultant_id, selectedDate]);
   return (
     <>
       <div className="flex items-center mb-6 mt-4">
@@ -110,9 +131,21 @@ const SetChatDate = ({ close, data }: Props) => {
         </div>
         <div className="w-[20%]">
           <CustomTime
-            time_slots={slots}
+            time_slots={result.data?.availableHoursCount.map((el) => {
+              const isBeforeNow = isBefore(
+                `${moment(selectedDate).format("YYYY-MM-DD")}T${
+                  el.time === "9:00" ? "09:00" : el.time
+                }:00+01:00`,
+                new Date()
+              );
+              return {
+                time: moment(el.time, ["HH:mm"]).format("h:mm A"),
+                isAvailable: isBeforeNow ? false : el.isAvailable,
+              };
+            })}
             selectedTime={selectedTime}
             setSelected={(val) => setSelectedTime(val)}
+            isFetching={result.isFetching}
           />
         </div>
       </div>
@@ -131,17 +164,17 @@ const SetChatDate = ({ close, data }: Props) => {
               serviceToChat({
                 chat_title: data.chat_title,
                 cid: consultantId!,
-                consultant: data.expertise ,
+                consultant: data.expertise,
                 date: moment(selectedDate).format("YYYY-MM-DD"),
                 time: `${moment(selectedDate).format("YYYY-MM-DD")}T${moment(
                   selectedTime,
                   ["h:mm A"]
                 ).format("HH:mm")}:00+01:00`,
                 originalOrderId: data.orderId,
-                summary: data.summary || "" ,
-                title: data.nameofservice ,
+                summary: data.summary || "",
+                title: data.nameofservice,
                 type: "Chat",
-                userId: data.userId ,
+                userId: data.userId,
               });
             }
           }}

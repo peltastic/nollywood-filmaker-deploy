@@ -47,7 +47,7 @@ const CustomerOrderDetailsPage = (props: Props) => {
                   orderId={data?.request.orderId}
                   expertise={data?.request.expertise}
                   chat_appointment_data={{
-                    date: data.request.booktime,
+                    date: data.request.booktime || data.request.date,
                     time: {
                       hours: data.request.time ? data.request.time.hours : 0,
                       minutes: data.request.time

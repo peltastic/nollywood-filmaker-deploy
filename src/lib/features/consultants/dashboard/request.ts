@@ -60,11 +60,26 @@ export const consultantRequestsApi = createApi({
     }),
     fetchReqHistory: build.query<
       {
-        completedRequests: IRequestHistoryResponse[]
+        completedRequests: IRequestHistoryResponse[];
       },
       string
     >({
       query: (id) => `/api/consultants/assignments/${id}`,
+    }),
+    getSingleConsultantAvailability: build.query<
+      {
+        availableHoursCount: {
+          time: string
+          isAvailable: true
+        }[]
+      },
+      {
+        date: string;
+        id: string;
+      }
+    >({
+      query: ({ date, id }) =>
+        `/api/users/consultant/${id}/availability?date=${date}`,
     }),
   }),
 });
@@ -79,4 +94,5 @@ export const {
   useLazyGetServiceRequestsQuery,
   useSetChatAsCompleteMutation,
   useLazyFetchReqHistoryQuery,
+  useLazyGetSingleConsultantAvailabilityQuery
 } = consultantRequestsApi;

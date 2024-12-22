@@ -69,12 +69,13 @@ const FeedbacksPage = (props: Props) => {
         return {
           _id: el._id,
           comment: el.reason,
-          customer: `Jane Copper`,
+          customer: `${el.userId?.fname} ${el.userId?.lname}`,
           date: moment(el.createdAt).format("ll"),
-          email: "email@email.com",
+          email: `${el.userId?.email}`,
           orderId: el.orderId,
           quality: el.quality,
           speed: el.speed,
+          image: el.userId?.profilepics
         };
       });
       setFeedbackData(refined_data);

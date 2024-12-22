@@ -4,7 +4,7 @@ export interface IAdminConsultantResponse {
     fname: string;
     lname: string;
     phone: string;
-    email: string
+    email: string;
     expertise: string[];
     createdAt: string;
     location?: {
@@ -12,4 +12,14 @@ export interface IAdminConsultantResponse {
       country?: string;
     };
   }[];
+}
+
+export interface ICreateConsultantPayload {
+  fname: string;
+  lname: string;
+  email: string;
+  phone: string;
+  state: string;
+  country: string;
+  expertise: string[];
 }

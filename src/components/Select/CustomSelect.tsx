@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import TestImage from "/public/assets/dashboard/issues-img-1.png";
 import Image from "next/image";
@@ -12,6 +12,7 @@ type Props = {
     value: string;
     caption?: string;
     info?: string;
+    image?: ReactNode;
   }[];
   setValue: (val: string) => void;
 };
@@ -38,15 +39,16 @@ const CustomSelect = (props: Props) => {
       >
         {selected.value ? (
           <div className="flex items-center">
-            <Image src={TestImage} alt="test-image" className="w-[2.3rem]" />
             <div className="mr-auto">
               <div className="flex flex-wrap items-center text-[0.88rem] px-3 cursor-pointer">
                 <p className="text-[0.88rem] mr-2 font-medium w-full sm:w-auto">
                   {selected.label}
                 </p>
-                <p className="text-[0.6rem] py-1 text-black-2 rounded-md px-2 bg-yellow-1">
-                  {selected.caption}
-                </p>
+                {selected.caption && (
+                  <p className="text-[0.6rem] py-1 text-black-2 rounded-md px-2 bg-yellow-1">
+                    {selected.caption}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -75,19 +77,17 @@ const CustomSelect = (props: Props) => {
                 className="flex items-center my-6 px-3"
                 key={el.value}
               >
-                <Image
-                  src={TestImage}
-                  alt="test-image"
-                  className="w-[2.3rem]"
-                />
+                {el.image}
                 <div className="mr-auto">
                   <div className="flex flex-wrap items-center text-[0.88rem] px-3 cursor-pointer">
                     <p className="text-[0.88rem] mr-2 font-medium w-full sm:w-auto">
                       {el.label}
                     </p>
-                    <p className="text-[0.6rem] py-1 text-black-2 rounded-md px-2 bg-yellow-1">
-                      {el.caption}
-                    </p>
+                    {el.caption && (
+                      <p className="text-[0.6rem] py-1 text-black-2 rounded-md px-2 bg-yellow-1">
+                        {el.caption}
+                      </p>
+                    )}
                   </div>
                   <p className="text-gray-8 px-3 mt-1 text-[0.75rem]">
                     {el.info}

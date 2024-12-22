@@ -23,12 +23,14 @@ import { months_data } from "@/utils/helperFunction";
 const weeks = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
 type Props = {
-  value?: Date;
+  value: Date;
   onChange: (date: Date) => void;
 };
 
-const Calendar: React.FC<Props> = ({ value = new Date(), onChange }) => {
-  const [calendarPrivateDateState, setCalendarPrivateDateState] = useState(new Date())
+const Calendar: React.FC<Props> = ({ value, onChange }) => {
+  const [calendarPrivateDateState, setCalendarPrivateDateState] = useState(
+    new Date()
+  );
   const startDate = startOfMonth(calendarPrivateDateState);
   const endDate = endOfMonth(calendarPrivateDateState);
   const numDays = differenceInDays(endDate, startDate) + 1;
@@ -48,26 +50,23 @@ const Calendar: React.FC<Props> = ({ value = new Date(), onChange }) => {
   const prevYear = () => onChange(sub(calendarPrivateDateState, { years: 1 }));
   const nextYear = () => onChange(add(calendarPrivateDateState, { years: 1 }));
 
-
   const handleClickDate = (index: number) => {
     const date = setDate(calendarPrivateDateState, index);
     onChange(date);
   };
 
-  
-
   const updateCalenderMonth = (month_value: number) => {
-    const currDate = new Date()
-    let updatedDate
+    const currDate = new Date();
+    let updatedDate;
     const currentMonth = getMonth(currDate);
     if (month_value < currentMonth) {
-     updatedDate = subMonths(currDate, currentMonth - month_value);
-     setCalendarPrivateDateState(updatedDate)
-    } else if (month_value> currentMonth) {
-      updatedDate =addMonths(currDate, month_value - currentMonth)
-      setCalendarPrivateDateState(updatedDate)
-    } 
-    setOpenMonthSelection(false)
+      updatedDate = subMonths(currDate, currentMonth - month_value);
+      setCalendarPrivateDateState(updatedDate);
+    } else if (month_value > currentMonth) {
+      updatedDate = addMonths(currDate, month_value - currentMonth);
+      setCalendarPrivateDateState(updatedDate);
+    }
+    setOpenMonthSelection(false);
   };
 
   return (
@@ -120,7 +119,9 @@ const Calendar: React.FC<Props> = ({ value = new Date(), onChange }) => {
             const date = index + 1;
             const isCurrentDate = date === value.getDate();
             const cellDate = new Date(
-              `${format(calendarPrivateDateState, "yyyy")}-${Number(getMonth(calendarPrivateDateState)) + 1}-${date}`
+              `${format(calendarPrivateDateState, "yyyy")}-${
+                Number(getMonth(calendarPrivateDateState)) + 1
+              }-${date}`
             );
             const currentDate = new Date(
               `${format(value, "yyyy")}-${

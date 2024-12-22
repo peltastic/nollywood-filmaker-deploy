@@ -36,10 +36,42 @@ export const requestsApi = createApi({
       },
     }),
     fetchResolvedFiles: build.query<IResolveFiles, string>({
-      query: (id) => `/api/consultants/resolve/${id}`
+      query: (id) => `/api/consultants/resolve/${id}`,
     }),
     getCustomerRequestDetail: build.query<ICustomerReqDetails, string>({
       query: (id) => `/api/consultants/orderdetail/${id}`,
+    }),
+    getSingleConsultantAvailability: build.query<
+      {
+        availableHoursCount: {
+          time: string;
+          isAvailable: true;
+        }[];
+      },
+      {
+        date: string;
+        id: string;
+      }
+    >({
+      query: ({ date, id }) =>
+        `/api/users/consultant/${id}/availability?date=${date}`,
+    }),
+    updateReqAndCreateAppointment: build.mutation<
+      unknown,
+      {
+        body: {
+          orderId: string;
+          time: string;
+          date: string;
+        };
+        userId: string;
+      }
+    >({
+      query: ({ body, userId }) => ({
+        url: "/api/users/requests/6760904a63f1266c6484e261/createappointment",
+        body,
+        method: "POST",
+      }),
     }),
   }),
 });
@@ -48,5 +80,7 @@ export const {
   useFetchActiveRequestsQuery,
   useLazyFetchUserRequestHistoryQuery,
   useLazyFetchResolvedFilesQuery,
-  useLazyGetCustomerRequestDetailQuery
+  useLazyGetCustomerRequestDetailQuery,
+  useLazyGetSingleConsultantAvailabilityQuery,
+  useUpdateReqAndCreateAppointmentMutation
 } = requestsApi;

@@ -62,13 +62,24 @@ export const adminRequestApi = createApi({
     getCustomerRequestDetail: build.query<ICustomerReqDetails, string>({
       query: (id) => `/api/consultants/orderdetail/${id}`,
     }),
+    getConsultantForTask: build.query<{
+      consultants: {
+        fname: string
+        lname: string
+        _id: string
+      }[]
+    } , void>({
+      query: () => `/api/admin/fetch/consultants`
+    })
   }),
 });
 
 export const {
   useLazyFetchCustomerRequestQuery,
   useFetchConsultantsByExpertiseQuery,
+  useLazyFetchConsultantsByExpertiseQuery,
   useAppointConsultantMutation,
   useAssignServiceToConsultantMutation,
   useLazyGetCustomerRequestDetailQuery,
+  useLazyGetConsultantForTaskQuery
 } = adminRequestApi;

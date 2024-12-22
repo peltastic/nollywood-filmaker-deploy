@@ -21,14 +21,22 @@ import { useProtectRoute } from "@/hooks/useProtectRoute";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { useSearchParams } from "next/navigation";
+import { useDisclosure } from "@mantine/hooks";
+import ModalComponent from "@/components/Modal/Modal";
+import SetChatDateByUser from "@/components/ModalPages/SetChatDateByUser";
 
 type Props = {};
 
 const DashboardHomePgae = (props: Props) => {
-  useProtectRoute()
+  useProtectRoute();
   const [reqHistoryData, setReqHistoryData] = useState<ReqHistoryColumnData[]>(
     []
   );
+  const search = useSearchParams();
+  const cid = search.get("cid");
+  const orderId = search.get("orderId");
+  const date = search.get("date");
+  const time = search.get("time");
   const userData = useSelector(
     (state: RootState) => state.persistedState.user.user
   );
@@ -44,11 +52,8 @@ const DashboardHomePgae = (props: Props) => {
     (state: RootState) => state.persistedState.user.user?.id
   );
 
-
+  const [opened, { open, close }] = useDisclosure();
   const [fetchRequestHistory, result] = useLazyFetchUserRequestHistoryQuery();
-
-
-
 
   useEffect(() => {
     if (data) {
@@ -94,40 +99,64 @@ const DashboardHomePgae = (props: Props) => {
       setReqHistoryData(modData);
     }
   }, [result.isSuccess]);
+  useEffect(() => {
+    if (cid && orderId && time && date) {
+      open();
+    }
+  }, [cid, orderId, time, date]);
   return (
-    <ServiceLayout>
-      <DashboardBodyLayout>
-        <div className="px-4 xs:px-8 chatbp:px-0">
-          <Header
-            fname={userData?.fname || ""}
-            lname={userData?.lname || ""}
-            ppicture={userData?.profilepics}
+    <>
+      <ModalComponent
+        opened={opened}
+        centered
+        onClose={close}
+        withCloseButton={false}
+        size="xl"
+      >
+        {orderId && cid && date && time && (
+          <SetChatDateByUser
+            close={close}
+            cid={cid}
+            date={date}
+            orderId={orderId}
+            time={time}
           />
+        )}
+      </ModalComponent>
+      <ServiceLayout>
+        <DashboardBodyLayout>
+          <div className="px-4 xs:px-8 chatbp:px-0">
+            <Header
+              fname={userData?.fname || ""}
+              lname={userData?.lname || ""}
+              ppicture={userData?.profilepics}
+            />
 
-          <div className="mt-14">
-            <DataTable
-              title="Active requests"
-              columns={active_requests_columns}
-              data={activeReqData}
-              loaderLength={4}
-              isFetching={isFetching}
-            />
+            <div className="mt-14">
+              <DataTable
+                title="Active requests"
+                columns={active_requests_columns}
+                data={activeReqData}
+                loaderLength={4}
+                isFetching={isFetching}
+              />
+            </div>
+            <div className="mt-14">
+              <DataTable
+                link="/user/dashboard/request-history"
+                showMoreBtnContent="See All"
+                title="Request History"
+                subtitle="Keep track of all your past requests"
+                columns={request_history_columns}
+                isFetching={result.isFetching}
+                loaderLength={5}
+                data={reqHistoryData}
+              />
+            </div>
           </div>
-          <div className="mt-14" >
-            <DataTable
-              link="/user/dashboard/request-history"
-              showMoreBtnContent="See All"
-              title="Request History"
-              subtitle="Keep track of all your past requests"
-              columns={request_history_columns}
-              isFetching={result.isFetching}
-              loaderLength={5}
-              data={reqHistoryData}
-            />
-          </div>
-        </div>
-      </DashboardBodyLayout>
-    </ServiceLayout>
+        </DashboardBodyLayout>
+      </ServiceLayout>
+    </>
   );
 };
 
