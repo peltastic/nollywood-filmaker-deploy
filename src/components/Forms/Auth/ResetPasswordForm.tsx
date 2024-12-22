@@ -19,7 +19,7 @@ type Props = {
 };
 
 const ResetPasswordForm = (props: Props) => {
-  const router = useRouter();
+
   return (
     <Formik
       initialValues={{

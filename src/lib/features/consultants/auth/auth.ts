@@ -21,8 +21,20 @@ export const consultantAuthApi = createApi({
         body,
       }),
     }),
+    setPassword: builder.mutation<
+      unknown,
+      {
+        token: string;
+        password: string;
+      }
+    >({
+      query: (body) => ({
+        url: "/api/consultants/verify-email",
+        body,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
-
-export const {useLoginConsultantMutation} = consultantAuthApi
+export const { useLoginConsultantMutation, useSetPasswordMutation } = consultantAuthApi;
