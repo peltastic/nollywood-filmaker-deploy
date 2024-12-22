@@ -65,7 +65,7 @@ const SetChatDateByUser = (props: Props) => {
     if (isSuccess) {
       nprogress.complete();
       notify("success", "Chat date updated successfully");
-      close();
+      props.close();
     }
   }, [isError, isSuccess]);
   return (

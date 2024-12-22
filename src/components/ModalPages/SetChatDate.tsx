@@ -77,6 +77,13 @@ const SetChatDate = ({ close, data }: Props) => {
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [serviceToChat, { isError, isSuccess, isLoading, error }] =
     useChangeServiceToChatMutation();
+    const [slots, setSlots] = useState<
+    | {
+        time: string;
+        isAvailable: boolean;
+      }[]
+    | undefined
+  >(undefined);
 
   const [getConsultantHours, result] =
     useLazyGetSingleConsultantAvailabilityQuery();
@@ -109,6 +116,14 @@ const SetChatDate = ({ close, data }: Props) => {
       }
     }
   }, [data.consultant_id, selectedDate]);
+  useEffect(() => {
+    if (result.isError) {
+      setSlots(undefined);
+    }
+    if (result.isSuccess) {
+      setSlots(result.data.availableHoursCount);
+    }
+  }, [result.data, result.isError, result.isSuccess]);
   return (
     <>
       <div className="flex items-center mb-6 mt-4">
@@ -131,7 +146,7 @@ const SetChatDate = ({ close, data }: Props) => {
         </div>
         <div className="w-[20%]">
           <CustomTime
-            time_slots={result.data?.availableHoursCount.map((el) => {
+            time_slots={slots?.map((el) => {
               const isBeforeNow = isBefore(
                 `${moment(selectedDate).format("YYYY-MM-DD")}T${
                   el.time === "9:00" ? "09:00" : el.time
