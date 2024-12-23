@@ -115,7 +115,7 @@ const ServiceNavbar = (props: Props) => {
   );
 
   const adminData = useSelector(
-    (state: RootState) => state.persistedState.consultant.user
+    (state: RootState) => state.persistedState.adminuser.user
   );
 
   return (

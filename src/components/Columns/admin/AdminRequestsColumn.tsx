@@ -9,6 +9,8 @@ import UnstyledButton from "@/components/Button/UnstyledButton";
 import { AspectRatio, Rating } from "@mantine/core";
 import { ICustomerRequest } from "@/interfaces/admin/requests/requests";
 import moment from "moment";
+import GenerateDarkServiceLogo from "@/components/Generate/GenerateDarkServiceLogo";
+import { generateColorClass } from "@/utils/helperFunction";
 
 export const admin_reqs_columns: ColumnDef<ICustomerRequest>[] = [
   {
@@ -31,7 +33,7 @@ export const admin_reqs_columns: ColumnDef<ICustomerRequest>[] = [
       return (
         <div className="flex items-center w-[20rem] xl:w-auto">
           <div className="mr-2 h-[2.5rem] w-[2.5rem]">
-            <AspectRatio ratio={1800/1800}>
+            <AspectRatio ratio={1800 / 1800}>
               <Image
                 src={row.original.user.profilepics}
                 width={100}
@@ -45,10 +47,6 @@ export const admin_reqs_columns: ColumnDef<ICustomerRequest>[] = [
             <h1 className=" text-black-4 font-medium">
               {row.original.user.fname + " " + row.original.user.lname}
             </h1>
-            {/* <h1 className=" text-black-4 font-medium">
-              {row.getValue("customer")}
-            </h1> */}
-            {/* <p className="text-gray-1 text-[0.88rem]">{row.original.email}</p> */}
             <p className="text-gray-1 text-[0.88rem]">
               {row.original.user.email}
             </p>
@@ -62,15 +60,27 @@ export const admin_reqs_columns: ColumnDef<ICustomerRequest>[] = [
     header: () => <div className="">Service name</div>,
     cell: ({ row }) => {
       return (
-        <div className="flex items-center w-[20rem] xl:w-auto py-4">
-          <div className="bg-gray-bg-3 h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4">
-            <Image src={ReadMyScriptDarkImg} alt="name-img" />
+        <div
+          className={` rounded-md px-9 flex items-center w-[20rem] xl:w-auto py-4`}
+        >
+          <div
+            className={`${generateColorClass(
+              row.original.nameofservice
+            )} h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4`}
+          >
+            <GenerateDarkServiceLogo service={row.original.nameofservice} />
           </div>
           <div className="text-[0.88rem]">
             <p className="text-black-4 font-medium">
               {row.original.movie_title || row.original.chat_title}
             </p>
-            <p className="text-gray-1">{row.original.nameofservice}</p>
+            <p
+              className={`${generateColorClass(
+                row.original.nameofservice
+              )} text-gray-1 px-3 py-1 rounded-xl font-medium text-[0.88rem] mt-1`}
+            >
+              {row.original.nameofservice}
+            </p>
           </div>
         </div>
       );

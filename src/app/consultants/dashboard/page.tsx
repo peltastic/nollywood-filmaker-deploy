@@ -4,8 +4,6 @@ import {
   IConsultantActiveRequestColumnData,
   consultant_active_requests_columns,
 } from "@/components/Columns/consultants/ActiveRequestsColumn";
-
-import { ReqHistoryColumnData } from "@/components/Columns/consultants/RequestHistoryColumn";
 import DashboardInfoCard from "@/components/Dashboard/DashboardInfoCard";
 import DashboardPlate from "@/components/Dashboard/DashboardPlate";
 import Header from "@/components/Dashboard/Header";
@@ -118,10 +116,6 @@ const DashboardPage = (props: Props) => {
   const userData = useSelector(
     (state: RootState) => state.persistedState.consultant.user
   );
-
-  // const [customerReqData, setCustomerReqData] = useState<ICustomerReqData[]>(
-  //   []
-  // );
   const [activeReqData, setActiveReqData] = useState<
     IConsultantActiveRequestColumnData[]
   >([]);
@@ -144,24 +138,6 @@ const DashboardPage = (props: Props) => {
     fetchServiceReq(consultantId!);
   }, []);
 
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     const resData: ICustomerReqData[] = data.assignments.map((el) => {
-  //       return {
-  //         customer: el.user.fullname,
-  //         date: moment(el.assignment.createdDate).format("LL"),
-  //         email: el.user.email,
-  //         script: el.info.chat_title,
-  //         service_type: el.info.nameofservice,
-  //         status: el.assignment.status,
-  //         imgurl: el.user.profilepics,
-  //         id: el.assignment._id,
-  //         orderId: el.assignment.orderId,
-  //       };
-  //     });
-  //     setCustomerReqData(resData);
-  //   }
-  // }, [isSuccess, isError]);
 
   useEffect(() => {
     if (result.isSuccess) {

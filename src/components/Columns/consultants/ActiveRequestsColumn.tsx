@@ -10,6 +10,8 @@ import { IoIosArrowDown } from "react-icons/io";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import Link from "next/link";
 import { AspectRatio } from "@mantine/core";
+import GenerateDarkServiceLogo from "@/components/Generate/GenerateDarkServiceLogo";
+import { generateColorClass } from "@/utils/helperFunction";
 
 export interface IConsultantActiveRequestColumnData {
   customer: string;
@@ -29,7 +31,7 @@ export interface IConsultantActiveRequestColumnData {
   profilepic: string;
   orderId: string;
   type: "service" | "chat";
-  creation_date: string
+  creation_date: string;
 }
 
 export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequestColumnData>[] =
@@ -80,9 +82,13 @@ export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequ
       cell: ({ row }) => {
         return (
           <div className="flex items-center w-[20rem] xl:w-auto py-4">
-            <div className="bg-gray-bg-3 h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4">
-              <Image src={ReadMyScriptDarkImg} alt="name-img" />
-            </div>
+             <div
+            className={`${generateColorClass(
+              row.original.service_type
+            )} h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4`}
+          >
+            <GenerateDarkServiceLogo service={row.original.service_type} />
+          </div>
             <div className="text-[0.88rem]">
               <p className="text-black-4 font-medium">
                 {row.getValue("script")}

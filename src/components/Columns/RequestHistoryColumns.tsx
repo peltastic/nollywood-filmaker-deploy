@@ -13,6 +13,8 @@ import ModalComponent from "../Modal/Modal";
 import { useDisclosure } from "@mantine/hooks";
 import CustomCalender from "@/components/CustomCalender/CustomCalender";
 import CustomTime from "../CustomTime/CustomTime";
+import GenerateDarkServiceLogo from "../Generate/GenerateDarkServiceLogo";
+import { generateColorClass } from "@/utils/helperFunction";
 
 export interface ReqHistoryColumnData {
   name: string;
@@ -53,8 +55,8 @@ export const request_history_columns: ColumnDef<ReqHistoryColumnData>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center">
-          <div className="bg-gray-bg-3 h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4">
-            <Image src={ReadMyScriptDarkImg} alt="name-img" />
+          <div className={`${generateColorClass(row.original.service_type)} h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4`}>
+           <GenerateDarkServiceLogo service={row.original.service_type} />
           </div>
           <div className="text-[0.88rem]">
             <p className="text-black-4 font-medium">{row.getValue("name")}</p>

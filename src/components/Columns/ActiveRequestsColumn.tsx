@@ -11,10 +11,11 @@ import Link from "next/link";
 import ModalComponent from "../Modal/Modal";
 import { useDisclosure } from "@mantine/hooks";
 import SetChatDate from "../ModalPages/SetChatDate";
-import { capitalizeFirstLetter, isResolveFile } from "@/utils/helperFunction";
+import { capitalizeFirstLetter, generateColorClass, isResolveFile } from "@/utils/helperFunction";
 import moment from "moment";
 import SetChatDateByUser from "../ModalPages/SetChatDateByUser";
 import { useLazyFetchActiveRequestsQuery } from "@/lib/features/users/dashboard/requests/requests";
+import GenerateDarkServiceLogo from "../Generate/GenerateDarkServiceLogo";
 
 export interface IActiveRequestColumnData {
   name: string;
@@ -57,9 +58,13 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center w-[20rem] xl:w-auto">
-          <div className="bg-gray-bg-3 h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4">
-            <Image src={ReadMyScriptDarkImg} alt="name-img" />
-          </div>
+          <div
+            className={`${generateColorClass(
+              row.original.service_type
+            )} h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4`}
+          >
+            <GenerateDarkServiceLogo service={row.original.service_type} />
+          </div> 
           <div className="text-[0.88rem]">
             <p className="text-black-4 font-medium">
               {row.getValue("name") || row.original.chat_title}

@@ -6,6 +6,7 @@ import SendImg from "/public/assets/chats/send-icon.svg";
 import { Textarea } from "@mantine/core";
 import { MdCancel } from "react-icons/md";
 import CancelImg from "/public/assets/cancel.svg";
+import Lottie from "lottie-react";
 
 import {
   chat_socket,
@@ -28,9 +29,7 @@ import { useDisclosure } from "@mantine/hooks";
 import RateYourExperience from "./ModalComponents/RateYourExperience";
 import ModalComponent from "../Modal/Modal";
 import { differenceInMilliseconds, isAfter } from "date-fns";
-import { MdInsertPhoto } from "react-icons/md";
 import classes from "@/app/styles/Input.module.css";
-import { consultantProfileApi } from "@/lib/features/consultants/profile/profile";
 
 type Props = {
   type: "user" | "consultant" | "admin";
@@ -45,7 +44,7 @@ type Props = {
   refreshChat: () => void;
   status: "ongoing" | "completed" | "pending" | "ready";
   profilepics?: string;
-  setTypingPtops: (val: boolean) => void;
+  removeTyping: () => void;
 };
 
 export interface IChatMessagesData {
@@ -95,6 +94,19 @@ const ChatRoom = (props: Props) => {
 
   const [opened, { open, close }] = useDisclosure();
 
+  ///////////////UPDATE TYPING CHAT
+
+  const addTypingChatHandler = () => {
+    props.updateChatHandlerProps({
+      file: "",
+      filename: "",
+      id: Math.floor(Math.random() * 100000).toString(),
+      text: "",
+      type: "typing",
+      user: props.type === "user" ? "consultant" : "user",
+    });
+  };
+
   ////////////////CUSTOM CHAT LISTENERS - OPEN///////////////////////////
 
   useEffect(() => {
@@ -141,7 +153,7 @@ const ChatRoom = (props: Props) => {
 
   useEffect(() => {
     if (props.sessionOver || !props.isTime) return () => {};
-    console.log(props.orderId)
+    console.log(props.orderId);
     if (props.userData) {
       joinChatRoom({
         room: props.orderId,
@@ -157,12 +169,12 @@ const ChatRoom = (props: Props) => {
     if (props.isTime) {
       chat_socket.on("stoptyping", (data) => {
         if (data.userId !== props.userData?.id) {
-          props.setTypingPtops(false);
+          props.removeTyping();
         }
       });
       chat_socket.on("istyping", (data) => {
         if (data.userId !== props.userData?.id) {
-          props.setTypingPtops(true);
+          addTypingChatHandler();
         }
       });
 
@@ -173,10 +185,7 @@ const ChatRoom = (props: Props) => {
   //send message
 
   const sendMessageHandler = () => {
-    stopTypingEmit(
-      props.orderId,
-      `${props.userData?.id}`
-    );
+    stopTypingEmit(props.orderId, `${props.userData?.id}`);
     if (props.userData) {
       const payload: {
         room: string;
@@ -437,6 +446,7 @@ const ChatRoom = (props: Props) => {
             </>
           )}
         </div>
+
         {props.sessionOver ? (
           <div className="flex items-center text-[0.88rem] bg-gray-bg-7 border mx-4 mt-8 py-2 rounded-md px-4 border-border-gray">
             <MdInfoOutline className="text-gray-4 mr-4 text-xl " />
@@ -526,7 +536,6 @@ const ChatRoom = (props: Props) => {
                     <Textarea
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {
-                          
                           e.preventDefault();
                           sendMessageHandler();
                         }
@@ -537,7 +546,7 @@ const ChatRoom = (props: Props) => {
                       radius={"md"}
                       value={inputValue}
                       onChange={(event) => {
-                        console.log(props.orderId)
+                        console.log(props.orderId);
                         emitTypingEvent(props.orderId, `${props.userData?.id}`);
                         setInputValue(event.currentTarget.value);
                         setTimeout(() => {

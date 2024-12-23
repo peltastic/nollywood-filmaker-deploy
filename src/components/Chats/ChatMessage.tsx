@@ -1,12 +1,13 @@
 import React, { use, useEffect, useRef } from "react";
-import TestImage from "/public/assets/test-avatar-big.png";
 import AdminProfileImg from "/public/assets/dashboard/admin-profile-img.svg";
 import Image from "next/image";
 import { FaDownload } from "react-icons/fa";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
+import Lottie from "lottie-react";
 import { AspectRatio } from "@mantine/core";
+import TypingLottie from "@/components/Lottie/typing.json";
 
 type Props = {
   text: string;
@@ -14,7 +15,7 @@ type Props = {
   prevUser: "admin" | "user" | "consultant" | null;
   index: number;
   lastmessage?: boolean;
-  type: "text" | "file" | "img";
+  type: "text" | "file" | "img" | "typing";
   filename: string;
   file: string;
 };
@@ -104,6 +105,10 @@ const ChatMessage = ({
                   </div>
                 </div>
               </Link>
+            ) : type === "typing" ? (
+              <div className="w-[3rem]">
+                <Lottie animationData={TypingLottie} />
+              </div>
             ) : (
               <>
                 {text.split("\n").map((line, index) => (

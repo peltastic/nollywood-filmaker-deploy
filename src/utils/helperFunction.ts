@@ -172,7 +172,57 @@ export function downloadCSV(blob: Blob, filename?: string) {
   URL.revokeObjectURL(url);
 }
 
-
 export function numberWithCommas(value: number) {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+export function generateColorClass(
+  service:
+    | "Chat With A Professional"
+    | "Read my Script and advice"
+    | "Watch the Final cut of my film and advice"
+    | "Look at my Budget and advice"
+    | "Create a Marketing budget"
+    | "Create a Pitch based on my Script"
+    | "Draft Legal documents"
+    | "Create a Production budget"
+) {
+  const logoAssignment = [
+    {
+      service: "Chat With A Professional",
+      class: "glo-chat-with-professional",
+    },
+    {
+      service: "Read my Script and advice",
+      class: "glo-read-my-script",
+    },
+    {
+      service: "Watch the Final cut of my film and advice",
+      class: "glo-watch-final-cut",
+    },
+    {
+      service: "Look at my Budget and advice",
+      class: "glo-look-at-my-budget ",
+    },
+    {
+      service: "Create a Marketing budget",
+      class: "glo-create-marketing ",
+    },
+    {
+      service: "Create a Pitch based on my Script",
+      class: "glo-create-a-pitch",
+    },
+    {
+      service: "Draft Legal documents",
+      class: "glo-draft-legal-docs",
+    },
+
+    {
+      service: "Create a Production budget",
+      class: "glo-create-prod-bud",
+    },
+  ];
+
+  const colorClass = logoAssignment.find((el) => el.service === service);
+  return colorClass?.class;
 }

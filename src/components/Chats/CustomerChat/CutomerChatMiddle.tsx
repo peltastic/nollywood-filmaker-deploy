@@ -38,7 +38,7 @@ export interface ChatPayload {
   id: string;
   file: string;
   filename: string;
-  type: "text" | "file" | "img";
+  type: "text" | "file" | "img" | "typing";
 }
 
 type Props = {
@@ -88,7 +88,6 @@ const CustomerChatMiddle = ({
   const [extentionValue, setExtensionValue] = useState<string>("");
   const [transref, setTransRef] = useState<string>("");
   const [setAsCompleted, completedRes] = useSetChatAsCompleteMutation();
-  const [isTyping, setIsTyping] = useState<boolean>(false);
 
   const [paymentStatus, setPaymentStatus] = useState<
     "initialized" | "pending" | "completed"
@@ -231,6 +230,12 @@ const CustomerChatMiddle = ({
 
   const updateChatDataHandler = (newEntry: ChatPayload) => {
     setChatData((prev) => [...prev, newEntry]);
+  };
+
+  const removeIsTypingMessage = () => {
+    const payload = [...chatData];
+    payload.pop();
+    setChatData(payload);
   };
 
   const [extensionOpened, extensionOpenedFuncs] = useDisclosure();
@@ -379,14 +384,10 @@ const CustomerChatMiddle = ({
                   </div>
                   <div className="">
                     <h1 className="font-semibold text-[1.25rem]">
-                      {data?.chat_title && truncateStr(data?.chat_title, 25)}
+                      {data?.chat_title && truncateStr(data?.chat_title, 45)}
                     </h1>
                     <p className="text-[#00000082] text-[0.75rem] font-semibold">
-                      {isTyping ? (
-                        <span className="italic">Typing...</span>
-                      ) : (
-                        <>{data?.nameofservice}</>
-                      )}
+                      {data?.nameofservice}
                     </p>
                   </div>
                   <div className="flex items-center ml-auto">
@@ -449,7 +450,6 @@ const CustomerChatMiddle = ({
                 <div className="h-full bg-white relative">
                   {data && (isTime || sessionOver) ? (
                     <ChatRoom
-                      setTypingPtops={(val) => setIsTyping(val)}
                       refreshChat={() => {
                         if (type === "user") {
                           fetchUserChatMessages(data.orderId);
@@ -468,6 +468,7 @@ const CustomerChatMiddle = ({
                       sessionOver={sessionOver}
                       status={data.stattusof}
                       profilepics={profilepic}
+                      removeTyping={removeIsTypingMessage}
                     />
                   ) : (
                     <div className="h-[90vh] max-h-[120rem] w-full">

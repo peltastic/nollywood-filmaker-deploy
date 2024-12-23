@@ -5,7 +5,7 @@ import InputComponent from "@/components/Input/Input";
 import SelectComponent from "@/components/Select/SelectComponent";
 import ServiceInfo from "@/components/ServiceInfo/ServiceInfo";
 import TextArea from "@/components/TextArea/TextArea";
-import { testSelectData } from "@/utils/constants/constants";
+import { testExhibitionData, testSelectData } from "@/utils/constants/constants";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { FaArrowRight } from "react-icons/fa";
@@ -58,7 +58,7 @@ const MarketingBudgetForm = ({
             value={data.platform}
             setValueProps={(val) => setScriptProps("platform", val!)}
             label="Platform for exhibition"
-            data={testSelectData}
+            data={testExhibitionData}
             placeholder="Select"
           />
         </div>
