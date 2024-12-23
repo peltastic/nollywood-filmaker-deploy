@@ -105,7 +105,7 @@ export const store = configureStore({
       adminIssuesApi.middleware,
       adminFeedbackApi.middleware
     ]),
-  devTools: process.env.NODE_ENV !== "production",
+  // devTools: process.env.NODE_ENV !== "production",
 });
 
 export type RootState = ReturnType<typeof store.getState>;
