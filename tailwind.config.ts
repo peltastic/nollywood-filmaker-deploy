@@ -67,6 +67,8 @@ const config: Config = {
         "admin-chat-bg": "#F1F1F1",
         "unchecked-gray": "#ACACAC",
         "blue-1": "#2c51c9",
+        "light-awaiting":"#fff6ec",
+        "dark-awaiting": "#a7671f",
         "input-text-color": "#414D63",
         "light-blue": "#E7F0FF",
         "dark-blue": "#225CB9",

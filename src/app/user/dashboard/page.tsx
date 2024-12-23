@@ -15,6 +15,7 @@ import {
 import moment from "moment";
 import {
   useFetchActiveRequestsQuery,
+  useLazyFetchActiveRequestsQuery,
   useLazyFetchUserRequestHistoryQuery,
 } from "@/lib/features/users/dashboard/requests/requests";
 import { useProtectRoute } from "@/hooks/useProtectRoute";
@@ -44,10 +45,8 @@ const DashboardHomePgae = (props: Props) => {
   useProtectRoute();
   const [activeReqData, setActiveReqData] = useState<
     IActiveRequestColumnData[]
-  >([]);
-  const { data, isFetching } = useFetchActiveRequestsQuery(null, {
-    refetchOnMountOrArgChange: true,
-  });
+  >([]); 
+  const [fetchActiveRequest, { data, isFetching }] = useLazyFetchActiveRequestsQuery();
   const userId = useSelector(
     (state: RootState) => state.persistedState.user.user?.id
   );
@@ -65,6 +64,8 @@ const DashboardHomePgae = (props: Props) => {
           service_type: el.nameofservice,
           chat_title: el.chat_title,
           orderId: el.orderId,
+          booktime: el.booktime,
+          cid: el.cid,
           progress:
             el.stattusof === "completed"
               ? 100
@@ -72,6 +73,8 @@ const DashboardHomePgae = (props: Props) => {
               ? 50
               : el.stattusof === "pending"
               ? 25
+              : el.stattusof === "awaiting"
+              ? 40
               : 100,
         };
       });
@@ -80,6 +83,7 @@ const DashboardHomePgae = (props: Props) => {
   }, [data]);
 
   useEffect(() => {
+    fetchActiveRequest()
     fetchRequestHistory({ userId: userId!, limit: 5 });
   }, []);
 
@@ -120,6 +124,7 @@ const DashboardHomePgae = (props: Props) => {
             date={date}
             orderId={orderId}
             time={time}
+            refetch={() => fetchActiveRequest()}
           />
         )}
       </ModalComponent>

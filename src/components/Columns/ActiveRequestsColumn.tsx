@@ -12,6 +12,9 @@ import ModalComponent from "../Modal/Modal";
 import { useDisclosure } from "@mantine/hooks";
 import SetChatDate from "../ModalPages/SetChatDate";
 import { capitalizeFirstLetter, isResolveFile } from "@/utils/helperFunction";
+import moment from "moment";
+import SetChatDateByUser from "../ModalPages/SetChatDateByUser";
+import { useLazyFetchActiveRequestsQuery } from "@/lib/features/users/dashboard/requests/requests";
 
 export interface IActiveRequestColumnData {
   name: string;
@@ -27,8 +30,10 @@ export interface IActiveRequestColumnData {
   progress: number;
   chat_title?: string;
   date: string;
-  status: "ready" | "ongoing" | "completed" | "pending";
+  status: "ready" | "ongoing" | "completed" | "pending" | "awaiting";
   orderId: string;
+  booktime?: string;
+  cid: string;
 }
 
 export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
@@ -104,6 +109,8 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
           ? "bg-light-green text-dark-green"
           : row.original.status === "pending"
           ? "bg-stroke-4 text-black-6"
+          : row.original.status === "awaiting"
+          ? "bg-light-awaiting text-dark-awaiting"
           : "bg-light-yellow text-dark-yellow";
       return (
         <div className=" w-[10rem] xl:w-auto">
@@ -113,7 +120,7 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
             <span className="block pr-1">
               <GoDotFill />
             </span>{" "}
-            {capitalizeFirstLetter(row.getValue("status"))}
+            {row.getValue("status")}
           </p>
         </div>
       );
@@ -122,10 +129,35 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
+      const [fetchActiveRequest] = useLazyFetchActiveRequestsQuery();
       const [opened, { open, close }] = useDisclosure();
-      // const
+      let formattedDate;
+      let time;
+      const { cid, booktime, orderId, status } = row.original;
+      if (status === "awaiting" && booktime) {
+        formattedDate = moment(booktime).format("YYYY-MM-DD");
+        time = moment(booktime).format("HH:mm");
+      }
       return (
         <>
+          <ModalComponent
+            opened={opened}
+            onClose={close}
+            size="xl"
+            centered
+            withCloseButton={false}
+          >
+            {formattedDate && time && cid && orderId && (
+              <SetChatDateByUser
+                close={close}
+                cid={cid}
+                date={formattedDate}
+                orderId={orderId}
+                time={time}
+                refetch={() => fetchActiveRequest()}
+              />
+            )}
+          </ModalComponent>
           <MenuComponent
             target={
               <div>
@@ -138,7 +170,6 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
           >
             <div className="bg-white ">
               <ul className="px-1 text-gray-6 text-[0.88rem]">
-                
                 <li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
                   <Link
                     href={`/user/dashboard/order-details/${row.original.orderId}`}
@@ -156,6 +187,14 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
                       </Link>
                     </li>
                   )}
+                {row.original.status === "awaiting" && (
+                  <li
+                    onClick={open}
+                    className="cursor-pointer py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md"
+                  >
+                    <p>Set Chat Date</p>
+                  </li>
+                )}
               </ul>
             </div>
           </MenuComponent>

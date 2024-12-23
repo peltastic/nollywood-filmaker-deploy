@@ -1,12 +1,14 @@
 export interface IActiveRequestData {
   _id: string;
   movie_title: string;
-  stattusof: "pending" | "ongoing" | "ready" | "completed";
+  stattusof: "pending" | "ongoing" | "ready" | "completed" | "awaiting";
   date: string;
   nameofservice: "Chat With A Professional";
   chat_title?: string;
   orderId: string;
   createdAt: string
+  cid: string
+  booktime?: string
 }
 
 export interface IActiveRequestDataResposne {
@@ -28,7 +30,7 @@ export interface IUserRequestHistoryResponse {
     | "Draft Legal documents"
     | "Create a Production budget";
     date: string
-    stattusof: "pending" | "ongoing" | "ready" | "completed";
+    stattusof: "pending" | "ongoing" | "ready" | "completed" | "awaiting";
     chat_title: string   
 }
 

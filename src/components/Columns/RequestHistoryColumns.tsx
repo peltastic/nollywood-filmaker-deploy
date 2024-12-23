@@ -28,7 +28,7 @@ export interface ReqHistoryColumnData {
   progress: number;
   rating: number;
   date: string;
-  status: "pending" | "ongoing" | "ready" | "completed";
+  status: "pending" | "ongoing" | "ready" | "completed" | "awaiting";
   orderId: string;
 }
 

@@ -82,5 +82,6 @@ export const {
   useLazyFetchResolvedFilesQuery,
   useLazyGetCustomerRequestDetailQuery,
   useLazyGetSingleConsultantAvailabilityQuery,
-  useUpdateReqAndCreateAppointmentMutation
+  useUpdateReqAndCreateAppointmentMutation,
+  useLazyFetchActiveRequestsQuery
 } = requestsApi;

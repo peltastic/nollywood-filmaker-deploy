@@ -22,9 +22,11 @@ type Props = {
   orderId: string;
   date: string;
   close: () => void;
+  refetch: () => void
 };
 
 const SetChatDateByUser = (props: Props) => {
+  console.log(props)
   const [selectedDate, setSelectedDate] = useState<Date>(new Date(props.date));
   const [slots, setSlots] = useState<
     | {
@@ -65,6 +67,8 @@ const SetChatDateByUser = (props: Props) => {
     if (isSuccess) {
       nprogress.complete();
       notify("success", "Chat date updated successfully");
+      props.refetch
+      ()
       props.close();
     }
   }, [isError, isSuccess]);
