@@ -64,11 +64,11 @@ export const requestsApi = createApi({
           time: string;
           date: string;
         };
-        userId: string;
+        cid: string;
       }
     >({
-      query: ({ body, userId }) => ({
-        url: "/api/users/requests/6760904a63f1266c6484e261/createappointment",
+      query: ({ body, cid }) => ({
+        url: `/api/users/requests/${cid}/createappointment`,
         body,
         method: "POST",
       }),

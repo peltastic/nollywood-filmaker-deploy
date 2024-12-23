@@ -34,11 +34,11 @@ const SetChatDateByUser = (props: Props) => {
     | undefined
   >(undefined);
   const [selectedTime, setSelectedTime] = useState<string>(
-    moment(props.time === "9:00" ? "09:00" : props.time, ["HH:mm"]).format("h:mm A")
+    moment(props.time === "9:00" ? "09:00" : props.time, ["HH:mm"]).format(
+      "h:mm A"
+    )
   );
-  const userId = useSelector(
-    (state: RootState) => state.persistedState.user.user?.id
-  );
+
   const [getConsultantHours, result] =
     useLazyGetSingleConsultantAvailabilityQuery();
   const [createAppointment, { isError, isLoading, isSuccess, error }] =
@@ -120,19 +120,16 @@ const SetChatDateByUser = (props: Props) => {
         <UnstyledButton
           disabled={!selectedTime || isLoading}
           clicked={() => {
-            if (userId) {
-                nprogress.start()
-              createAppointment({
-                body: {
-                  date: moment(selectedDate).format("YYYY-MM-DD"),
-                  orderId: props.orderId,
-                  time:
-                    moment(selectedTime, ["h:mm A"]).format("HH:mm") + ":00",
-                },
-                userId,
-              });
-            }
-          }}
+            nprogress.start();
+            createAppointment({
+              body: {
+                date: moment(selectedDate).format("YYYY-MM-DD"),
+                orderId: props.orderId,
+                time: moment(selectedTime, ["h:mm A"]).format("HH:mm") + ":00",
+              },
+              cid: props.cid,
+            });
+          }} 
           class="w-[8rem] flex items-center justify-center bg-black-3 disabled:opacity-50  text-white py-2 px-2 border border-black-3 rounded-md"
         >
           {isLoading ? (
