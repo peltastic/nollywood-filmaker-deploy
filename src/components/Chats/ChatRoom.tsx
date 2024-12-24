@@ -45,6 +45,7 @@ type Props = {
   status: "ongoing" | "completed" | "pending" | "ready";
   profilepics?: string;
   removeTyping: () => void;
+  addTyping: () => void
 };
 
 export interface IChatMessagesData {
@@ -96,16 +97,6 @@ const ChatRoom = (props: Props) => {
 
   ///////////////UPDATE TYPING CHAT
 
-  const addTypingChatHandler = () => {
-    props.updateChatHandlerProps({
-      file: "",
-      filename: "",
-      id: Math.floor(Math.random() * 100000).toString(),
-      text: "",
-      type: "typing",
-      user: props.type === "user" ? "consultant" : "user",
-    });
-  };
 
   ////////////////CUSTOM CHAT LISTENERS - OPEN///////////////////////////
 
@@ -174,7 +165,7 @@ const ChatRoom = (props: Props) => {
       });
       chat_socket.on("istyping", (data) => {
         if (data.userId !== props.userData?.id) {
-          addTypingChatHandler();
+         props.addTyping()
         }
       });
 

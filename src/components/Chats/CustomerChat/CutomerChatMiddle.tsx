@@ -234,8 +234,25 @@ const CustomerChatMiddle = ({
 
   const removeIsTypingMessage = () => {
     const payload = [...chatData];
-    payload.pop();
-    setChatData(payload);
+    if (payload[payload.length - 1].type === "typing") {
+      payload.pop();
+      setChatData(payload);
+    }
+  };
+
+  const addTypingChatHandler = () => {
+    const payload = [...chatData];
+    if (payload[payload.length - 1].type !== "typing") {
+      payload.push({
+        file: "",
+        filename: "",
+        id: Math.floor(Math.random() * 100000).toString(),
+        text: "",
+        type: "typing",
+        user: type === "user" ? "consultant" : "user",
+      });
+      setChatData(payload);
+    }
   };
 
   const [extensionOpened, extensionOpenedFuncs] = useDisclosure();
@@ -450,6 +467,7 @@ const CustomerChatMiddle = ({
                 <div className="h-full bg-white relative">
                   {data && (isTime || sessionOver) ? (
                     <ChatRoom
+                      addTyping={addTypingChatHandler}
                       refreshChat={() => {
                         if (type === "user") {
                           fetchUserChatMessages(data.orderId);
