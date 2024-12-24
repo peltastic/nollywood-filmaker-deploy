@@ -44,8 +44,6 @@ type Props = {
   refreshChat: () => void;
   status: "ongoing" | "completed" | "pending" | "ready";
   profilepics?: string;
-  removeTyping: () => void;
-  addTyping: () => void
 };
 
 export interface IChatMessagesData {
@@ -56,6 +54,7 @@ export interface IChatMessagesData {
 const ChatRoom = (props: Props) => {
   const [missedPongs, setMissedPongs] = useState(0);
   const [fileType, setFileType] = useState<"file" | "img">("file");
+  const [istyping, setIsTyping] = useState<boolean>(false);
 
   const messageQueueRef = useRef<
     {
@@ -96,7 +95,6 @@ const ChatRoom = (props: Props) => {
   const [opened, { open, close }] = useDisclosure();
 
   ///////////////UPDATE TYPING CHAT
-
 
   ////////////////CUSTOM CHAT LISTENERS - OPEN///////////////////////////
 
@@ -160,12 +158,14 @@ const ChatRoom = (props: Props) => {
     if (props.isTime) {
       chat_socket.on("stoptyping", (data) => {
         if (data.userId !== props.userData?.id) {
-          props.removeTyping();
+          console.log("stoptyping");
+          setIsTyping(false);
         }
       });
       chat_socket.on("istyping", (data) => {
         if (data.userId !== props.userData?.id) {
-         props.addTyping()
+          console.log("istyping");
+          setIsTyping(true);
         }
       });
 
@@ -434,6 +434,31 @@ const ChatRoom = (props: Props) => {
                   )}
                 </div>
               ))}
+            </>
+          )}
+          {istyping && (
+            <>
+              {props.type === "user" ? (
+                <ChatMessage
+                  file=""
+                  filename=""
+                  index={props.data.length}
+                  prevUser={"user"}
+                  text=""
+                  type="typing"
+                  user={props.type === "user" ? "consultant" : "user"}
+                />
+              ) : (
+                <ConsultantChatMessage
+                  file=""
+                  filename=""
+                  index={props.data.length}
+                  prevUser={"user"}
+                  text=""
+                  type="typing"
+                  user={props.type === "consultant" ? "user" : "consultant"}
+                />
+              )}
             </>
           )}
         </div>

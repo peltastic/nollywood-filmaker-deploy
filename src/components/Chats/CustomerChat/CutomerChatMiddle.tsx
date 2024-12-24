@@ -232,29 +232,6 @@ const CustomerChatMiddle = ({
     setChatData((prev) => [...prev, newEntry]);
   };
 
-  const removeIsTypingMessage = () => {
-    const payload = [...chatData];
-    if (payload[payload.length - 1].type === "typing") {
-      payload.pop();
-      setChatData(payload);
-    }
-  };
-
-  const addTypingChatHandler = () => {
-    const payload = [...chatData];
-    if (payload[payload.length - 1].type !== "typing") {
-      payload.push({
-        file: "",
-        filename: "",
-        id: Math.floor(Math.random() * 100000).toString(),
-        text: "",
-        type: "typing",
-        user: type === "user" ? "consultant" : "user",
-      });
-      setChatData(payload);
-    }
-  };
-
   const [extensionOpened, extensionOpenedFuncs] = useDisclosure();
   const [reportModOpened, funcs] = useDisclosure();
   const [transOpened, transFunc] = useDisclosure();
@@ -467,7 +444,6 @@ const CustomerChatMiddle = ({
                 <div className="h-full bg-white relative">
                   {data && (isTime || sessionOver) ? (
                     <ChatRoom
-                      addTyping={addTypingChatHandler}
                       refreshChat={() => {
                         if (type === "user") {
                           fetchUserChatMessages(data.orderId);
@@ -486,9 +462,8 @@ const CustomerChatMiddle = ({
                       sessionOver={sessionOver}
                       status={data.stattusof}
                       profilepics={profilepic}
-                      removeTyping={removeIsTypingMessage}
                     />
-                  ) : (
+                  ) : ( 
                     <div className="h-[90vh] max-h-[120rem] w-full">
                       <div className="absolute left-[50%] top-[50%]  -translate-x-1/2 z-10 -translate-y-1/2">
                         <Image

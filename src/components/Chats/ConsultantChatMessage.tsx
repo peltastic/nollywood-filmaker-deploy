@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaDownload } from "react-icons/fa";
 import { AspectRatio } from "@mantine/core";
+import Lottie from "lottie-react";
+import TypingLottie from "@/components/Lottie/typing.json";
 
 type Props = {
   text: string;
@@ -100,9 +102,11 @@ const ConsultantChatMessage = ({
                   </div>
                 </div>
               </Link>
-            ) : type === "img" ? (
-              <div className="">Image</div> 
-            ) : (
+            ) : type === "typing" ? (
+              <div className="w-[3rem]">
+                <Lottie animationData={TypingLottie} />
+              </div>
+            )  : (
               <>
                 {text.split("\n").map((line, index) => (
                   <div className="" key={index}>

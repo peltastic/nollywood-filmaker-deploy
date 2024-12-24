@@ -5,8 +5,8 @@ import { FaDownload } from "react-icons/fa";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
-import Lottie from "lottie-react";
 import { AspectRatio } from "@mantine/core";
+import Lottie from "lottie-react";
 import TypingLottie from "@/components/Lottie/typing.json";
 
 type Props = {
