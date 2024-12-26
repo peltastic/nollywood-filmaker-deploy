@@ -34,6 +34,7 @@ import { adminStatsApi } from "./features/admin/dashboard/stats";
 import { adminConsultantApi } from "./features/admin/consultants/consultants";
 import { adminIssuesApi } from "./features/admin/issues/issues";
 import { adminFeedbackApi } from "./features/admin/feedback/feedback";
+import { issuesApi } from "./features/users/issues/issues";
 
 const persistConfig = {
   key: "root",
@@ -78,7 +79,8 @@ export const store = configureStore({
     [adminStatsApi.reducerPath]: adminStatsApi.reducer,
     [adminConsultantApi.reducerPath]: adminConsultantApi.reducer,
     [adminIssuesApi.reducerPath]: adminIssuesApi.reducer,
-    [adminFeedbackApi.reducerPath]: adminFeedbackApi.reducer
+    [adminFeedbackApi.reducerPath]: adminFeedbackApi.reducer,
+    [issuesApi.reducerPath]: issuesApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -103,7 +105,8 @@ export const store = configureStore({
       adminStatsApi.middleware,
       adminConsultantApi.middleware,
       adminIssuesApi.middleware,
-      adminFeedbackApi.middleware
+      adminFeedbackApi.middleware,
+      issuesApi.middleware
     ]),
   // devTools: process.env.NODE_ENV !== "production",
 });

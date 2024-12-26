@@ -12,34 +12,21 @@ export interface IssuesColumnData {
   service_name: string;
   service_body: string;
   date_created: string;
-  status: "ready" | "ongoing" | "completed" | "pending";
+  status: "closed" | "pending" | "opened";
   image: string | StaticImport;
   email: string;
   admin?: boolean;
+  id: string;
 }
-
 export const issues_columns: ColumnDef<IssuesColumnData>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <div className="pl-5">
-        <CheckboxComponent label />
-      </div>
-    ),
-    cell: () => (
-      <div className="pl-5">
-        <CheckboxComponent label />
-      </div>
-    ),
-  },
-  {
     accessorKey: "customer",
-    header: () => <div className="py-4">Customer</div>,
+    header: () => <div className="py-4 pl-8">Customer</div>,
     cell: ({ row }) => {
       return (
-        <div className="flex items-center w-[15rem] xl:w-auto">
+        <div className="flex items-center w-[15rem] xl:w-auto pl-8">
           <div className="w-[2.5rem] h-[2.5rem] mr-2">
-            <AspectRatio ratio={1800/1800}>
+            <AspectRatio ratio={1800 / 1800}>
               <Image
                 src={row.original.image}
                 alt="image"
@@ -90,10 +77,16 @@ export const issues_columns: ColumnDef<IssuesColumnData>[] = [
     accessorKey: "status",
     header: () => <div className="">Status</div>,
     cell: ({ row }) => {
+      const className =
+        row.original.status.toLowerCase() === "closed"
+          ? "bg-light-green text-dark-green"
+          : row.original.status === "pending"
+          ? "bg-stroke-4 text-black-6"
+          : "bg-light-yellow text-dark-yellow";
       return (
         <div className="w-[10rem] xl:w-auto">
           <p
-            className={`bg-stroke-4 w-fit text-[12px] text-black-3 flex items-center font-medium py-1 px-2 rounded-full`}
+            className={`${className}  w-fit text-[12px]  flex items-center font-medium py-1 px-2 rounded-full`}
           >
             <span className="block pr-1">
               <GoDotFill />
@@ -111,11 +104,7 @@ export const issues_columns: ColumnDef<IssuesColumnData>[] = [
       return (
         <UnstyledButton
           clicked={() =>
-            router.push(
-              row.original.admin
-                ? `/admin/dashboard/issues/details/1`
-                : `/user/dashboard/issues/details/1`
-            )
+            router.push(`/admin/dashboard/issues/details/${row.original.id}`)
           }
           class="px-4 hover:bg-blue-1 transition-all py-2 rounded-md items-center bg-black-3 text-white flex"
         >

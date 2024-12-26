@@ -19,6 +19,7 @@ type Props = {
   noIcon?: boolean;
   darkBorder?: boolean
   defaultValue?: string
+  disabled?: boolean
 };
 
 const SelectComponent = (props: Props) => {
@@ -46,6 +47,7 @@ const SelectComponent = (props: Props) => {
         placeholder={props.placeholder}
         data={props.data}
         defaultValue={props.defaultValue}
+        disabled={props.disabled}
       />
     </div>
   );

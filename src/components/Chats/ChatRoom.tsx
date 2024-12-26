@@ -120,6 +120,16 @@ const ChatRoom = (props: Props) => {
   }, []);
 
   useEffect(() => {
+    if (props.sessionOver) return () => {};
+    chat_socket.on("disconnect", () => {
+      chat_socket.connect();
+    });
+    return () => {
+      chat_socket.off("disconnect");
+    };
+  }, [props.sessionOver]);
+
+  useEffect(() => {
     chat_socket.on("reconnect_attempt", () => {
       console.log("reconnecting...");
     });

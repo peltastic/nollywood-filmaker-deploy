@@ -1,4 +1,4 @@
-import { nprogress } from "@mantine/nprogress";
+
 import { monthNames, resolve_file_services } from "./constants/constants";
 import moment from "moment";
 
@@ -226,3 +226,4 @@ export function generateColorClass(
   const colorClass = logoAssignment.find((el) => el.service === service);
   return colorClass?.class;
 }
+

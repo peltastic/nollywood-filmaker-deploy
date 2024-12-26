@@ -6,8 +6,6 @@ import {
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import { DataTable } from "@/components/Tables/DataTable";
-import Img1 from "/public/assets/dashboard/issues-img-1.png";
-import Img2 from "/public/assets/dashboard/issues-img-2.png";
 
 import React, { useEffect, useState } from "react";
 import { useLazyFetchAllIssuesQuery } from "@/lib/features/admin/issues/issues";
@@ -36,6 +34,7 @@ const AdminIssuesPage = (props: Props) => {
           service_name: el.title,
           status: el.status,
           admin: true,
+          id: el._id
         };
       });
       setIssuesdData(refined_data);

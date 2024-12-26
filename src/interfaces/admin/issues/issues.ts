@@ -1,5 +1,6 @@
 export interface IssuesResponse {
   issues: {
+    _id: string;
     uid: {
       fname: string;
       lname: string;
@@ -10,8 +11,15 @@ export interface IssuesResponse {
     orderId: string;
     title: string;
     complain: string;
-    status: "ready" | "ongoing" | "completed" | "pending";
-    cid: string
-    createdAt: string
+    status: "closed" | "opened" | "pending";
+    cid: string;
+    createdAt: string;
   }[];
+}
+
+export interface IPostToIssueThreadPayload {
+  isid: string
+  reply: string
+  uid: string
+  role: "admin" | "user";
 }

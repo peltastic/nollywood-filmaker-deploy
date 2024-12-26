@@ -5,7 +5,6 @@ import {
   IUserPreferencesDataResponse,
 } from "@/interfaces/profile/profile";
 import { baseQueryWithReauth } from "@/lib/baseQuery";
-import { formDataHandler } from "@/utils/helperFunction";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
 export const profileApi = createApi({
