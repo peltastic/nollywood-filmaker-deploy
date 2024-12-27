@@ -172,6 +172,7 @@ const CustomerChatMiddle = ({
 
   useEffect(() => {
     if (result.data) {
+      console.log("updated-use")
       const chat_data: ChatPayload[] = result.data.messages.map((el) => {
         return {
           text: el.message,
@@ -198,6 +199,7 @@ const CustomerChatMiddle = ({
 
   useEffect(() => {
     if (consultantRes.data) {
+      console.log("updated-con")
       const chat_data: ChatPayload[] = consultantRes.data.messages.map((el) => {
         return {
           text: el.message,
