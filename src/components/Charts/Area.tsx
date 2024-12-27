@@ -15,7 +15,7 @@ const Area = (props: Props) => {
       dataKey="month"
       withYAxis={false}
       curveType="natural"
-      valueFormatter={(value) => `₦ ${new Intl.NumberFormat('en-US').format(value)}`}
+      valueFormatter={(value) => `${new Intl.NumberFormat('en-US').format(value)}`}
     //   gridAxis="none"
     strokeDasharray="15 1"
     // unit=" ₦"

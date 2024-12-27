@@ -21,11 +21,17 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { useProtectAdmin } from "@/hooks/useProtectAdminRoute";
 import {
+  useFetchNewestCustomersQuery,
+  useFetchSalesReportDataQuery,
   useFetchTotalCustomersAndConsultantsQuery,
   useFetchTransactionStatsQuery,
 } from "@/lib/features/admin/dashboard/stats";
 import DashboardStatsSkeleton from "@/components/Skeletons/DashboardStatsSkeleton";
 import { numberWithCommas } from "@/utils/helperFunction";
+import { IGetNewestUsers } from "@/interfaces/admin/dashboard/stats";
+import CustomerSkeleton from "@/components/Skeletons/CustomersSkeleton";
+import moment from "moment";
+import { useFetchCustomerRequestQuery } from "@/lib/features/admin/requests/request";
 
 type Props = {};
 
@@ -37,148 +43,14 @@ interface IOverviewData {
   id: string;
 }
 
-const linechartData = [
-  {
-    month: "Jan",
-    sales_price: 28010,
-    profit: 11200,
-  },
-  {
-    month: "Feb",
-    sales_price: 22100,
-    profit: 11150,
-  },
-  {
-    month: "Mar",
-    sales_price: 23790,
-    profit: 2100,
-  },
-  {
-    month: "Apr",
-    sales_price: 21200,
-    profit: 11300,
-  },
-  {
-    month: "May",
-    sales_price: 31700,
-    profit: 11300,
-  },
-  {
-    month: "Jun",
-    sales_price: 22800,
-    profit: 11100,
-  },
-  {
-    month: "Jul",
-    sales_price: 21200,
-    profit: 2150,
-  },
-  {
-    month: "Aug",
-    sales_price: 32790,
-    profit: 11200,
-  },
-  {
-    month: "Sep",
-    sales_price: 22100,
-    profit: 11300,
-  },
-  {
-    month: "Oct",
-    sales_price: 22010,
-    profit: 11150,
-  },
-  {
-    month: "Nov",
-    sales_price: 37910,
-    profit: 1200,
-  },
-  {
-    month: "Dec",
-    sales_price: 32200,
-    profit: 11300,
-  },
-];
 const line_series = [
   {
-    name: "sales_price",
+    name: "Sales_Price",
     color: "#181818",
   },
   {
-    name: "profit",
+    name: "Transactions",
     color: "#999999",
-  },
-];
-
-const user_data: {
-  name: string;
-  email: string;
-  date: string;
-  time: string;
-  id: string;
-}[] = [
-  {
-    name: "Jenny Wilson",
-    email: "w.lawson@example.com",
-    date: "Today",
-    time: "12:00pm",
-    id: "1",
-  },
-  {
-    name: "Jenny Wilson",
-    email: "w.lawson@example.com",
-    date: "Tomorrow",
-    time: "12:00pm",
-    id: "2",
-  },
-  {
-    name: "Jenny Wilson",
-    email: "w.lawson@example.com",
-    date: "Tomorrow",
-    time: "12:00pm",
-    id: "3",
-  },
-  {
-    name: "Jenny Wilson",
-    email: "w.lawson@example.com",
-    date: "Tomorrow",
-    time: "12:00pm",
-    id: "4",
-  },
-];
-
-const customer_req_data: ICustomerReqData[] = [
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Pending",
-  },
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Ongoing",
-  },
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Ready",
-  },
-  {
-    customer: "Jenny Wilson",
-    date: "22 Jan 2022",
-    email: "w.lawson@example.com",
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Completed",
   },
 ];
 
@@ -314,12 +186,81 @@ const AdminDashboardPage = (props: Props) => {
       id: "8",
     },
   ]);
+  const [newCustomersData, setNewCustomersData] = useState<IGetNewestUsers[]>(
+    []
+  );
+  const [customerReqData, setCustomerReqData] = useState<ICustomerReqData[]>(
+    []
+  );
+  const [linesChartData, setLinesChartData] = useState<
+    {
+      Sales_Price: number;
+      Transactions: number;
+      month: string;
+    }[]
+  >([]);
 
   const adminUserData = useSelector(
     (state: RootState) => state.persistedState.adminuser.user
   );
   const { data, isFetching } = useFetchTotalCustomersAndConsultantsQuery();
   const result = useFetchTransactionStatsQuery();
+  const sales = useFetchSalesReportDataQuery(null, {
+    refetchOnMountOrArgChange: true,
+  });
+  const customer_req = useFetchCustomerRequestQuery({
+    limit: 10,
+    page: 1,
+    order: "desc",
+    status: "pending"
+  }, {
+    refetchOnMountOrArgChange: true
+  });
+  const new_users = useFetchNewestCustomersQuery(null, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  useEffect(() => {
+    if (sales.data) {
+      const refined_data: {
+        Sales_Price: number;
+        Transactions: number;
+        month: string;
+      }[] = sales.data.data.map((el) => {
+        return {
+          month: el.month,
+          Sales_Price: el.totalPrice,
+          Transactions: el.totalTransactions,
+        };
+      });
+      setLinesChartData(refined_data);
+    }
+  }, [sales.data]);
+
+  useEffect(() => {
+    if (customer_req.data) {
+      const refined_data: ICustomerReqData[] = customer_req.data.requests.map(
+        (el) => {
+          return {
+            customer: `${el.user.fname} ${el.user.lname}`,
+            date: moment(el.createdAt).format("ll"),
+            email: el.user.email,
+            profilepic: el.user.profilepics,
+            script: el.chat_title || el.movie_title || "",
+            service_type: el.nameofservice,
+            status: el.stattusof,
+          };
+        }
+      );
+      setCustomerReqData(refined_data);
+    }
+  }, [customer_req.data]);
+
+  useEffect(() => {
+    if (new_users.data) {
+      setNewCustomersData(new_users.data.data);
+    }
+  }, [new_users.data]);
 
   useEffect(() => {
     if (data && result.data) {
@@ -429,29 +370,51 @@ const AdminDashboardPage = (props: Props) => {
             <div className="w-full xl:w-[65%]">
               <DashboardPlate title="Sales Report">
                 <div className="pb-8">
-                  <Area line_data={linechartData} line_series={line_series} />
+                  <Area line_data={linesChartData} line_series={line_series} />
                 </div>
               </DashboardPlate>
             </div>
             <div className=" mt-10 xl:mt-0 w-full xl:w-[35%]">
               <DashboardPlate title="Latest customers">
                 <div className="pb-7">
-                  {user_data.map((el) => (
-                    <CustomerFeed
-                      date={el.date}
-                      email={el.email}
-                      name={el.name}
-                      time={el.time}
-                      key={el.id}
-                    />
-                  ))}
+                  {new_users.isFetching ? (
+                    <div className="mt-8">
+                      <div className="mt-2">
+                        <CustomerSkeleton />
+                      </div>
+                      <div className="mt-2">
+                        <CustomerSkeleton />
+                      </div>
+                      <div className="mt-2">
+                        <CustomerSkeleton />
+                      </div>
+                      <div className="mt-2">
+                        <CustomerSkeleton />
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      {newCustomersData.map((el) => (
+                        <CustomerFeed
+                          date={moment(el.createdAt).format("MMM Do YY")}
+                          email={el.email}
+                          name={`${el.fname} ${el.lname}`}
+                          time={moment(el.createdAt).format("h:mm a")}
+                          key={el._id}
+                          profilepic={el.profilepics}
+                        />
+                      ))}
+                    </>
+                  )}
                 </div>
               </DashboardPlate>
             </div>
           </div>
           <div className="mt-16">
             <DataTable
-              data={customer_req_data}
+              loaderLength={10}
+              isFetching={customer_req.isFetching}
+              data={customerReqData}
               title="Customer requests"
               columns={customer_req_columns}
             />

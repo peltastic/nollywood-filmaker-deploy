@@ -62,16 +62,27 @@ export const consultantRequestsApi = createApi({
       {
         completedRequests: IRequestHistoryResponse[];
       },
-      string
+      { id: string; limit?: number; page?: number }
     >({
-      query: (id) => `/api/consultants/assignments/${id}`,
+      query: ({ id, limit, page }) => {
+        let query = "";
+        if (limit) {
+          query += `?limit=${limit}`;
+        }
+        if (page) {
+          query += `&page=${page}`;
+        }
+        return {
+          url: `/api/consultants/assignments/${id}${query}`,
+        };
+      },
     }),
     getSingleConsultantAvailability: build.query<
       {
         availableHoursCount: {
-          time: string
-          isAvailable: true
-        }[]
+          time: string;
+          isAvailable: true;
+        }[];
       },
       {
         date: string;
@@ -94,5 +105,5 @@ export const {
   useLazyGetServiceRequestsQuery,
   useSetChatAsCompleteMutation,
   useLazyFetchReqHistoryQuery,
-  useLazyGetSingleConsultantAvailabilityQuery
+  useLazyGetSingleConsultantAvailabilityQuery,
 } = consultantRequestsApi;

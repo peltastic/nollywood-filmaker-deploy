@@ -72,6 +72,10 @@ export const testExhibitionData = [
     label: "TV Broadcast",
     value: "TV Broadcast",
   },
+  {
+    label: "Not Decided Yet",
+    value: "Not Decided Yet"
+  }
 ];
 
 export const consultantTypesData = [

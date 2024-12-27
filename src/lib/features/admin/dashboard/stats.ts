@@ -1,5 +1,6 @@
 import {
   IGetNewestUsers,
+  IGetSalesReportResponse,
   IGetTotalCustomersAndConsultantsResponse,
   IGetTransactionStatsResponse,
 } from "@/interfaces/admin/dashboard/stats";
@@ -19,10 +20,18 @@ export const adminStatsApi = createApi({
     >({
       query: () => `/api/admin/stats/user-consultants`,
     }),
-    fetchNewestCustomers: build.query<{ data: IGetNewestUsers[] }, void>({
+    fetchNewestCustomers: build.query<{ data: IGetNewestUsers[] }, null>({
       query: () => `/api/admin/stats/newest-users`,
+    }),
+    fetchSalesReportData: build.query<IGetSalesReportResponse, null>({
+      query: () => `/api/admin/transactions/monthly-totals`,
     }),
   }),
 });
 
-export const { useFetchTransactionStatsQuery, useFetchTotalCustomersAndConsultantsQuery } = adminStatsApi;
+export const {
+  useFetchTransactionStatsQuery,
+  useFetchTotalCustomersAndConsultantsQuery,
+  useFetchSalesReportDataQuery,
+  useFetchNewestCustomersQuery
+} = adminStatsApi;

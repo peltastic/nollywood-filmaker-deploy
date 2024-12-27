@@ -21,13 +21,21 @@ export const adminRequestApi = createApi({
         page?: number;
         limit?: number;
         sort?: string;
-        order?: "desc"
-        status?: string
+        order?: "desc";
+        status?: string;
       }
     >({
       query: ({ limit, order, page, sort, type, status }) => {
+        let query = "";
+        if (limit) {
+          query += `&limit=${limit}`;
+        }
+        if (page) {
+          query += `&page=${page}`;
+        }
+
         return {
-          url: `/api/admin/pullrequests?order=${order}&status=${status}`,
+          url: `/api/admin/pullrequests?order=${order}&status=${status}${query}`,
         };
       },
     }),
@@ -38,6 +46,7 @@ export const adminRequestApi = createApi({
           if (expertise) {
             query = `?expertise=${expertise}`;
           }
+
           return { url: `/api/admin/consultants${query}` };
         },
       }
@@ -62,24 +71,28 @@ export const adminRequestApi = createApi({
     getCustomerRequestDetail: build.query<ICustomerReqDetails, string>({
       query: (id) => `/api/consultants/orderdetail/${id}`,
     }),
-    getConsultantForTask: build.query<{
-      consultants: {
-        fname: string
-        lname: string
-        _id: string
-      }[]
-    } , void>({
-      query: () => `/api/admin/fetch/consultants`
-    })
+    getConsultantForTask: build.query<
+      {
+        consultants: {
+          fname: string;
+          lname: string;
+          _id: string;
+        }[];
+      },
+      void
+    >({
+      query: () => `/api/admin/fetch/consultants`,
+    }),
   }),
 });
 
 export const {
   useLazyFetchCustomerRequestQuery,
+  useFetchCustomerRequestQuery,
   useFetchConsultantsByExpertiseQuery,
   useLazyFetchConsultantsByExpertiseQuery,
   useAppointConsultantMutation,
   useAssignServiceToConsultantMutation,
   useLazyGetCustomerRequestDetailQuery,
-  useLazyGetConsultantForTaskQuery
+  useLazyGetConsultantForTaskQuery,
 } = adminRequestApi;

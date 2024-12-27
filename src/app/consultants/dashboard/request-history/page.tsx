@@ -27,7 +27,12 @@ const RequestHistoryPage = (props: Props) => {
     useLazyFetchReqHistoryQuery();
 
   useEffect(() => {
-    fetchReqHistory(consultantId!);
+    if (consultantId) {
+      fetchReqHistory({
+        id: consultantId,
+        limit: 10,
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -47,7 +52,9 @@ const RequestHistoryPage = (props: Props) => {
             orderId: el.request.orderId,
           };
         });
-    setReqHistoryData(transformed_data);
+      setReqHistoryData(transformed_data);
+    } else {
+      setReqHistoryData([])
     }
   }, [data]);
 

@@ -52,7 +52,7 @@ const UpcomingConversations = ({ data }: Props) => {
         </div>
       ) : (
         <div className="mt-2">
-          {data.map((el) => (
+          {/* {data.map((el) => (
             <CustomerFeed
               date={el.date}
               email={el.email}
@@ -60,7 +60,7 @@ const UpcomingConversations = ({ data }: Props) => {
               time={el.time}
               key={el.id}
             />
-          ))}
+          ))} */}
         </div>
       )}
     </div>

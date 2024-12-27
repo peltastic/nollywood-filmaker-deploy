@@ -4,6 +4,10 @@ import {
   IConsultantActiveRequestColumnData,
   consultant_active_requests_columns,
 } from "@/components/Columns/consultants/ActiveRequestsColumn";
+import {
+  ReqHistoryColumnData,
+  request_history_column,
+} from "@/components/Columns/consultants/RequestHistoryColumn";
 import DashboardInfoCard from "@/components/Dashboard/DashboardInfoCard";
 import DashboardPlate from "@/components/Dashboard/DashboardPlate";
 import Header from "@/components/Dashboard/Header";
@@ -15,6 +19,7 @@ import { useProtectRouteConsultantRoute } from "@/hooks/useProtectConsultantRout
 import {
   useFetchCustomerRequestsQuery,
   useGetActiveRequestQuery,
+  useLazyFetchReqHistoryQuery,
   useLazyGetServiceRequestsQuery,
 } from "@/lib/features/consultants/dashboard/request";
 import { RootState } from "@/lib/store";
@@ -60,7 +65,6 @@ const dashboard_data: {
     id: "4",
   },
 ];
-
 
 const plate_data: {
   change?: "increase" | "decrease";
@@ -126,11 +130,15 @@ const DashboardPage = (props: Props) => {
   const result = useGetActiveRequestQuery(consultantId!, {
     refetchOnMountOrArgChange: true,
   });
+  const [reqHistoryData, setReqHistoryData] = useState<ReqHistoryColumnData[]>(
+    []
+  );
+  // const { data, isSuccess, isError, isFetching } =
+  //   useFetchCustomerRequestsQuery(consultantId!, {
+  //     refetchOnMountOrArgChange: true,
+  //   });
 
-  const { data, isSuccess, isError, isFetching } =
-    useFetchCustomerRequestsQuery(consultantId!, {
-      refetchOnMountOrArgChange: true,
-    });
+  const [getReqHistory, req_history] = useLazyFetchReqHistoryQuery();
 
   const [fetchServiceReq, serviceReq] = useLazyGetServiceRequestsQuery();
 
@@ -138,6 +146,37 @@ const DashboardPage = (props: Props) => {
     fetchServiceReq(consultantId!);
   }, []);
 
+  useEffect(() => {
+    if (consultantId) {
+      getReqHistory({
+        id: consultantId,
+        limit: 5,
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (req_history.data) {
+      const transformed_data: ReqHistoryColumnData[] =
+        req_history.data.completedRequests.map((el) => {
+          return {
+            customer: `${el.userInfo.fname} ${el.userInfo.lname}`,
+            date: moment(el.request.createdAt).format("ll"),
+            email: el.userInfo.email,
+            rating: 5,
+            script: el.request.chat_title || el.request.movie_title,
+            service_type: el.request.nameofservice,
+            status: el.request.stattusof,
+            type: "consultant",
+            profilepics: el.userInfo.profilepics,
+            orderId: el.request.orderId,
+          };
+        });
+      setReqHistoryData(transformed_data);
+    } else {
+      setReqHistoryData([]);
+    }
+  }, [req_history.data]);
 
   useEffect(() => {
     if (result.isSuccess) {
@@ -154,10 +193,12 @@ const DashboardPage = (props: Props) => {
               profilepic: el.user.profilepics,
               orderId: el.orderId,
               type: "chat",
-              creation_date: el.creationDate
+              creation_date: el.creationDate,
             };
           });
         setActiveReqData(resData);
+      } else {
+        setActiveReqData([]);
       }
     }
   }, [result.isSuccess]);
@@ -177,7 +218,7 @@ const DashboardPage = (props: Props) => {
               status: el.status,
               orderId: el.orderId,
               type: "service",
-              creation_date: el.creationDate
+              creation_date: el.creationDate,
             };
           });
         setServiceReqData(resData);
@@ -252,15 +293,17 @@ const DashboardPage = (props: Props) => {
               loaderLength={5}
             />
           </div>
-          {/* <div className="mt-16">
+          <div className="mt-16">
             <DataTable
-              title="Customer Requests"
-              isFetching={isFetching}
-              columns={customer_req_columns}
-              data={customerReqData}
+              title="Request History"
+              isFetching={req_history.isFetching}
+              columns={request_history_column}
+              data={reqHistoryData}
               loaderLength={5}
+              showMoreBtnContent="See All"
+              link="/consultants/dashboard/request-history"
             />
-          </div> */}
+          </div>
         </div>
         <div className="mt-16 px-6 chatbp:px-0">
           <DashboardPlate
