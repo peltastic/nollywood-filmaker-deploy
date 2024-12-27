@@ -14,7 +14,6 @@ import {
 } from "@/components/Columns/RequestHistoryColumns";
 import moment from "moment";
 import {
-  useFetchActiveRequestsQuery,
   useLazyFetchActiveRequestsQuery,
   useLazyFetchUserRequestHistoryQuery,
 } from "@/lib/features/users/dashboard/requests/requests";
@@ -144,6 +143,8 @@ const DashboardHomePgae = (props: Props) => {
                 data={activeReqData}
                 loaderLength={4}
                 isFetching={isFetching}
+                emptyHeader="You have no active requests"
+                emptyBody="Any requests you have made will show up here."
               />
             </div>
             <div className="mt-14">
@@ -156,6 +157,8 @@ const DashboardHomePgae = (props: Props) => {
                 isFetching={result.isFetching}
                 loaderLength={5}
                 data={reqHistoryData}
+                emptyHeader="No completed requests"
+                emptyBody="Any requests you made will show up here."
               />
             </div>
           </div>

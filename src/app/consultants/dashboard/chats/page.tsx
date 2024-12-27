@@ -20,7 +20,7 @@ import { useSelector } from "react-redux";
 type Props = {};
 
 const ConsultantChastPage = (props: Props) => {
-  useProtectRouteConsultantRoute()
+  useProtectRouteConsultantRoute();
   const [isTime, setIsTime] = useState<boolean>(false);
   const [sessionOver, setSessionOver] = useState<boolean>(false);
   const consultantId = useSelector(
@@ -81,6 +81,9 @@ const ConsultantChastPage = (props: Props) => {
   const refresh = () => {
     if (searchVal) {
       fetchConversationData(searchVal);
+      if (consultantId) {
+        fetchConversations(consultantId);
+      }
     }
   };
 
@@ -100,7 +103,7 @@ const ConsultantChastPage = (props: Props) => {
           <section
             className={`${
               closeRight ? "w-[70%]" : "w-[43%]"
-            } transition-all hidden chatbp:block`}
+            } transition-all h-full hidden chatbp:block`}
           >
             <CustomerChatMiddle
               refetch={() => {
@@ -130,6 +133,7 @@ const ConsultantChastPage = (props: Props) => {
             <CustomerChatRight
               type="consultant"
               data={result.data}
+              closeRight={closeRight}
               close={() => setCloseRight(true)}
               isTime={isTime}
               sessionOver={sessionOver}

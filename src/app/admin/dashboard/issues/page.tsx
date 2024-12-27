@@ -49,6 +49,7 @@ const AdminIssuesPage = (props: Props) => {
           isFetching={isFetching}
           loaderLength={10}
           data={issuesData}
+          emptyHeader="No issues"
         />
       </DashboardBodyLayout>
     </ServiceLayout>

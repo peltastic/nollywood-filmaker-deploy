@@ -72,6 +72,7 @@ const AdminRequests = (props: Props) => {
           }}
           dropdowndata={dropdowndata}
           data={customerReqData}
+          emptyHeader="No requests"
         />
       </DashboardBodyLayout>
     </ServiceLayout>

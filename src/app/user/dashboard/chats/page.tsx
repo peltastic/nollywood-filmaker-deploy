@@ -20,7 +20,7 @@ import { useSelector } from "react-redux";
 type Props = {};
 
 const ChatsPage = (props: Props) => {
-  useProtectRoute()
+  useProtectRoute();
   const [isTime, setIsTime] = useState<boolean>(false);
   const [sessionOver, setSessionOver] = useState<boolean>(false);
   const userId = useSelector(
@@ -79,6 +79,9 @@ const ChatsPage = (props: Props) => {
   const refresh = () => {
     if (searchVal) {
       fetchConversationData(searchVal);
+      if (userId) {
+        fetchConversation(userId);
+      }
     }
   };
 

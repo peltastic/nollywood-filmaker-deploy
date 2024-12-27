@@ -114,7 +114,7 @@ const OrderDetailsHeader = ({
       adminMenuContent = (
         <MenuContent
           data={[
-            { name: "Resolve", link: "/", function: () => {} },
+            // { name: "Resolve", link: "/", function: () => {} },
             {
               name: "Assign",
               link: "/",

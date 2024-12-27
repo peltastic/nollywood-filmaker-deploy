@@ -115,6 +115,7 @@ const FeedbacksPage = (props: Props) => {
               title="Customer feedback"
               columns={feedback_column}
               data={feedbackData}
+              emptyHeader="No feedbacks"
             />
           </div>
         </div>

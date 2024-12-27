@@ -105,13 +105,13 @@ const RequestExtension = (props: Props) => {
             {/* <RadixSelect changed={() => {}} data={extension_data} /> */}
             <div className="w-full flex flex-wrap mt-[10rem]">
               <UnstyledButton
-                disabled={isLoading || !extensionValue}
                 clicked={props.close}
                 class="mb-4 xs:mb-0 py-2 rounded-md px-4 border-stroke-2 w-full xs:w-auto border ml-auto xs:mr-4"
-              >
+                >
                 Cancel
               </UnstyledButton>
               <UnstyledButton
+                disabled={isLoading || !extensionValue}
                 clicked={() => {
                   if (userId) {
                     requestExtension({

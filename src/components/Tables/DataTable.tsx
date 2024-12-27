@@ -39,6 +39,8 @@ interface DataTableProps<TData, TValue> {
   updateDropdownData?: (val: string) => void;
   dropdownValue?: string;
   dropdownDefaultVal?: string
+  emptyHeader?: string
+  emptyBody?: string
 }
 
 export function DataTable<TData, TValue>({
@@ -56,7 +58,9 @@ export function DataTable<TData, TValue>({
   dropdowndata,
   updateDropdownData,
   dropdownValue,
-  dropdownDefaultVal
+  dropdownDefaultVal,
+  emptyBody,
+  emptyHeader
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -171,11 +175,10 @@ export function DataTable<TData, TValue>({
                 <div className="w-full py-[4rem]">
                   <Image src={NoDataImg} alt="no-data" className="mx-auto" />
                   <h1 className="py-8 text-black-4 text-[1.13rem] font-medium text-center">
-                    No completed requests
+                    {emptyHeader}
                   </h1>
                   <h2 className="text-[0.88rem] text-center text-gray-1 w-[20rem] mx-auto">
-                    Any requests you have made will show up here. Start today by
-                    creating a request.
+                    {emptyBody}
                   </h2>
                 </div>
               </TableRow>
@@ -186,3 +189,6 @@ export function DataTable<TData, TValue>({
     </div>
   );
 }
+
+// Any requests you have made will show up here. Start today by
+// creating a request.

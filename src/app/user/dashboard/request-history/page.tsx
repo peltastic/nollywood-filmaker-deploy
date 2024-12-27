@@ -17,7 +17,7 @@ import { useSelector } from "react-redux";
 type Props = {};
 
 const RequestHistoryPage = (props: Props) => {
-  useProtectRoute()
+  useProtectRoute();
   const [reqHistoryData, setReqHistoryData] = useState<ReqHistoryColumnData[]>(
     []
   );
@@ -60,6 +60,8 @@ const RequestHistoryPage = (props: Props) => {
             isFetching={isFetching}
             loaderLength={10}
             data={reqHistoryData}
+            emptyHeader="No completed requests"
+            emptyBody="Any requests you made will show up here."
           />
         </div>
       </DashboardBodyLayout>

@@ -282,6 +282,8 @@ const DashboardPage = (props: Props) => {
               data={activeReqData}
               isFetching={result.isFetching}
               loaderLength={5}
+              emptyHeader="You have no active chat requests"
+              emptyBody="Any requests you have made will show up here."
             />
           </div>
           <div className="mt-16">
@@ -291,6 +293,8 @@ const DashboardPage = (props: Props) => {
               data={serviceReqData}
               isFetching={serviceReq.isFetching}
               loaderLength={5}
+              emptyHeader="You have no active service requests"
+              emptyBody="Any requests you have made will show up here."
             />
           </div>
           <div className="mt-16">
@@ -302,6 +306,8 @@ const DashboardPage = (props: Props) => {
               loaderLength={5}
               showMoreBtnContent="See All"
               link="/consultants/dashboard/request-history"
+              emptyHeader="No completed requests"
+              emptyBody="Any requests you made will show up here."
             />
           </div>
         </div>

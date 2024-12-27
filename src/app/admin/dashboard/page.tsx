@@ -208,14 +208,17 @@ const AdminDashboardPage = (props: Props) => {
   const sales = useFetchSalesReportDataQuery(null, {
     refetchOnMountOrArgChange: true,
   });
-  const customer_req = useFetchCustomerRequestQuery({
-    limit: 10,
-    page: 1,
-    order: "desc",
-    status: "pending"
-  }, {
-    refetchOnMountOrArgChange: true
-  });
+  const customer_req = useFetchCustomerRequestQuery(
+    {
+      limit: 10,
+      page: 1,
+      order: "desc",
+      status: "pending",
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
   const new_users = useFetchNewestCustomersQuery(null, {
     refetchOnMountOrArgChange: true,
   });
@@ -412,10 +415,12 @@ const AdminDashboardPage = (props: Props) => {
           </div>
           <div className="mt-16">
             <DataTable
+              showMoreBtnContent="See All"
+              link="/admin/dashboard/requests"
               loaderLength={10}
               isFetching={customer_req.isFetching}
               data={customerReqData}
-              title="Customer requests"
+              title="Customer Requests"
               columns={customer_req_columns}
             />
           </div>

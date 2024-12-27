@@ -69,6 +69,8 @@ const RequestHistoryPage = (props: Props) => {
             loaderLength={10}
             isFetching={isFetching}
             columns={request_history_column}
+            emptyHeader="No completed requests"
+            emptyBody="Any requests you made will show up here."
           />
         </div>
       </DashboardBodyLayout>

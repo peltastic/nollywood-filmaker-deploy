@@ -277,20 +277,23 @@ const CustomerChatMiddle = ({
   }, [paymentStatus]);
 
   useEffect(() => {
+    let timeout: NodeJS.Timeout | undefined;
     if (type === "consultant") {
       chat_socket.on("refresh", () => {
         notify(
           "message",
           "Customer extended session, chat will refresh to update time"
         );
-        const timer = setTimeout(() => {
+        timeout = setTimeout(() => {
           refreshChat();
         }, 3000);
-        return () => {
-          clearTimeout(timer);
-        };
       });
     }
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
   }, [type]);
 
   useEffect(() => {
@@ -463,7 +466,7 @@ const CustomerChatMiddle = ({
                       status={data.stattusof}
                       profilepics={profilepic}
                     />
-                  ) : ( 
+                  ) : (
                     <div className="h-[90vh] max-h-[120rem] w-full">
                       <div className="absolute left-[50%] top-[50%]  -translate-x-1/2 z-10 -translate-y-1/2">
                         <Image

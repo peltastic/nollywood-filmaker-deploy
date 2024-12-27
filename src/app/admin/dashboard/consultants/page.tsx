@@ -71,6 +71,7 @@ const AdminConsultantPage = (props: Props) => {
             isFetching={isFetching}
             loaderLength={10}
             clicked={open}
+            emptyHeader="No consultants"
           />
         </DashboardBodyLayout>
       </ServiceLayout>

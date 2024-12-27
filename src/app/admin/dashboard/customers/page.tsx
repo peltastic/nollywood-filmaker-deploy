@@ -54,6 +54,7 @@ const AdminCustomersPage = (props: Props) => {
             data={customerData}
             isFetching={isFetching}
             loaderLength={14}
+            emptyHeader="No customers"
           />
         </div>
       </DashboardBodyLayout>
