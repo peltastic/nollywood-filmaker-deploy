@@ -222,11 +222,11 @@ const CustomerChatMiddle = ({
     }
   }, [consultantRes.data]);
 
-  useEffect(() => {
-    if (isFetching) {
-      setChatData([]);
-    }
-  }, [isFetching]);
+  // useEffect(() => {
+  //   if (isFetching) {
+  //     setChatData([]);
+  //   }
+  // }, [isFetching]);
 
   const updateChatDataHandler = (newEntry: ChatPayload) => {
     setChatData((prev) => [...prev, newEntry]);
