@@ -22,8 +22,8 @@ export const admin_customers_column: ColumnDef<IAdminCustomersColumnData>[] = [
     header: () => <div className="pl-6">Customer</div>,
     cell: ({ row }) => {
       return (
-        <div className="mr-2">
-            <div className="pl-6 flex items-center w-[20rem] xl:w-auto">
+        <div className="mr-2 flex items-center">
+            <div className="pl-6 mr-2 flex items-center w-[20rem] xl:w-auto">
             <AspectRatio ratio={1800/1800}>
               <Image
                 className="w-[3rem] rounded-full h-[3rem]"

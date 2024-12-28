@@ -314,7 +314,7 @@ const AdminDashboardPage = (props: Props) => {
           change: "increase",
           percentage: 0,
           title: "Total Revenue",
-          value: numberWithCommas(result.data.totalCompletedPrice),
+          value: `₦ ${numberWithCommas(result.data.totalCompletedPrice)}`,
 
           id: "7",
         },

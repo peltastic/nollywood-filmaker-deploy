@@ -142,14 +142,14 @@ const CustomerDetailsPage = (props: Props) => {
       setOverviewData([
         {
           title: "Requests created",
-          value: `₦ ${numberWithCommas(data.metrics.totalTransactions)}`,
+          value: `${numberWithCommas(data.metrics.totalTransactions)}`,
           percentage: 0,
           change: "increase",
           id: "1",
         },
         {
           title: "Chats created",
-          value: `₦ ${numberWithCommas(data.metrics.totalChats)}`,
+          value: `${numberWithCommas(data.metrics.totalChats)}`,
           percentage: 0,
           change: "increase",
           id: "4",
@@ -163,7 +163,7 @@ const CustomerDetailsPage = (props: Props) => {
         },
         {
           title: "Average rating",
-          value: `₦ ${numberWithCommas(
+          value: `${numberWithCommas(
             (data.metrics.averageRatings.quality +
               data.metrics.averageRatings.speed) /
               2
