@@ -38,26 +38,14 @@ export interface IActiveRequestColumnData {
 }
 
 export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <div className="pl-5">
-        <CheckboxComponent label />
-      </div>
-    ),
-    cell: () => (
-      <div className="pl-5">
-        <CheckboxComponent label />
-      </div>
-    ),
-  },
+
 
   {
     accessorKey: "name",
-    header: () => <div className=" py-4 ">Service name</div>,
+    header: () => <div className=" py-4 pl-6 ">Service name</div>,
     cell: ({ row }) => {
       return (
-        <div className="flex items-center w-[20rem] xl:w-auto">
+        <div className="flex items-center w-[20rem] xl:w-auto pl-6">
           <div
             className={`${generateColorClass(
               row.original.service_type

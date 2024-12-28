@@ -129,7 +129,7 @@ const OrderDetailsHeader = ({
     case "ongoing":
       adminMenuContent = (
         <MenuContent
-          data={[{ name: "Assign", link: "/", function: () => {} }]}
+          data={isChat ? [{ name: "Go to Chat", link: `/`, function: () => {} }] : []}
         />
       );
       break;

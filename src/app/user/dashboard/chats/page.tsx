@@ -14,13 +14,14 @@ import {
 import { useLazyGetChatFilesQuery } from "@/lib/features/users/services/chat/chat";
 import { RootState } from "@/lib/store";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 type Props = {};
 
 const ChatsPage = (props: Props) => {
   useProtectRoute();
+  const ref = useRef<HTMLDivElement>(null);
   const [isTime, setIsTime] = useState<boolean>(false);
   const [sessionOver, setSessionOver] = useState<boolean>(false);
   const userId = useSelector(
@@ -48,6 +49,16 @@ const ChatsPage = (props: Props) => {
       fetchConversationData(searchVal);
       getChatFiles(searchVal);
     }
+  }, [searchVal]);
+
+  useEffect(() => {
+    if (!ref.current) return () => {};
+
+    ref.current.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "center",
+    });
   }, [searchVal]);
 
   useEffect(() => {
@@ -90,7 +101,7 @@ const ChatsPage = (props: Props) => {
   return (
     <ServiceLayout>
       <DashboardBodyLayout>
-        <section className="flex h-[60rem]  max-h-[120rem]   bg-white">
+        <div ref={ref} className="flex h-[95vh]  max-h-[80rem]   bg-white">
           <section className="mx-auto w-full  h-full chatbp:w-[30%]">
             <CustomerChatLeft
               data={chatData}
@@ -140,7 +151,7 @@ const ChatsPage = (props: Props) => {
               res={res.data?.files}
             />
           </section>
-        </section>
+        </div>
       </DashboardBodyLayout>
     </ServiceLayout>
   );

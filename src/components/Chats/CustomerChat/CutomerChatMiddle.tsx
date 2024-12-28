@@ -172,7 +172,6 @@ const CustomerChatMiddle = ({
 
   useEffect(() => {
     if (result.data) {
-      console.log("updated-use")
       const chat_data: ChatPayload[] = result.data.messages.map((el) => {
         return {
           text: el.message,
@@ -199,7 +198,6 @@ const CustomerChatMiddle = ({
 
   useEffect(() => {
     if (consultantRes.data) {
-      console.log("updated-con")
       const chat_data: ChatPayload[] = consultantRes.data.messages.map((el) => {
         return {
           text: el.message,
@@ -351,7 +349,7 @@ const CustomerChatMiddle = ({
           />
         )}
       </ModalComponent>
-      <div className=" bg-white border-r relative border-r-stroke-8 border-l border-l-stroke-8  h-full">
+      <div className=" bg-white border-r relative  border-r-stroke-8 border-l border-l-stroke-8  h-full">
         {!orderId ? (
           <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2">
             <Image
@@ -364,14 +362,14 @@ const CustomerChatMiddle = ({
             </p>
           </div>
         ) : (
-          <div className="">
+          <div className="h-full">
             {isFetching ? (
               <div className="w-[5rem] absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2">
                 <Spinner dark />
               </div>
             ) : (
               <>
-                <header className="flex items-center py-[1.4rem] px-2 sm:px-6 border-b border-b-stroke-8">
+                <header className="flex items-center py-[1.4rem] px-2 sm:px-6 border-b border-b-stroke-8 h-[13%] max-h-[8rem]">
                   <div
                     className="block chatbp:hidden"
                     onClick={() => router.back()}
@@ -446,7 +444,7 @@ const CustomerChatMiddle = ({
                   </div>
                 </header>
 
-                <div className="h-full bg-white relative">
+                <div className="h-[87%] bg-white ">
                   {data && (isTime || sessionOver) ? (
                     <ChatRoom
                       refreshChat={() => {

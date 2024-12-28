@@ -35,7 +35,7 @@ import { useFetchCustomerRequestQuery } from "@/lib/features/admin/requests/requ
 
 type Props = {};
 
-interface IOverviewData {
+export interface IOverviewData {
   change?: "increase" | "decrease";
   title: string;
   value: string;

@@ -8,43 +8,46 @@ import ModalComponent from "@/components/Modal/Modal";
 import MenuComponent from "@/components/Menu/MenuComponent";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import { IoIosArrowDown } from "react-icons/io";
+import { useRouter } from "next/navigation";
+import { generateColorClass } from "@/utils/helperFunction";
+import GenerateDarkServiceLogo from "@/components/Generate/GenerateDarkServiceLogo";
 
 export interface IAdminRequestHistory {
   service_name: string;
-  service_type: string;
+  service_type:
+    | "Chat With A Professional"
+    | "Read my Script and advice"
+    | "Watch the Final cut of my film and advice"
+    | "Look at my Budget and advice"
+    | "Create a Marketing budget"
+    | "Create a Pitch based on my Script"
+    | "Draft Legal documents"
+    | "Create a Production budget";
   progress: number;
   rating: number;
   date_created: string;
-  status: "Ready" | "Ongoing" | "Completed" | "Pending";
+  status: "ready" | "ongoing" | "completed" | "pending" | "awaiting";
+  orderId: string;
 }
 
 export const admin_customer_request_history_column: ColumnDef<IAdminRequestHistory>[] =
   [
     {
-      id: "select",
-      header: ({ table }) => (
-        <div className="pl-5">
-          <CheckboxComponent label />
-        </div>
-      ),
-      cell: () => (
-        <div className="pl-5">
-          <CheckboxComponent label />
-        </div>
-      ),
-    },
-    {
-      accessorKey: "script",
-      header: () => <div className="">Service name</div>,
+      accessorKey: "service_name",
+      header: () => <div className="pl-6">Service name</div>,
       cell: ({ row }) => {
         return (
-          <div className="flex items-center w-[20rem] chatbp::w-auto py-4">
-            <div className="bg-gray-bg-3 h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4">
-              <Image src={ReadMyScriptDarkImg} alt="name-img" />
+          <div className="flex items-center w-[20rem] chatbp::w-auto py-4 pl-6">
+            <div
+              className={`${generateColorClass(
+                row.original.service_type
+              )} h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4`}
+            >
+              <GenerateDarkServiceLogo service={row.original.service_type} />
             </div>
             <div className="text-[0.88rem]">
               <p className="text-black-4 font-medium">
-                {row.getValue("script")}
+                {row.getValue("service_name")}
               </p>
               <p className="text-gray-1">{row.original.service_type}</p>
             </div>
@@ -58,7 +61,7 @@ export const admin_customer_request_history_column: ColumnDef<IAdminRequestHisto
       cell: ({ row }) => {
         return (
           <div className="flex items-center py-4 w-[20rem] chatbp:w-auto">
-            <div className="w-[25rem] mr-2">
+            <div className="w-[20rem] mr-2">
               <Progress value={row.getValue("progress")} color="#181818" />
             </div>
             <p className="font-medium text-[0.88rem]">
@@ -97,9 +100,9 @@ export const admin_customer_request_history_column: ColumnDef<IAdminRequestHisto
       header: "Status",
       cell: ({ row }) => {
         const className =
-          row.original.status === "Ready"
+          row.original.status === "ready"
             ? "bg-light-blue text-dark-blue"
-            : row.original.status === "Completed"
+            : row.original.status === "completed"
             ? "bg-light-green text-dark-green"
             : "bg-light-yellow text-dark-yellow";
         return (
@@ -119,20 +122,32 @@ export const admin_customer_request_history_column: ColumnDef<IAdminRequestHisto
     {
       id: "actions",
       cell: ({ row }) => {
+        const router = useRouter();
         // const [opened, { open, close }] = useDisclosure();
         return (
           <>
             <MenuComponent
               target={
-                <UnstyledButton class="px-4 py-2 hover:bg-blue-1 rounded-md items-center bg-black-3 text-white flex">
-                  <p className="mr-1 font-medium text-[0.88rem]">Actions</p>
-                  <IoIosArrowDown />
-                </UnstyledButton>
+                <div>
+                  <UnstyledButton class="px-4 py-2 hover:bg-blue-1 rounded-md items-center bg-black-3 text-white flex">
+                    <p className="mr-1 font-medium text-[0.88rem]">Actions</p>
+                    <IoIosArrowDown />
+                  </UnstyledButton>
+                </div>
               }
             >
-              <div className="shadow-xl border bg-white border-[#1925321A]">
-                <ul>
-                  <li className="cursor-pointer">Go to Chat</li>
+              <div className=" bg-white">
+                <ul className="px-1 text-gray-6 text-[0.88rem]">
+                  <li
+                    onClick={() =>
+                      router.push(
+                        `/admin/dashboard/order-details/${row.original.orderId}`
+                      )
+                    }
+                    className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
+                  >
+                    See Details
+                  </li>
                 </ul>
               </div>
             </MenuComponent>

@@ -18,7 +18,7 @@ const AdminCustomersPage = (props: Props) => {
   const [customerData, setCustomerData] = useState<IAdminCustomersColumnData[]>(
     []
   );
-  const { isError, isFetching, isSuccess, data } = useFetchAllCustomersQuery(
+  const { isFetching, data } = useFetchAllCustomersQuery(
     null,
     {
       refetchOnMountOrArgChange: true,
@@ -36,7 +36,8 @@ const AdminCustomersPage = (props: Props) => {
             expertise: el.expertise,
             location: "N/A",
             number: el.phone,
-            profilePic: el.profilepics
+            profilePic: el.profilepics,
+            id: el._id
           };
         }
       );

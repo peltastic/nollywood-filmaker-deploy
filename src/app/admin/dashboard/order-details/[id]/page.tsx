@@ -10,7 +10,6 @@ import OrderDetailsTop from "@/components/OrderDetails/OrderDetailsTop";
 import OrderDetailsBody from "@/components/OrderDetails/OrderDetailsBody";
 
 import OrderDetailsPageSkeleton from "@/components/Skeletons/OrderDetailsPageSkeleton";
-import moment from "moment";
 import { useLazyGetCustomerRequestDetailQuery } from "@/lib/features/admin/requests/request";
 type Props = {};
 
@@ -118,14 +117,7 @@ const CustomerOrderDetailsPage = (props: Props) => {
                     booktime={data?.request.booktime}
                     contact_info={data?.request.contactInfo}
                   />
-                  {/* <OrderDetailsBody
-                    chat={
-                      data?.request.nameofservice === "Chat With A Professional"
-                    }
-                    // bodyData={bodyData}
-                    script="Movie script 2024.pdf"
-                    title="Mission Impossible"
-                  /> */}
+                
                 </div>
               </div>
             </div>

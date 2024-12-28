@@ -42,7 +42,7 @@ const AdminConsultantPage = (props: Props) => {
             id: el._id,
             number: el.phone,
             fname: el.fname,
-            lname: el.lname
+            lname: el.lname,
           };
         }
       );

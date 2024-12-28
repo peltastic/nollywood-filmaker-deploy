@@ -192,7 +192,7 @@ const DashboardPage = (props: Props) => {
               status: el.request.stattusof,
               profilepic: el.user.profilepics,
               orderId: el.orderId,
-              type: "chat",
+              type: "Chat",
               creation_date: el.creationDate,
             };
           });

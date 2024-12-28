@@ -30,8 +30,9 @@ export interface IConsultantActiveRequestColumnData {
   status: "ready" | "ongoing" | "completed" | "pending";
   profilepic: string;
   orderId: string;
-  type: "service" | "chat";
+  type: "service" | "Chat";
   creation_date: string;
+  admin?: boolean;
 }
 
 export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequestColumnData>[] =
@@ -82,13 +83,13 @@ export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequ
       cell: ({ row }) => {
         return (
           <div className="flex items-center w-[20rem] xl:w-auto py-4">
-             <div
-            className={`${generateColorClass(
-              row.original.service_type
-            )} h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4`}
-          >
-            <GenerateDarkServiceLogo service={row.original.service_type} />
-          </div>
+            <div
+              className={`${generateColorClass(
+                row.original.service_type
+              )} h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4`}
+            >
+              <GenerateDarkServiceLogo service={row.original.service_type} />
+            </div>
             <div className="text-[0.88rem]">
               <p className="text-black-4 font-medium">
                 {row.getValue("script")}
@@ -153,38 +154,43 @@ export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequ
                 </div>
               }
             >
-              <div className="bg-white ">
-                <ul className="px-1 text-gray-6 text-[0.88rem]">
-                  {row.original.type === "chat" ? (
-                    <Link
-                      href={`/consultants/dashboard/chats?chat=${row.original.orderId}`}
-                    >
-                      <li
-                        // onClick={open}
-                        className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
+              {row.original.admin ? (
+                <div className="bg-white">
+                  <ul>
+                    <li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
+                      <Link
+                        href={`/admin/dashboard/order-details/${row.original.orderId}`}
                       >
-                        Go to Chat
-                      </li>
-                    </Link>
-                  ) : null}
-                  <li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
-                    <Link
-                      href={`/consultants/dashboard/${row.original.orderId}/order-details`}
-                    >
-                      See Details
-                    </Link>
-                  </li>
-                  {/* {<li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
-                    <Link
-                      href={
-                        "/user/dashboard/order-details/1?page_type=download_files"
-                      }
-                    >
-                      Download files
-                    </Link>
-                  </li>} */}
-                </ul>
-              </div>
+                        See Details
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              ) : (
+                <div className="bg-white ">
+                  <ul className="px-1 text-gray-6 text-[0.88rem]">
+                    {row.original.type === "Chat" ? (
+                      <Link
+                        href={`/consultants/dashboard/chats?chat=${row.original.orderId}`}
+                      >
+                        <li
+                          // onClick={open}
+                          className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
+                        >
+                          Go to Chat
+                        </li>
+                      </Link>
+                    ) : null}
+                    <li className="py-1 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
+                      <Link
+                        href={`/consultants/dashboard/${row.original.orderId}/order-details`}
+                      >
+                        See Details
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </MenuComponent>
           </>
         );

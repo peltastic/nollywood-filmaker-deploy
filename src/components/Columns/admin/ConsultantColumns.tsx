@@ -1,16 +1,12 @@
 import UnstyledButton from "@/components/Button/UnstyledButton";
-import CheckboxComponent from "@/components/Checkbox/Checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-
-import TestImage from "/public/assets/dashboard/issues-img-1.png";
+import { useRouter } from "next/navigation";;
 
 export interface IAdminConsultantData {
-  id: string
+  id: string;
   consultant: string;
-  fname: string
-  lname: string
+  fname: string;
+  lname: string;
   email: string;
   number: string;
   location: string;
@@ -20,25 +16,12 @@ export interface IAdminConsultantData {
 
 export const admin_consultant_column: ColumnDef<IAdminConsultantData>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <div className="pl-5">
-        <CheckboxComponent label />
-      </div>
-    ),
-    cell: () => (
-      <div className="pl-5">
-        <CheckboxComponent label />
-      </div>
-    ),
-  },
-  {
     accessorKey: "consultant",
-    header: () => <div className="">Consultant</div>,
+    header: () => <div className="pl-6">Consultant</div>,
     cell: ({ row }) => {
       return (
-        <div className="flex items-center w-[20rem] xl:w-auto">
-           <div className="bg-black-3 font-bold text-[0.7rem] mr-2 h-[2.5rem] flex items-center justify-center w-[2.5rem] rounded-full text-white">
+        <div className="pl-6 flex items-center w-[20rem] xl:w-auto">
+          <div className="bg-black-3 font-bold text-[0.7rem] mr-2 h-[2.5rem] flex items-center justify-center w-[2.5rem] rounded-full text-white">
             {row.original.fname[0]} {row.original.lname[0]}
           </div>
           <div className="">
@@ -105,13 +88,13 @@ export const admin_consultant_column: ColumnDef<IAdminConsultantData>[] = [
   },
   {
     id: "action",
-    cell: ({}) => {
+    cell: ({row}) => {
       const router = useRouter();
       return (
         <div className="w-[15rem] xl:w-auto">
           <UnstyledButton
-            clicked={() => router.push(`/admin/dashboard/consultants/1`)}
-            class=" border-stroke-2 border text-[0.88rem] text-black-5 py-2 px-4 rounded-md"
+            clicked={() => router.push(`/admin/dashboard/consultants/${row.original.id}`)}
+            class="hover:bg-gray-bg-9 border-stroke-2 border text-[0.88rem] text-black-5 py-2 px-4 rounded-md"
           >
             See more
           </UnstyledButton>

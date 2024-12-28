@@ -2,7 +2,6 @@ import UnstyledButton from "@/components/Button/UnstyledButton";
 import CheckboxComponent from "@/components/Checkbox/Checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
-import TestImage from "/public/assets/dashboard/issues-img-1.png";
 import { useRouter } from "next/navigation";
 import { AspectRatio } from "@mantine/core";
 
@@ -14,29 +13,17 @@ export interface IAdminCustomersColumnData {
   expertise: string[];
   date: string;
   profilePic: string;
+  id: string
 }
 
 export const admin_customers_column: ColumnDef<IAdminCustomersColumnData>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <div className="pl-5">
-        <CheckboxComponent label />
-      </div>
-    ),
-    cell: () => (
-      <div className="pl-5">
-        <CheckboxComponent label />
-      </div>
-    ),
-  },
-  {
     accessorKey: "customer",
-    header: () => <div className="">Customer</div>,
+    header: () => <div className="pl-6">Customer</div>,
     cell: ({ row }) => {
       return (
-        <div className="flex items-center w-[20rem] xl:w-auto">
-          <div className="mr-2">
+        <div className="mr-2">
+            <div className="pl-6 flex items-center w-[20rem] xl:w-auto">
             <AspectRatio ratio={1800/1800}>
               <Image
                 className="w-[3rem] rounded-full h-[3rem]"
@@ -110,13 +97,13 @@ export const admin_customers_column: ColumnDef<IAdminCustomersColumnData>[] = [
   },
   {
     id: "action",
-    cell: ({}) => {
+    cell: ({row}) => {
       const router = useRouter();
       return (
         <div className="w-[15rem] xl:w-auto">
           <UnstyledButton
-            clicked={() => router.push(`/admin/dashboard/customers/1`)}
-            class=" border-stroke-2 border text-[0.88rem] text-black-5 py-2 px-4 rounded-md"
+            clicked={() => router.push(`/admin/dashboard/customers/${row.original.id}`)}
+            class=" hover:bg-gray-bg-9 transition-all border-stroke-2 border text-[0.88rem] text-black-5 py-2 px-4 rounded-md"
           >
             See more
           </UnstyledButton>

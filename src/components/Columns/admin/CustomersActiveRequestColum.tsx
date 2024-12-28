@@ -8,38 +8,40 @@ import MenuComponent from "@/components/Menu/MenuComponent";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import { IoIosArrowDown } from "react-icons/io";
 import { useRouter } from "next/navigation";
+import { generateColorClass } from "@/utils/helperFunction";
+import GenerateDarkServiceLogo from "@/components/Generate/GenerateDarkServiceLogo";
 
 export interface ICustomerActiveReqData {
   service_name: string;
-  service_type: string;
+  service_type:
+    | "Chat With A Professional"
+    | "Read my Script and advice"
+    | "Watch the Final cut of my film and advice"
+    | "Look at my Budget and advice"
+    | "Create a Marketing budget"
+    | "Create a Pitch based on my Script"
+    | "Draft Legal documents"
+    | "Create a Production budget";
   progress: number;
   date: string;
-  status: "Ready" | "Ongoing" | "Completed" | "Pending";
+  status: "ready" | "ongoing" | "completed" | "pending" | "awaiting";
+  orderId: string;
 }
 
 export const customer_active_request_column: ColumnDef<ICustomerActiveReqData>[] =
   [
     {
-      id: "select",
-      header: ({ table }) => (
-        <div className="pl-5">
-          <CheckboxComponent label />
-        </div>
-      ),
-      cell: () => (
-        <div className="pl-5">
-          <CheckboxComponent label />
-        </div>
-      ),
-    },
-    {
       accessorKey: "service_name",
-      header: () => <div className="">Service name</div>,
+      header: () => <div className="pl-6">Service name</div>,
       cell: ({ row }) => {
         return (
-          <div className="flex items-center w-[20rem] xl:w-auto py-4">
-            <div className="bg-gray-bg-3 h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4">
-              <Image src={ReadMyScriptDarkImg} alt="name-img" />
+          <div className="flex items-center w-[20rem] xl:w-auto py-4 pl-6">
+            <div
+              className={`${generateColorClass(
+                row.original.service_type
+              )} h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4`}
+            >
+              <GenerateDarkServiceLogo service={row.original.service_type} />
             </div>
             <div className="text-[0.88rem]">
               <p className="text-black-4 font-medium">
@@ -83,12 +85,14 @@ export const customer_active_request_column: ColumnDef<ICustomerActiveReqData>[]
       header: "Status",
       cell: ({ row }) => {
         const className =
-          row.original.status === "Ready"
+          row.original.status === "ready"
             ? "bg-light-blue text-dark-blue"
-            : row.original.status === "Completed"
+            : row.original.status === "completed"
             ? "bg-light-green text-dark-green"
-            : row.original.status === "Pending"
+            : row.original.status === "pending"
             ? "bg-stroke-4 text-black-6"
+            : row.original.status === "awaiting"
+            ? "bg-light-awaiting text-dark-awaiting"
             : "bg-light-yellow text-dark-yellow";
         return (
           <div className=" w-[10rem] xl:w-auto">
@@ -126,7 +130,7 @@ export const customer_active_request_column: ColumnDef<ICustomerActiveReqData>[]
                   <li
                     onClick={() =>
                       router.push(
-                        `/admin/dashboard/customers/1/order-details/1?status=${row.original.status}`
+                        `/admin/dashboard/order-details/${row.original.orderId}`
                       )
                     }
                     className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
