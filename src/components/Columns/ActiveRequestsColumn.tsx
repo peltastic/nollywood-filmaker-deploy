@@ -11,7 +11,11 @@ import Link from "next/link";
 import ModalComponent from "../Modal/Modal";
 import { useDisclosure } from "@mantine/hooks";
 import SetChatDate from "../ModalPages/SetChatDate";
-import { capitalizeFirstLetter, generateColorClass, isResolveFile } from "@/utils/helperFunction";
+import {
+  capitalizeFirstLetter,
+  generateColorClass,
+  isResolveFile,
+} from "@/utils/helperFunction";
 import moment from "moment";
 import SetChatDateByUser from "../ModalPages/SetChatDateByUser";
 import { useLazyFetchActiveRequestsQuery } from "@/lib/features/users/dashboard/requests/requests";
@@ -38,8 +42,6 @@ export interface IActiveRequestColumnData {
 }
 
 export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
-
-
   {
     accessorKey: "name",
     header: () => <div className=" py-4 pl-6 ">Service name</div>,
@@ -52,7 +54,7 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
             )} h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4`}
           >
             <GenerateDarkServiceLogo service={row.original.service_type} />
-          </div> 
+          </div>
           <div className="text-[0.88rem]">
             <p className="text-black-4 font-medium">
               {row.getValue("name") || row.original.chat_title}
@@ -147,7 +149,7 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
                 date={formattedDate}
                 orderId={orderId}
                 time={time}
-                refetch={() => fetchActiveRequest()}
+                refetch={() => fetchActiveRequest({ limit: 10 })}
               />
             )}
           </ModalComponent>

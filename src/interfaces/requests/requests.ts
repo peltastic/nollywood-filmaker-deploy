@@ -12,6 +12,9 @@ export interface IActiveRequestData {
 }
 
 export interface IActiveRequestDataResposne {
+  page: number
+  limit: number
+  total: number
   requests: IActiveRequestData[];
 }
 

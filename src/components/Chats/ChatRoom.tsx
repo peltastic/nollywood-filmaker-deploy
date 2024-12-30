@@ -5,9 +5,6 @@ import Image from "next/image";
 import SendImg from "/public/assets/chats/send-icon.svg";
 import { Textarea } from "@mantine/core";
 import { MdCancel } from "react-icons/md";
-import CancelImg from "/public/assets/cancel.svg";
-import Lottie from "lottie-react";
-
 import {
   chat_socket,
   emitTypingEvent,
@@ -19,7 +16,7 @@ import {
 import { ChatPayload } from "./CustomerChat/CutomerChatMiddle";
 import ConsultantChatMessage from "./ConsultantChatMessage";
 import { IUserInfoData } from "@/interfaces/auth/auth";
-import { useParams, useSearchParams } from "next/navigation";
+import {  useSearchParams } from "next/navigation";
 import { MdInfoOutline } from "react-icons/md";
 import FileButtonComponent from "../FileButton/FileButtonComponent";
 import UnstyledButton from "../Button/UnstyledButton";
@@ -457,6 +454,7 @@ const ChatRoom = (props: Props) => {
                   text=""
                   type="typing"
                   user={props.type === "user" ? "consultant" : "user"}
+                  lastmessage={true}
                 />
               ) : (
                 <ConsultantChatMessage
@@ -467,6 +465,7 @@ const ChatRoom = (props: Props) => {
                   text=""
                   type="typing"
                   user={props.type === "consultant" ? "user" : "consultant"}
+                  lastmessage={true}
                 />
               )}
             </>

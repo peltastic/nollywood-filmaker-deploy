@@ -10,6 +10,7 @@ import { DataTable } from "@/components/Tables/DataTable";
 import { useProtectRoute } from "@/hooks/useProtectRoute";
 import { useLazyFetchUserRequestHistoryQuery } from "@/lib/features/users/dashboard/requests/requests";
 import { RootState } from "@/lib/store";
+import { Pagination } from "@mantine/core";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -18,6 +19,7 @@ type Props = {};
 
 const RequestHistoryPage = (props: Props) => {
   useProtectRoute();
+  const [activePage, setActivePage] = useState<number>(1);
   const [reqHistoryData, setReqHistoryData] = useState<ReqHistoryColumnData[]>(
     []
   );
@@ -25,11 +27,10 @@ const RequestHistoryPage = (props: Props) => {
     (state: RootState) => state.persistedState.user.user?.id
   );
 
-  useProtectRoute();
   const [fetchRequestHistory, { data, isSuccess, isFetching }] =
     useLazyFetchUserRequestHistoryQuery();
   useEffect(() => {
-    fetchRequestHistory({ userId: userId! });
+    fetchRequestHistory({ userId: userId!, limit: 10 });
   }, []);
 
   useEffect(() => {
@@ -47,7 +48,7 @@ const RequestHistoryPage = (props: Props) => {
       });
       setReqHistoryData(modData);
     }
-  }, [isSuccess]);
+  }, [isSuccess, data]);
 
   return (
     <ServiceLayout>
@@ -64,6 +65,22 @@ const RequestHistoryPage = (props: Props) => {
             emptyBody="Any requests you made will show up here."
           />
         </div>
+        {data && (
+          <Pagination
+            total={
+              data.totalItems % 10
+                ? Math.floor(data.totalItems / 10) + 1
+                : data.totalItems / 10
+            }
+            value={activePage}
+            color="#333333"
+            onChange={(val) => {
+              fetchRequestHistory({ userId: userId!, limit: 10, page: val });
+              setActivePage(val);
+            }}
+            mt={"xl"}
+          />
+        )}
       </DashboardBodyLayout>
     </ServiceLayout>
   );

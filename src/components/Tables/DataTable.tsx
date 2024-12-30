@@ -116,8 +116,8 @@ export function DataTable<TData, TValue>({
             Array.from({
               length: loaderLength,
             }).map((el, index) => (
-              <div className="mb-2" key={index.toString()}>
-                <Skeleton height={50} />
+              <div className="mb-3" key={index.toString()}>
+                <Skeleton height={70} />
               </div>
             ))}
         </div>

@@ -14,6 +14,7 @@ interface OtherProps {
   labelClass?: string;
   disabled?: boolean;
   labelColor?: string;
+  required?: boolean;
 }
 
 const Field = (props: FieldHookConfig<string> & OtherProps) => {
@@ -24,15 +25,20 @@ const Field = (props: FieldHookConfig<string> & OtherProps) => {
     <div className="w-full">
       <label className="">
         {props.label && (
-          <p
-            className={`${
-              props.labelColor || "text-gray-3"
-            }  font-medium text-[0.88rem] ${props.labelClass} ${
-              props.smallLabel ? "text-sm" : ""
-            }  mb-2`}
-          >
-            {props.label}
-          </p>
+          <div className="flex">
+            <p
+              className={`${
+                props.labelColor || "text-gray-3"
+              }  font-medium text-[0.88rem] ${props.labelClass} ${
+                props.smallLabel ? "text-sm" : ""
+              }  mb-2`}
+            >
+              {props.label}
+            </p>
+            {props.required && (
+              <p className={`${props.labelColor || "text-gray-3"} `}>*</p>
+            )}
+          </div>
         )}
 
         <div className="relative ">

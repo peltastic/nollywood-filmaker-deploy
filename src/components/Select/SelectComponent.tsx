@@ -11,7 +11,7 @@ type Props = {
     value: string;
   }[];
   placeholder: string;
-  value?: string;
+  value?: string | null;
   setValueProps: (value: string | null, option?: ComboboxItem) => void;
   size?: "lg" | "md" | "xl" | "xs" | "sm";
   rounded?: "lg" | "md" | "xl" | "xs" | "sm";
@@ -48,6 +48,7 @@ const SelectComponent = (props: Props) => {
         data={props.data}
         defaultValue={props.defaultValue}
         disabled={props.disabled}
+        value={props.value}
       />
     </div>
   );

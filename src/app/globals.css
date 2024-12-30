@@ -118,3 +118,16 @@ body {
   background-color: #fae1ff;
   color: #3d0c47;
 }
+
+
+.PhoneInputInput {
+  outline: none !important; 
+  padding: .8rem;
+  border-radius: .6rem;
+  /* border-radius: ; */
+}
+.PhoneInput {
+  padding: 0 .5rem;
+  border-radius: .6rem;
+  /* border-radius: ; */
+}

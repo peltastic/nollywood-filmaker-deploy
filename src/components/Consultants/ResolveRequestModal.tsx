@@ -113,7 +113,7 @@ const ResolveRequestModal = (props: Props) => {
               });
             }
           }}
-          class="w-[10rem] flex py-2 px-4 disabled:opacity-50 transition-all rounded-md justify-center items-center text-white border border-black-3 disabled:border-black-2  bg-black-3 text-[0.88rem] disabled:bg-black-2"
+          class="w-[10rem] flex py-2 px-4 disabled:opacity-50 transition-all rounded-md justify-center items-center text-white border border-black-3 disabled:border-black-2  bg-black-3 text-[0.88rem] "
         >
           {isLoading ? (
             <div className="py-1 w-[1rem]">

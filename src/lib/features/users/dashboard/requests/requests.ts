@@ -11,8 +11,23 @@ export const requestsApi = createApi({
   reducerPath: "requestApi",
   baseQuery: baseQueryWithReauth,
   endpoints: (build) => ({
-    fetchActiveRequests: build.query<IActiveRequestDataResposne, void | null>({
-      query: () => `/api/users/user/pending-request`,
+    fetchActiveRequests: build.query<
+      IActiveRequestDataResposne,
+      {
+        page?: number;
+        limit?: number;
+      }
+    >({
+      query: ({ page, limit }) => {
+        let query = "";
+        if (limit) {
+          query += `?limit=${limit}`;
+        }
+        if (page) {
+          query += `&page=${page}`;
+        }
+        return { url: `/api/users/user/pending-request${query}` };
+      },
     }),
     fetchUserRequestHistory: build.query<
       {
@@ -25,12 +40,16 @@ export const requestsApi = createApi({
       {
         userId: string;
         limit?: number;
+        page?: number;
       }
     >({
-      query: ({ userId, limit }) => {
+      query: ({ userId, limit, page }) => {
         let query = "";
         if (limit) {
-          query = `?limit=${limit}`;
+          query += `?limit=${limit}`;
+        }
+        if (page) {
+          query += `&page=${page}`;
         }
         return { url: `/api/users/requests/completed/${userId}${query}` };
       },
@@ -83,5 +102,5 @@ export const {
   useLazyGetCustomerRequestDetailQuery,
   useLazyGetSingleConsultantAvailabilityQuery,
   useUpdateReqAndCreateAppointmentMutation,
-  useLazyFetchActiveRequestsQuery
+  useLazyFetchActiveRequestsQuery,
 } = requestsApi;

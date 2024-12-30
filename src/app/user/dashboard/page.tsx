@@ -24,6 +24,7 @@ import { useSearchParams } from "next/navigation";
 import { useDisclosure } from "@mantine/hooks";
 import ModalComponent from "@/components/Modal/Modal";
 import SetChatDateByUser from "@/components/ModalPages/SetChatDateByUser";
+import { Pagination } from "@mantine/core";
 
 type Props = {};
 
@@ -32,6 +33,7 @@ const DashboardHomePgae = (props: Props) => {
   const [reqHistoryData, setReqHistoryData] = useState<ReqHistoryColumnData[]>(
     []
   );
+  const [activePage, setActivePage] = useState<number>(1);
   const search = useSearchParams();
   const cid = search.get("cid");
   const orderId = search.get("orderId");
@@ -44,8 +46,9 @@ const DashboardHomePgae = (props: Props) => {
   useProtectRoute();
   const [activeReqData, setActiveReqData] = useState<
     IActiveRequestColumnData[]
-  >([]); 
-  const [fetchActiveRequest, { data, isFetching }] = useLazyFetchActiveRequestsQuery();
+  >([]);
+  const [fetchActiveRequest, { data, isFetching }] =
+    useLazyFetchActiveRequestsQuery();
   const userId = useSelector(
     (state: RootState) => state.persistedState.user.user?.id
   );
@@ -82,7 +85,7 @@ const DashboardHomePgae = (props: Props) => {
   }, [data]);
 
   useEffect(() => {
-    fetchActiveRequest()
+    fetchActiveRequest({ limit: 10 });
     fetchRequestHistory({ userId: userId!, limit: 5 });
   }, []);
 
@@ -123,7 +126,7 @@ const DashboardHomePgae = (props: Props) => {
             date={date}
             orderId={orderId}
             time={time}
-            refetch={() => fetchActiveRequest()}
+            refetch={() => fetchActiveRequest({ limit: 10 })}
           />
         )}
       </ModalComponent>
@@ -147,6 +150,25 @@ const DashboardHomePgae = (props: Props) => {
                 emptyBody="Any requests you have made will show up here."
               />
             </div>
+            {data && data.total > 10 && (
+              <Pagination
+                total={
+                  data.total % 10
+                    ? Math.floor(data.total / 10) + 1
+                    : data.total / 10
+                }
+                value={activePage}
+                color="#333333"
+                onChange={(val) => {
+                  fetchActiveRequest({
+                    limit: 10,
+                    page: val,
+                  });
+                  setActivePage(val);
+                }}
+                mt={"xl"}
+              />
+            )}
             <div className="mt-14">
               <DataTable
                 link="/user/dashboard/request-history"

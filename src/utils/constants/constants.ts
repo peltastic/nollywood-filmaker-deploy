@@ -74,8 +74,8 @@ export const testExhibitionData = [
   },
   {
     label: "Not Decided Yet",
-    value: "Not Decided Yet"
-  }
+    value: "Not Decided Yet",
+  },
 ];
 
 export const consultantTypesData = [
@@ -340,16 +340,143 @@ export const time_slots = [
   },
   {
     label: "1:00 AM",
-    value: "1:00 AM"
-  }
+    value: "1:00 AM",
+  },
 ];
 
 export const loaderColor = "#d9d0d5";
-
 
 export const resolve_file_services = [
   "Create a Production budget",
   "Create a Marketing budget",
   "Create a Pitch based on my Script",
-  "Draft Legal documents"
-]
+  "Draft Legal documents",
+];
+
+export const film_crew_values = [
+  {
+    key: "Production Department",
+    value: [
+      "Director",
+      "Screenwriter",
+      "Producer",
+      "Executive Producer",
+      "Line Producer",
+      "Production Manager",
+      "Production Coordinator",
+      "Production Assistant (PA)",
+      "Unit Production Manager (UPM)",
+      "Location Manager",
+      "Location Assistant",
+      "Location Assistant (1st AD)",
+      "Location Assistant (2nd AD)",
+      "Location Assistant (2nd 2nd AD)",
+      "Stunt Coordinator",
+      "Intimacy Coordinator",
+      "Casting Director",
+      "Script Supervisor",
+    ],
+  },
+  {
+    key: "Camera Department",
+    value: [
+      "Director of Photography (DP)",
+      "Camera Operator",
+      "1st Assistant Camera (AC)",
+      "2nd Assistant Camera (AC)",
+      "Steadicam Operator",
+      "Drone Operator",
+      "Digital Imaging Technician (DIT)",
+      "Video Assist Operator",
+    ],
+  },
+  {
+    key: "Lighting & Grip Department",
+    value: [
+      "Gaffer",
+      "Best Boy Electric",
+      "Electricians",
+      "Key Grip",
+      "Best Boy Grip",
+      "Dolly Grip",
+      "Rigging Grip",
+    ],
+  },
+  {
+    key: "Art Department",
+    value: [
+      "Production Designer",
+      "Art Director",
+      "Set Decorator",
+      "Prop Master",
+      "Props Assistant",
+      "Set Dresser",
+      "Construction Coordinator",
+    ],
+  },
+  {
+    key: "Customer Department",
+    value: [
+      "Costume Designer",
+      "Wardrobe Supervisor",
+      "Costume Assistants",
+      "Costume Standby",
+    ],
+  },
+  {
+    key: "Hair and Makeup Department",
+    value: [
+      "Makeup and Hair Personnel",
+      "Makeup Personnel",
+      "Makeup Assistant",
+      "Hair Stylist",
+      "Prosthetics Artist",
+      "SFX Makeup Artist",
+      "On-Set Touch-Up Artist",
+    ],
+  },
+  {
+    key: "Sound Department",
+    value: [
+      "Production Sound Mixer",
+      "Boom Operator",
+      "Utility Sound Technician",
+    ],
+  },
+  { key: "Music Department", value: ["Composer", "Music Supervisor"] },
+];
+
+export const departmentList = [
+  {
+    label: "Production Department",
+    value: "Production Department",
+  },
+  {
+    label: "Camera Department",
+    value: "Camera Department",
+  },
+  {
+    label: "Lighting & Grip Department",
+    value: "Lighting & Grip Department",
+  },
+  {
+    label: "Art Department",
+    value: "Art Department",
+  },
+  {
+    label: "Customer Department",
+    value: "Customer Department",
+  },
+  {
+    label: "Hair and Makeup Department",
+    value: "Hair and Makeup Department",
+  },
+  {
+    label: "Sound Department",
+    value: "Sound Department",
+  },
+  {
+    label: "Music Department",
+    value: "Music Department",
+  },
+];
