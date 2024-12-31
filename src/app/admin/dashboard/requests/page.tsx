@@ -52,14 +52,16 @@ const AdminRequests = (props: Props) => {
   }, [data]);
 
   useEffect(() => {
-    chat_socket.on("adminNotification", () => {
-      fetchCustomerRequests({
-        order: "desc",
-        status,
-      });
+    primary_socket.on("adminNotification", (data) => {
+      if (data.title === "New Service Order") {
+        fetchCustomerRequests({
+          order: "desc",
+          status,
+        });
+      }
     });
     return () => {
-      chat_socket.off("adminNotification");
+      primary_socket.off("adminNotification");
     };
   }, []);
 
