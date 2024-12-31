@@ -126,8 +126,7 @@ const CompanyDetails = (props: Props) => {
             <div className="">
               <div className="mt-8">
                 <div className="mb-2  flex font-medium text-[0.88rem] text-[#A5A5A5]">
-                  <p>Budget</p>
-                  <p>*</p>
+                  <p>Fee range</p>
                 </div>
                 <SelectComponent
                   data={[

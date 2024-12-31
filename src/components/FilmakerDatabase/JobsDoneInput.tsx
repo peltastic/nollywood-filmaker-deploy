@@ -57,13 +57,13 @@ const JobsDoneInput = ({
               classname="w-full"
               name="title"
               placeholder="Production title"
-              required
+              // required
             />
             {!company && roles && (
               <div className="">
                 <div className="mb-2  flex font-medium text-[0.88rem] text-[#A5A5A5]">
                   <p>Role</p>
-                  <p>*</p>
+                  {/* <p>*</p> */}
                 </div>
                 <SelectComponent
                   data={roles.map((el) => {
@@ -88,12 +88,12 @@ const JobsDoneInput = ({
               classname="w-full"
               name="link"
               placeholder="Link"
-              required
+              // required
             />
             <div className="">
               <div className="mb-2  flex font-medium text-[0.88rem] text-[#A5A5A5]">
                 <p>Year</p>
-                <p>*</p>
+                {/* <p>*</p> */}
               </div>
               <YearPickerInput
                 value={dateInput}

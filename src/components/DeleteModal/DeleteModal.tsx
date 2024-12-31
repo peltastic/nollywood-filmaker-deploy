@@ -2,11 +2,14 @@ import React from "react";
 import DeleteIcon from "/public/assets/admin/delete-icon.svg";
 import Image from "next/image";
 import UnstyledButton from "../Button/UnstyledButton";
+import Spinner from "@/app/Spinner/Spinner";
 
 type Props = {
   title: string;
   body: string;
   close: () => void;
+  isLoading?: boolean;
+  deleteAction: () => void;
 };
 
 const DeleteModal = (props: Props) => {
@@ -22,8 +25,14 @@ const DeleteModal = (props: Props) => {
         >
           No, Cancel
         </UnstyledButton>
-        <UnstyledButton class="flex py-2 px-4 transition-all rounded-md w-full xs:w-auto justify-center items-center text-white border border-red-1 disabled:border-black-2  bg-red-1  disabled:opacity-50 text-[0.88rem] disabled:bg-black-2">
-          <p>Yes, Delete</p>
+        <UnstyledButton clicked={props.deleteAction} class="flex w-[8rem] py-2 px-4 transition-all rounded-md  justify-center items-center text-white border border-red-1 disabled:border-black-2  bg-red-1  disabled:opacity-50 text-[0.88rem] disabled:bg-black-2">
+          {props.isLoading ? (
+            <div className="w-[1rem] py-1">
+              <Spinner />
+            </div>
+          ) : (
+            <p>Yes, Delete</p>
+          )}
         </UnstyledButton>
       </div>
     </section>

@@ -29,6 +29,7 @@ export interface IFetchConsultantOverview {
   alltimependingrev: number;
   alltimerev: number;
   consultant: {
+    _id: string
     createdAt: string;
     expertise: string[];
     fname: string;

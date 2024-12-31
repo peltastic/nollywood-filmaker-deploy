@@ -79,7 +79,7 @@ const CustomerDetailsPage = (props: Props) => {
   const [fetchOverview, { data, isFetching }] = useLazyFetchUserOverviewQuery();
 
   useEffect(() => {
-    if (activeReq.data) {
+    if (activeReq.data?.requests) {
       const refined_data: ICustomerActiveReqData[] =
         activeReq.data.requests.map((el) => {
           return {
@@ -101,10 +101,12 @@ const CustomerDetailsPage = (props: Props) => {
           };
         });
       setActiveReqData(refined_data);
+    } else {
+      setActiveReqData([]);
     }
   }, [activeReq.data]);
   useEffect(() => {
-    if (reqHistory.data) {
+    if (reqHistory.data?.requests) {
       const refined_data: IAdminRequestHistory[] = reqHistory.data.requests.map(
         (el) => {
           return {
@@ -128,6 +130,8 @@ const CustomerDetailsPage = (props: Props) => {
         }
       );
       setReqHistoryData(refined_data);
+    } else {
+      setReqHistoryData([]);
     }
   }, [reqHistory.data]);
   useEffect(() => {

@@ -25,11 +25,23 @@ export const adminConsultantApi = createApi({
     fetchConsultantOverview: build.query<IFetchConsultantOverview, string>({
       query: (id) => `/api/admin/fetch/consultants/${id}`,
     }),
-    fetchConsultantActiveRequest: build.query<IFetchActiveConsultantRequest, string>({
+    fetchConsultantActiveRequest: build.query<
+      IFetchActiveConsultantRequest,
+      string
+    >({
       query: (id) => `/api/admin/consultant/active/${id}`,
     }),
-    fetchConsultantRequestHistory: build.query<IFetchConsultantRequestHistory, string>({
+    fetchConsultantRequestHistory: build.query<
+      IFetchConsultantRequestHistory,
+      string
+    >({
       query: (id) => `/api/admin/consultant/history/${id}`,
+    }),
+    deleteConsultant: build.mutation<unknown, string>({
+      query: (id) => ({
+        url: `/api/admin/consultants/${id}`,
+        method: "DELETE"
+      }),
     }),
   }),
 });
@@ -40,4 +52,5 @@ export const {
   useLazyFetchConsultantOverviewQuery,
   useLazyFetchConsultantActiveRequestQuery,
   useLazyFetchConsultantRequestHistoryQuery,
+  useDeleteConsultantMutation
 } = adminConsultantApi;
