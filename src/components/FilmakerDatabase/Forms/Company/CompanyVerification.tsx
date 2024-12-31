@@ -30,7 +30,7 @@ const CompanyVerification = (props: Props) => {
                 labelColor="text-[#A5A5A5]"
                 classname="w-full"
                 name="address"
-                placeholder="Enter your first name"
+                placeholder="Enter address"
                 required
               />
               <Field
@@ -39,7 +39,7 @@ const CompanyVerification = (props: Props) => {
                 labelColor="text-[#A5A5A5]"
                 classname="w-full"
                 name="city"
-                placeholder="Enter your surname"
+                placeholder="Enter your city"
               />
               <Field
                 required
@@ -47,7 +47,7 @@ const CompanyVerification = (props: Props) => {
                 labelColor="text-[#A5A5A5]"
                 classname="w-full"
                 name="state"
-                placeholder="Enter your surname"
+                placeholder="Enter your state"
               />
               <Field
                 required
@@ -55,7 +55,7 @@ const CompanyVerification = (props: Props) => {
                 labelColor="text-[#A5A5A5]"
                 classname="w-full"
                 name="country"
-                placeholder="Enter your surname"
+                placeholder="Enter your country"
               />
             </div>
             <div className="mt-8">
