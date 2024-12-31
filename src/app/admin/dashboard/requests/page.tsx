@@ -6,33 +6,32 @@ import { DataTable } from "@/components/Tables/DataTable";
 import { useProtectAdmin } from "@/hooks/useProtectAdminRoute";
 import { ICustomerRequest } from "@/interfaces/admin/requests/requests";
 import { useLazyFetchCustomerRequestQuery } from "@/lib/features/admin/requests/request";
+import { chat_socket, primary_socket } from "@/lib/socket";
 import React, { useEffect, useState } from "react";
 
 type Props = {};
 const dropdowndata = [
   {
     label: "Pending",
-    value: "pending"
+    value: "pending",
   },
   {
     label: "Ongoing",
-    value: "ongoing"
+    value: "ongoing",
   },
   {
     label: "Ready",
-    value: "ready"
+    value: "ready",
   },
   {
     label: "Completed",
-    value: "completed"
-  }
-]
+    value: "completed",
+  },
+];
 
 const AdminRequests = (props: Props) => {
   useProtectAdmin();
-  const [status, setStatus] = useState<
-    string
-  >("pending");
+  const [status, setStatus] = useState<string>("pending");
   const [fetchCustomerRequests, { data, isFetching }] =
     useLazyFetchCustomerRequestQuery();
   const [customerReqData, setCustomerReqData] = useState<ICustomerRequest[]>(
@@ -42,7 +41,7 @@ const AdminRequests = (props: Props) => {
   useEffect(() => {
     fetchCustomerRequests({
       order: "desc",
-      status
+      status,
     });
   }, []);
 
@@ -51,6 +50,18 @@ const AdminRequests = (props: Props) => {
       setCustomerReqData(data.requests);
     }
   }, [data]);
+
+  useEffect(() => {
+    chat_socket.on("adminNotification", () => {
+      fetchCustomerRequests({
+        order: "desc",
+        status,
+      });
+    });
+    return () => {
+      chat_socket.off("adminNotification");
+    };
+  }, []);
 
   return (
     <ServiceLayout admin>
@@ -64,11 +75,11 @@ const AdminRequests = (props: Props) => {
           dropdownValue={status}
           dropdownFilter
           updateDropdownData={(val) => {
-            setStatus(val)
+            setStatus(val);
             fetchCustomerRequests({
               order: "desc",
-              status: val
-            })
+              status: val,
+            });
           }}
           dropdowndata={dropdowndata}
           data={customerReqData}
