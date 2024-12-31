@@ -32,7 +32,7 @@ const GetStartedPage = (props: Props) => {
             Let us help you make successful films
           </h1>
           <p className="text-[1.13rem]">
-            You can choose one of film-related services or set a chat date with
+            You can choose one out of our many film-related services or set a chat date with
             one of our top-rated industry consultants.
           </p>
         </div>
@@ -100,19 +100,20 @@ const GetStartedPage = (props: Props) => {
             </div>
           </button>
         </div>
-        <div className="w-full flex mt-[10rem] mb-9 md:mb-0">
-          {selected ? (
+        {selected ? (
+          <div className="w-full flex mt-[10rem] mb-9 md:mb-0">
             <UnstyledButton
               clicked={() => setSelected(null)}
               class="rounded-md px-4 border-stroke-2 border hover:border-black-3 duration-500"
             >
               Back
             </UnstyledButton>
-          ) : null}
-         
-        </div>
+          </div>
+        ) : null}
       </div>
-      <FilmmakerDatabaseHeader />
+      <div className="mt-16">
+        <FilmmakerDatabaseHeader />
+      </div>
     </HomeLayout>
   );
 };
