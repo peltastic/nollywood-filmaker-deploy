@@ -480,3 +480,15 @@ export const departmentList = [
     value: "Music Department",
   },
 ];
+
+export const companyTypeList = [
+  { label: "Rental Company", value: "Rental Company" },
+  {
+    label: "Post Production Studio (Edit/Color/Delivery)",
+    value: "Post Production Studio (Edit/Color/Delivery)",
+  },
+  { label: "VFX Studio", value: "VFX Studio" },
+  { label: "Animation Studio", value: "Animation Studio" },
+  { label: "Music Studio", value: "Music Studio" },
+  { label: "Craft Services", value: "Craft Services" },
+];

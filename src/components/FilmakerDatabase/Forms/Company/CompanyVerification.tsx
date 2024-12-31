@@ -6,10 +6,9 @@ import Image from "next/image";
 import React from "react";
 import UploadImage from "/public/assets/consultant/cloud-upload.svg";
 import { BsUpload } from "react-icons/bs";
-
 type Props = {};
 
-const Verification = (props: Props) => {
+const CompanyVerification = (props: Props) => {
   return (
     <div>
       <Formik
@@ -19,6 +18,7 @@ const Verification = (props: Props) => {
           state: "",
           country: "",
           identification: "",
+          cac: ""
         }}
         onSubmit={() => {}}
       >
@@ -110,14 +110,24 @@ const Verification = (props: Props) => {
                     </div>
                   </DropZoneComponent>
                 </div>
-                <div className="mt-8">
+                <div className="mt-10">
                   <Field
                     required
                     label="ID number"
                     labelColor="text-[#A5A5A5]"
                     classname="w-full"
                     name="identification"
-                    placeholder="ID number"
+                    placeholder="Enter your ID number"
+                  />
+                </div>
+                <div className="mt-10">
+                  <Field
+                    required
+                    label="CAC number"
+                    labelColor="text-[#A5A5A5]"
+                    classname="w-full"
+                    name="cac"
+                    placeholder="Enter your CAC number"
                   />
                 </div>
               </div>
@@ -129,4 +139,4 @@ const Verification = (props: Props) => {
   );
 };
 
-export default Verification;
+export default CompanyVerification;

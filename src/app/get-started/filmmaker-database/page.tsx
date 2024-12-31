@@ -13,6 +13,9 @@ import { FaCircleDot } from "react-icons/fa6";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import ContactDetails from "@/components/FilmakerDatabase/Forms/Crew/ContactDetails";
 import Verification from "@/components/FilmakerDatabase/Forms/Crew/Verification";
+import CompanyInfo from "@/components/FilmakerDatabase/Forms/Company/CompanyInfo";
+import CompanyDetails from "@/components/FilmakerDatabase/Forms/Company/CompanyDetails";
+import CompanyVerification from "@/components/FilmakerDatabase/Forms/Company/CompanyVerification";
 
 type Props = {};
 
@@ -63,7 +66,19 @@ const FilmakerDatabasePage = (props: Props) => {
             </p>
             <div className="w-full border-t border-t-stroke-12 my-6"></div>
             <div className="">
-              <h1 className="font-medium mb-6">{active === 1 ? "What are you?" : active === 2 ? "What department are you in" : "Location"}</h1>
+            {formType === "film-crew" ?  <h1 className="font-medium mb-6">
+                {active === 1
+                  ? "What are you?"
+                  : active === 2
+                  ? "What department are you in"
+                  : "Location"}
+              </h1>: <h1 className="font-medium mb-6">
+                {active === 1
+                  ? "What are you?"
+                  : active === 2
+                  ? "What type of company are you?"
+                  : "Company location"}
+              </h1> }
               {active === 1 && (
                 <div className="flex">
                   <div
@@ -109,8 +124,27 @@ const FilmakerDatabasePage = (props: Props) => {
                 </div>
               )}
             </div>
+            {formType === "film-crew" && (
+              <>
+                {active === 1 ? (
+                  <GeneralInfo />
+                ) : active === 2 ? (
+                  <ContactDetails />
+                ) : (
+                  <Verification />
+                )}
+              </>
+            )}
 
-            {active === 1 ? <GeneralInfo /> : active === 2 ? <ContactDetails /> : <Verification /> }
+            {formType === "film-company" && (
+              <>
+                {active === 1 ? (
+                  <CompanyInfo />
+                ) : active === 2 ? (
+                  <CompanyDetails />
+                ) : <CompanyVerification />}
+              </>
+            )}
           </div>
           <div className="flex items-center justify-between mt-[4rem]">
             {active === 1 ? null : (

@@ -7,11 +7,12 @@ import { JobsDoneList } from "./JobsDone";
 import { MdAdd } from "react-icons/md";
 
 type Props = {
-  roles: string[];
+  roles?: string[];
   addJob: (val: JobsDoneList) => void;
   defaultVal?: JobsDoneList;
   edit?: boolean;
   removeEdit?: (val: boolean) => void;
+  company?: boolean;
 };
 
 const JobsDoneInput = ({
@@ -20,6 +21,7 @@ const JobsDoneInput = ({
   defaultVal,
   edit,
   removeEdit,
+  company,
 }: Props) => {
   const [dateInput, setDateInput] = useState<Date | null>(
     defaultVal?.date || null
@@ -57,27 +59,29 @@ const JobsDoneInput = ({
               placeholder="Production title"
               required
             />
-            <div className="">
-              <div className="mb-2  flex font-medium text-[0.88rem] text-[#A5A5A5]">
-                <p>Role</p>
-                <p>*</p>
+            {!company && roles && (
+              <div className="">
+                <div className="mb-2  flex font-medium text-[0.88rem] text-[#A5A5A5]">
+                  <p>Role</p>
+                  <p>*</p>
+                </div>
+                <SelectComponent
+                  data={roles.map((el) => {
+                    return {
+                      label: el,
+                      value: el,
+                    };
+                  })}
+                  label=""
+                  placeholder=""
+                  setValueProps={(val) => {
+                    if (val) setRole(val);
+                  }}
+                  size="lg"
+                  value={role || null}
+                />
               </div>
-              <SelectComponent
-                data={roles.map((el) => {
-                  return {
-                    label: el,
-                    value: el,
-                  };
-                })}
-                label=""
-                placeholder=""
-                setValueProps={(val) => {
-                  if (val) setRole(val);
-                }}
-                size="lg"
-                value={role || null}
-              />
-            </div>
+            )}
             <Field
               label="Link"
               labelColor="text-[#A5A5A5]"
@@ -100,7 +104,9 @@ const JobsDoneInput = ({
             </div>
           </div>
           <button
-            disabled={!isValid || !dateInput || !role}
+            disabled={
+              company ? !isValid || !dateInput : !isValid || !dateInput || !role
+            }
             className="flex items-center text-[0.88rem] mt-6 disabled:cursor-not-allowed"
           >
             {!edit && <MdAdd />}

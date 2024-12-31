@@ -11,7 +11,7 @@ import JobsDoneInput from "./JobsDoneInput";
 
 export interface JobsDoneList {
   title: string;
-  role: string;
+  role?: string;
   link: string;
   date: Date;
 }
@@ -20,10 +20,11 @@ type Props = {
   editJob: (val: JobsDoneList, index: number) => void;
   deleteJob: (index: number) => void;
   index: number;
-  roles: string[];
+  roles?: string[];
+  company?: boolean
 };
 
-const JobsDone = ({ val, deleteJob, editJob, index, roles }: Props) => {
+const JobsDone = ({ val, deleteJob, editJob, index, roles, company }: Props) => {
   const [edit, setEdit] = useState<boolean>(false);
   return (
     <>
@@ -34,14 +35,19 @@ const JobsDone = ({ val, deleteJob, editJob, index, roles }: Props) => {
           addJob={(val) => editJob(val, index)}
           edit
           removeEdit={(el) => setEdit(el)}
+          company={company}
         />
       ) : (
         <div className="flex items-center border-b py-8">
           <div className="text-[0.88rem]">
             <h1 className="font-medium">{val.title}</h1>
-            <p className="text-[#4B5563]">{val.role}</p>
+            {val.role && <p className="text-[#4B5563]">{val.role}</p>}
             <p className="text-[#A5A5A5]">{moment(val.date).format("YYYY")}</p>
-            <Link target="_blank" className="text-[#4B5563] border-b" href={val.link}>
+            <Link
+              target="_blank"
+              className="text-[#4B5563] border-b"
+              href={val.link}
+            >
               View project
             </Link>
           </div>
