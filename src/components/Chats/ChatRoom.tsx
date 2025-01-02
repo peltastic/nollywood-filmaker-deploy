@@ -238,12 +238,12 @@ const ChatRoom = (props: Props) => {
         },
       };
 
-      if (chat_socket.connected) {
+      // if (chat_socket.connected) {
         sendChatMessageEvent(payload);
-      } else {
-        console.log("queued");
-        messageQueueRef.current.push(payload);
-      }
+      // } else {
+      //   console.log("queued");
+      //   messageQueueRef.current.push(payload);
+      // }
       props.updateChatHandlerProps({
         text: inputValue,
         user: props.type,
@@ -583,11 +583,11 @@ const ChatRoom = (props: Props) => {
                                 mid: id
                               },
                             };
-                            if (chat_socket.connected) {
+                            // if (chat_socket.connected) {
                               sendFileMessage(payload);
-                            } else {
-                              fileQueueRef.current.push(payload);
-                            }
+                            // } else {
+                            //   fileQueueRef.current.push(payload);
+                            // }
                             props.updateChatHandlerProps({
                               text: fileInputValue.name,
                               user: props.type,
