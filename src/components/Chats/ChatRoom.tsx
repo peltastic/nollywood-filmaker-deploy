@@ -95,6 +95,7 @@ const ChatRoom = (props: Props) => {
         name: string;
         role: "user" | "consultant" | "admin";
         chatRoomId: string;
+        mid: string
       };
     }[]
   >([]);
@@ -240,6 +241,7 @@ const ChatRoom = (props: Props) => {
       if (chat_socket.connected) {
         sendChatMessageEvent(payload);
       } else {
+        console.log("queued");
         messageQueueRef.current.push(payload);
       }
       props.updateChatHandlerProps({
@@ -259,7 +261,6 @@ const ChatRoom = (props: Props) => {
         reply: "",
         user: null,
       });
-      console.log(id);
     }
   };
 
@@ -370,7 +371,7 @@ const ChatRoom = (props: Props) => {
             props.updateChatHandlerProps({
               text: data.fileName,
               user: data.sender.role,
-              id: Math.floor(Math.random() * 100000).toString(),
+              id: uuidv4(),
               type: "file",
               file: data.fileUrl,
               filename: data.fileName,
@@ -420,9 +421,9 @@ const ChatRoom = (props: Props) => {
   }, [props.endTime]);
 
   useEffect(() => {
-    if (!ref.current) return () => {}
+    if (!ref.current) return () => {};
     if (replyData.reply) {
-      ref.current.focus()
+      ref.current.focus();
     }
   }, [replyData.reply]);
 
@@ -567,6 +568,7 @@ const ChatRoom = (props: Props) => {
                     <div className="ml-2">
                       <UnstyledButton
                         clicked={() => {
+                          const id = uuidv4()
                           if (base64File && props.userData) {
                             const payload = {
                               fileData: base64File,
@@ -578,6 +580,7 @@ const ChatRoom = (props: Props) => {
                                 role: props.type,
                                 userid: props.userData.id,
                                 chatRoomId: searchVal as string,
+                                mid: id
                               },
                             };
                             if (chat_socket.connected) {
@@ -588,10 +591,11 @@ const ChatRoom = (props: Props) => {
                             props.updateChatHandlerProps({
                               text: fileInputValue.name,
                               user: props.type,
-                              id: Math.floor(Math.random() * 100000).toString(),
+                              id,
                               file: base64File as string,
                               filename: fileInputValue.name,
                               type: fileType,
+                              
                             });
                             setFileInputValue(null);
                           }

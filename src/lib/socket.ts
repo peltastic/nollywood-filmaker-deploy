@@ -50,6 +50,7 @@ export function sendFileMessage(data: {
     name: string;
     role: "user" | "consultant" | "admin";
     chatRoomId: string;
+    mid: string
   };
 }) {
   chat_socket.emit("sendFile", data);
