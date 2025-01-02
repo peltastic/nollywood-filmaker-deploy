@@ -25,13 +25,18 @@ export function sendChatMessageEvent(data: {
   room: string;
   message: string;
   sender: {
+    mid: string
     type: "text";
     userid: string;
     name: string;
     role: "user" | "consultant" | "admin";
     chatRoomId: string;
+    replyto: string
+    replytoId: string
+    replytousertype: "user" | "consultant" | "admin" | null
   };
 }) {
+  console.log(data)
   chat_socket.emit("chatMessage", data);
 }
 

@@ -16,7 +16,7 @@ import {
 import { ChatPayload } from "./CustomerChat/CutomerChatMiddle";
 import ConsultantChatMessage from "./ConsultantChatMessage";
 import { IUserInfoData } from "@/interfaces/auth/auth";
-import {  useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { MdInfoOutline } from "react-icons/md";
 import FileButtonComponent from "../FileButton/FileButtonComponent";
 import UnstyledButton from "../Button/UnstyledButton";
@@ -27,6 +27,8 @@ import RateYourExperience from "./ModalComponents/RateYourExperience";
 import ModalComponent from "../Modal/Modal";
 import { differenceInMilliseconds, isAfter } from "date-fns";
 import classes from "@/app/styles/Input.module.css";
+import ReplyBox from "./ReplyBox";
+import { v4 as uuidv4 } from "uuid";
 
 type Props = {
   type: "user" | "consultant" | "admin";
@@ -49,9 +51,20 @@ export interface IChatMessagesData {
 }
 
 const ChatRoom = (props: Props) => {
+  const ref = useRef<HTMLTextAreaElement>(null);
   const [missedPongs, setMissedPongs] = useState(0);
   const [fileType, setFileType] = useState<"file" | "img">("file");
   const [istyping, setIsTyping] = useState<boolean>(false);
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [replyData, setReplyData] = useState<{
+    user: "admin" | "user" | "consultant" | null;
+    reply: string;
+    id: string;
+  }>({
+    user: null,
+    reply: "",
+    id: "",
+  });
 
   const messageQueueRef = useRef<
     {
@@ -63,6 +76,10 @@ const ChatRoom = (props: Props) => {
         name: string;
         role: "user" | "consultant" | "admin";
         chatRoomId: string;
+        replyto: string;
+        replytoId: string;
+        mid: string;
+        replytousertype: "user" | "consultant" | "admin" | null;
       };
     }[]
   >([]);
@@ -88,6 +105,8 @@ const ChatRoom = (props: Props) => {
   const [inputValue, setInputValue] = useState<string>("");
   const search = useSearchParams();
   const searchVal = search.get("chat");
+  const [selectedRepliedToMessageId, setSelectedRepliedToMessageId] =
+    useState<string>("");
 
   const [opened, { open, close }] = useDisclosure();
 
@@ -149,8 +168,8 @@ const ChatRoom = (props: Props) => {
 
   useEffect(() => {
     if (props.sessionOver || !props.isTime) return () => {};
-    console.log(props.orderId);
     if (props.userData) {
+      console.log("i joined");
       joinChatRoom({
         room: props.orderId,
         name: `${props.userData.fname} ${props.userData.lname}`,
@@ -165,13 +184,11 @@ const ChatRoom = (props: Props) => {
     if (props.isTime) {
       chat_socket.on("stoptyping", (data) => {
         if (data.userId !== props.userData?.id) {
-          console.log("stoptyping");
           setIsTyping(false);
         }
       });
       chat_socket.on("istyping", (data) => {
         if (data.userId !== props.userData?.id) {
-          console.log("istyping");
           setIsTyping(true);
         }
       });
@@ -182,18 +199,27 @@ const ChatRoom = (props: Props) => {
 
   //send message
 
+  const setActiveIdHandler = (id?: string) => {
+    setActiveId(id || null);
+  };
+
   const sendMessageHandler = () => {
     stopTypingEmit(props.orderId, `${props.userData?.id}`);
+    const id = uuidv4();
     if (props.userData) {
       const payload: {
         room: string;
         message: string;
         sender: {
+          mid: string;
           type: "text";
           userid: string;
           name: string;
           role: "user" | "consultant" | "admin";
           chatRoomId: string;
+          replyto: string;
+          replytoId: string;
+          replytousertype: "user" | "consultant" | "admin" | null;
         };
       } = {
         room: props.orderId,
@@ -204,8 +230,13 @@ const ChatRoom = (props: Props) => {
           role: props.type,
           userid: props.userData.id,
           chatRoomId: searchVal as string,
+          replyto: replyData.reply,
+          replytoId: replyData.id,
+          mid: id,
+          replytousertype: replyData.user,
         },
       };
+
       if (chat_socket.connected) {
         sendChatMessageEvent(payload);
       } else {
@@ -214,12 +245,21 @@ const ChatRoom = (props: Props) => {
       props.updateChatHandlerProps({
         text: inputValue,
         user: props.type,
-        id: Math.floor(Math.random() * 100000).toString(),
+        id: id,
         file: "",
         filename: "",
         type: "text",
+        replyTo: replyData.reply,
+        replyToId: replyData.id,
+        replytousertype: replyData.user,
       });
       setInputValue("");
+      setReplyData({
+        id: "",
+        reply: "",
+        user: null,
+      });
+      console.log(id);
     }
   };
 
@@ -249,7 +289,6 @@ const ChatRoom = (props: Props) => {
     if (props.sessionOver) return () => {};
     if (props.isTime) {
       chat_socket.on("roomPing", () => {
-        console.log("received");
         setMissedPongs(0);
       });
       return () => {
@@ -269,19 +308,27 @@ const ChatRoom = (props: Props) => {
           role: "user" | "consultant" | "admin";
           userid: string;
           chatRoomId: string;
+          replyto: string;
+          replytoId: string;
+          mid: string;
+          replytousertype?: "user" | "consultant" | "admin" | null;
         };
         message: string;
       }) => {
         if (props.userData?.id === data.sender.userid) {
         } else {
           if (searchVal === data.sender.chatRoomId) {
+            console.log(data);
             props.updateChatHandlerProps({
               text: data.message,
               user: data.sender.role,
-              id: Math.floor(Math.random() * 100000).toString(),
+              id: data.sender.mid,
               type: "text",
               file: "",
               filename: "",
+              replyTo: data.sender.replyto,
+              replyToId: data.sender.replytoId,
+              replytousertype: data.sender.replytousertype,
             });
           }
         }
@@ -372,6 +419,13 @@ const ChatRoom = (props: Props) => {
     };
   }, [props.endTime]);
 
+  useEffect(() => {
+    if (!ref.current) return () => {}
+    if (replyData.reply) {
+      ref.current.focus()
+    }
+  }, [replyData.reply]);
+
   return (
     <>
       <ModalComponent
@@ -384,27 +438,7 @@ const ChatRoom = (props: Props) => {
         <RateYourExperience orderId={props.orderId} close={close} />
       </ModalComponent>
       <div className=" py-6  h-full  relative bg-white">
-        {/* {message && (
-          <div className="h-[3rem] absolute left-0 top-0 w-full flex items-center px-8 text-white  bg-[#d14d4deb]">
-            <p className="mr-4">
-              {message}{" "}
-              <span
-                className="underline cursor-pointer"
-                onClick={() => props.refreshChat()}
-              >
-                Retry
-              </span>
-            </p>
-
-            <div
-              onClick={() => setReconnectMessage("")}
-              className="w-[1rem] cursor-pointer ml-auto"
-            >
-              <Image src={CancelImg} alt="cancel-img" />
-            </div>
-          </div>
-        )} */}
-        <div className=" overflow-scroll w-full h-[85%]">
+        <div className=" overflow-y-scroll nolly-film-hide-scrollbar w-full h-[90%] pb-8">
           {props.data && (
             <>
               {props.data.map((el, index) => (
@@ -422,6 +456,17 @@ const ChatRoom = (props: Props) => {
                       lastmessage={
                         props.data[props.data.length - 1].id === el.id
                       }
+                      setActiveId={setActiveIdHandler}
+                      id={el.id}
+                      activeId={activeId}
+                      setReplyDataProps={(val) => setReplyData(val)}
+                      repliedText={el.replyTo}
+                      repliedTextId={el.replyToId}
+                      selectedRepliedToMessageId={selectedRepliedToMessageId}
+                      setSelectedRepliedToMessageId={(val) =>
+                        setSelectedRepliedToMessageId(val)
+                      }
+                      repliedToUser={el.replytousertype}
                     />
                   ) : (
                     <ConsultantChatMessage
@@ -437,6 +482,17 @@ const ChatRoom = (props: Props) => {
                       }
                       index={index}
                       userprofilepic={props.profilepics}
+                      setActiveId={setActiveIdHandler}
+                      id={el.id}
+                      activeId={activeId}
+                      setReplyDataProps={(val) => setReplyData(val)}
+                      repliedText={el.replyTo}
+                      repliedTextId={el.replyToId}
+                      repliedToUser={el.replytousertype}
+                      selectedRepliedToMessageId={selectedRepliedToMessageId}
+                      setSelectedRepliedToMessageId={(val) =>
+                        setSelectedRepliedToMessageId(val)
+                      }
                     />
                   )}
                 </div>
@@ -471,7 +527,20 @@ const ChatRoom = (props: Props) => {
             </>
           )}
         </div>
-        <div className="h-[15%] relative ">
+        {replyData.reply && (
+          <ReplyBox
+            cancelReplyBox={() =>
+              setReplyData({
+                reply: "",
+                user: null,
+                id: "",
+              })
+            }
+            type={props.type}
+            replyData={replyData}
+          />
+        )}
+        <div className="h-[10%] relative ">
           {props.sessionOver ? (
             <div className="absolute bottom-0 w-[95%]  flex items-center text-[0.88rem] bg-gray-bg-7 border mx-4 mt-8 py-2 rounded-md px-4 border-border-gray">
               <MdInfoOutline className="text-gray-4 mr-4 text-xl " />
@@ -559,6 +628,7 @@ const ChatRoom = (props: Props) => {
                   <form className="w-full" onSubmit={(e) => e.preventDefault()}>
                     <div className="w-full relative">
                       <Textarea
+                        ref={ref}
                         onKeyDown={(e) => {
                           if (e.key === "Enter" && !e.shiftKey) {
                             e.preventDefault();
@@ -571,7 +641,6 @@ const ChatRoom = (props: Props) => {
                         radius={"md"}
                         value={inputValue}
                         onChange={(event) => {
-                          console.log(props.orderId);
                           emitTypingEvent(
                             props.orderId,
                             `${props.userData?.id}`
@@ -596,24 +665,6 @@ const ChatRoom = (props: Props) => {
                         >
                           <Image src={SendImg} alt="send-img" />
                         </button>
-                        {/* <div className="text-2xl ml-2">
-                        <FileButtonComponent
-                        accept="image/*"
-                        setFile={(file) => {
-                          setFileType("img");
-                          setFileInputValue(file);
-                          if (file) {
-                            getBase64(file).then((res) => {
-                              if (res) {
-                                setBase64File(res as any);
-                              }
-                            });
-                          }
-                        }}
-                        >
-                        <MdInsertPhoto />
-                        </FileButtonComponent>
-                      </div> */}
                       </div>
                     </div>
                   </form>

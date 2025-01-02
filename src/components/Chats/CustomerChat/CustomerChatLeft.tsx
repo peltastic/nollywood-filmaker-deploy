@@ -60,13 +60,13 @@ const CustomerChatLeft = (props: Props) => {
               <ChatSearch />
             </div>
           )}
-          <div className="my-4 h-[90%] overflow-y-scroll">
+          <div className="my-4 h-[90%] overflow-y-scroll nolly-film-hide-scrollbar">
             {props.data?.map((el, index) => (
               <Chat
                 index={index}
                 selctedIndex={selected}
                 data={el}
-                key={el.name}
+                key={el.name + el.orderId}
                 orderId={props.orderId}
                 type={props.type}
               />

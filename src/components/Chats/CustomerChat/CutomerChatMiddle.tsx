@@ -39,6 +39,9 @@ export interface ChatPayload {
   file: string;
   filename: string;
   type: "text" | "file" | "img" | "typing";
+  replyTo?: string;
+  replyToId?: string;
+  replytousertype?: "user" | "consultant" | "admin" | null;
 }
 
 type Props = {
@@ -180,6 +183,9 @@ const CustomerChatMiddle = ({
           file: el.type === "file" ? el.message : "",
           filename: el.type === "file" ? el.filename : "",
           type: el.type,
+          replyTo: el.replyto,
+          replyToId: el.replytoId,
+          replytousertype: el.replytousertype
         };
       });
       setChatData([
@@ -190,6 +196,8 @@ const CustomerChatMiddle = ({
           type: "text",
           file: "",
           filename: "",
+          replyTo: "",
+          replyToId: "",
         },
         ...chat_data,
       ]);
@@ -206,6 +214,9 @@ const CustomerChatMiddle = ({
           file: el.type === "file" ? el.message : "",
           filename: el.type === "file" ? el.filename : "",
           type: el.type,
+          replyTo: el.replyto,
+          replyToId: el.replytoId,
+          replytousertype: el.replytousertype
         };
       });
       setChatData([
@@ -216,6 +227,8 @@ const CustomerChatMiddle = ({
           type: "text",
           file: "",
           filename: "",
+          replyTo: "",
+          replyToId: "",
         },
         ...chat_data,
       ]);

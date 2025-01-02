@@ -44,6 +44,11 @@ export interface IChatMessages {
   timestamp: string;
   type: "text" | "file" | "img";
   filename: string;
+
+  replyto?: string
+  replytoId?: string
+  replytousertype?: "user" | "consultant" | "admin" | null
+  mid: string
 }
 
 export interface IChatMessagesResponse {
