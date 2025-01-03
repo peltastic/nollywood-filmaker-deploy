@@ -1,7 +1,7 @@
 import SelectComponent from "@/components/Select/SelectComponent";
 import { departmentList, film_crew_values } from "@/utils/constants/constants";
 import { MultiSelect, Select } from "@mantine/core";
-import React, { useEffect, useState } from "react";
+import React, { act, useEffect, useState } from "react";
 import CancelImg from "/public/assets/cancel.svg";
 import Image from "next/image";
 import { IoIosArrowDown } from "react-icons/io";
@@ -9,25 +9,61 @@ import { IoIosArrowDown } from "react-icons/io";
 import classes from "@/app/styles/Select.module.css";
 import JobsDone, { JobsDoneList } from "../../JobsDone";
 import JobsDoneInput from "../../JobsDoneInput";
+import UnstyledButton from "@/components/Button/UnstyledButton";
+import { IJoinCrew } from "@/lib/features/users/filmmaker-database/filmmaker-database";
+import moment from "moment";
 
-type Props = {};
+type Props = {
+  prevStep: () => void;
+  nextStep: () => void;
+  updateCrew: (val: IJoinCrew) => void;
+  data: IJoinCrew;
+  active: number;
+};
 
 const icon = <IoIosArrowDown className="text-gray-4" />;
-const ContactDetails = (props: Props) => {
-  const [department, setDepartment] = useState<string>("");
-  const [roles, setRoles] = useState<string[]>([]);
+const ContactDetails = ({
+  prevStep,
+  nextStep,
+  data,
+  updateCrew,
+  active,
+}: Props) => {
+  const [department, setDepartment] = useState<string>(data.department || "");
+  const [roles, setRoles] = useState<string[]>(data.role || []);
   const [rolesList, setRolesList] = useState<string[] | null>(null);
   const [val, setValue] = useState<string>("");
-  const [budget, setBudget] = useState<string>("");
+  const [budget, setBudget] = useState<string>(data.fee || "");
 
-  const [jobsDoneList, setJobsDoneList] = useState<JobsDoneList[]>([]);
+  const [jobsDoneList, setJobsDoneList] = useState<JobsDoneList[]>(
+    data.works
+      ? data.works.map((el) => {
+          return {
+            date: new Date(el.year),
+            link: el.link,
+            title: el.title,
+            role: el.role,
+          };
+        })
+      : []
+  );
+
+  // useEffect(() => {
+  //   console.log("damn 1");
+  //   if (rolesList && data.role) {
+  //     console.log("damn 2");
+  //     setRolesList((prev) =>
+  //       prev ? prev.filter((item) => data.role?.includes(item)) : prev
+  //     );
+  //   }
+  // }, [active]);
 
   useEffect(() => {
     if (department) {
       const list = film_crew_values.filter((el) => el.key === department);
-      setRolesList(list[0].value);
+      setRolesList(list[0].value.filter((item) => !data.role?.includes(item)));
     }
-  }, [department]);
+  }, [department, active]);
 
   const addJobDoneHandler = (val: JobsDoneList) => {
     setJobsDoneList((prev) => [...prev, val]);
@@ -41,6 +77,25 @@ const ContactDetails = (props: Props) => {
     const editedValue = [...jobsDoneList];
     editedValue.splice(index, 1);
     setJobsDoneList(editedValue);
+  };
+  const nextPageHandler = () => {
+    const payload: IJoinCrew = {
+      department,
+      role: roles,
+      fee: budget,
+    };
+    if (jobsDoneList.length > 0) {
+      payload.works = jobsDoneList.map((el) => {
+        return {
+          link: el.link,
+          role: el.role || "",
+          title: el.title,
+          year: moment(el.date).format("YYYY"),
+        };
+      });
+    }
+    updateCrew(payload);
+    nextStep();
   };
   return (
     <div>
@@ -64,7 +119,7 @@ const ContactDetails = (props: Props) => {
       {rolesList && (
         <div className="">
           <div className="mb-2 mt-6 flex font-medium text-[0.88rem] text-[#A5A5A5]">
-            <p>Role</p>
+            <p>Roles (you can select multiple roles)</p>
             <p>*</p>
           </div>
           <Select
@@ -120,7 +175,7 @@ const ContactDetails = (props: Props) => {
               </div>
             ))}
           </div>
-          {val && (
+          {roles.length > 0 && (
             <div className="mt-8">
               <h1 className="font-medium ">Jobs done</h1>
               {jobsDoneList.map((el, index) => (
@@ -146,7 +201,6 @@ const ContactDetails = (props: Props) => {
               <div className="mt-8">
                 <div className="mb-2  flex font-medium text-[0.88rem] text-[#A5A5A5]">
                   <p>Fee range</p>
-      
                 </div>
                 <SelectComponent
                   data={[
@@ -180,6 +234,40 @@ const ContactDetails = (props: Props) => {
           )}
         </div>
       )}
+      <div className="flex items-center justify-between mt-[4rem]">
+        <UnstyledButton
+          clicked={() => {
+            const payload: IJoinCrew = {
+              department,
+              role: roles,
+              fee: budget,
+            };
+            if (jobsDoneList.length > 0) {
+              payload.works = jobsDoneList.map((el) => {
+                return {
+                  link: el.link,
+                  role: el.role || "",
+                  title: el.title,
+                  year: moment(el.date).format("YYYY"),
+                };
+              });
+            }
+            updateCrew(payload);
+            prevStep();
+          }}
+          class="mb-4 xs:mb-0 py-2 rounded-md px-6 border-stroke-2 w-full xs:w-auto border  xs:mr-4"
+        >
+          Back
+        </UnstyledButton>
+
+        <UnstyledButton
+          clicked={nextPageHandler}
+          disabled={!department || roles.length === 0}
+          class="ml-auto w-[7rem] flex hover:bg-blue-1 py-2 px-4 disabled:opacity-50 transition-all rounded-lg justify-center items-center text-white border border-black-3  bg-black-3 "
+        >
+          Continue
+        </UnstyledButton>
+      </div>
     </div>
   );
 };

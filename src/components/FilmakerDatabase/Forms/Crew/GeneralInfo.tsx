@@ -9,27 +9,50 @@ import Image from "next/image";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import FileButtonComponent from "@/components/FileButton/FileButtonComponent";
 import { AspectRatio } from "@mantine/core";
+import { IJoinCrew } from "@/lib/features/users/filmmaker-database/filmmaker-database";
+import { crewInfoSchema } from "@/utils/validation/fimmaker";
+import moment from "moment";
 
-type Props = {};
+type Props = {
+  updateCrew: (val: IJoinCrew) => void;
+  data: IJoinCrew;
+  updatePfp: (val: string) => void;
+  pfp: string;
+  nextStep: () => void;
+};
 
-const GeneralInfo = (props: Props) => {
-  const [phoneInputVal, setPhoneInputVal] = useState("");
-  const [dateInput, setDateInput] = useState<Date | null>(null);
-  const [aboutval, setAboutVal] = useState<string>("");
-  const [tempUrl, setTempUrl] = useState<string>("");
+const GeneralInfo = ({ nextStep, updateCrew, updatePfp, data, pfp }: Props) => {
+  const [phoneInputVal, setPhoneInputVal] = useState(data.mobile || "");
+  const [dateInput, setDateInput] = useState<Date | null>(
+    data.dob ? new Date(data.dob) : null
+  );
+  const [aboutval, setAboutVal] = useState<string>(data.bio || "");
   const [file, setFile] = useState<File | null>(null);
   return (
     <div className="">
       <h1 className="font-medium py-8">Personal Information</h1>
       <Formik
         initialValues={{
-          fname: "",
-          lname: "",
-          email: "",
+          fname: data.firstName || "",
+          lname: data.lastName || "",
+          email: data.email || "",
         }}
-        onSubmit={() => {}}
+        validationSchema={crewInfoSchema}
+        onSubmit={({ fname, lname, email }) => {
+          const payload: IJoinCrew = {
+            firstName: fname,
+            lastName: lname,
+            email,
+            file: file || data.file,
+            dob: (dateInput && moment(dateInput).format("YYYY-MM-DD")) || "",
+            mobile: phoneInputVal,
+            bio: aboutval,
+          };
+          updateCrew(payload);
+          nextStep();
+        }}
       >
-        {({}) => (
+        {({ isValid }) => (
           <Form>
             <div className="grid grid-cols-2 gap-x-8 gap-y-8">
               <Field
@@ -53,7 +76,7 @@ const GeneralInfo = (props: Props) => {
                 label="Email"
                 labelColor="text-[#A5A5A5]"
                 classname="w-full"
-                name="enail"
+                name="email"
                 placeholder="Enter your email address"
               />
               <div className="">
@@ -85,7 +108,7 @@ const GeneralInfo = (props: Props) => {
             />
             <div className="mb-2 mt-6 flex font-medium text-[0.88rem] text-[#A5A5A5]">
               <p>About you</p>
-              <p>*</p>
+              {/* <p>*</p> */}
             </div>
             <TextArea
               changed={(val) => setAboutVal(val)}
@@ -94,12 +117,18 @@ const GeneralInfo = (props: Props) => {
             />
             <div className="mb-2 mt-6 flex font-medium text-[0.88rem] text-[#A5A5A5]">
               <p>Profile photo</p>
-              <p>*</p>
+              {/* <p>*</p> */}
             </div>
             <div className="flex items-center mt-10">
               <div className="w-[10rem] h-[10rem]">
-                <AspectRatio ratio={1800/1800}>
-                  <Image src={tempUrl || PhotoImg} alt="photo-img" width={100} height={100} className="h-full w-full rounded-full" />
+                <AspectRatio ratio={1800 / 1800}>
+                  <Image
+                    src={pfp || PhotoImg}
+                    alt="photo-img"
+                    width={100}
+                    height={100}
+                    className="h-full w-full rounded-full"
+                  />
                 </AspectRatio>
               </div>
               <FileButtonComponent
@@ -108,14 +137,27 @@ const GeneralInfo = (props: Props) => {
                   setFile(file);
                   if (file) {
                     const objectUrl = URL.createObjectURL(file);
-                    setTempUrl(objectUrl);
+                    updatePfp(objectUrl);
                   }
                 }}
               >
-                <UnstyledButton class="border border-[#A5A5A5] text-black-4 rounded-md py-2 px-6 ml-8">
+                <UnstyledButton
+                  type="button"
+                  class="border border-[#A5A5A5] text-black-4 rounded-md py-2 px-6 ml-8"
+                >
                   Add Photo
                 </UnstyledButton>
               </FileButtonComponent>
+            </div>
+            <div className="flex items-center justify-between mt-[4rem]">
+              <UnstyledButton
+                disabled={!isValid || !dateInput || !phoneInputVal}
+                type="submit"
+                // clicked={nextStep}
+                class="ml-auto w-[7rem] flex hover:bg-blue-1 py-2 px-4 disabled:opacity-50 transition-all rounded-lg justify-center items-center text-white border border-black-3 disabled:border-black-2  bg-black-3 "
+              >
+                Continue
+              </UnstyledButton>
             </div>
           </Form>
         )}

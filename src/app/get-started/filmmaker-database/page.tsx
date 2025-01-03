@@ -16,6 +16,10 @@ import Verification from "@/components/FilmakerDatabase/Forms/Crew/Verification"
 import CompanyInfo from "@/components/FilmakerDatabase/Forms/Company/CompanyInfo";
 import CompanyDetails from "@/components/FilmakerDatabase/Forms/Company/CompanyDetails";
 import CompanyVerification from "@/components/FilmakerDatabase/Forms/Company/CompanyVerification";
+import {
+  IJoinCompany,
+  IJoinCrew,
+} from "@/lib/features/users/filmmaker-database/filmmaker-database";
 
 type Props = {};
 
@@ -28,6 +32,69 @@ const FilmakerDatabasePage = (props: Props) => {
   const [formType, setFormType] = useState<"film-crew" | "film-company">(
     "film-crew"
   );
+
+  const [crewData, setCrewData] = useState<IJoinCrew>({
+    department: "",
+    dob: "",
+    doc: null,
+    email: "",
+    firstName: "",
+    idNumber: "",
+    lastName: "",
+    location: {
+      address: "",
+      city: "",
+      country: "",
+      state: "",
+    },
+    mobile: "",
+    file: null,
+    role: [],
+    verificationDocType: "",
+    bio: "",
+    fee: "",
+    works: [],
+  });
+  const [companyData, setCompanyData] = useState<IJoinCompany>({
+    doc: null,
+    bio: "",
+    cacNumber: "",
+    clientele: [],
+    email: "",
+    fee: "",
+    file: null,
+    idNumber: "",
+    location: {
+      address: "",
+      city: "",
+      country: "",
+      state: "",
+    },
+    mobile: "",
+    name: "",
+    rateCard: null,
+    type: "",
+    useRateCard: null,
+    verificationDocType: "",
+    website: "",
+  });
+  const [pfpUrl, setPfpUrl] = useState<string>("");
+  const [companyPfpUrl, setCompanyPfpUrl] = useState<string>("");
+
+  const updateCrewDataHandler = (val: IJoinCrew) => {
+    setCrewData((prev) => {
+      return {
+        ...prev,
+        ...val,
+      };
+    });
+  };
+
+  const updateCompanyDataHandler = (val: IJoinCompany) => {
+    setCompanyData((prev) => {
+      return { ...prev, ...val };
+    });
+  };
 
   return (
     <div className="">
@@ -66,19 +133,23 @@ const FilmakerDatabasePage = (props: Props) => {
             </p>
             <div className="w-full border-t border-t-stroke-12 my-6"></div>
             <div className="">
-            {formType === "film-crew" ?  <h1 className="font-medium mb-6">
-                {active === 1
-                  ? "What are you?"
-                  : active === 2
-                  ? "What department are you in"
-                  : "Location"}
-              </h1>: <h1 className="font-medium mb-6">
-                {active === 1
-                  ? "What are you?"
-                  : active === 2
-                  ? "What type of company are you?"
-                  : "Company location"}
-              </h1> }
+              {formType === "film-crew" ? (
+                <h1 className="font-medium mb-6">
+                  {active === 1
+                    ? "What are you?"
+                    : active === 2
+                    ? "What department are you in"
+                    : "Location"}
+                </h1>
+              ) : (
+                <h1 className="font-medium mb-6">
+                  {active === 1
+                    ? "What are you?"
+                    : active === 2
+                    ? "What type of company are you?"
+                    : "Company location"}
+                </h1>
+              )}
               {active === 1 && (
                 <div className="flex">
                   <div
@@ -127,11 +198,27 @@ const FilmakerDatabasePage = (props: Props) => {
             {formType === "film-crew" && (
               <>
                 {active === 1 ? (
-                  <GeneralInfo />
+                  <GeneralInfo
+                    data={crewData}
+                    pfp={pfpUrl}
+                    updatePfp={(el) => setPfpUrl(el)}
+                    nextStep={nextStep}
+                    updateCrew={updateCrewDataHandler}
+                  />
                 ) : active === 2 ? (
-                  <ContactDetails />
+                  <ContactDetails
+                    data={crewData}
+                    updateCrew={updateCrewDataHandler}
+                    nextStep={nextStep}
+                    prevStep={prevStep}
+                    active={active}
+                  />
                 ) : (
-                  <Verification />
+                  <Verification
+                    updateCrew={updateCrewDataHandler}
+                    data={crewData}
+                    prevStep={prevStep}
+                  />
                 )}
               </>
             )}
@@ -139,28 +226,30 @@ const FilmakerDatabasePage = (props: Props) => {
             {formType === "film-company" && (
               <>
                 {active === 1 ? (
-                  <CompanyInfo />
+                  <CompanyInfo
+                    pfp={companyPfpUrl}
+                    updatePfp={(el) => setCompanyPfpUrl(el)}
+                    data={companyData}
+                    updateCompany={updateCompanyDataHandler}
+                    nextStep={nextStep}
+                  />
                 ) : active === 2 ? (
-                  <CompanyDetails />
-                ) : <CompanyVerification />}
+                  <CompanyDetails
+                    active={active}
+                    data={companyData}
+                    nextStep={nextStep}
+                    prevStep={prevStep}
+                    updateCompany={updateCompanyDataHandler}
+                  />
+                ) : (
+                  <CompanyVerification
+                    data={companyData}
+                    prevStep={prevStep}
+                    updateCompany={updateCompanyDataHandler}
+                  />
+                )}
               </>
             )}
-          </div>
-          <div className="flex items-center justify-between mt-[4rem]">
-            {active === 1 ? null : (
-              <UnstyledButton
-                clicked={prevStep}
-                class="mb-4 xs:mb-0 py-2 rounded-md px-6 border-stroke-2 w-full xs:w-auto border  xs:mr-4"
-              >
-                Back
-              </UnstyledButton>
-            )}
-            <UnstyledButton
-              clicked={nextStep}
-              class="ml-auto w-[7rem] flex hover:bg-blue-1 py-2 px-4 disabled:opacity-50 transition-all rounded-lg justify-center items-center text-white border border-black-3 disabled:border-black-2  bg-black-3 "
-            >
-              Continue
-            </UnstyledButton>
           </div>
         </div>
       </section>

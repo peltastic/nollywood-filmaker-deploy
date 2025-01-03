@@ -36,7 +36,7 @@ export function sendChatMessageEvent(data: {
     replytousertype: "user" | "consultant" | "admin" | null
   };
 }) {
-  console.log(data)
+  console.log(data, "send message")
   chat_socket.emit("chatMessage", data);
 }
 
@@ -51,8 +51,12 @@ export function sendFileMessage(data: {
     role: "user" | "consultant" | "admin";
     chatRoomId: string;
     mid: string
+    replyto: string
+    replytoId: string
+    replytousertype: "user" | "consultant" | "admin" | null
   };
 }) {
+  console.log(data, "send file message")
   chat_socket.emit("sendFile", data);
 }
 

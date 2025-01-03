@@ -12,7 +12,7 @@ const FileButtonComponent = ({ setFile, children, accept }: Props) => {
     <Group justify="center">
       <FileButton onChange={(payload) => setFile(payload)} accept={accept}>
         {(props) => (
-          <button className="w-full" {...props}>
+          <button className="w-full" type="button" {...props}>
             {children}
           </button>
         )}

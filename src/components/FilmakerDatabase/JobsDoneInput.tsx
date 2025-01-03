@@ -107,10 +107,10 @@ const JobsDoneInput = ({
             disabled={
               company ? !isValid || !dateInput : !isValid || !dateInput || !role
             }
-            className="flex items-center text-[0.88rem] mt-6 disabled:cursor-not-allowed"
+            className={`px-3 py-1 rounded-md flex items-center text-[0.88rem] mt-6 disabled:cursor-not-allowed disabled:opacity-50 bg-black-3 text-white`}
           >
             {!edit && <MdAdd />}
-            <p className="ml-1">{edit ? "Update" : "Add a new job"}</p>
+            <p className="ml-1">{edit ? "Update" : "Save"}</p>
           </button>
         </Form>
       )}

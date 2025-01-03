@@ -221,7 +221,7 @@ const ChatMessage = ({
               <p>{repliedText}</p>
             </div>
           )}
-          <p className="break-words">
+          <div className="break-words">
             {type === "file" ? (
               <Link href={file}>
                 <div className="cursor-pointer py-2 px-2">
@@ -246,7 +246,7 @@ const ChatMessage = ({
                 ))}
               </>
             )}
-          </p>
+          </div>
         </div>
       </div>
     </div>

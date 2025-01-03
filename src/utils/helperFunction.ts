@@ -1,4 +1,3 @@
-
 import { monthNames, resolve_file_services } from "./constants/constants";
 import moment from "moment";
 
@@ -227,3 +226,38 @@ export function generateColorClass(
   return colorClass?.class;
 }
 
+export function appendToFormData(
+  formData: FormData,
+  data: Record<string, any>,
+  parentKey: string = ""
+): FormData {
+  for (const key in data) {
+    if (data.hasOwnProperty(key)) {
+      const value = data[key];
+      const formKey = parentKey ? `${parentKey}[${key}]` : key;
+
+      if (
+        value &&
+        typeof value === "object" &&
+        !(value instanceof File) &&
+        !Array.isArray(value)
+      ) {
+        // Recursively handle nested objects
+        appendToFormData(formData, value, formKey);
+      } else if (Array.isArray(value)) {
+        // Handle arrays
+        value.forEach((item, index) => {
+          if (typeof item === "object") {
+            appendToFormData(formData, item, `${formKey}[${index}]`);
+          } else {
+            formData.append(`${formKey}[${index}]`, item);
+          }
+        });
+      } else if (value !== null && value !== undefined) {
+        // Append scalar values
+        formData.append(formKey, value);
+      }
+    }
+  }
+  return formData;
+}

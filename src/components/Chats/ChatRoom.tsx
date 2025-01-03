@@ -29,6 +29,7 @@ import { differenceInMilliseconds, isAfter } from "date-fns";
 import classes from "@/app/styles/Input.module.css";
 import ReplyBox from "./ReplyBox";
 import { v4 as uuidv4 } from "uuid";
+import moment from "moment";
 
 type Props = {
   type: "user" | "consultant" | "admin";
@@ -95,7 +96,7 @@ const ChatRoom = (props: Props) => {
         name: string;
         role: "user" | "consultant" | "admin";
         chatRoomId: string;
-        mid: string
+        mid: string;
       };
     }[]
   >([]);
@@ -117,18 +118,19 @@ const ChatRoom = (props: Props) => {
 
   useEffect(() => {
     chat_socket.on("connect", () => {
-      while (messageQueueRef.current.length > 0) {
-        const queuedMessage = messageQueueRef.current.shift();
-        if (queuedMessage) {
-          sendChatMessageEvent(queuedMessage);
-        }
-      }
-      while (fileQueueRef.current.length > 0) {
-        const fileMessage = fileQueueRef.current.shift();
-        if (fileMessage) {
-          sendFileMessage(fileMessage);
-        }
-      }
+      console.log("i connected");
+      //   while (messageQueueRef.current.length > 0) {
+      //     const queuedMessage = messageQueueRef.current.shift();
+      //     if (queuedMessage) {
+      //       sendChatMessageEvent(queuedMessage);
+      //     }
+      //   }
+      //   while (fileQueueRef.current.length > 0) {
+      //     const fileMessage = fileQueueRef.current.shift();
+      //     if (fileMessage) {
+      //       sendFileMessage(fileMessage);
+      //     }
+      //   }
     });
 
     return () => {
@@ -138,7 +140,8 @@ const ChatRoom = (props: Props) => {
 
   useEffect(() => {
     if (props.sessionOver) return () => {};
-    chat_socket.on("disconnect", () => {
+    chat_socket.on("disconnect", (data) => {
+      console.log("i disconnected", console.log(data));
       chat_socket.connect();
     });
     return () => {
@@ -239,7 +242,7 @@ const ChatRoom = (props: Props) => {
       };
 
       // if (chat_socket.connected) {
-        sendChatMessageEvent(payload);
+      sendChatMessageEvent(payload);
       // } else {
       //   console.log("queued");
       //   messageQueueRef.current.push(payload);
@@ -271,13 +274,12 @@ const ChatRoom = (props: Props) => {
     if (props.sessionOver) return () => {};
     if (props.isTime) {
       interval = setInterval(() => {
-        if (chat_socket.connected) {
-          chat_socket.emit("triggerPing", {
-            room: props.orderId,
-          });
-          setMissedPongs((prev) => prev + 1);
-        }
-      }, 7000);
+        // console.log("i sent ping", moment(new Date()).format("h:mm a"));
+        chat_socket.emit("triggerPing", {
+          room: props.orderId,
+        });
+        setMissedPongs((prev) => prev + 1);
+      }, 20000);
     }
     return () => {
       if (interval) {
@@ -290,6 +292,7 @@ const ChatRoom = (props: Props) => {
     if (props.sessionOver) return () => {};
     if (props.isTime) {
       chat_socket.on("roomPing", () => {
+        console.log("received my ping", moment(new Date()).format("h:mm a"));
         setMissedPongs(0);
       });
       return () => {
@@ -319,7 +322,6 @@ const ChatRoom = (props: Props) => {
         if (props.userData?.id === data.sender.userid) {
         } else {
           if (searchVal === data.sender.chatRoomId) {
-            console.log(data);
             props.updateChatHandlerProps({
               text: data.message,
               user: data.sender.role,
@@ -345,7 +347,7 @@ const ChatRoom = (props: Props) => {
     if (missedPongs > 3) {
       chat_socket.connect();
       setMissedPongs(0);
-      ("reconnecting..");
+      console.log("missed my pong, i am reconnecting..");
     }
   }, [missedPongs]);
 
@@ -362,19 +364,27 @@ const ChatRoom = (props: Props) => {
           name: string;
           role: "user" | "consultant" | "admin";
           userid: string;
+          mid: string;
+          replyto: string;
+          replytoId: string;
+          replytousertype?: "user" | "consultant" | "admin" | null;
         };
       }) => {
         props.refetch();
         if (props.userData?.id === data.sender.userid) {
         } else {
           if (searchVal === data.sender.chatRoomId) {
+            console.log("file message received", data);
             props.updateChatHandlerProps({
               text: data.fileName,
               user: data.sender.role,
-              id: uuidv4(),
+              id: data.sender.mid,
               type: "file",
               file: data.fileUrl,
               filename: data.fileName,
+              replyTo: data.sender.replyto,
+              replyToId: data.sender.replytoId,
+              replytousertype: data.sender.replytousertype,
             });
           }
         }
@@ -383,6 +393,15 @@ const ChatRoom = (props: Props) => {
     return () => {
       chat_socket.off("fileMessage");
     };
+  }, [chat_socket.connected]);
+
+  useEffect(() => {
+    document.addEventListener("visibilitychange", () => {
+      console.log(document.visibilityState, "visibility state log");
+      if (document.visibilityState === "visible" && !chat_socket.connected) {
+        chat_socket.connect();
+      }
+    });
   }, []);
 
   //get base64 for chat files to be uploaded
@@ -568,7 +587,7 @@ const ChatRoom = (props: Props) => {
                     <div className="ml-2">
                       <UnstyledButton
                         clicked={() => {
-                          const id = uuidv4()
+                          const id = uuidv4();
                           if (base64File && props.userData) {
                             const payload = {
                               fileData: base64File,
@@ -580,11 +599,14 @@ const ChatRoom = (props: Props) => {
                                 role: props.type,
                                 userid: props.userData.id,
                                 chatRoomId: searchVal as string,
-                                mid: id
+                                mid: id,
+                                replyto: replyData.reply,
+                                replytoId: replyData.id,
+                                replytousertype: replyData.user,
                               },
                             };
                             // if (chat_socket.connected) {
-                              sendFileMessage(payload);
+                            sendFileMessage(payload);
                             // } else {
                             //   fileQueueRef.current.push(payload);
                             // }
@@ -595,9 +617,16 @@ const ChatRoom = (props: Props) => {
                               file: base64File as string,
                               filename: fileInputValue.name,
                               type: fileType,
-                              
+                              replyTo: replyData.reply,
+                              replyToId: replyData.id,
+                              replytousertype: replyData.user,
                             });
                             setFileInputValue(null);
+                            setReplyData({
+                              id: "",
+                              reply: "",
+                              user: null,
+                            });
                           }
                         }}
                         class="flex hover:bg-blue-1 transition-all items-center bg-black-2 text-white py-2 px-4 rounded-md"
@@ -617,8 +646,49 @@ const ChatRoom = (props: Props) => {
                         setFileInputValue(file);
                         if (file) {
                           getBase64(file).then((res) => {
+                            const id = uuidv4();
                             if (res) {
-                              setBase64File(res as any);
+                              if (res && props.userData) {
+                                const payload = {
+                                  fileData: res as string,
+                                  fileName: file.name,
+                                  room: props.orderId,
+                                  sender: {
+                                    type: fileType,
+                                    name: `${props.userData.fname} ${props.userData.lname}`,
+                                    role: props.type,
+                                    userid: props.userData.id,
+                                    chatRoomId: searchVal as string,
+                                    mid: id,
+                                    replyto: replyData.reply,
+                                    replytoId: replyData.id,
+                                    replytousertype: replyData.user,
+                                  },
+                                };
+                                // if (chat_socket.connected) {
+                                sendFileMessage(payload);
+                                // } else {
+                                //   fileQueueRef.current.push(payload);
+                                // }
+                                props.updateChatHandlerProps({
+                                  text: file.name,
+                                  user: props.type,
+                                  id,
+                                  file: res as string,
+                                  filename: file.name,
+                                  type: fileType,
+                                  replyTo: replyData.reply,
+                                  replyToId: replyData.id,
+                                  replytousertype: replyData.user,
+                                });
+                                setFileInputValue(null);
+                                setReplyData({
+                                  id: "",
+                                  reply: "",
+                                  user: null,
+                                });
+                              }
+                              // setBase64File(res as any);
                             }
                           });
                         }

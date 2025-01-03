@@ -35,6 +35,7 @@ import { adminConsultantApi } from "./features/admin/consultants/consultants";
 import { adminIssuesApi } from "./features/admin/issues/issues";
 import { adminFeedbackApi } from "./features/admin/feedback/feedback";
 import { issuesApi } from "./features/users/issues/issues";
+import { filmmakerDatabaseApi } from "./features/users/filmmaker-database/filmmaker-database";
 
 const persistConfig = {
   key: "root",
@@ -80,7 +81,8 @@ export const store = configureStore({
     [adminConsultantApi.reducerPath]: adminConsultantApi.reducer,
     [adminIssuesApi.reducerPath]: adminIssuesApi.reducer,
     [adminFeedbackApi.reducerPath]: adminFeedbackApi.reducer,
-    [issuesApi.reducerPath]: issuesApi.reducer
+    [issuesApi.reducerPath]: issuesApi.reducer,
+    [filmmakerDatabaseApi.reducerPath]: filmmakerDatabaseApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -106,9 +108,10 @@ export const store = configureStore({
       adminConsultantApi.middleware,
       adminIssuesApi.middleware,
       adminFeedbackApi.middleware,
-      issuesApi.middleware
-    ]),
-  // devTools: process.env.NODE_ENV !== "production",
+      issuesApi.middleware,
+      filmmakerDatabaseApi.middleware,
+    ]), 
+  devTools: process.env.NODE_ENV !== "production",
 });
 
 export type RootState = ReturnType<typeof store.getState>;

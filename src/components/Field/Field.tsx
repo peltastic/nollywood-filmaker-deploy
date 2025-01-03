@@ -8,7 +8,7 @@ interface OtherProps {
   classname: string;
   placeholder: string;
   password?: boolean;
-  changed?: any;
+  changed?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   borderError?: boolean;
   smallLabel?: boolean;
   labelClass?: string;
@@ -46,7 +46,7 @@ const Field = (props: FieldHookConfig<string> & OtherProps) => {
             disabled={props.disabled}
             autoComplete="off"
             {...field}
-            onChange={(e) => {
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               if (props.changed) {
                 props.changed(e);
               }
