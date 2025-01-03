@@ -15,6 +15,7 @@ import { nprogress } from "@mantine/nprogress";
 import { notify } from "@/utils/notification";
 import { useRouter } from "next/navigation";
 import Spinner from "@/app/Spinner/Spinner";
+import { companyVerificationSchema } from "@/utils/validation/fimmaker";
 type Props = {
   prevStep: () => void;
   data: IJoinCompany;
@@ -98,6 +99,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
           joinCompany(payload)
 
         }}
+        validationSchema={companyVerificationSchema}
       >
         {({ isValid }) => (
           <Form>
@@ -274,7 +276,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
 
               <UnstyledButton
                 type="submit"
-                disabled={!isValid}
+                disabled={!isValid || !file || !documentType}
                 class="ml-auto w-[7rem] flex hover:bg-blue-1 py-2 px-4 disabled:opacity-50 transition-all rounded-lg justify-center items-center text-white border border-black-3  bg-black-3 "
               >
                 {result.isLoading ? (
