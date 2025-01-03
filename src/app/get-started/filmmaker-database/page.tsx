@@ -20,6 +20,7 @@ import {
   IJoinCompany,
   IJoinCrew,
 } from "@/lib/features/users/filmmaker-database/filmmaker-database";
+import Link from "next/link";
 
 type Props = {};
 
@@ -99,9 +100,11 @@ const FilmakerDatabasePage = (props: Props) => {
   return (
     <div className="">
       <nav className="py-4 px-4">
-        <div className="">
-          <Image src={Logo} alt="logo" className="w-[7rem]" />
-        </div>
+        <Link href={"/"}  >
+          <div className="">
+            <Image src={Logo} alt="logo" className="w-[7rem]" />
+          </div>
+        </Link>
       </nav>
       <h1 className="text-4xl font-bold text-center">
         Nollywood Filmaker Database

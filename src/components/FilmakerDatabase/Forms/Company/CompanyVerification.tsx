@@ -95,9 +95,8 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
             verificationDocType: documentType,
             website: data.website,
           };
-          nprogress.start()
-          joinCompany(payload)
-
+          nprogress.start();
+          joinCompany(payload);
         }}
         validationSchema={companyVerificationSchema}
       >
@@ -153,10 +152,13 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
               <p className="mb-6 font-medium">Documents</p>
               <div className="mt-8">
                 <div className="mb-2 font-medium text-[0.88rem] text-[#A5A5A5]">
-                  <p>
-                    Select ID type (Driver&apos;s license, NIN, International
-                    passport)
-                  </p>
+                  <div className="flex items-center">
+                    <p>
+                      Select ID type (Driver&apos;s license, NIN, International
+                      passport)
+                    </p>
+                    <p>*</p>
+                  </div>
                   <p>
                     Note: The name used for registration must match the name on
                     the document.
@@ -276,7 +278,9 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
 
               <UnstyledButton
                 type="submit"
-                disabled={!isValid || !file || !documentType || result.isLoading}
+                disabled={
+                  !isValid || !file || !documentType || result.isLoading
+                }
                 class="ml-auto w-[7rem] flex hover:bg-blue-1 py-2 px-4 disabled:opacity-50 transition-all rounded-lg justify-center items-center text-white border border-black-3  bg-black-3 "
               >
                 {result.isLoading ? (

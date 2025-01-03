@@ -163,7 +163,7 @@ const ConsultantDetailsPage = (props: Props) => {
         });
       setReqHistoryData(refined_data);
     } else {
-      setReqHistoryData([])
+      setReqHistoryData([]);
     }
   }, [reqHistory.data]);
 
@@ -191,7 +191,7 @@ const ConsultantDetailsPage = (props: Props) => {
         });
       setActiveReqData(refined_data);
     } else {
-      setActiveReqData([])
+      setActiveReqData([]);
     }
   }, [activeReq.data]);
 
@@ -208,7 +208,7 @@ const ConsultantDetailsPage = (props: Props) => {
       notify("success", "Consultant account has been deleted permanently");
       nprogress.complete();
       deleteModalOptions.close();
-      router.push("/admin/dashboard/consultants")
+      router.push("/admin/dashboard/consultants");
     }
   }, [deleteRes.isError, deleteRes.isSuccess]);
   return (
@@ -219,7 +219,27 @@ const ConsultantDetailsPage = (props: Props) => {
         withCloseButton={false}
         onClose={close}
       >
-        <CreateNewConsultantModal close={close} edit />
+        {data && (
+          <CreateNewConsultantModal
+            refresh={() => {
+              if (params.id) {
+                fetchConsultantOverview(params.id);
+              }
+            }}
+            data={{
+              country: data.consultant.location?.country || "",
+              email: data.consultant.email,
+              expertise: data.consultant.expertise,
+              first_name: data.consultant.fname,
+              last_name: data.consultant.lname,
+              phone: data.consultant.phone,
+              state: data.consultant.location?.state || "",
+            }}
+            close={close}
+            id={data.consultant._id}
+            edit
+          />
+        )}
       </ModalComponent>
       <ModalComponent
         withCloseButton={false}

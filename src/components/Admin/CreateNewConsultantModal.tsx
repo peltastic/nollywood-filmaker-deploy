@@ -7,7 +7,10 @@ import Field from "../Field/Field";
 import Expertise from "../Expertise/Expertise";
 import UnstyledButton from "../Button/UnstyledButton";
 import { createConsultantSchema } from "@/utils/validation/consultant";
-import { useCreateConsultantMutation } from "@/lib/features/admin/consultants/consultants";
+import {
+  useCreateConsultantMutation,
+  useEditConsultantMutation,
+} from "@/lib/features/admin/consultants/consultants";
 import Spinner from "@/app/Spinner/Spinner";
 import { nprogress } from "@mantine/nprogress";
 import { notify } from "@/utils/notification";
@@ -15,12 +18,26 @@ import { notify } from "@/utils/notification";
 type Props = {
   close: () => void;
   edit?: boolean;
+  refresh?: () => void;
+  id?: string;
+  data?: {
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone: string;
+    state: string;
+    country: string;
+    expertise: string[];
+  };
 };
 
 const CreateNewConsultantModal = (props: Props) => {
   const [createConsultant, { isLoading, isError, error, isSuccess }] =
     useCreateConsultantMutation();
-  const [expertiseData, setExpertiseData] = useState<string[]>([]);
+  const [editConsultant, result] = useEditConsultantMutation();
+  const [expertiseData, setExpertiseData] = useState<string[]>(
+    props.data?.expertise || []
+  );
   const setExpertiseHandler = (value: string, type: "add" | "remove") => {
     const data = [...expertiseData];
     if (type === "add") {
@@ -47,6 +64,27 @@ const CreateNewConsultantModal = (props: Props) => {
       props.close();
     }
   }, [isError, isSuccess]);
+
+  useEffect(() => {
+    if (result.isError) {
+      nprogress.complete();
+      notify(
+        "error",
+        "",
+        (result.error as any).data?.message || "An Error Occured"
+      );
+    }
+    if (result.isSuccess) {
+      nprogress.complete();
+      notify(
+        "success",
+        "Successful",
+        "Consultant data has been updated"
+      );
+      props.refresh && props.refresh();
+      props.close();
+    }
+  }, [result.isError, result.isSuccess]);
   return (
     <section className="px-2 xs:px-6 py-6">
       <div className="flex">
@@ -71,16 +109,16 @@ const CreateNewConsultantModal = (props: Props) => {
       )}
       <Formik
         initialValues={{
-          first_name: "",
-          last_name: "",
-          email: "",
-          phone: "",
-          state: "",
-          country: "",
+          first_name: props.data?.first_name || "",
+          last_name: props.data?.last_name || "",
+          email: props.data?.email || "",
+          phone: props.data?.phone || "",
+          state: props.data?.state || "",
+          country: props.data?.country || "",
         }}
         onSubmit={({ first_name, country, email, last_name, phone, state }) => {
           nprogress.start();
-          createConsultant({
+          const payload = {
             country,
             email,
             expertise: expertiseData,
@@ -88,7 +126,12 @@ const CreateNewConsultantModal = (props: Props) => {
             lname: last_name,
             phone,
             state,
-          });
+          };
+          if (props.edit && props.id) {
+            editConsultant({ body: payload, id: props.id });
+          } else {
+            createConsultant(payload);
+          }
         }}
         validationSchema={createConsultantSchema}
       >
@@ -160,16 +203,15 @@ const CreateNewConsultantModal = (props: Props) => {
                 Cancel
               </UnstyledButton>
               <UnstyledButton
-                disabled={!isValid || isLoading || expertiseData.length < 1}
+                disabled={!isValid || isLoading || !result.isLoading || expertiseData.length < 1}
                 class="flex py-2 px-4 transition-all rounded-md w-full xs:w-[8rem] justify-center items-center text-white border border-black-3 disabled:border-black-2  bg-black-3 disabled:opacity-50 text-[0.88rem]"
               >
-                {" "}
-                {isLoading ? (
+                {isLoading || result.isLoading ? (
                   <div className="py-1 w-[1rem]">
                     <Spinner />
                   </div>
                 ) : (
-                  <p>Create</p>
+                  <p>{props.edit ? "Edit" : "Create"}</p>
                 )}
               </UnstyledButton>
             </div>

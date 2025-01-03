@@ -22,6 +22,16 @@ export const adminConsultantApi = createApi({
         body,
       }),
     }),
+    editConsultant: build.mutation<
+      unknown,
+      { body: ICreateConsultantPayload; id: string }
+    >({
+      query: ({ body, id }) => ({
+        url: `/api/admin/consultants/${id}`,
+        method: "PUT",
+        body,
+      }),
+    }),
     fetchConsultantOverview: build.query<IFetchConsultantOverview, string>({
       query: (id) => `/api/admin/fetch/consultants/${id}`,
     }),
@@ -40,7 +50,7 @@ export const adminConsultantApi = createApi({
     deleteConsultant: build.mutation<unknown, string>({
       query: (id) => ({
         url: `/api/admin/consultants/${id}`,
-        method: "DELETE"
+        method: "DELETE",
       }),
     }),
   }),
@@ -52,5 +62,6 @@ export const {
   useLazyFetchConsultantOverviewQuery,
   useLazyFetchConsultantActiveRequestQuery,
   useLazyFetchConsultantRequestHistoryQuery,
-  useDeleteConsultantMutation
+  useDeleteConsultantMutation,
+  useEditConsultantMutation
 } = adminConsultantApi;
