@@ -12,7 +12,7 @@ type Props = {
 
 const FeedbackRatingCard = (props: Props) => {
   return (
-    <div className="border border-stroke-10 py-4 px-5 rounded-lg">
+    <div className="border border-stroke-10 py-4 px-5 rounded-lg ">
       <h1 className="text-[1.13rem] text-black-8 font-medium">
         {props.title}
       </h1>
@@ -21,7 +21,7 @@ const FeedbackRatingCard = (props: Props) => {
           <p className="font-semibold text-white text-[2.5rem]">{props.average_rating}</p>
         </div>
         <div className="mt-6">
-          <Rating color="#F8C51B" size={"lg"} defaultValue={5} />
+          <Rating color="#F8C51B" size={"lg"} defaultValue={Number(props.average_rating)} />
           <p className="text-gray-5 text-center  text-[0.88rem] mt-4">
             {props.total_rating} ratings
           </p>

@@ -1,4 +1,4 @@
-import { ICreateAvailabilityPayload } from "@/interfaces/consultants/profile/availability";
+import { ICreateAvailabilityPayload, ICreateAvailabilityPayloadV2 } from "@/interfaces/consultants/profile/availability";
 import { consultantBaseQueryWithReauth } from "@/lib/baseQuery";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
@@ -8,7 +8,7 @@ export const availabilityApi = createApi({
   endpoints: (build) => ({
     editAvailability: build.mutation<
       unknown,
-      { schedule: ICreateAvailabilityPayload[] }
+      { schedule: ICreateAvailabilityPayloadV2[] }
     >({
       query: (body) => ({
         url: "/api/consultants/createavailability",
@@ -17,7 +17,7 @@ export const availabilityApi = createApi({
       }),
     }),
     getConsultantAvailability: build.query<{
-      availability: ICreateAvailabilityPayload[]
+      availability: ICreateAvailabilityPayloadV2[]
     }, string>({
       query: (id) => `/api/consultants/availability/${id}`,
     }),

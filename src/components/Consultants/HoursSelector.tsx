@@ -1,54 +1,62 @@
 import React, { useEffect, useState } from "react";
 import SwitchComponent from "../Switch/SwitchComponent";
 import SelectComponent from "../Select/SelectComponent";
-import { ICreateAvailabilityPayload } from "@/interfaces/consultants/profile/availability";
+import { ICreateAvailabilityPayload, ICreateAvailabilityPayloadV2 } from "@/interfaces/consultants/profile/availability";
 import { time_slots } from "@/utils/constants/constants";
 import { convert12HT24, get12HTime } from "@/utils/helperFunction";
 import moment from "moment";
+import SlotsSelector from "./SlotsSelector";
 
 type Props = {
   day: string;
-  data: ICreateAvailabilityPayload;
+  data: ICreateAvailabilityPayloadV2;
   index: number;
   updateHours: (
     index: number,
-    payload: {
-      hours: number;
-      minutes: number;
-      seconds: number;
-    },
-    type: "openTime" | "closeTime"
+    slots: string[]
   ) => void;
-  updateStatus: (index: number, status: "open" | "close") => void;
+  updateStatus: (index: number, status: "open" | "closed") => void;
 };
 
 const HoursSelector = (props: Props) => {
   const [checked, setChecked] = useState<boolean>(
     props.data.status === "open" ? true : false
   );
-  const [openTimeValue, setOpenTimeValue] = useState<string | null>(null);
-  const [closeTimeValue, setCloseTimeValue] = useState<string | null>(null);
+  // const [currSlots, setCurrSlots] = useState<string[]>(props.data.slots)
+  // const [openTimeValue, setOpenTimeValue] = useState<string | null>(null);
+  // const [closeTimeValue, setCloseTimeValue] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (props.data) {
-      setOpenTimeValue(
-        moment(`${props.data.otime.hours}:00 `, ["HH:mm"]).format("h:mm A")
-      );
-      setCloseTimeValue(
-        moment(`${props.data.ctime.hours}:00`, ["HH:mm"]).format("h:mm A")
-      );
+  // useEffect(() => {
+  //   if (props.data) {
+  //     setOpenTimeValue(
+  //       moment(`${props.data.otime.hours}:00 `, ["HH:mm"]).format("h:mm A")
+  //     );
+  //     setCloseTimeValue(
+  //       moment(`${props.data.ctime.hours}:00`, ["HH:mm"]).format("h:mm A")
+  //     );
+  //   }
+  // }, [props.data]);
+
+  const updateSlots = (value: string, type: "add" | "remove") => {
+    const slots = [...props.data.slots]
+    if (type === "add") {
+      slots.push(value)
+    } else {
+      const index = slots.indexOf(value)
+      slots.splice(index, 1)
     }
-  }, [props.data]);
+    props.updateHours(props.index, slots)
+  } 
 
   return (
-    <div className="border flex items-center border-stroke-2 my-4 rounded-lg px-4 font-semibold py-4">
+    <div className="border  border-stroke-2 my-4 rounded-lg px-4 font-semibold py-4">
       <div className="w-[14rem] mr-auto flex items-center">
         <p className="mr-auto">{props.day}</p>
         <SwitchComponent
           checked={checked}
           setChecked={(val) => {
             setChecked(val);
-            props.updateStatus(props.index, val ? "open" : "close");
+            props.updateStatus(props.index, val ? "open" : "closed");
           }}
           radius={"sm"}
           size="md"
@@ -58,7 +66,9 @@ const HoursSelector = (props: Props) => {
           {checked ? "Open" : "Closed"}
         </p>
       </div>
-      {checked && openTimeValue && closeTimeValue ? (
+    {/* <SlotsSelector /> */}
+    {checked && <SlotsSelector slots={props.data.slots} updateSlots={updateSlots} /> }
+      {/* {checked && openTimeValue && closeTimeValue ? (
         <div className="flex items-center">
           <div className="w-[7rem]">
             <SelectComponent
@@ -118,7 +128,7 @@ const HoursSelector = (props: Props) => {
             />
           </div>
         </div>
-      ) : null}
+      ) : null} */}
     </div>
   );
 };

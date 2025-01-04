@@ -17,7 +17,6 @@ import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import { DataTable } from "@/components/Tables/DataTable";
 import { useProtectRouteConsultantRoute } from "@/hooks/useProtectConsultantRoute";
 import {
-  useFetchCustomerRequestsQuery,
   useGetActiveRequestQuery,
   useLazyFetchReqHistoryQuery,
   useLazyGetServiceRequestsQuery,

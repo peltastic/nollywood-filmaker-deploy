@@ -20,6 +20,19 @@ export interface ICreateAvailabilityPayload {
   status: "open" | "close";
   expertise: string[];
 }
+export interface ICreateAvailabilityPayloadV2 {
+  slots: string[];
+  day:
+    | "Monday"
+    | "Tuesday"
+    | "Wednesday"
+    | "Thursday"
+    | "Friday"
+    | "Saturday"
+    | "Sunday";
+  status: "open" | "closed";
+  expertise: string[];
+}
 
 // export interface ICreateAvailabilityPayload {
 

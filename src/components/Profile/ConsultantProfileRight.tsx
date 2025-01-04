@@ -1,9 +1,13 @@
-import { ICreateAvailabilityPayload } from "@/interfaces/consultants/profile/availability";
+import {
+  ICreateAvailabilityPayload,
+  ICreateAvailabilityPayloadV2,
+} from "@/interfaces/consultants/profile/availability";
 import { IConsultantProfileResponse } from "@/interfaces/consultants/profile/profile";
 import { useLazyGetConsultantAvailabilityQuery } from "@/lib/features/consultants/profile/availability";
 import { RootState } from "@/lib/store";
 import { convert12HT24, get12HTime } from "@/utils/helperFunction";
 import { Skeleton } from "@mantine/core";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -19,7 +23,7 @@ const ConsultantProfileRight = ({ isFetching, data }: Props) => {
     (state: RootState) => state.persistedState.consultant.user?.id
   );
   const [availableHours, setAvailableHours] = useState<
-    ICreateAvailabilityPayload[]
+    ICreateAvailabilityPayloadV2[]
   >([]);
 
   const [getConsultantAvailability, result] =
@@ -150,12 +154,18 @@ const ConsultantProfileRight = ({ isFetching, data }: Props) => {
           {availableHours.map((el) => (
             <div className="mt-6" key={el.day}>
               <h1 className="font-bold">{el.day}</h1>
-              <p>
-                {convert12HT24(el.otime.hours)}:00 
-                {get12HTime(el.otime.hours)} - &nbsp;
-                {convert12HT24(el.ctime.hours)}:00 {get12HTime(el.ctime.hours)}
-                
-              </p>
+              <div className="flex flex-wrap gap-4 mt-5">
+                {el.slots.length > 0 ?<>
+                {el.slots.map((el) => (
+                  <div
+                  className="text-gray-1 border font-normal border-gray-1    py-2 px-4 rounded-md transition-all"
+                  key={el}
+                  >
+                    <p>{moment(el, "HH:mm").format("h:mm A")}</p>
+                  </div>
+                ))}
+                </>: <p>No time slots chosen</p> }
+              </div>
             </div>
           ))}
         </div>

@@ -8,8 +8,15 @@ import {
 import DashboardPlate from "@/components/Dashboard/DashboardPlate";
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
+import CustomerSkeleton from "@/components/Skeletons/CustomersSkeleton";
+import FeedbackRatingSkeleton from "@/components/Skeletons/FeedbackRatingSkeleton";
 import { DataTable } from "@/components/Tables/DataTable";
-import { useFetchAllFeedbackQuery } from "@/lib/features/admin/feedback/feedback";
+import {
+  useFetchAllFeedbackQuery,
+  useFetchAverageRatingsQuery,
+  useFetchTopConsultantsQuery,
+} from "@/lib/features/admin/feedback/feedback";
+import { Skeleton } from "@mantine/core";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 
@@ -62,6 +69,12 @@ const FeedbacksPage = (props: Props) => {
   const { data, isFetching } = useFetchAllFeedbackQuery(null, {
     refetchOnMountOrArgChange: true,
   });
+  const result = useFetchAverageRatingsQuery(null, {
+    refetchOnMountOrArgChange: true,
+  });
+  const topConsultants = useFetchTopConsultantsQuery(null, {
+    refetchOnMountOrArgChange: true,
+  });
 
   useEffect(() => {
     if (data) {
@@ -75,7 +88,7 @@ const FeedbacksPage = (props: Props) => {
           orderId: el.orderId,
           quality: el.quality,
           speed: el.speed,
-          image: el.userId?.profilepics
+          image: el.userId?.profilepics,
         };
       });
       setFeedbackData(refined_data);
@@ -88,23 +101,67 @@ const FeedbacksPage = (props: Props) => {
           <DashboardPlate title="Feedback">
             <div className="flex flex-wrap xl:flex-nowrap py-8 gap-x-6">
               <div className="w-full md:w-[48%] xl:w-[30%] mr-auto xl:mr-0">
-                <FeedbackRatingCard
-                  title="Delivery Quality"
-                  average_rating="3.3"
-                  ratings_data={ratings}
-                  total_rating="125"
-                />
+                {result.isFetching ? (
+                  <FeedbackRatingSkeleton />
+                ) : (
+                  <>
+                    <FeedbackRatingCard
+                      title="Delivery Quality"
+                      average_rating={
+                        result.data?.avgQuality.toFixed(1).toString() || "0"
+                      }
+                      ratings_data={ratings}
+                      total_rating="125"
+                    />
+                  </>
+                )}
               </div>
               <div className="w-full md:w-[48%] xl:w-[30%] mt-8 md:mt-0">
-                <FeedbackRatingCard
-                  average_rating={"4.3"}
-                  ratings_data={ratings}
-                  total_rating={"125"}
-                  title="Delivery Speed"
-                />
+                {result.isFetching ? (
+                  <FeedbackRatingSkeleton />
+                ) : (
+                  <FeedbackRatingCard
+                    average_rating={
+                      result.data?.avgSpeed.toFixed(1).toString() || "0"
+                    }
+                    ratings_data={ratings}
+                    total_rating={"125"}
+                    title="Delivery Speed"
+                  />
+                )}
               </div>
               <div className="mt-8 xl:mt-0 w-full xl:w-[40%]">
-                <TopConsultants />
+                {topConsultants.isFetching ? (
+                  <div className="">
+                    <div className="w-[6rem] my-8">
+                      <Skeleton height={20} />
+                    </div>
+                    <CustomerSkeleton />
+                    <CustomerSkeleton />
+                    <CustomerSkeleton />
+                    <CustomerSkeleton />
+                    <CustomerSkeleton />
+                    <CustomerSkeleton />
+                  </div>
+                ) : (
+                  <TopConsultants
+                    data={
+                      topConsultants.data?.consultants
+                        ? topConsultants.data.consultants.map((el) => {
+                            return {
+                              fname: el.fname,
+                              lname: el.lname,
+                              id: `${el.fname + el.lname}`,
+                              rating: (el.avgQuality + el.avgSpeed) / 2,
+                              requests: (
+                                el.appointmentCount + el.totalRequest
+                              ).toString(),
+                            };
+                          })
+                        : []
+                    }
+                  />
+                )}
               </div>
             </div>
           </DashboardPlate>

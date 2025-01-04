@@ -8,7 +8,10 @@ import ModalComponent from "@/components/Modal/Modal";
 import ConsultantProfileLeft from "@/components/Profile/ConsultantProfileLeft";
 import ConsultantProfileRight from "@/components/Profile/ConsultantProfileRight";
 import { useProtectRouteConsultantRoute } from "@/hooks/useProtectConsultantRoute";
-import { useGetConsultantProfileQuery } from "@/lib/features/consultants/profile/profile";
+import {
+  useGetConsultantProfileQuery,
+  useLazyGetConsultantProfileQuery,
+} from "@/lib/features/consultants/profile/profile";
 import { RootState } from "@/lib/store";
 import { useDisclosure } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
@@ -26,9 +29,14 @@ const ConsultantProfilePage = (props: Props) => {
   const consultantId = useSelector(
     (state: RootState) => state.persistedState.consultant.user?.id
   );
-  const { data, isFetching } = useGetConsultantProfileQuery(consultantId!, {
-    refetchOnMountOrArgChange: true,
-  });
+  const [fetchConsultantProfile, { data, isFetching }] =
+    useLazyGetConsultantProfileQuery();
+
+  useEffect(() => {
+    if (consultantId) {
+      fetchConsultantProfile(consultantId);
+    }
+  }, [consultantId]);
   const router = useRouter();
   const status: any = "active";
   const statusClassname =
@@ -40,7 +48,6 @@ const ConsultantProfilePage = (props: Props) => {
       ? "bg-stroke-4 text-black-6"
       : "bg-light-yellow text-dark-yellow";
 
-
   return (
     <ServiceLayout consultant>
       <>
@@ -51,7 +58,14 @@ const ConsultantProfilePage = (props: Props) => {
           centered
           size="xl"
         >
-          <SetStandardHoursModal close={close} />
+          <SetStandardHoursModal
+            close={close}
+            refresh={() => {
+              if (consultantId) {
+                fetchConsultantProfile(consultantId);
+              }
+            }}
+          />
         </ModalComponent>
         <DashboardBodyLayout>
           <header className="flex flex-wrap md:flex-nowrap items-center pt-10 px-4 chatbp:px-0">

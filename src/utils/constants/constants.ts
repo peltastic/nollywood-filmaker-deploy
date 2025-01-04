@@ -1,4 +1,7 @@
-import { ICreateAvailabilityPayload } from "@/interfaces/consultants/profile/availability";
+import {
+  ICreateAvailabilityPayload,
+  ICreateAvailabilityPayloadV2,
+} from "@/interfaces/consultants/profile/availability";
 
 export const testSelectData = [
   {
@@ -342,6 +345,69 @@ export const time_slots = [
     label: "1:00 AM",
     value: "1:00 AM",
   },
+];
+
+export const defaultAvailabilityHoursV2: ICreateAvailabilityPayloadV2[] = [
+  {
+    day: "Monday",
+    slots: [],
+    expertise: ["Producer", "Editor", "Writer"],
+    status: "closed",
+  },
+  {
+    day: "Tuesday",
+    slots: [],
+    expertise: ["Producer", "Editor", "Writer"],
+    status: "closed",
+  },
+  {
+    day: "Wednesday",
+    slots: [],
+    expertise: ["Producer", "Editor", "Writer"],
+    status: "closed",
+  },
+  {
+    day: "Thursday",
+    slots: [],
+    expertise: ["Producer", "Editor", "Writer"],
+    status: "closed",
+  },
+  {
+    day: "Friday",
+    slots: [],
+    expertise: ["Producer", "Editor", "Writer"],
+    status: "closed",
+  },
+  {
+    day: "Saturday",
+    slots: [],
+    expertise: ["Producer", "Editor", "Writer"],
+    status: "closed",
+  },
+  {
+    day: "Sunday",
+    slots: [],
+    expertise: ["Producer", "Editor", "Writer"],
+    status: "closed",
+  },
+];
+
+export const time_slots_v2 = [
+  "09:00",
+  "10:00",
+  "11:00",
+  "12:00",
+  "13:00",
+  "14:00",
+  "15:00",
+  "16:00",
+  "17:00",
+  "18:00",
+  "19:00",
+  "20:00",
+  "21:00",
+  "22:00",
+  "23:00",
 ];
 
 export const loaderColor = "#d9d0d5";

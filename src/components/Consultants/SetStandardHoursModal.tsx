@@ -5,14 +5,17 @@ import { MdInfoOutline } from "react-icons/md";
 import {
   days,
   defaultAvailabilityHours,
+  defaultAvailabilityHoursV2,
   loaderColor,
 } from "@/utils/constants/constants";
 import HoursSelector from "./HoursSelector";
 import UnstyledButton from "../Button/UnstyledButton";
-import { ICreateAvailabilityPayload } from "@/interfaces/consultants/profile/availability";
+import {
+  ICreateAvailabilityPayload,
+  ICreateAvailabilityPayloadV2,
+} from "@/interfaces/consultants/profile/availability";
 import {
   useEditAvailabilityMutation,
-  useGetConsultantAvailabilityQuery,
   useLazyGetConsultantAvailabilityQuery,
 } from "@/lib/features/consultants/profile/availability";
 import { useSelector } from "react-redux";
@@ -21,13 +24,13 @@ import { nprogress } from "@mantine/nprogress";
 import { notify } from "@/utils/notification";
 import Spinner from "@/app/Spinner/Spinner";
 import { Skeleton } from "@mantine/core";
-import { useLazyGetAvailabilityHoursQuery } from "@/lib/features/users/services/chat/chat";
 
 type Props = {
   close: () => void;
+  refresh: () => void
 };
 
-const SetStandardHoursModal = (props: Props) => {
+const SetStandardHoursModal = (props: Props) => { 
   const consultantId = useSelector(
     (state: RootState) => state.persistedState.consultant.user?.id
   );
@@ -38,7 +41,7 @@ const SetStandardHoursModal = (props: Props) => {
   const [setStandardHours, { isSuccess, isError, error, data, isLoading }] =
     useEditAvailabilityMutation();
   const [availableHours, setAvailableHours] = useState<
-    ICreateAvailabilityPayload[]
+    ICreateAvailabilityPayloadV2[]
   >([]);
   const [getConsultantAvailability, result] =
     useLazyGetConsultantAvailabilityQuery();
@@ -46,14 +49,13 @@ const SetStandardHoursModal = (props: Props) => {
   useEffect(() => {
     if (result.error) {
       if (consultantExpertise) {
-        const defaultHours: ICreateAvailabilityPayload[] =
-          defaultAvailabilityHours.map((el) => {
+        const defaultHours: ICreateAvailabilityPayloadV2[] =
+          defaultAvailabilityHoursV2.map((el) => {
             return {
-              ctime: el.ctime,
-              expertise: consultantExpertise,
               day: el.day,
+              expertise: el.expertise,
+              slots: el.slots,
               status: el.status,
-              otime: el.otime,
             };
           });
         setAvailableHours(defaultHours);
@@ -74,7 +76,9 @@ const SetStandardHoursModal = (props: Props) => {
       );
     }
     if (isSuccess) {
+      nprogress.complete();
       notify("success", "Successful!", "Availability hours set successfully");
+      props.refresh()
       props.close();
     }
   }, [isError, isSuccess]);
@@ -83,21 +87,12 @@ const SetStandardHoursModal = (props: Props) => {
     getConsultantAvailability(consultantId!);
   }, []);
 
-  const updateAvailabiltyHours = (
-    index: number,
-    payload: {
-      hours: number;
-      minutes: number;
-      seconds: number;
-    },
-    type: "openTime" | "closeTime"
-  ) => {
+  const updateAvailabiltyHours = (index: number, payload: string[]) => {
     const currAvalabilityHours = [...availableHours];
     const currPayload = currAvalabilityHours[index];
 
     currAvalabilityHours.splice(index, 1, {
-      ctime: type === "closeTime" ? payload : currPayload.ctime,
-      otime: type === "openTime" ? payload : currPayload.otime,
+      slots: payload,
       day: currPayload.day,
       status: currPayload.status,
       expertise: currPayload.expertise,
@@ -106,12 +101,11 @@ const SetStandardHoursModal = (props: Props) => {
     setAvailableHours(currAvalabilityHours);
   };
 
-  const updateStatus = (index: number, status: "open" | "close") => {
+  const updateStatus = (index: number, status: "open" | "closed") => {
     const currAvalabilityHours = [...availableHours];
     const currPayload = currAvalabilityHours[index];
     currAvalabilityHours.splice(index, 1, {
-      ctime: currPayload.ctime,
-      otime: currPayload.otime,
+      slots: status === "open" ? currPayload.slots: [],
       day: currPayload.day,
       status,
       expertise: currPayload.expertise,
@@ -183,8 +177,8 @@ const SetStandardHoursModal = (props: Props) => {
         </UnstyledButton>
         <UnstyledButton
           clicked={() => {
+            nprogress.start()
             setStandardHours({ schedule: availableHours });
-
           }}
           disabled={isLoading}
           class="flex w-[8rem] py-2 px-4 transition-all rounded-md  justify-center items-center text-white border border-black-3 disabled:border-black-2  bg-black-3 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
