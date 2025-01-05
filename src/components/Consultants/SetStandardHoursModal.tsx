@@ -96,7 +96,7 @@ const SetStandardHoursModal = (props: Props) => {
       slots: sortTimeSlots(payload),
       day: currPayload.day,
       status: currPayload.status,
-      expertise: currPayload.expertise,
+      expertise: consultantExpertise ? consultantExpertise : [],
     });
 
     setAvailableHours(currAvalabilityHours);
@@ -109,7 +109,7 @@ const SetStandardHoursModal = (props: Props) => {
       slots: status === "open" ? currPayload.slots : [],
       day: currPayload.day,
       status,
-      expertise: currPayload.expertise,
+      expertise: consultantExpertise ? consultantExpertise : [],
     });
     setAvailableHours(currAvalabilityHours);
   };
