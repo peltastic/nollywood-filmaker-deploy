@@ -11,7 +11,6 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import classes from "@/app/styles/SuccessNotification.module.css";
-import LoadingBar from "react-top-loading-bar";
 import { nprogress } from "@mantine/nprogress";
 import { CancelSvg } from "@/components/CustomSvgs/CustomSvgs";
 

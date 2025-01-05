@@ -86,7 +86,7 @@ const page = (props: Props) => {
       <ServiceLayout nonDashboard>
         <div className="flex flex-wrap items-start">
           <ServiceLeft
-            cost="50,000"
+            cost="150,000"
             title="Watch the final cut of my film"
             image={<Image src={WatchFinalCutImage} alt="watch-final-cut" />}
             body={[

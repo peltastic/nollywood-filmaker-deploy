@@ -88,7 +88,7 @@ const CreatePitchPage = (props: Props) => {
         <div className="flex flex-wrap items-start">
           <ServiceLeft
             title="Create a Movie Schedule"
-            cost="105,000"
+            cost="250,000"
             image={<Image src={CreatePitchImg} alt="create-pitch" />}
             body={[
               {

@@ -20,7 +20,7 @@ type Props = {
   filename: string;
   file: string;
   id?: string;
-  setActiveId?: (id?: string) => void;
+  setActiveId?: (id?: string) => void ;
   activeId?: string | null;
   setReplyDataProps?: (data: {
     user: "admin" | "user" | "consultant" | null;

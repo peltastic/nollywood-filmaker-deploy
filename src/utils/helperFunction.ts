@@ -261,3 +261,17 @@ export function appendToFormData(
   }
   return formData;
 }
+
+export function sortTimeSlots(value: string[]): string[] {
+  const timeSlots = value
+  timeSlots.sort((a, b) => {
+    const [hoursA, minutesA] = a.split(":").map(Number);
+    const [hoursB, minutesB] = b.split(":").map(Number);
+
+    const totalMinutesA = hoursA * 60 + minutesA;
+    const totalMinutesB = hoursB * 60 + minutesB;
+
+    return totalMinutesA - totalMinutesB;
+  });
+  return timeSlots
+}

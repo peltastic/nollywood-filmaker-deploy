@@ -87,7 +87,7 @@ const MarketingBudget = (props: Props) => {
       <ServiceLayout nonDashboard>
         <div className="flex flex-wrap items-start">
           <ServiceLeft
-            cost="105,000"
+            cost="250,000"
             title="Create a marketing budget"
             image={<Image src={MarketingBudgetImg} alt="production-budget" />}
             body={[

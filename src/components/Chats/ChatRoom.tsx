@@ -476,7 +476,7 @@ const ChatRoom = (props: Props) => {
                       lastmessage={
                         props.data[props.data.length - 1].id === el.id
                       }
-                      setActiveId={setActiveIdHandler}
+                      setActiveId={props.isTime?  setActiveIdHandler : undefined}
                       id={el.id}
                       activeId={activeId}
                       setReplyDataProps={(val) => setReplyData(val)}
@@ -502,7 +502,7 @@ const ChatRoom = (props: Props) => {
                       }
                       index={index}
                       userprofilepic={props.profilepics}
-                      setActiveId={setActiveIdHandler}
+                      setActiveId={props.isTime ? setActiveIdHandler : undefined}
                       id={el.id}
                       activeId={activeId}
                       setReplyDataProps={(val) => setReplyData(val)}

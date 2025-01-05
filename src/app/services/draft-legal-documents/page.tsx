@@ -85,7 +85,7 @@ const DraftLegalDocumentPage = (props: Props) => {
         <div className="flex flex-wrap items-start">
           <ServiceLeft
             title="Draft Legal Documents"
-            cost="100,000"
+            cost="250,000"
             image={
               <Image
                 src={DraftLegalDocumentImage}

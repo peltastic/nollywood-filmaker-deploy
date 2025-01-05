@@ -14,30 +14,16 @@ import { useSelector } from "react-redux";
 type Props = {
   data?: IConsultantProfileResponse;
   isFetching?: boolean;
+  avalilability: ICreateAvailabilityPayloadV2[]
 };
 
 const expertise = ["Producer", "Director", "Composer"];
 
-const ConsultantProfileRight = ({ isFetching, data }: Props) => {
+const ConsultantProfileRight = ({ isFetching, data, avalilability }: Props) => {
   const consultantId = useSelector(
     (state: RootState) => state.persistedState.consultant.user?.id
   );
-  const [availableHours, setAvailableHours] = useState<
-    ICreateAvailabilityPayloadV2[]
-  >([]);
-
-  const [getConsultantAvailability, result] =
-    useLazyGetConsultantAvailabilityQuery();
-
-  useEffect(() => {
-    if (result.isSuccess) {
-      setAvailableHours(result.data.availability);
-    }
-  }, [result.isSuccess]);
-
-  useEffect(() => {
-    getConsultantAvailability(consultantId!);
-  }, []);
+  
 
   return (
     <div className="">
@@ -146,12 +132,12 @@ const ConsultantProfileRight = ({ isFetching, data }: Props) => {
           </div>
         </div>
       )}
-      {availableHours.length > 0 && (
+      {avalilability.length > 0 && (
         <div className="mt-4 bg-white rounded-2xl pb-6 pt-2 px-6 border shadow-md border-stroke-5 shadow-[#1018280F]">
           <div className="py-4 border-b border-b-stroke-6">
             <h1 className="font-medium text-[1.13rem]">Availability</h1>
           </div>
-          {availableHours.map((el) => (
+          {avalilability.map((el) => (
             <div className="mt-6" key={el.day}>
               <h1 className="font-bold">{el.day}</h1>
               <div className="flex flex-wrap gap-4 mt-5">

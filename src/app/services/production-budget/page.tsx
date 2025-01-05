@@ -89,7 +89,7 @@ const ProductionBudgetPage = (props: Props) => {
       <ServiceLayout nonDashboard>
         <div className="flex flex-wrap items-start">
           <ServiceLeft
-            cost="95,000"
+            cost="250,000"
             title="Create a production budget"
             image={<Image src={ProductionBudgetImg} alt="production-budget" />}
             body={[

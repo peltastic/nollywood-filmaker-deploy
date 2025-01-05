@@ -24,13 +24,14 @@ import { nprogress } from "@mantine/nprogress";
 import { notify } from "@/utils/notification";
 import Spinner from "@/app/Spinner/Spinner";
 import { Skeleton } from "@mantine/core";
+import { sortTimeSlots } from "@/utils/helperFunction";
 
 type Props = {
   close: () => void;
-  refresh: () => void
+  refresh: () => void;
 };
 
-const SetStandardHoursModal = (props: Props) => { 
+const SetStandardHoursModal = (props: Props) => {
   const consultantId = useSelector(
     (state: RootState) => state.persistedState.consultant.user?.id
   );
@@ -78,7 +79,7 @@ const SetStandardHoursModal = (props: Props) => {
     if (isSuccess) {
       nprogress.complete();
       notify("success", "Successful!", "Availability hours set successfully");
-      props.refresh()
+      props.refresh();
       props.close();
     }
   }, [isError, isSuccess]);
@@ -92,7 +93,7 @@ const SetStandardHoursModal = (props: Props) => {
     const currPayload = currAvalabilityHours[index];
 
     currAvalabilityHours.splice(index, 1, {
-      slots: payload,
+      slots: sortTimeSlots(payload),
       day: currPayload.day,
       status: currPayload.status,
       expertise: currPayload.expertise,
@@ -105,7 +106,7 @@ const SetStandardHoursModal = (props: Props) => {
     const currAvalabilityHours = [...availableHours];
     const currPayload = currAvalabilityHours[index];
     currAvalabilityHours.splice(index, 1, {
-      slots: status === "open" ? currPayload.slots: [],
+      slots: status === "open" ? currPayload.slots : [],
       day: currPayload.day,
       status,
       expertise: currPayload.expertise,
@@ -177,7 +178,7 @@ const SetStandardHoursModal = (props: Props) => {
         </UnstyledButton>
         <UnstyledButton
           clicked={() => {
-            nprogress.start()
+            nprogress.start();
             setStandardHours({ schedule: availableHours });
           }}
           disabled={isLoading}

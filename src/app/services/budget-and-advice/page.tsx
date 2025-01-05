@@ -80,7 +80,7 @@ const page = (props: Props) => {
       <ServiceLayout nonDashboard>
         <div className="flex flex-wrap items-start">
           <ServiceLeft
-            cost="75,000"
+            cost="150,000"
             title="Look at my budget"
             image={<Image src={BudgetAndAdviceImg} alt="budget-and-advice" />}
             body={[

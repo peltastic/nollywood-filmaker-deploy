@@ -85,7 +85,7 @@ const ReadMyScriptPage = (props: Props) => {
       <ServiceLayout nonDashboard>
         <div className="flex flex-wrap items-start">
           <ServiceLeft
-            cost="50,000"
+            cost="150,000"
             title="Read my script"
             image={<Image src={ReadMyScriptImg} alt="read-my-script" />}
             body={[

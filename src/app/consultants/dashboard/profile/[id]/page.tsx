@@ -8,6 +8,8 @@ import ModalComponent from "@/components/Modal/Modal";
 import ConsultantProfileLeft from "@/components/Profile/ConsultantProfileLeft";
 import ConsultantProfileRight from "@/components/Profile/ConsultantProfileRight";
 import { useProtectRouteConsultantRoute } from "@/hooks/useProtectConsultantRoute";
+import { ICreateAvailabilityPayloadV2 } from "@/interfaces/consultants/profile/availability";
+import { useLazyGetConsultantAvailabilityQuery } from "@/lib/features/consultants/profile/availability";
 import {
   useGetConsultantProfileQuery,
   useLazyGetConsultantProfileQuery,
@@ -31,10 +33,27 @@ const ConsultantProfilePage = (props: Props) => {
   );
   const [fetchConsultantProfile, { data, isFetching }] =
     useLazyGetConsultantProfileQuery();
+  const [availableHours, setAvailableHours] = useState<
+    ICreateAvailabilityPayloadV2[]
+  >([]);
+
+  const [getConsultantAvailability, result] =
+    useLazyGetConsultantAvailabilityQuery();
+
+  useEffect(() => {
+    if (result.isSuccess) {
+      setAvailableHours(result.data.availability);
+    }
+  }, [result.isSuccess]);
+
+  useEffect(() => {
+    getConsultantAvailability(consultantId!);
+  }, []);
 
   useEffect(() => {
     if (consultantId) {
       fetchConsultantProfile(consultantId);
+      getConsultantAvailability(consultantId);
     }
   }, [consultantId]);
   const router = useRouter();
@@ -63,6 +82,7 @@ const ConsultantProfilePage = (props: Props) => {
             refresh={() => {
               if (consultantId) {
                 fetchConsultantProfile(consultantId);
+                getConsultantAvailability(consultantId)
               }
             }}
           />
@@ -118,9 +138,15 @@ const ConsultantProfilePage = (props: Props) => {
             <div className="w-full chatbp:w-[30%]">
               <ConsultantProfileLeft />
             </div>
-            <div className="px-4 chatbp:px-0 mt-8 chatbp:mt-0 w-full chatbp:w-[70%]">
-              <ConsultantProfileRight isFetching={isFetching} data={data} />
-            </div>
+            {result.data && (
+              <div className="px-4 chatbp:px-0 mt-8 chatbp:mt-0 w-full chatbp:w-[70%]">
+                <ConsultantProfileRight
+                  avalilability={result.data.availability}
+                  isFetching={isFetching}
+                  data={data}
+                />
+              </div>
+            )}
           </div>
         </DashboardBodyLayout>
       </>
