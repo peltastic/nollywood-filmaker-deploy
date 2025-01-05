@@ -341,7 +341,7 @@ const ChatRoom = (props: Props) => {
     return () => {
       chat_socket.off("message");
     };
-  }, []);
+  }, [chat_socket.connected]);
 
   useEffect(() => {
     if (missedPongs > 3) {
