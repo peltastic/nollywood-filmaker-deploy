@@ -76,11 +76,7 @@ const CreateNewConsultantModal = (props: Props) => {
     }
     if (result.isSuccess) {
       nprogress.complete();
-      notify(
-        "success",
-        "Successful",
-        "Consultant data has been updated"
-      );
+      notify("success", "Successful", "Consultant data has been updated");
       props.refresh && props.refresh();
       props.close();
     }
@@ -197,13 +193,19 @@ const CreateNewConsultantModal = (props: Props) => {
             </div>
             <div className="  w-full flex flex-wrap mt-[5rem]">
               <UnstyledButton
+                type="button"
                 clicked={props.close}
                 class="mb-4 xs:mb-0 py-2 rounded-md px-4 border-stroke-2 w-full xs:w-auto border ml-auto xs:mr-4"
               >
                 Cancel
               </UnstyledButton>
               <UnstyledButton
-                disabled={!isValid || isLoading || !result.isLoading || expertiseData.length < 1}
+                disabled={
+                  !isValid ||
+                  isLoading ||
+                  result.isLoading ||
+                  expertiseData.length < 1
+                }
                 class="flex py-2 px-4 transition-all rounded-md w-full xs:w-[8rem] justify-center items-center text-white border border-black-3 disabled:border-black-2  bg-black-3 disabled:opacity-50 text-[0.88rem]"
               >
                 {isLoading || result.isLoading ? (
