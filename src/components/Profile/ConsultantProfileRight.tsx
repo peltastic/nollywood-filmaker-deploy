@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 type Props = {
   data?: IConsultantProfileResponse;
   isFetching?: boolean;
-  avalilability: ICreateAvailabilityPayloadV2[]
+  avalilability?: ICreateAvailabilityPayloadV2[]
 };
 
 const expertise = ["Producer", "Director", "Composer"];
@@ -132,7 +132,7 @@ const ConsultantProfileRight = ({ isFetching, data, avalilability }: Props) => {
           </div>
         </div>
       )}
-      {avalilability.length > 0 && (
+      {avalilability && avalilability.length > 0 && (
         <div className="mt-4 bg-white rounded-2xl pb-6 pt-2 px-6 border shadow-md border-stroke-5 shadow-[#1018280F]">
           <div className="py-4 border-b border-b-stroke-6">
             <h1 className="font-medium text-[1.13rem]">Availability</h1>

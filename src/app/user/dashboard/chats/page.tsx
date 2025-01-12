@@ -101,7 +101,7 @@ const ChatsPage = (props: Props) => {
   return (
     <ServiceLayout>
       <DashboardBodyLayout>
-        <div ref={ref} className="flex h-[95vh]  max-h-[80rem]   bg-white">
+        <div ref={ref} className="flex h-screen chatbp:h-[95vh]  max-h-[90rem]   bg-white">
           <section className="mx-auto w-full  h-full chatbp:w-[30%]">
             <CustomerChatLeft
               data={chatData}

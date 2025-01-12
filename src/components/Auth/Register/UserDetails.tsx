@@ -3,8 +3,9 @@ import Field from "@/components/Field/Field";
 import { IRegisterdata } from "@/interfaces/auth/auth";
 import { userDetailsSchema } from "@/utils/validation/auth";
 import { Form, Formik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
+import PhoneInput from "react-phone-number-input";
 
 type Props = {
   setPageProps: (value: string) => void;
@@ -18,6 +19,7 @@ type Props = {
 };
 
 const UserDetails = ({ setPageProps, setDataProps, data }: Props) => {
+  const [phoneInputVal, setPhoneInputVal] = useState("");
   return (
     <div>
       <div className="text-black-2 mt-20">
@@ -32,11 +34,16 @@ const UserDetails = ({ setPageProps, setDataProps, data }: Props) => {
         initialValues={{
           fname: data.fname,
           lname: data.lname,
-          phone: data.phone,
+          // phone: data.phone,
           email: data.email,
         }}
         onSubmit={(values) => {
-          setDataProps(values);
+          setDataProps({
+            email: values.email,
+            fname: values.fname,
+            lname: values.lname,
+            phone: phoneInputVal,
+          });
           setPageProps("3");
         }}
         validationSchema={userDetailsSchema}
@@ -65,13 +72,25 @@ const UserDetails = ({ setPageProps, setDataProps, data }: Props) => {
                 name="email"
                 placeholder=""
               />
-              <Field
+              <div className="mt-7">
+                <PhoneInput
+                  className="border outline-none"
+                  style={{}}
+                  value={phoneInputVal}
+                  onChange={(val) => {
+                    if (val) {
+                      setPhoneInputVal(val.toString());
+                    }
+                  }}
+                />
+              </div>
+              {/* <Field
                 label="Phone"
                 labelColor="text-black-2"
                 classname="w-full"
                 name="phone"
                 placeholder=""
-              />
+              /> */}
             </div>
             <div className="w-full flex mt-28 mb-8 sm:mb-0">
               <UnstyledButton
@@ -83,7 +102,7 @@ const UserDetails = ({ setPageProps, setDataProps, data }: Props) => {
               </UnstyledButton>
               <UnstyledButton
                 type="submit"
-                disabled={!(isValid)}
+                disabled={!isValid || !phoneInputVal}
                 class="flex py-2 hover:bg-blue-1 px-4 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
               >
                 <p className="mr-2">Next</p>

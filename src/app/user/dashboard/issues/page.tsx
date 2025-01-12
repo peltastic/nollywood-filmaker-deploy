@@ -50,6 +50,8 @@ const DashboardIssues = (props: Props) => {
           loaderLength={10}
           data={issuesData}
           title="My Issues"
+          emptyHeader="No Issues"
+          emptyBody="Reported issues will show up here"
         />
       </DashboardBodyLayout>
     </ServiceLayout>

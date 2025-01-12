@@ -47,7 +47,7 @@ const OrderDetailsTop = ({
       <div className="flex lg:justify-center lg:border-r border-r-stroke-6 mb-6 lg:mb-0">
         <div className="">
           <h1 className="font-bold mb-1">Order No</h1>
-          <p className="text-[0.88rem]">{order_no}</p>
+          <p className="text-[0.88rem]">{order_no?.toUpperCase()}</p>
         </div>
       </div>
       {order_type && (

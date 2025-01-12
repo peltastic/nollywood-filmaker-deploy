@@ -205,7 +205,7 @@ const Scheduler = ({ value = new Date(), setValue, data }: Props) => {
           </div>
           {time_slots.map((el) => (
             <div
-              className="border-b border-b-stroke-10 font-bold text-black-2 h-[4rem] text-[0.75rem] flex items-center justify-center"
+              className="border-b border-b-stroke-10 font-bold text-black-2 h-[7rem] text-[0.75rem] flex items-center justify-center"
               key={el.upperBound}
             >
               <p>{el.time}</p>

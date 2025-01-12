@@ -182,10 +182,8 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
         </div>
       </div>
       <div
-        onClick={() => router.push("/user/dashboard/chats/1")}
-        className={`${
-          index === selctedIndex ? "bg-[#615EF00F]" : ""
-        } flex chatbp:hidden rounded-md items-start py-4 mb-2 px-4  `}
+        onClick={() => router.push(`/user/dashboard/chats/${data.orderId}`)}
+        className={` flex chatbp:hidden rounded-md items-start py-4 mb-2 px-4  `}
       >
         <div className="w-[3rem] mr-3 h-[3rem] rounded-full bg-black flex items-center justify-center">
           <Image src={AdminProfileImg} alt="admin-alt-profile" />
@@ -212,7 +210,7 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
           )}
         </div>
         <div className="ml-auto font-semibold text-[#00000056] text-[0.88rem]">
-          <p>{data.date}</p>
+          <p>{chatTimeStatus}</p>
         </div>
       </div>
     </>

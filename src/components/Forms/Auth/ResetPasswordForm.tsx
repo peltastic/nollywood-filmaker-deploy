@@ -4,6 +4,7 @@ import UnstyledButton from "@/components/Button/UnstyledButton";
 import CheckboxComponent from "@/components/Checkbox/Checkbox";
 import Field from "@/components/Field/Field";
 import { secureAccountSchema } from "@/utils/validation/auth";
+import { nprogress } from "@mantine/nprogress";
 import { Form, Formik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -28,6 +29,7 @@ const ResetPasswordForm = (props: Props) => {
       }}
       validationSchema={secureAccountSchema}
       onSubmit={({ password }) => {
+        nprogress.start()
         props.resetPasswordProps && props.resetPasswordProps(password);
       }}
     >

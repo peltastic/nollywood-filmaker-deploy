@@ -1,6 +1,7 @@
 import { RootState } from "@/lib/store";
 import React, { ReactNode } from "react";
 import { useSelector } from "react-redux";
+import RenderTextAreaInput from "../RenderTextAreaInput/RenderTextAreaInput";
 
 type Props = {
   body: {
@@ -43,7 +44,7 @@ const ServiceLeft = ({ body, title, image, cost }: Props) => {
               key={el.title}
             >
               <h1 className="text-black-2 font-bold">{el.title}</h1>
-              <p className="mt-2">{el.content || "..."}</p>
+              <RenderTextAreaInput text={el.content || "..."} />
             </div>
           ))}
         </div>

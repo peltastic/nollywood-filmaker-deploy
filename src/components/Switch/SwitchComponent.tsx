@@ -13,7 +13,7 @@ type Props = {
 
 const SwitchComponent = (props: Props) => {
   return (
-    <div className="flex items-center">
+    <div className="flex cursor-pointer items-center">
       <Switch
         color={props.color}
         size={props.size}

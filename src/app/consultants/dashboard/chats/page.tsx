@@ -14,13 +14,14 @@ import {
 } from "@/lib/features/consultants/dashboard/chat/chat";
 import { RootState } from "@/lib/store";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 type Props = {};
 
 const ConsultantChastPage = (props: Props) => {
   useProtectRouteConsultantRoute();
+  const ref = useRef<HTMLDivElement>(null);
   const [isTime, setIsTime] = useState<boolean>(false);
   const [sessionOver, setSessionOver] = useState<boolean>(false);
   const consultantId = useSelector(
@@ -51,6 +52,16 @@ const ConsultantChastPage = (props: Props) => {
       setCloseRight(false);
     }
   }, [isTime]);
+
+  useEffect(() => {
+    if (!ref.current) return () => {};
+
+    ref.current.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "center",
+    });
+  }, [searchVal]);
 
   useEffect(() => {
     if (conversationsRes.data) {
@@ -91,7 +102,7 @@ const ConsultantChastPage = (props: Props) => {
   return (
     <ServiceLayout consultant>
       <DashboardBodyLayout>
-        <section className="flex h-[60rem]  max-h-[120rem] bg-white">
+        <div ref={ref} className="flex h-[95vh] max-h-[90rem] bg-white">
           <section className="mx-auto w-full h-full  chatbp:w-[30%]">
             <CustomerChatLeft
               type="consultant"
@@ -143,7 +154,7 @@ const ConsultantChastPage = (props: Props) => {
               userProfilePic={result.data?.userinfo.profilepics}
             />
           </section>
-        </section>
+        </div>
       </DashboardBodyLayout>
     </ServiceLayout>
   );

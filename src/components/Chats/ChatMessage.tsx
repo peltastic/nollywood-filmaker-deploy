@@ -8,7 +8,6 @@ import { RootState } from "@/lib/store";
 import { AspectRatio, Menu } from "@mantine/core";
 import Lottie from "lottie-react";
 import TypingLottie from "@/components/Lottie/typing.json";
-import { retry } from "@reduxjs/toolkit/query";
 
 type Props = {
   text: string;
@@ -20,7 +19,7 @@ type Props = {
   filename: string;
   file: string;
   id?: string;
-  setActiveId?: (id?: string) => void ;
+  setActiveId?: (id?: string) => void;
   activeId?: string | null;
   setReplyDataProps?: (data: {
     user: "admin" | "user" | "consultant" | null;
@@ -137,11 +136,11 @@ const ChatMessage = ({
         {prevUser === user && index + 1 !== 1 ? null : (
           <>
             {user === "admin" || user === "consultant" ? (
-              <div className="w-[2.5rem] mr-3 h-[2.5rem] rounded-full bg-black flex items-center justify-center">
-                {<Image src={AdminProfileImg} alt="admin-alt-profile" />}
+              <div className="w-[1.8rem] sm:w-[2.5rem] mr-3 h-[1.8rem] sm:h-[2.5rem] rounded-full bg-black flex items-center justify-center">
+                {<Image src={AdminProfileImg} alt="admin-alt-profile" className="w-[60%] h-[60%]" />}
               </div>
             ) : (
-              <div className="w-[2.5rem] h-[2.5rem] mr-3">
+              <div className="w-[1.8rem] sm:w-[2.5rem] h-[2,5rem] sm:h-[2.5rem] mr-3">
                 {userImage && (
                   <AspectRatio ratio={1800 / 1800}>
                     <Image
@@ -184,7 +183,7 @@ const ChatMessage = ({
               : user !== "user"
               ? "bg-admin-chat-bg text-black"
               : "bg-black-3 text-white mr-2"
-          }  py-3 px-3 text-[0.95rem] rounded-xl max-w-[20rem] relative`}
+          }  py-3 px-3 text-[0.95rem] rounded-xl max-w-[12rem] sm:max-w-[20rem] relative`}
         >
           {contextMenu.visible && activeId === id && (
             <div className="absolute bg-white text-black-3 w-[6rem] top-6 shadow-md z-10 px-1 text-[0.88rem] py-2 rounded-md">
@@ -215,7 +214,11 @@ const ChatMessage = ({
               }}
               className={`cursor-pointer ${
                 user === "user" ? "bg-gray-1" : "bg-gray-bg-8"
-              } px-2 rounded-md py-1 mb-1 text-[0.88rem] ${repliedToUser === "user" ? "border-l-dark-yellow" : "border-l-dark-red"} border-l-4 `}
+              } px-2 rounded-md py-1 mb-1 text-[0.88rem] ${
+                repliedToUser === "user"
+                  ? "border-l-dark-yellow"
+                  : "border-l-dark-red"
+              } border-l-4 `}
             >
               <p>{repliedToUser === "user" ? "You" : "Consultant"}</p>
               <p>{repliedText}</p>
@@ -239,10 +242,10 @@ const ChatMessage = ({
             ) : (
               <>
                 {text.split("\n").map((line, index) => (
-                  <div className="" key={index}>
+                  <p className="" key={index}>
                     {line}
                     <br />
-                  </div>
+                  </p>
                 ))}
               </>
             )}

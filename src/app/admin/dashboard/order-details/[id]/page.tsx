@@ -74,7 +74,7 @@ const CustomerOrderDetailsPage = (props: Props) => {
                 <div className="mb-10 px-3 sm:px-4 lg:px-0 w-full chatbp::w-[80%]">
                   <OrderDetailsTop
                     order_date={data?.request.date}
-                    order_no="O-NG240629806487"
+                    order_no={data?.request.orderId}
                     order_type={data?.request.nameofservice}
                     isChat={data?.request.type === "Chat"}
                     // rating="5"

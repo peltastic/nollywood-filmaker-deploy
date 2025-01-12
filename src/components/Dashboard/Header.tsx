@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import MenuComponent from "../Menu/MenuComponent";
 import { IoIosArrowDown } from "react-icons/io";
 import { AspectRatio } from "@mantine/core";
+import Link from "next/link";
 
 type Props = {
   consultant?: boolean;
@@ -51,15 +52,32 @@ const Header = (props: Props) => {
             Make a request
           </UnstyledButton>
         )}
-        {props.admin ? (
+        {props.admin || props.consultant ? (
           <MenuComponent
             target={
-              <UnstyledButton class="mt-8 sm:mt-0 px-4 py-2 hover:bg-blue-1 rounded-md items-center bg-black-3 text-white flex">
-                <p className="mr-1 font-medium text-[0.88rem]">Actions</p>
-                <IoIosArrowDown />
-              </UnstyledButton>
+              <div>
+                <UnstyledButton class="mt-8 sm:mt-0 px-4 py-2 hover:bg-blue-1 rounded-md items-center bg-black-3 text-white flex">
+                  <p className="mr-1 font-medium text-[0.88rem]">Actions</p>
+                  <IoIosArrowDown />
+                </UnstyledButton>
+              </div>
             }
-          ></MenuComponent>
+          >
+            {props.consultant ? (
+              <div className="bg-white">
+                <ul className="px-1 text-gray-6 text-[0.88rem]">
+                  <li
+                    onClick={() =>
+                      router.push("/consultants/dashboard/profile/1?show=ea")
+                    }
+                    className="py-2 mb hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
+                  >
+                    Edit Availability
+                  </li>
+                </ul>
+              </div>
+            ) : null}
+          </MenuComponent>
         ) : null}
       </div>
     </header>

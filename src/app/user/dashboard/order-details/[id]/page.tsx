@@ -103,7 +103,7 @@ const OrderDetailsPage = (props: Props) => {
             <div className="w-[90%] lg:w-[82%] mx-auto">
               <OrderDetailsTop
                 order_date={data?.request.date}
-                order_no="O-NG240629806487"
+                order_no={data?.request.orderId}
                 order_type={data?.request.nameofservice}
                 isChat={data?.request.type === "Chat"}
               />

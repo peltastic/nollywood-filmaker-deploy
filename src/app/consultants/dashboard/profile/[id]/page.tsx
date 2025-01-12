@@ -16,7 +16,7 @@ import {
 } from "@/lib/features/consultants/profile/profile";
 import { RootState } from "@/lib/store";
 import { useDisclosure } from "@mantine/hooks";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { GoDotFill } from "react-icons/go";
 import { IoIosArrowBack, IoIosArrowDown } from "react-icons/io";
@@ -40,6 +40,9 @@ const ConsultantProfilePage = (props: Props) => {
   const [getConsultantAvailability, result] =
     useLazyGetConsultantAvailabilityQuery();
 
+  const search = useSearchParams();
+  const searchVal = search.get("show");
+
   useEffect(() => {
     if (result.isSuccess) {
       setAvailableHours(result.data.availability);
@@ -56,6 +59,11 @@ const ConsultantProfilePage = (props: Props) => {
       getConsultantAvailability(consultantId);
     }
   }, [consultantId]);
+  useEffect(() => {
+    if (searchVal) {
+      open();
+    }
+  }, [searchVal]);
   const router = useRouter();
   const status: any = "active";
   const statusClassname =
@@ -82,7 +90,7 @@ const ConsultantProfilePage = (props: Props) => {
             refresh={() => {
               if (consultantId) {
                 fetchConsultantProfile(consultantId);
-                getConsultantAvailability(consultantId)
+                getConsultantAvailability(consultantId);
               }
             }}
           />
@@ -138,10 +146,10 @@ const ConsultantProfilePage = (props: Props) => {
             <div className="w-full chatbp:w-[30%]">
               <ConsultantProfileLeft />
             </div>
-            {result.data && (
+            {data && (
               <div className="px-4 chatbp:px-0 mt-8 chatbp:mt-0 w-full chatbp:w-[70%]">
                 <ConsultantProfileRight
-                  avalilability={result.data.availability}
+                  avalilability={result.data?.availability}
                   isFetching={isFetching}
                   data={data}
                 />

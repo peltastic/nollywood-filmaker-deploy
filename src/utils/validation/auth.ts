@@ -4,7 +4,7 @@ export const userDetailsSchema = Yup.object({
   email: Yup.string().trim().email().required("Email is required"),
   lname: Yup.string().required("Last name is required"),
   fname: Yup.string().required("First name is required"),
-  phone: Yup.string().required("Phone number is required"),
+  // phone: Yup.string().required("Phone number is required"),
 });
 
 export const secureAccountSchema = Yup.object({

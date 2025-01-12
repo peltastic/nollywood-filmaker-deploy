@@ -214,7 +214,7 @@ const ConsultantChatMessage = ({
               <p>{repliedText}</p>
             </div>
           )}
-          <p className="break-words">
+          <div className="break-words">
             {type === "file" ? (
               <Link href={file}>
                 <div className="cursor-pointer py-2 px-2">
@@ -232,14 +232,14 @@ const ConsultantChatMessage = ({
             ) : (
               <>
                 {text.split("\n").map((line, index) => (
-                  <div className="" key={index}>
+                  <p className="" key={index}>
                     {line}
                     <br />
-                  </div>
+                  </p>
                 ))}
               </>
             )}
-          </p>
+          </div>
         </div>
       </div>
     </div>

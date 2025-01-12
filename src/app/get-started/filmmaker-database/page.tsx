@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Logo from "/public/assets/nav/logo.svg";
-import { Stepper } from "@mantine/core";
 import SingleStepper from "@/components/Stepper/SingleStepper";
 import GeneralInfo from "@/components/FilmakerDatabase/Forms/Crew/GeneralInfo";
 import CrewImg from "/public/assets/filmmaker-database/film-crew.svg";
@@ -10,7 +9,6 @@ import CrewImgInactive from "/public/assets/filmmaker-database/film-crew-inactiv
 import CompanyImg from "/public/assets/filmmaker-database/film-company.svg";
 import CompanyImgInactive from "/public/assets/filmmaker-database/film-company-inactive.svg";
 import { FaCircleDot } from "react-icons/fa6";
-import UnstyledButton from "@/components/Button/UnstyledButton";
 import ContactDetails from "@/components/FilmakerDatabase/Forms/Crew/ContactDetails";
 import Verification from "@/components/FilmakerDatabase/Forms/Crew/Verification";
 import CompanyInfo from "@/components/FilmakerDatabase/Forms/Company/CompanyInfo";

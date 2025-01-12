@@ -44,7 +44,7 @@ const SchedulerSlots = (props: Props) => {
     <div
       className={`
       
-       relative  h-[4rem] border-b-stroke-10  border-r-stroke-10 border-r border-b`}
+       relative  h-[7rem] border-b-stroke-10  border-r-stroke-10 border-r border-b`}
     >
       {isTime && (
         <HoverCardComponent
@@ -55,7 +55,7 @@ const SchedulerSlots = (props: Props) => {
                 isTime
                   ? "bg-schedule-bg border-2 rounded-md border-r-2 border-b-2 border-black-3"
                   : ""
-              } absolute w-[95%] left-1/2 top-1 -translate-x-1/2  h-[7rem] py-2 px-2 cursor-pointer`}
+              } absolute w-[95%] left-1/2 top-1 -translate-x-1/2  h-[6rem] py-2 px-2 cursor-pointer`}
             >
               <div className="">
                 <div className="flex">

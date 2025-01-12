@@ -377,7 +377,7 @@ const CustomerChatMiddle = ({
         ) : (
           <div className="h-full">
             {isFetching ? (
-              <div className="w-[5rem] absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2">
+              <div className="w-[2rem] sm:w-[5rem] absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2">
                 <Spinner dark />
               </div>
             ) : (
@@ -404,7 +404,7 @@ const CustomerChatMiddle = ({
                     {(isTime || sessionOver) && (
                       <MenuComponent
                         target={
-                          <div className="">
+                          <div className="hidden  md:block">
                             <UnstyledButton class="px-4 py-2 rounded-md items-center bg-black-3 hover:bg-blue-1  text-white flex">
                               <p className="mr-1 font-medium text-[0.88rem]">
                                 Actions

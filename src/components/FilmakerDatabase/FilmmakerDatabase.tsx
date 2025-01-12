@@ -13,8 +13,8 @@ type Props = {};
 const FilmmakerDatabaseHeader = (props: Props) => {
   const router = useRouter()
   return (
-    <header className="flex items-center w-[55.6rem] gap-x-7 justify-between mx-auto mb-10 text-black-2">
-      <div className="w-[50%]">
+    <header className="flex flex-wrap lg:flex-nowrap items-center w-[90%] sm:w-[80%] lg:w-[55.6rem] gap-x-7 justify-between mx-auto mb-10 text-black-2">
+      <div className="w-full lg:w-[50%] mx-auto mb-10 lg:mb-0">
         <h1 className="text-[1.45rem] font-bold leading-[1.2]">
           Connect with top film opportunities: Join our database today!
         </h1>
@@ -32,7 +32,7 @@ const FilmmakerDatabaseHeader = (props: Props) => {
           <FaYoutube className="text-[1.7rem]" />
         </div>
       </div>
-      <div className="w-[50%]">
+      <div className="w-full lg:w-[50%] mx-auto">
         <Image src={HeroImg} alt="hero-img" />
       </div>
     </header>

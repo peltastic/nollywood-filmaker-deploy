@@ -3,6 +3,7 @@ import moment from "moment";
 import Link from "next/link";
 import React from "react";
 import { IoMdDownload } from "react-icons/io";
+import RenderTextAreaInput from "../RenderTextAreaInput/RenderTextAreaInput";
 
 type Props = {
   chat?: boolean;
@@ -113,7 +114,9 @@ const OrderDetailsBody = ({
       {summary && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Summary</h1>
-          <p className="text-[0.88rem]">{summary}</p>
+          <div className="text-[0.88rem]">
+            <RenderTextAreaInput text={summary} />
+          </div>
         </div>
       )}
       {platform && (
@@ -126,7 +129,9 @@ const OrderDetailsBody = ({
       {actors && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Key actors in mind</h1>
-          <p className="text-[0.88rem]">{actors}</p>
+          <div className="text-[0.88rem]">
+            <RenderTextAreaInput text={actors} />
+          </div>
         </div>
       )}
       {days && (
@@ -138,19 +143,25 @@ const OrderDetailsBody = ({
       {info && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Relevant information</h1>
-          <p className="text-[0.88rem]">{info}</p>
+          <div className="text-[0.88rem]">
+            <RenderTextAreaInput text={info} />
+          </div>
         </div>
       )}
       {target_social && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Target Social media platforms</h1>
-          <p className="text-[0.88rem]">{target_social}</p>
+          <div className="text-[0.88rem]">
+            <RenderTextAreaInput text={target_social} />
+          </div>
         </div>
       )}
       {ooh && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Target OOH platforms</h1>
-          <p className="text-[0.88rem]">{ooh}</p>
+          <div className="text-[0.88rem]">
+            <RenderTextAreaInput text={ooh} />
+          </div>
         </div>
       )}
       {visual && (
@@ -180,7 +191,9 @@ const OrderDetailsBody = ({
       {synopsis && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Logline/Synopsis</h1>
-          <p className="text-[0.88rem]">{synopsis}</p>
+          <div className="text-[0.88rem]">
+            <RenderTextAreaInput text={synopsis} />
+          </div>
         </div>
       )}
       {genre && (
@@ -201,7 +214,9 @@ const OrderDetailsBody = ({
       {concerns && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Concerns</h1>
-          <p className="text-[0.88rem]">{concerns}</p>
+          <div className="text-[0.88rem]">
+            <RenderTextAreaInput text={concerns} />
+          </div>
         </div>
       )}
 

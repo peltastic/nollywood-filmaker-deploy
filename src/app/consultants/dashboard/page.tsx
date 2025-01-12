@@ -232,7 +232,6 @@ const DashboardPage = (props: Props) => {
             fname={userData?.fname || ""}
             lname={userData?.lname || ""}
             ppicture={userData?.profilepics}
-            admin
             consultant
           />
           <div className="mt-16">
