@@ -30,8 +30,8 @@ const ReplyBox = (props: Props) => {
         } bg-gray-bg-1 py-4 shadow-sm px-4 rounded-md`}
       >
         <div className="mr-auto">
-          <p className="text-sm font-semibold ">{userType}</p>
-          <p>{props.replyData.reply}</p>
+          <p className=" text-[0.75rem] sm:text-sm font-semibold ">{userType}</p>
+          <p className="text-[0.88rem] sm:text-base">{props.replyData.reply}</p>
         </div>
         <div className="cursor-pointer relative z-10" onClick={props.cancelReplyBox}>
           <Image src={CancelImg} alt="cancel-img" />

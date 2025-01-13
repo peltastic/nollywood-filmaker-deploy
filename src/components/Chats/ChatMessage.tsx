@@ -55,6 +55,7 @@ const ChatMessage = ({
 }: Props) => {
   const [temporarySelectedHighlight, setTemporarySelectedHighlight] =
     useState<string>("transparent");
+  const [isRightClicked, setIsRightClicked] = useState<boolean>(false);
   const [contextMenu, setContextMenu] = useState<{
     visible: boolean;
     x: number;
@@ -121,7 +122,7 @@ const ChatMessage = ({
 
   return (
     <div
-      className="flex  py-1 px-4 w-full"
+      className="flex  py-1 px-1 sm:px-4 w-full"
       ref={ref}
       style={{
         backgroundColor: temporarySelectedHighlight,
@@ -136,11 +137,17 @@ const ChatMessage = ({
         {prevUser === user && index + 1 !== 1 ? null : (
           <>
             {user === "admin" || user === "consultant" ? (
-              <div className="w-[1.8rem] sm:w-[2.5rem] mr-3 h-[1.8rem] sm:h-[2.5rem] rounded-full bg-black flex items-center justify-center">
-                {<Image src={AdminProfileImg} alt="admin-alt-profile" className="w-[60%] h-[60%]" />}
+              <div className="w-[1.8rem] sm:w-[2.5rem] mr-2 sm:mr-3 h-[1.8rem] sm:h-[2.5rem] rounded-full bg-black flex items-center justify-center">
+                {
+                  <Image
+                    src={AdminProfileImg}
+                    alt="admin-alt-profile"
+                    className="w-[60%] h-[60%]"
+                  />
+                }
               </div>
             ) : (
-              <div className="w-[1.8rem] sm:w-[2.5rem] h-[2,5rem] sm:h-[2.5rem] mr-3">
+              <div className="w-[1.8rem] sm:w-[2.5rem] h-[2,5rem] sm:h-[2.5rem] mr-1 sm:mr-3">
                 {userImage && (
                   <AspectRatio ratio={1800 / 1800}>
                     <Image
@@ -159,6 +166,8 @@ const ChatMessage = ({
         <div
           onContextMenu={(e) => {
             if (setActiveId) {
+              setIsRightClicked(true);
+              setTimeout(() => setIsRightClicked(false), 1000);
               setActiveId();
               e.preventDefault();
               setActiveId(id);
@@ -171,9 +180,9 @@ const ChatMessage = ({
           }}
           className={` ${
             noPfpRow && (user === "admin" || user === "consultant")
-              ? "ml-[3.2rem]"
+              ? "ml-[2.8rem] sm:ml-[3.2rem]"
               : noPfpRow && user === "user"
-              ? "mr-[3.2rem]"
+              ? "mr-[2.8rem] sm:mr-[3.2rem]"
               : ""
           } ${
             type === "file" && user === "user"
@@ -182,8 +191,8 @@ const ChatMessage = ({
               ? "bg-admin-chat-bg  text-black hover:bg-gray-2 transition-al"
               : user !== "user"
               ? "bg-admin-chat-bg text-black"
-              : "bg-black-3 text-white mr-2"
-          }  py-3 px-3 text-[0.95rem] rounded-xl max-w-[12rem] sm:max-w-[20rem] relative`}
+              : `${isRightClicked ? `bg-slate-700` : `bg-black-3` }  text-white mr-2`
+          }  py-2 sm:py-3 px-2 sm:px-3 text-[0.8rem] sm:text-[0.95rem] rounded-xl max-w-[12rem] sm:max-w-[20rem] relative`}
         >
           {contextMenu.visible && activeId === id && (
             <div className="absolute bg-white text-black-3 w-[6rem] top-6 shadow-md z-10 px-1 text-[0.88rem] py-2 rounded-md">
@@ -224,7 +233,7 @@ const ChatMessage = ({
               <p>{repliedText}</p>
             </div>
           )}
-          <div className="break-words">
+          <div className="break-words" >
             {type === "file" ? (
               <Link href={file}>
                 <div className="cursor-pointer py-2 px-2">
@@ -242,7 +251,7 @@ const ChatMessage = ({
             ) : (
               <>
                 {text.split("\n").map((line, index) => (
-                  <p className="" key={index}>
+                  <p className="" key={index} >
                     {line}
                     <br />
                   </p>

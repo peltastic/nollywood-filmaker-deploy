@@ -476,7 +476,8 @@ const ChatRoom = (props: Props) => {
                       lastmessage={
                         props.data[props.data.length - 1].id === el.id
                       }
-                      setActiveId={props.isTime?  setActiveIdHandler : undefined}
+                      // setActiveId={props.isTime?  setActiveIdHandler : undefined}
+                      setActiveId={setActiveIdHandler}
                       id={el.id}
                       activeId={activeId}
                       setReplyDataProps={(val) => setReplyData(val)}
@@ -502,7 +503,9 @@ const ChatRoom = (props: Props) => {
                       }
                       index={index}
                       userprofilepic={props.profilepics}
-                      setActiveId={props.isTime ? setActiveIdHandler : undefined}
+                      setActiveId={
+                        props.isTime ? setActiveIdHandler : undefined
+                      }
                       id={el.id}
                       activeId={activeId}
                       setReplyDataProps={(val) => setReplyData(val)}
@@ -562,7 +565,7 @@ const ChatRoom = (props: Props) => {
         )}
         <div className="h-[10%] relative ">
           {props.sessionOver ? (
-            <div className="absolute bottom-0 w-[95%]  flex items-center text-[0.88rem] bg-gray-bg-7 border mx-4 mt-8 py-2 rounded-md px-4 border-border-gray">
+            <div className="absolute bottom-0 w-[90%] xs:w-[93%] sm:w-[95%]   flex items-center text-[0.88rem] bg-gray-bg-7 border mx-4 mt-8 py-2 rounded-md px-4 border-border-gray">
               <MdInfoOutline className="text-gray-4 mr-4 text-xl " />
               <p className="text-gray-4">This conversation has ended</p>
             </div>
@@ -694,13 +697,13 @@ const ChatRoom = (props: Props) => {
                         }
                       }}
                     >
-                      <div className="mr-10">
+                      <div className="mr-3 md:mr-10">
                         <Image src={AttachIcon} alt="attach-icon" />
                       </div>
                     </FileButtonComponent>
                   </UnstyledButton>
                   <form className="w-full" onSubmit={(e) => e.preventDefault()}>
-                    <div className="w-full relative">
+                    <div className="w-full relative hidden lg:block">
                       <Textarea
                         ref={ref}
                         onKeyDown={(e) => {
@@ -709,6 +712,47 @@ const ChatRoom = (props: Props) => {
                             sendMessageHandler();
                           }
                         }}
+                        minRows={0}
+                        autosize
+                        size="md"
+                        radius={"md"}
+                        value={inputValue}
+                        onChange={(event) => {
+                          emitTypingEvent(
+                            props.orderId,
+                            `${props.userData?.id}`
+                          );
+                          setInputValue(event.currentTarget.value);
+                          setTimeout(() => {
+                            stopTypingEmit(
+                              props.orderId,
+                              `${props.userData?.id}`
+                            );
+                          }, 3000);
+                        }}
+                        classNames={{
+                          input: classes.input,
+                        }}
+                      />
+                      <div className=" flex items-center absolute right-6 -translate-y-1/2 top-1/2">
+                        <button
+                          onClick={sendMessageHandler}
+                          disabled={!inputValue}
+                          className="w-fit disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                        >
+                          <Image src={SendImg} alt="send-img" />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="w-full relative block lg:hidden">
+                      <Textarea
+                        ref={ref}
+                        // onKeyDown={(e) => {
+                        //   if (e.key === "Enter" && !e.shiftKey) {
+                        //     e.preventDefault();
+                        //     sendMessageHandler();
+                        //   }
+                        // }}
                         minRows={0}
                         autosize
                         size="md"
