@@ -38,7 +38,7 @@ const ProfileRight = ({ data, isFetching }: Props) => {
         <div className="py-4 border-b border-b-stroke-6">
           <h1 className="font-medium text-[1.13rem]">Skills</h1>
         </div>
-        <div className="grid-cols-4 grid mt-8 gap-x-6 gap-y-6">
+        <div className="grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 mid:grid-cols-4 grid mt-8 gap-x-6 gap-y-6">
           {isFetching ? (
             <>
               <Skeleton height={50} />
@@ -66,7 +66,7 @@ const ProfileRight = ({ data, isFetching }: Props) => {
         <div className="py-4 border-b border-b-stroke-6">
           <h1 className="font-medium text-[1.13rem]">Contact</h1>
         </div>
-        <div className="grid grid-cols-3 gap-x-3 mt-8">
+        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-x-3 mt-8">
           {isFetching ? (
             <>
               <Skeleton height={50} />
@@ -75,11 +75,11 @@ const ProfileRight = ({ data, isFetching }: Props) => {
             </>
           ) : (
             <>
-              <div className="">
+              <div className="mb-6 xs:mb-0">
                 <h1 className="font-bold">Phone</h1>
                 <p>{data?.phone}</p>
               </div>
-              <div className="">
+              <div className="mb-6 xs:mb-0">
                 <h1 className="font-bold">Email</h1>
                 <p>{data?.email}</p>
               </div>

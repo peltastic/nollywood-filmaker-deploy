@@ -36,54 +36,56 @@ const ProfilePage = (props: Props) => {
   return (
     <ServiceLayout>
       <DashboardBodyLayout>
-        <header className="flex items-center mt-10">
-          <div className="flex items-center text-[1.5rem] mr-auto ">
-            <div
-              onClick={() => router.back()}
-              className="hover:bg-gray-bg-3 w-fit mr-8 transition-all cursor-pointer px-1 py-1 rounded-md"
-            >
-              <IoIosArrowBack className="text-gray-4 " />
-            </div>
-            <h1 className="text-black-2 font-bold">Profile details</h1>
-          </div>
-          <div className="flex items-center">
-            <p
-              className={`${statusClassname} font-medium, w-fit flex text-[0.75rem] items-center font-medium py-2 px-2 rounded-md`}
-            >
-              <span className="block pr-1">
-                <GoDotFill />
-              </span>
-              Active
-            </p>
-            <MenuComponent
-              target={
-                <div>
-                  <UnstyledButton class="ml-6 px-4 py-2 hover:bg-blue-1 rounded-md items-center bg-black-3 text-white flex">
-                    <p className="mr-1 font-medium text-[0.88rem]">Actions</p>
-                    <IoIosArrowDown />
-                  </UnstyledButton>
-                </div>
-              }
-            >
-              <div className="bg-white ">
-                <ul className="px-1 text-gray-6 text-[0.88rem]">
-                  <li className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4">
-                    Delete Account
-                  </li>
-                </ul>
+        <div className="px-6 chatbp:px-0">
+          <header className="flex flex-wrap items-center pt-10 lg:pt-0 lg:mt-10">
+            <div className="flex items-center text-[1.5rem] mr-auto">
+              <div
+                onClick={() => router.back()}
+                className="hover:bg-gray-bg-3 w-fit mr-4 mid:mr-8 transition-all cursor-pointer px-1 py-1 rounded-md"
+              >
+                <IoIosArrowBack className="text-gray-4 " />
               </div>
-            </MenuComponent>
-          </div>
-        </header>
-        <div className="flex items-start mt-10">
-          <div className="w-[30%]">
-            <ProfileLeft
-              isFetching={isFetching}
-              fullname={`${data?.fname} ${data?.lname}`}
-            />
-          </div>
-          <div className="w-[70%]">
-            <ProfileRight data={data} isFetching={isFetching} />
+              <h1 className="text-black-2 font-bold">Profile details</h1>
+            </div>
+            <div className="flex items-center w-full sm:w-auto mt-8 sm:mt-0">
+              <p
+                className={`${statusClassname} font-medium, w-fit flex text-[0.75rem] items-center font-medium py-2 px-2 rounded-md`}
+              >
+                <span className="block pr-1">
+                  <GoDotFill />
+                </span>
+                Active
+              </p>
+              <MenuComponent
+                target={
+                  <div>
+                    <UnstyledButton class="ml-6 px-4 py-2 hover:bg-blue-1 rounded-md items-center bg-black-3 text-white flex">
+                      <p className="mr-1 font-medium text-[0.88rem]">Actions</p>
+                      <IoIosArrowDown />
+                    </UnstyledButton>
+                  </div>
+                }
+              >
+                <div className="bg-white ">
+                  <ul className="px-1 text-gray-6 text-[0.88rem]">
+                    <li className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4">
+                      Delete Account
+                    </li>
+                  </ul>
+                </div>
+              </MenuComponent>
+            </div>
+          </header>
+          <div className="flex flex-wrap lg:flex-nowrap items-start mt-10">
+            <div className="w-full sm:w-[70%] md:w-[50%] lg:w-[30%] mx-auto lg:mx-0 mb-10 lg:mb-0">
+              <ProfileLeft
+                isFetching={isFetching}
+                fullname={`${data?.fname} ${data?.lname}`}
+              />
+            </div>
+            <div className="lg:ml-auto w-full lg:w-[60%] xl:w-[65%] chatbp:w-[70%] mb-10 lg:mb-0">
+              <ProfileRight data={data} isFetching={isFetching} />
+            </div>
           </div>
         </div>
       </DashboardBodyLayout>

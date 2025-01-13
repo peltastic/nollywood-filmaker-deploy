@@ -101,7 +101,7 @@ const ProfileSettings = ({ settingsType }: Props) => {
   return (
     <div className="mt-10 flex flex-wrap lg:flex-nowrap gap-6">
       {isFetching || consultantProfileRes.isFetching ? (
-        <div className="w-[5rem] mx-auto">
+        <div className="w-[3rem] sm:w-[5rem] mx-auto">
           <Spinner dark />
         </div>
       ) : (

@@ -83,26 +83,26 @@ const OrderDetails = (props: Props) => {
         {isFetching ? (
           <IssuesDetailsSkeleton />
         ) : (
-          <div className="px-2 xs:px-4 sm:px-8 chatbp:px-0 py-8 chatbp:py-">
-            <header className="flex items-center">
+          <div className="px-4 sm:px-8 chatbp:px-0 py-8 chatbp:py-0">
+            <header className="flex flex-wrap items-center">
               <div className="flex items-center text-[1.5rem] mr-auto">
                 <div
                   onClick={() => router.back()}
-                  className="hover:bg-gray-bg-3 w-fit mr-8 transition-all cursor-pointer px-1 py-1 rounded-md"
+                  className="hover:bg-gray-bg-3 w-fit mr-4 mid:mr-8 transition-all cursor-pointer pr-1 py-1 rounded-md"
                 >
                   <IoIosArrowBack className="text-gray-4 " />
                 </div>
                 <h1 className="text-black-2 font-bold">Issue Thread</h1>
               </div>
-              <div className="flex items-center">
-                <p className="text-[0.88rem] text-black-2 mr-2">Set status:</p>
+              <div className="flex items-center w-full sm:w-auto mt-6 sm:mt-0">
+                <p className="text-[0.88rem] text-black-2 mr-2">Status</p>
                 <div className="font-medium text-[0.88rem] text-black-5 rounded-md px-4 py-2 bg-white border border-stroke-2">
                   <p>{capitalizeFirstLetter(data?.issue.status || "")}</p>
                 </div>
               </div>
             </header>
             {data && (
-              <div className="mt-14">
+              <div className="mt-8 sm:mt-14">
                 <IssuesOrderDetails
                   complain={data.issue.complain}
                   consultant={{

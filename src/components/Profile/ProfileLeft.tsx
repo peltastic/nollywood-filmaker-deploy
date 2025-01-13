@@ -18,27 +18,30 @@ const ProfileLeft = ({ isFetching, fullname }: Props) => {
   return (
     <div className="w-full">
       {isFetching ? (
-        <div className="mr-[2rem] ">
+        <div className="sm:mr-[2rem] ">
           <Skeleton height={400} radius={"1rem"} />
         </div>
       ) : (
         <div
           style={{
             backgroundImage: `linear-gradient(#181818e2, #181818e2),url(${ProfileBackground.src})`,
+            backgroundSize: "cover"
           }}
-          className="w-[22rem] h-[29.1rem] rounded-2xl relative"
+          className="w-full lg:w-[22rem] h-[22rem] lg:h-[29.1rem] rounded-2xl relative"
         >
           <div className="absolute left-1/2 text-white top-1/2 -translate-x-1/2 -translate-y-1/2 w-full ">
             {userData?.profilepics ? (
-              <AspectRatio ratio={1800 / 1800}>
-                <Image
-                  src={userData.profilepics}
-                  alt="text-image"
-                  className="mx-auto w-[6rem] h-[6rem] rounded-full"
-                  height={100}
-                  width={100}
-                />
-              </AspectRatio>
+              <div className="w-[10rem] h-[10rem] mx-auto">
+                <AspectRatio ratio={1800 / 1800}>
+                  <Image
+                    src={userData.profilepics}
+                    alt="text-image"
+                    className="mx-auto w-full h-full   rounded-full"
+                    height={100}
+                    width={100}
+                  />
+                </AspectRatio>
+              </div>
             ) : (
               <div className="bg-black-3 text-center font-bold text-4xl mb-10 mx-auto h-[7rem] flex items-center justify-center w-[7rem] rounded-full text-white">
                 {userData?.fname[0]} {userData?.lname[0]}

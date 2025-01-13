@@ -33,7 +33,7 @@ const UserprofileMenu = (props: Props) => {
     <div className="bg-white w-[15rem]   py-3 text-gray-3">
       <div className="flex items-center px-3">
         {userData?.profilepics ? (
-          <div className="md:mr-4">
+          <div className="mr-4">
             <AspectRatio ratio={1800 / 1800}>
               <Image
                 src={userData.profilepics}
@@ -59,7 +59,7 @@ const UserprofileMenu = (props: Props) => {
         </div>
       </div>
       <ul className="text-[0.88rem] mt-2 py-3 border-t border-b border-profile-menu-border">
-        <li className=" px-3">
+        <li className=" active:bg-gray-bg-9 lg:hover:bg-gray-bg-9 py-2 rounded-md transition-all px-3">
           <Link
             className="flex items-center"
             href={"/user/dashboard/profile/1"}
@@ -68,31 +68,31 @@ const UserprofileMenu = (props: Props) => {
             <p>View profile</p>
           </Link>
         </li>
-        <li className=" px-3 mt-4 cursor-pointer">
+        <li className=" px-3  active:bg-gray-bg-9 cursor-pointer hover:bg-gray-bg-9 py-2 rounded-md transition-all">
           <Link className="flex items-center" href={"/user/dashboard/settings"}>
             <Image src={SettingsIconImg} alt="setting-icon" className="mr-3" />
             <p>Settings</p>
           </Link>
         </li>
-        <li className=" px-3 mt-4">
+        <li className=" px-3 active:bg-gray-bg-9  cursor-pointer hover:bg-gray-bg-9 py-2 rounded-md transition-all">
           <Link className="flex items-center" href={"/user/dashboard/issues"}>
             <Image src={IssuesIcon} alt="issues-icon" className="mr-3" />
             <p>Issues</p>
           </Link>
         </li>
       </ul>
-      <ul className="block md:hidden text-[0.88rem] px-3 mt-2 py-3  border-b border-profile-menu-border">
-        <li className="mb-3">
+      <ul className="block md:hidden text-[0.88rem]  py-3  border-b border-profile-menu-border">
+        <li className=" px-3 active:bg-gray-bg-9 cursor-pointer hover:bg-gray-bg-9 py-2 rounded-md transition-all">
           <Link href={"/user/dashboard"}>
             <p>Dashboard</p>
           </Link>
         </li>
-        <li className="mb-3">
+        <li className=" px-3 active:bg-gray-bg-9 cursor-pointer hover:bg-gray-bg-9 py-2 rounded-md transition-all">
           <Link href={"/user/dashboard/chats"}>
             <p>Chats</p>
           </Link>
         </li>
-        <li>
+        <li className="px-3 active:bg-gray-bg-9 cursor-pointer hover:bg-gray-bg-9 py-2 rounded-md transition-all">
           <Link href={"/user/dashboard/request-history"}>
             <p>Request History</p>
           </Link>
@@ -116,7 +116,7 @@ const UserprofileMenu = (props: Props) => {
           nprogress.complete();
           router.push("/");
         }}
-        className="cursor-pointer flex items-center text-[0.88rem] px-3 mt-4"
+        className=" active:bg-gray-bg-9 cursor-pointer hover:bg-gray-bg-9 py-2 rounded-md transition-all flex items-center text-[0.88rem] px-3 mt-4"
       >
         <Image src={LoginIcon} alt="login-icon" className="mr-3" />
         <p>Log out</p>

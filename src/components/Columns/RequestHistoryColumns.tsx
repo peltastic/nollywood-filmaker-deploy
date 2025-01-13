@@ -54,9 +54,13 @@ export const request_history_columns: ColumnDef<ReqHistoryColumnData>[] = [
     header: () => <div className=" py-4 ">Service name</div>,
     cell: ({ row }) => {
       return (
-        <div className="flex items-center">
-          <div className={`${generateColorClass(row.original.service_type)} h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4`}>
-           <GenerateDarkServiceLogo service={row.original.service_type} />
+        <div className="flex items-center w-[20rem]">
+          <div
+            className={`${generateColorClass(
+              row.original.service_type
+            )} h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4`}
+          >
+            <GenerateDarkServiceLogo service={row.original.service_type} />
           </div>
           <div className="text-[0.88rem]">
             <p className="text-black-4 font-medium">{row.getValue("name")}</p>
@@ -72,7 +76,7 @@ export const request_history_columns: ColumnDef<ReqHistoryColumnData>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center py-8">
-          <div className="w-[15rem] mr-2">
+          <div className="w-[20rem] mr-2">
             <Progress value={row.getValue("progress")} color="#181818" />
           </div>
           <p className="font-medium text-[0.88rem]">
@@ -86,7 +90,11 @@ export const request_history_columns: ColumnDef<ReqHistoryColumnData>[] = [
     accessorKey: "rating",
     header: "Rating",
     cell: ({ row }) => {
-      return <Rating defaultValue={row.getValue("rating")} color="#F8C51B" />;
+      return (
+        <div className="w-[10rem]">
+          <Rating defaultValue={row.getValue("rating")} color="#F8C51B" />
+        </div>
+      );
     },
   },
 
@@ -95,7 +103,9 @@ export const request_history_columns: ColumnDef<ReqHistoryColumnData>[] = [
     header: "Date created",
     cell: ({ row }) => {
       return (
-        <p className="text-gray-1 text-[0.88rem]">{row.getValue("date")}</p>
+        <div className=" w-[10rem] xl:w-auto">
+          <p className="text-gray-1 text-[0.88rem]">{row.getValue("date")}</p>
+        </div>
       );
     },
   },
@@ -110,14 +120,16 @@ export const request_history_columns: ColumnDef<ReqHistoryColumnData>[] = [
           ? "bg-light-green text-dark-green"
           : "bg-light-yellow text-dark-yellow";
       return (
-        <p
-          className={`${className} w-fit flex items-center font-medium py-1 px-2 rounded-full`}
-        >
-          <span className="block pr-1">
-            <GoDotFill />
-          </span>{" "}
-          {row.getValue("status")}
-        </p>
+        <div className="w-[10rem] xl:w-auto">
+          <p
+            className={`${className} w-fit flex items-center font-medium py-1 px-2 rounded-full`}
+          >
+            <span className="block pr-1">
+              <GoDotFill />
+            </span>{" "}
+            {row.getValue("status")}
+          </p>
+        </div>
       );
     },
   },

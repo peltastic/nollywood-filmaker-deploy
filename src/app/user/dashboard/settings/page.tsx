@@ -8,7 +8,7 @@ import SecuritySettings from "@/components/Settings/Security";
 import { useFetchUserPreferencesQuery } from "@/lib/features/users/profile/profile";
 import { RootState } from "@/lib/store";
 import { Tabs } from "@mantine/core";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 
 type Props = {};

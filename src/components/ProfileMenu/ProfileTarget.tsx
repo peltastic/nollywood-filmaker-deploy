@@ -19,7 +19,7 @@ const ProfileTarget = (props: Props) => {
               width={100}
               height={100}
               alt="test-image"
-              className=" rounded-full w-[2.8rem] md:w-[2rem] h-[2.8rem] md:h-[2rem]"
+              className=" rounded-full w-[2.4rem] md:w-[2rem] h-[2.4rem] md:h-[2rem]"
             />
           </AspectRatio>
         </div>
