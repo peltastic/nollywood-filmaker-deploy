@@ -92,9 +92,9 @@ const GetStartedChatPage = (props: Props) => {
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
         />
-       ) : null}
+      ) : null}
       <ServiceLayout nonDashboard>
-        <div className="flex flex-wrap items-start">
+        <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start ">
           <ServiceLeft
             title="Chat with a professional"
             cost="50,000"
@@ -122,11 +122,11 @@ const GetStartedChatPage = (props: Props) => {
             ]}
             image={<Image src={ChatWithProfessionalImg} alt="chat-img" />}
           />
-          <div className="w-full lg:w-[55%]">
+          <div className="w-full lg:w-[55%] px-6 sm:px-0">
             <div
               className={`${
                 page === "1" || page === "3"
-                  ? "w-[90%] sm:w-[70%]"
+                  ? "w-[90%] md:w-[70%]"
                   : "w-full sm:w-[85%]"
               }  mx-auto`}
             >
@@ -183,7 +183,7 @@ const GetStartedChatPage = (props: Props) => {
                     />
                   )}
                   {page === "3" && (
-                    <div className="">
+                    <div className="hidden lg:block">
                       <UnstyledButton
                         disabled={isLoading}
                         clicked={() => {
@@ -234,6 +234,52 @@ const GetStartedChatPage = (props: Props) => {
             </div>
           </div>
         </div>
+        {page === "3" && (
+          <div className="block lg:hidden w-[90%] md:w-[80%] mx-auto mt-10">
+            <UnstyledButton
+              disabled={isLoading}
+              clicked={() => {
+                if (userId) {
+                  chatWithPro({
+                    chat_title: chatData.title,
+                    consultant: chatData.consultant,
+                    date: moment(currentDate).format("YYYY-MM-DD"),
+                    summary: chatData.summary,
+                    time: `${moment(currentDate).format("YYYY-MM-DD")}T${moment(
+                      chatData.time,
+                      ["h:mm A"]
+                    ).format("HH:mm")}:00+01:00`,
+                    title: "Chat With A Professional",
+                    type: "Chat",
+                    userId,
+                  });
+                  initializeTransactionListener(userId);
+                  nprogress.start();
+                  open();
+                }
+              }}
+              class="bg-black-2 flex disabled:opacity-50 justify-center hover:bg-blue-1 transition-all text-white w-full py-4 rounded-md"
+            >
+              {isLoading ? (
+                <div className="w-[1rem] py-1">
+                  <Spinner />
+                </div>
+              ) : (
+                <>
+                  <p className="mr-2">Proceed to payment</p>
+                  {/* <FaArrowRight className="text-[0.7rem]" /> */}
+                </>
+              )}
+            </UnstyledButton>
+            <UnstyledButton
+              type="button"
+              clicked={() => setPage("2")}
+              class="w-full rounded-md py-3 mb-10  mt-8 px-4 transition-all hover:bg-gray-bg-1 border-stroke-2 border"
+            >
+              Back
+            </UnstyledButton>
+          </div>
+        )}
       </ServiceLayout>
     </>
   );

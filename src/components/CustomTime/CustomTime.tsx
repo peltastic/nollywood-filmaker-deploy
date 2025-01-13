@@ -31,7 +31,7 @@ const CustomTime = (props: Props) => {
         props.serviceSelection
           ? "w-full xl:w-[14rem] mt-6 xl:mt-0"
           : "w-full md:w-[12rem]"
-      } grid md:block grid-cols-2 sm:grid-cols-3  mid:grid-cols-4 gap-4 md:gap-0 rounded-xl border-r border-b border-l mid:h-[28rem] overflow-y-scroll  bg-calender-bg px-4 py-6 `}
+      } grid xl:block sm:grid-cols-2 mid:grid-cols-2 gap-4 lg:gap-4 rounded-xl border-r border-b border-l mid:h-[28rem] overflow-y-scroll  bg-calender-bg px-4 py-6 `}
     >
       {props.isFetching ? (
         <>

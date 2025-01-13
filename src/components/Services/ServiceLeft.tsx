@@ -19,7 +19,7 @@ const ServiceLeft = ({ body, title, image, cost }: Props) => {
     (state: RootState) => state.persistedState.user.user
   );
   return (
-    <section className="bg-gray-bg-3 w-full lg:w-[45%] py-[5rem] lg:min-h-screen relative">
+    <section className="bg-gray-bg-3 w-full lg:w-[45%] py-[5rem] lg:min-h-screen relative ">
       {userData?.fname && userData.lname && (
         <div className="bg-black-3 h-[3.8rem] flex justify-center items-center mx-auto w-[3.8rem] rounded-full">
           <p className="text-[1.5rem] font-bold text-white">
