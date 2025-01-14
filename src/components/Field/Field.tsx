@@ -57,7 +57,7 @@ const Field = (props: FieldHookConfig<string> & OtherProps) => {
             type={typePassword && props.password ? "password" : "text"}
             className={`${
               props.classname
-            } border text-input-text-color outline-none border-gray-2 py-3 px-4 rounded-md placeholder:text-gray-1  ${
+            } border text-input-text-color outline-none border-gray-2 py-3 px-4 rounded-md placeholder:text-gray-2 ${
               meta.error && meta.touched
                 ? "border border-errorRed"
                 : "border border-gray8"

@@ -28,6 +28,9 @@ export interface IJoinCrew {
   verificationDocType?: string;
   doc?: File | null;
   idNumber?: string;
+  password?: string;
+  confirmPassword?: string;
+  username?: string;
 }
 
 export interface IJoinCompany {
@@ -53,6 +56,9 @@ export interface IJoinCompany {
   cacNumber?: string;
   file?: File | null;
   doc?: File | null;
+  password?: string;
+  confirmPassword?: string;
+  username?: string;
 }
 
 export const filmmakerDatabaseApi = createApi({
@@ -83,7 +89,18 @@ export const filmmakerDatabaseApi = createApi({
         };
       },
     }),
+    createCrewOrCompany: build.mutation<
+      unknown,
+      { username: string; email: string; password: string }
+    >({
+      query: (body) => ({
+        url: `/api/join/crewcompany`,
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useJoinCrewMutation, useJoinCompanyMutation } = filmmakerDatabaseApi;
+export const { useJoinCrewMutation, useJoinCompanyMutation, useCreateCrewOrCompanyMutation } =
+  filmmakerDatabaseApi;

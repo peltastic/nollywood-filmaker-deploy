@@ -7,6 +7,7 @@ import { BsUpload } from "react-icons/bs";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import {
   IJoinCrew,
+  useCreateCrewOrCompanyMutation,
   useJoinCrewMutation,
 } from "@/lib/features/users/filmmaker-database/filmmaker-database";
 import { crewVerificationSchema } from "@/utils/validation/fimmaker";
@@ -24,6 +25,7 @@ type Props = {
 const Verification = ({ prevStep, data, updateCrew }: Props) => {
   const router = useRouter();
   const [joinCrew, result] = useJoinCrewMutation();
+  const [createCrew, crewRes] = useCreateCrewOrCompanyMutation();
   const [file, setFile] = useState<File | null>(data.doc || null);
   const [documentType, setDocumentType] = useState<string>(
     data.verificationDocType || ""
@@ -34,14 +36,55 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
     state: string;
     country: string;
     identification: string;
+    password: string;
+    confirmPassword: string;
+    username: string;
   }>({
     address: data.location?.address || "",
     city: data.location?.city || "",
     state: data.location?.state || "",
     country: data.location?.country || "",
     identification: data.idNumber || "",
+    password: data.password || "",
+    confirmPassword: data.confirmPassword || "",
+    username: data.username || "",
   });
 
+  useEffect(() => {
+    if (crewRes.isError) {
+      nprogress.complete();
+      notify(
+        "error",
+        "",
+        (crewRes.error as any).data?.message || "An Error Occured"
+      );
+    }
+    if (crewRes.isSuccess) {
+      const payload: IJoinCrew = {
+        location: {
+          address: formData.address,
+          city: formData.city,
+          country: formData.country,
+          state: formData.state,
+        },
+        doc: file,
+        verificationDocType: documentType,
+        idNumber: formData.identification,
+        bio: data.bio,
+        department: data.department,
+        dob: data.dob,
+        email: data.email,
+        fee: data.fee,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        mobile: data.mobile,
+        file: data.file,
+        role: data.role,
+        works: data.works,
+      };
+      joinCrew(payload);
+    }
+  }, [crewRes.isSuccess, crewRes.isError]);
   useEffect(() => {
     if (result.isError) {
       nprogress.complete();
@@ -51,11 +94,11 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
         (result.error as any).data?.message || "An Error Occured"
       );
     }
-
+    
     if (result.isSuccess) {
       // notify("success", "Information uploaded successfully!")
       nprogress.complete();
-      router.push("/success-page/filmaker-database");
+      router.push(`/success-page/filmaker-database?email=${data.email}&type=crew`);
     }
   }, [result.isError, result.isSuccess]);
   return (
@@ -67,36 +110,22 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
           state: data.location?.state || "",
           country: data.location?.country || "",
           identification: data.idNumber || "",
+          password: data.password || "",
+          confirmPassword: data.confirmPassword || "",
+          username: data.username || "",
         }}
         validationSchema={crewVerificationSchema}
-        onSubmit={({ address, city, country, identification, state }) => {
-          const payload: IJoinCrew = {
-            location: {
-              address,
-              city,
-              country,
-              state,
-            },
-            doc: file,
-            verificationDocType: documentType,
-            idNumber: identification,
-            bio: data.bio,
-            department: data.department,
-            dob: data.dob,
-            email: data.email,
-            fee: data.fee,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            mobile: data.mobile,
-            file: data.file,
-            role: data.role,
-            works: data.works,
-          };
-          console.log(payload);
-          nprogress.start();
-          joinCrew(payload);
+        onSubmit={({ password, username }) => {
+          if (data.email) {
+            nprogress.start();
+            createCrew({
+              email: data.email,
+              password,
+              username,
+            });
+          }
         }}
-      >
+        >
         {({ isValid }) => (
           <Form>
             <div className="grid grid-cols-2 gap-8">
@@ -233,6 +262,56 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
                 </div>
               </div>
             </div>
+            <div className=" mt-8">
+              <p className="mb-2 font-medium">Create Account</p>
+              <div className="mb-2  flex font-medium text-[0.88rem] text-[#A5A5A5]">
+                <p>Create an account in order to save your profile</p>
+              </div>
+            </div>
+            <div className="mt-8">
+              <Field
+                required
+                label="Username"
+                labelColor="text-[#A5A5A5]"
+                classname="w-full"
+                name="username"
+                placeholder=""
+                changed={(e) =>
+                  setFormData((prev) => ({ ...prev, username: e.target.value }))
+                }
+              />
+            </div>
+            <div className="mt-8">
+              <Field
+                required
+                label="Password"
+                labelColor="text-[#A5A5A5]"
+                classname="w-full"
+                name="password"
+                placeholder=""
+                password
+                changed={(e) =>
+                  setFormData((prev) => ({ ...prev, password: e.target.value }))
+                }
+              />
+            </div>
+            <div className="mt-8">
+              <Field
+                required
+                label="Confirm Password"
+                labelColor="text-[#A5A5A5]"
+                classname="w-full"
+                name="confirmPassword"
+                placeholder=""
+                password
+                changed={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    confirmPassword: e.target.value,
+                  }))
+                }
+              />
+            </div>
             <div className="flex items-center justify-between mt-[4rem]">
               <UnstyledButton
                 type="button"
@@ -247,6 +326,9 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
                     doc: file,
                     verificationDocType: documentType,
                     idNumber: formData.identification,
+                    confirmPassword: formData.confirmPassword,
+                    password: formData.password,
+                    username: formData.username,
                   };
                   updateCrew(payload);
                   prevStep();
@@ -258,10 +340,16 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
 
               <UnstyledButton
                 type="submit"
-                disabled={!isValid || !file || !documentType || result.isLoading}
+                disabled={
+                  !isValid ||
+                  !file ||
+                  !documentType ||
+                  result.isLoading ||
+                  crewRes.isLoading
+                }
                 class="ml-auto w-[7rem] flex hover:bg-blue-1 py-2 px-4 disabled:opacity-50 transition-all rounded-lg justify-center items-center text-white border border-black-3  bg-black-3 "
               >
-                {result.isLoading ? (
+                {result.isLoading || crewRes.isLoading ? (
                   <div className="py-1 w-[1rem]">
                     <Spinner />
                   </div>

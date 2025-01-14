@@ -7,6 +7,7 @@ import { FaDownload } from "react-icons/fa";
 import { AspectRatio } from "@mantine/core";
 import Lottie from "lottie-react";
 import TypingLottie from "@/components/Lottie/typing.json";
+import Linkify from "../Linkify/Linkify";
 
 type Props = {
   text: string;
@@ -51,7 +52,7 @@ const ConsultantChatMessage = ({
   repliedTextId,
   selectedRepliedToMessageId,
   setSelectedRepliedToMessageId,
-  repliedToUser
+  repliedToUser,
 }: Props) => {
   const [temporarySelectedHighlight, setTemporarySelectedHighlight] =
     useState<string>("transparent");
@@ -80,7 +81,7 @@ const ConsultantChatMessage = ({
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
-    if (!ref.current) return () => {}
+    if (!ref.current) return () => {};
     if (selectedRepliedToMessageId === id) {
       ref.current.scrollIntoView({
         behavior: "smooth",
@@ -208,9 +209,13 @@ const ConsultantChatMessage = ({
               }}
               className={`cursor-pointer ${
                 user === "consultant" ? "bg-gray-1" : "bg-gray-bg-8"
-              } px-2 rounded-md py-1 mb-1 text-[0.88rem] ${repliedToUser === "consultant" ? "border-l-dark-red" : "border-l-dark-yellow"} border-l-4`}
+              } px-2 rounded-md py-1 mb-1 text-[0.88rem] ${
+                repliedToUser === "consultant"
+                  ? "border-l-dark-red"
+                  : "border-l-dark-yellow"
+              } border-l-4`}
             >
-                 <p>{repliedToUser === "consultant" ? "You" : "Customer"}</p>
+              <p>{repliedToUser === "consultant" ? "You" : "Customer"}</p>
               <p>{repliedText}</p>
             </div>
           )}
@@ -233,7 +238,7 @@ const ConsultantChatMessage = ({
               <>
                 {text.split("\n").map((line, index) => (
                   <p className="" key={index}>
-                    {line}
+                    <Linkify>{line}</Linkify>
                     <br />
                   </p>
                 ))}

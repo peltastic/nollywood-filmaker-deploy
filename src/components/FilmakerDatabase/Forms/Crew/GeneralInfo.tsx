@@ -36,16 +36,17 @@ const GeneralInfo = ({ nextStep, updateCrew, updatePfp, data, pfp }: Props) => {
           fname: data.firstName || "",
           lname: data.lastName || "",
           email: data.email || "",
+          phone: data.mobile || ""
         }}
         validationSchema={crewInfoSchema}
-        onSubmit={({ fname, lname, email }) => {
+        onSubmit={({ fname, lname, email, phone }) => {
           const payload: IJoinCrew = {
             firstName: fname,
             lastName: lname,
             email,
             file: file || data.file,
             dob: (dateInput && moment(dateInput).format("YYYY-MM-DD")) || "",
-            mobile: phoneInputVal,
+            mobile: phone,
             bio: aboutval,
           };
           updateCrew(payload);
@@ -79,7 +80,15 @@ const GeneralInfo = ({ nextStep, updateCrew, updatePfp, data, pfp }: Props) => {
                 name="email"
                 placeholder="Enter your email address"
               />
-              <div className="">
+              <Field
+                required
+                label="Phone number"
+                labelColor="text-[#A5A5A5]"
+                classname="w-full"
+                name="phone"
+                placeholder="+234 819 2727 973"
+              />
+              {/* <div className="">
                 <div className="mb-2 flex font-medium text-[0.88rem] text-[#A5A5A5]">
                   <p>Mobile number</p>
                   <p>*</p>
@@ -94,7 +103,7 @@ const GeneralInfo = ({ nextStep, updateCrew, updatePfp, data, pfp }: Props) => {
                     }
                   }}
                 />
-              </div>
+              </div> */}
             </div>
             <div className="mb-2 mt-6 flex font-medium text-[0.88rem] text-[#A5A5A5]">
               <p>Date of birth</p>

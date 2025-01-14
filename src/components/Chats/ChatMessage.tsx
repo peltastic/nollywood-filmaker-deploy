@@ -8,6 +8,7 @@ import { RootState } from "@/lib/store";
 import { AspectRatio, Menu } from "@mantine/core";
 import Lottie from "lottie-react";
 import TypingLottie from "@/components/Lottie/typing.json";
+import Linkify from "../Linkify/Linkify";
 
 type Props = {
   text: string;
@@ -191,7 +192,9 @@ const ChatMessage = ({
               ? "bg-admin-chat-bg  text-black hover:bg-gray-2 transition-al"
               : user !== "user"
               ? "bg-admin-chat-bg text-black"
-              : `${isRightClicked ? `bg-slate-700` : `bg-black-3` }  text-white mr-2`
+              : `${
+                  isRightClicked ? `bg-slate-700` : `bg-black-3`
+                }  text-white mr-2`
           }  py-2 sm:py-3 px-2 sm:px-3 text-[0.8rem] sm:text-[0.95rem] rounded-xl max-w-[12rem] sm:max-w-[20rem] relative`}
         >
           {contextMenu.visible && activeId === id && (
@@ -233,7 +236,7 @@ const ChatMessage = ({
               <p>{repliedText}</p>
             </div>
           )}
-          <div className="break-words" >
+          <div className="break-words">
             {type === "file" ? (
               <Link href={file}>
                 <div className="cursor-pointer py-2 px-2">
@@ -251,8 +254,8 @@ const ChatMessage = ({
             ) : (
               <>
                 {text.split("\n").map((line, index) => (
-                  <p className="" key={index} >
-                    {line}
+                  <p className="" key={index}>
+                    <Linkify>{line}</Linkify>
                     <br />
                   </p>
                 ))}

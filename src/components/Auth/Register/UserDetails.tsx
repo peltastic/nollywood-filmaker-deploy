@@ -34,7 +34,7 @@ const UserDetails = ({ setPageProps, setDataProps, data }: Props) => {
         initialValues={{
           fname: data.fname,
           lname: data.lname,
-          // phone: data.phone,
+          phone: data.phone,
           email: data.email,
         }}
         onSubmit={(values) => {
@@ -42,7 +42,7 @@ const UserDetails = ({ setPageProps, setDataProps, data }: Props) => {
             email: values.email,
             fname: values.fname,
             lname: values.lname,
-            phone: phoneInputVal,
+            phone: values.phone,
           });
           setPageProps("3");
         }}
@@ -56,41 +56,30 @@ const UserDetails = ({ setPageProps, setDataProps, data }: Props) => {
                 labelColor="text-black-2"
                 classname="w-full"
                 name="fname"
-                placeholder=""
+                placeholder="Enter your first name"
               />
               <Field
                 label="Last name"
                 labelColor="text-black-2"
                 classname="w-full"
                 name="lname"
-                placeholder=""
+                placeholder="Enter your first name "
               />
               <Field
                 label="Email"
                 labelColor="text-black-2"
                 classname="w-full"
                 name="email"
-                placeholder=""
+                placeholder="example@email.com"
               />
-              <div className="mt-7">
-                <PhoneInput
-                  className="border outline-none"
-                  style={{}}
-                  value={phoneInputVal}
-                  onChange={(val) => {
-                    if (val) {
-                      setPhoneInputVal(val.toString());
-                    }
-                  }}
-                />
-              </div>
-              {/* <Field
+
+              <Field
                 label="Phone"
                 labelColor="text-black-2"
                 classname="w-full"
                 name="phone"
-                placeholder=""
-              /> */}
+                placeholder="+234 819 2727 973"
+              />
             </div>
             <div className="w-full flex mt-28 mb-8 sm:mb-0">
               <UnstyledButton
@@ -102,7 +91,7 @@ const UserDetails = ({ setPageProps, setDataProps, data }: Props) => {
               </UnstyledButton>
               <UnstyledButton
                 type="submit"
-                disabled={!isValid || !phoneInputVal}
+                disabled={!isValid}
                 class="flex py-2 hover:bg-blue-1 px-4 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
               >
                 <p className="mr-2">Next</p>

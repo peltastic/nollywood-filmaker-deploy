@@ -4,10 +4,10 @@ import SelectComponent from "@/components/Select/SelectComponent";
 import { Form, Formik } from "formik";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import UploadImage from "/public/assets/consultant/cloud-upload.svg";
 import { BsUpload } from "react-icons/bs";
 import {
   IJoinCompany,
+  useCreateCrewOrCompanyMutation,
   useJoinCompanyMutation,
 } from "@/lib/features/users/filmmaker-database/filmmaker-database";
 import UnstyledButton from "@/components/Button/UnstyledButton";
@@ -26,6 +26,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
   const router = useRouter();
   const [joinCompany, result] = useJoinCompanyMutation();
   const [file, setFile] = useState<File | null>(data.doc || null);
+  const [createCompany, companyRes] = useCreateCrewOrCompanyMutation();
   const [documentType, setDocumentType] = useState<string>(
     data.verificationDocType || ""
   );
@@ -36,6 +37,9 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
     country: string;
     identification: string;
     cac: string;
+    password: string;
+    confirmPassword: string;
+    username: string;
   }>({
     address: data.location?.address || "",
     city: data.location?.city || "",
@@ -43,7 +47,47 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
     country: data.location?.country || "",
     identification: data.idNumber || "",
     cac: data.cacNumber || "",
+    password: data.password || "",
+    confirmPassword: data.confirmPassword || "",
+    username: data.username || "",
   });
+
+  useEffect(() => {
+    if (companyRes.isError) {
+      nprogress.complete();
+      notify(
+        "error",
+        "",
+        (companyRes.error as any).data?.message || "An Error Occured"
+      );
+    }
+    if (companyRes.isSuccess) {
+      const payload: IJoinCompany = {
+        location: {
+          address: formData.address,
+          city: formData.city,
+          country: formData.country,
+          state: formData.state,
+        },
+        cacNumber: formData.cac,
+        idNumber: formData.identification,
+        bio: data.bio,
+        clientele: data.clientele,
+        doc: file,
+        email: data.email,
+        fee: data.fee,
+        file: data.file,
+        mobile: data.mobile,
+        name: data.name,
+        rateCard: data.rateCard,
+        useRateCard: data.useRateCard,
+        type: data.type,
+        verificationDocType: documentType,
+        website: data.website,
+      };
+      joinCompany(payload);
+    }
+  }, [companyRes.isSuccess, companyRes.isError]);
   useEffect(() => {
     if (result.isError) {
       nprogress.complete();
@@ -57,7 +101,9 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
     if (result.isSuccess) {
       // notify("success", "Information uploaded successfully!")
       nprogress.complete();
-      router.push("/success-page/filmaker-database");
+      router.push(
+        `/success-page/filmaker-database?email=${data.email}&type=company`
+      );
     }
   }, [result.isError, result.isSuccess]);
   return (
@@ -70,33 +116,21 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
           country: data.location?.country || "",
           identification: data.idNumber || "",
           cac: data.cacNumber || "",
+          password: data.password || "",
+          confirmPassword: data.confirmPassword || "",
+          username: data.username || "",
         }}
-        onSubmit={({ address, cac, city, country, identification, state }) => {
-          const payload: IJoinCompany = {
-            location: {
-              address,
-              city,
-              country,
-              state,
-            },
-            cacNumber: cac,
-            idNumber: identification,
-            bio: data.bio,
-            clientele: data.clientele,
-            doc: file,
-            email: data.email,
-            fee: data.fee,
-            file: data.file,
-            mobile: data.mobile,
-            name: data.name,
-            rateCard: data.rateCard,
-            useRateCard: data.useRateCard,
-            type: data.type,
-            verificationDocType: documentType,
-            website: data.website,
-          };
-          nprogress.start();
-          joinCompany(payload);
+        onSubmit={({ password, username }) => {
+          if (data.email) {
+            nprogress.start();
+            if (data.email) {
+              createCompany({
+                email: data.email,
+                password,
+                username,
+              });
+            }
+          }
         }}
         validationSchema={companyVerificationSchema}
       >
@@ -250,6 +284,62 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
                     }
                   />
                 </div>
+                <div className=" mt-8">
+                  <p className="mb-2 font-medium">Create Account</p>
+                  <div className="mb-2  flex font-medium text-[0.88rem] text-[#A5A5A5]">
+                    <p>Create an account in order to save your profile</p>
+                  </div>
+                </div>
+                <div className="mt-8">
+                  <Field
+                    required
+                    label="Username"
+                    labelColor="text-[#A5A5A5]"
+                    classname="w-full"
+                    name="username"
+                    placeholder=""
+                    changed={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        username: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <div className="mt-8">
+                  <Field
+                    required
+                    label="Password"
+                    labelColor="text-[#A5A5A5]"
+                    classname="w-full"
+                    name="password"
+                    placeholder=""
+                    password
+                    changed={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        password: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <div className="mt-8">
+                  <Field
+                    required
+                    label="Confirm Password"
+                    labelColor="text-[#A5A5A5]"
+                    classname="w-full"
+                    name="confirmPassword"
+                    placeholder=""
+                    password
+                    changed={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        confirmPassword: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
               </div>
             </div>
             <div className="flex items-center justify-between mt-[4rem]">
@@ -267,6 +357,9 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
                     verificationDocType: documentType,
                     idNumber: formData.identification,
                     cacNumber: formData.cac,
+                    confirmPassword: formData.confirmPassword,
+                    password: formData.password,
+                    username: formData.username,
                   };
                   updateCompany(payload);
                   prevStep();
@@ -279,11 +372,15 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
               <UnstyledButton
                 type="submit"
                 disabled={
-                  !isValid || !file || !documentType || result.isLoading
+                  !isValid ||
+                  !file ||
+                  !documentType ||
+                  result.isLoading ||
+                  companyRes.isLoading
                 }
                 class="ml-auto w-[7rem] flex hover:bg-blue-1 py-2 px-4 disabled:opacity-50 transition-all rounded-lg justify-center items-center text-white border border-black-3  bg-black-3 "
               >
-                {result.isLoading ? (
+                {result.isLoading || companyRes.isLoading ? (
                   <div className="py-1 w-[1rem]">
                     <Spinner />
                   </div>

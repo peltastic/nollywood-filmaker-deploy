@@ -26,7 +26,6 @@ const CompanyInfo = ({
   updatePfp,
   nextStep,
 }: Props) => {
-  const [phoneInputVal, setPhoneInputVal] = useState(data.mobile || "");
   const [aboutval, setAboutVal] = useState<string>(data.bio || "");
   const [file, setFile] = useState<File | null>(data.file || null);
   return (
@@ -37,16 +36,18 @@ const CompanyInfo = ({
           name: data.name || "",
           email: data.email || "",
           website: data.website || "",
+          phone: data.mobile || ""
         }}
         validationSchema={companyInfoSchema}
-        onSubmit={({ email, name, website }) => {
+        onSubmit={({ email, name, website, phone }) => {
           const payload: IJoinCompany = {
             name,
             email,
             website,
-            mobile: phoneInputVal,
+            mobile: phone,
             bio: aboutval,
             file,
+            
           };
           updateCompany(payload);
           nextStep();
@@ -71,22 +72,16 @@ const CompanyInfo = ({
                 name="email"
                 placeholder="Enter your email address"
               />
-              <div className="">
-                <div className="mb-2 flex font-medium text-[0.88rem] text-[#A5A5A5]">
-                  <p>Company mobile number</p>
-                  <p>*</p>
-                </div>
-                <PhoneInput
-                  className="border outline-none"
-                  style={{}}
-                  value={phoneInputVal}
-                  onChange={(val) => {
-                    if (val) {
-                      setPhoneInputVal(val.toString());
-                    }
-                  }}
-                />
-              </div>
+        
+              <Field
+                required
+                label="Phone number"
+                labelColor="text-[#A5A5A5]"
+                classname="w-full"
+                name="phone"
+                placeholder="+234 819 2727 973"
+              />
+        
             </div>
             <div className="mt-10">
               <Field
@@ -143,7 +138,7 @@ const CompanyInfo = ({
             </div>
             <div className="flex items-center justify-between mt-[4rem]">
               <UnstyledButton
-                disabled={!isValid || !aboutval || !phoneInputVal || !file}
+                disabled={!isValid || !aboutval || !file}
                 type="submit"
                 // clicked={nextStep}
                 class="ml-auto w-[7rem] flex hover:bg-blue-1 py-2 px-4 disabled:opacity-50 transition-all rounded-lg justify-center items-center text-white border border-black-3 disabled:border-black-2  bg-black-3 "
