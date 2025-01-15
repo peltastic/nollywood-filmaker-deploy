@@ -160,7 +160,7 @@ const GeneralInfo = ({ nextStep, updateCrew, updatePfp, data, pfp }: Props) => {
             </div>
             <div className="flex items-center justify-between mt-[4rem]">
               <UnstyledButton
-                disabled={!isValid || !dateInput || !phoneInputVal}
+                disabled={!isValid || !dateInput || !file}
                 type="submit"
                 // clicked={nextStep}
                 class="ml-auto w-[7rem] flex hover:bg-blue-1 py-2 px-4 disabled:opacity-50 transition-all rounded-lg justify-center items-center text-white border border-black-3 disabled:border-black-2  bg-black-3 "

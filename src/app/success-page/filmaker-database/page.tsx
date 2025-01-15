@@ -32,7 +32,7 @@ const page = (props: Props) => {
         darkButtonContent="View public profile"
         lightBtnLink="/"
         subTitle=""
-        lightButtonContent=""
+        lightButtonContent="Take me home"
         titleLight="Your information has been stored successfully"
         titleBold=""
         width="w-[95%] sm:w-[90%] md:w-[40rem]"

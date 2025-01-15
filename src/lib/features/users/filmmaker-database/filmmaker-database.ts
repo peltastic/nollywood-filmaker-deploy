@@ -61,6 +61,68 @@ export interface IJoinCompany {
   username?: string;
 }
 
+export interface ICompanyDataResponse {
+  company: {
+    location: {
+      address: string;
+      city: string;
+      state: string;
+      country: string;
+    };
+    _id: string;
+    name: string;
+    email: string;
+    mobile: string;
+    website: string;
+    bio: string;
+    propic: string;
+    type: string;
+    clientele: {
+      title: string;
+      link: string;
+      year: string;
+      _id: string;
+    }[];
+    useRateCard: boolean;
+    rateCard: string;
+    fee: string;
+    verificationDocType: string;
+    document: string;
+    idNumber: string;
+    cacNumber: string;
+  };
+}
+
+export interface ICrewDataResponse {
+  crewMember: {
+    location: {
+      address: string;
+      city: string;
+      state: string;
+      country: string;
+    };
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    mobile: string;
+    dob: string;
+    bio: string;
+    propic: string;
+    department: string;
+    role: string[];
+    works: {
+      title: string;
+      role: string;
+      link: string;
+      year: string;
+      _id: string;
+    }[];
+
+    fee: string;
+  };
+}
+
 export const filmmakerDatabaseApi = createApi({
   reducerPath: "filmmaker-database",
   baseQuery: fetchBaseQuery({
@@ -99,8 +161,19 @@ export const filmmakerDatabaseApi = createApi({
         body,
       }),
     }),
+    fetchCompanyData: build.query<ICompanyDataResponse, string>({
+      query: (id) => `/api/join/company/${id}`,
+    }),
+    fetchCrewData: build.query<ICrewDataResponse, string>({
+      query: (id) => `/api/join/crew/${id}`,
+    }),
   }),
 });
 
-export const { useJoinCrewMutation, useJoinCompanyMutation, useCreateCrewOrCompanyMutation } =
-  filmmakerDatabaseApi;
+export const {
+  useJoinCrewMutation,
+  useJoinCompanyMutation,
+  useCreateCrewOrCompanyMutation,
+  useLazyFetchCompanyDataQuery,
+  useLazyFetchCrewDataQuery,
+} = filmmakerDatabaseApi;

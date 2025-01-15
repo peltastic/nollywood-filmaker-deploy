@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import TestImage from "/public/assets/test-avatar-big.png";
 import AdminProfileImg from "/public/assets/dashboard/admin-profile-img.svg";
 import Image from "next/image";
 import Link from "next/link";
