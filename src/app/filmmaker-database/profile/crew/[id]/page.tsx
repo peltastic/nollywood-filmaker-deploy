@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import React, { useEffect } from "react";
-import Logo from "/public/assets/logo2.png";
+import Logo from "/public/assets/logo22.png";
 import ProfileBanner from "/public/assets/filmmaker-database/filmmaker-profile-banner.png";
 import { useLazyFetchCrewDataQuery } from "@/lib/features/users/filmmaker-database/filmmaker-database";
 import { useParams } from "next/navigation";

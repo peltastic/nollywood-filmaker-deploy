@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import Logo from "/public/assets/logo2.png";
+import Logo from "/public/assets/logo22.png";
 import Image from "next/image";
 import ProfileBanner from "/public/assets/filmmaker-database/filmmaker-profile-banner.png";
 import { FaUser } from "react-icons/fa";

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import Logo from "/public/assets/logo2.png";
+import Logo from "/public/assets/logo22.png";
 import Image from "next/image";
 import Link from "next/link";
 import UnstyledButton from "../Button/UnstyledButton";
@@ -37,7 +37,7 @@ const Navbar = (props: Props) => {
       <nav className="flex items-center pt-2 pb-2 md:pb-0 text-black-1 border-b border-b-border-gray px-0 md:px-8">
         <Link href={"/"}>
           <div className="">
-            <Image src={Logo} alt="logo" className="w-[7rem]" />
+            <Image src={Logo} alt="logo" className="w-[3rem]" />
           </div>
         </Link>
         <div className="md:hidden ml-auto mr-4 md:mr-0 relative z-50">

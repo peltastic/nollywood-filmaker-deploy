@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import Logo from "/public/assets/nav/logo.svg";
+import Logo from "/public/assets/logo22.png";
 import SingleStepper from "@/components/Stepper/SingleStepper";
 import GeneralInfo from "@/components/FilmakerDatabase/Forms/Crew/GeneralInfo";
 import CrewImg from "/public/assets/filmmaker-database/film-crew.svg";

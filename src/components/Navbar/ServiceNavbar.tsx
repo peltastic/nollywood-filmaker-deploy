@@ -2,7 +2,7 @@
 import Image from "next/image";
 import React from "react";
 
-import Logo from "/public/assets/logo2.png";
+import Logo from "/public/assets/logo22.png";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { HiBell } from "react-icons/hi";
@@ -140,7 +140,7 @@ const ServiceNavbar = (props: Props) => {
             <Image
               src={Logo}
               alt="logo"
-              className={`w-[7rem] ${
+              className={`w-[3rem] ${
                 props.removeOptions ? "mb-0 md:mb-4  mt-1" : ""
               } `}
             />
