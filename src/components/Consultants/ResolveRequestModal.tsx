@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import CancelImg from "/public/assets/cancel.svg";
 import { MdInfoOutline } from "react-icons/md";
 import DropZoneComponent from "../DropZone/DropZone";
-import classes from "@/app/styles/Dropzone.module.css";
 import UploadImage from "/public/assets/consultant/cloud-upload.svg";
 import UnstyledButton from "../Button/UnstyledButton";
 import FileImg from "/public/assets/dashboard/file.svg";

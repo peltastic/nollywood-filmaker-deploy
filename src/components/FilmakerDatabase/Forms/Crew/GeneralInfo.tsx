@@ -22,7 +22,6 @@ type Props = {
 };
 
 const GeneralInfo = ({ nextStep, updateCrew, updatePfp, data, pfp }: Props) => {
-  const [phoneInputVal, setPhoneInputVal] = useState(data.mobile || "");
   const [dateInput, setDateInput] = useState<Date | null>(
     data.dob ? new Date(data.dob) : null
   );
@@ -55,7 +54,7 @@ const GeneralInfo = ({ nextStep, updateCrew, updatePfp, data, pfp }: Props) => {
       >
         {({ isValid }) => (
           <Form>
-            <div className="grid grid-cols-2 gap-x-8 gap-y-8">
+            <div className="grid md:grid-cols-2 gap-x-8 gap-y-8">
               <Field
                 label="First name"
                 labelColor="text-[#A5A5A5]"
@@ -105,7 +104,7 @@ const GeneralInfo = ({ nextStep, updateCrew, updatePfp, data, pfp }: Props) => {
                 />
               </div> */}
             </div>
-            <div className="mb-2 mt-6 flex font-medium text-[0.88rem] text-[#A5A5A5]">
+            <div className="mb-2 mt-8 flex font-medium text-[0.88rem] text-[#A5A5A5]">
               <p>Date of birth</p>
               <p>*</p>
             </div>
@@ -115,7 +114,7 @@ const GeneralInfo = ({ nextStep, updateCrew, updatePfp, data, pfp }: Props) => {
               placeholder="Date input"
               size="lg"
             />
-            <div className="mb-2 mt-6 flex font-medium text-[0.88rem] text-[#A5A5A5]">
+            <div className="mb-2 mt-8 flex font-medium text-[0.88rem] text-[#A5A5A5]">
               <p>About you</p>
               {/* <p>*</p> */}
             </div>
@@ -124,7 +123,7 @@ const GeneralInfo = ({ nextStep, updateCrew, updatePfp, data, pfp }: Props) => {
               value={aboutval}
               className="outline-none  px-4 py-4 h-[10rem]"
             />
-            <div className="mb-2 mt-6 flex font-medium text-[0.88rem] text-[#A5A5A5]">
+            <div className="mb-2 mt-8 flex font-medium text-[0.88rem] text-[#A5A5A5]">
               <p>Profile photo</p>
               {/* <p>*</p> */}
             </div>

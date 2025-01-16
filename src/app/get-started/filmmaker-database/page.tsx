@@ -98,29 +98,31 @@ const FilmakerDatabasePage = (props: Props) => {
   return (
     <div className="">
       <nav className="py-4 px-4">
-        <Link href={"/"}  >
+        <Link href={"/"}>
           <div className="">
             <Image src={Logo} alt="logo" className="w-[7rem]" />
           </div>
         </Link>
       </nav>
-      <h1 className="text-4xl font-bold text-center">
-        Nollywood Filmaker Database
-      </h1>
+      <div className="px-8">
+        <h1 className="text-3xl mid:text-4xl font-bold text-center">
+          Nollywood Filmaker Database
+        </h1>
+      </div>
       <section className="bg-[#FAFAFA] min-h-screen mt-8 py-8">
-        <div className="w-fit mx-auto max-w-[60%]">
+        <div className="w-[90%] lg:w-fit mx-auto max-w-[100rem]">
           <div className="">
             <h2 className="text-black-2 text-[1.57rem] font-semibold">
               Let us capture your information
             </h2>
             <p>A fully filled form makes it easier to find you</p>
           </div>
-          <div className="flex items-center mt-[4rem]">
+          <div className="lg:flex items-center mt-[4rem]">
             <SingleStepper value={1} active={active} text="General info" />
-            <div className="w-[9rem] border-t border-stroke-12"></div>
+            <div className="w-[9rem] border-t border-stroke-12 hidden lg:block"></div>
             <SingleStepper value={2} active={active} text="Contact details" />
 
-            <div className="w-[9rem] border-t border-stroke-12"></div>
+            <div className="w-[9rem] border-t border-stroke-12 hidden lg:block"></div>
             <SingleStepper value={3} active={active} text="Verification" />
           </div>
           <div className="mt-[4rem]">
@@ -152,21 +154,21 @@ const FilmakerDatabasePage = (props: Props) => {
                 </h1>
               )}
               {active === 1 && (
-                <div className="flex">
+                <div className="flex flex-wrap">
                   <div
                     onClick={() => setFormType("film-crew")}
                     className={`${
                       formType === "film-crew"
                         ? "border-stepper-green text-stepper-green"
                         : "border-[#A5A5A5] text-[#A5A5A5]"
-                    } border rounded-md flex items-center px-4 py-4 mr-8 cursor-pointer transition-all`}
+                    } border rounded-md flex items-center px-4 py-4 mr-8 cursor-pointer transition-all w-[80%] sm:w-[50%] mid:w-auto`}
                   >
                     <Image
                       src={formType === "film-crew" ? CrewImg : CrewImgInactive}
                       alt="film-crew"
                       className="w-[1.3rem] mr-2"
                     />
-                    <p className="font-medium mr-12">Film Crew</p>
+                    <p className="font-medium mr-auto mid:mr-12">Film Crew</p>
                     <div className="w-[1rem]">
                       {formType === "film-crew" ? <FaCircleDot /> : null}
                     </div>
@@ -177,7 +179,7 @@ const FilmakerDatabasePage = (props: Props) => {
                       formType === "film-company"
                         ? "border-stepper-green text-stepper-green"
                         : "border-[#A5A5A5] text-[#A5A5A5]"
-                    } border rounded-md flex items-center px-4 py-4 cursor-pointer transition-all`}
+                    } border rounded-md flex items-center px-4 py-4 cursor-pointer transition-all w-[80%] sm:w-[50%] mid:w-auto mt-8 mid:mt-0`}
                   >
                     <Image
                       src={
@@ -188,7 +190,9 @@ const FilmakerDatabasePage = (props: Props) => {
                       alt="film-crew"
                       className="w-[1.3rem] mr-2"
                     />
-                    <p className="font-medium mr-10">Film Company</p>
+                    <p className="font-medium mr-auto mid::mr-10">
+                      Film Company
+                    </p>
                     <div className="w-[1rem]">
                       {formType === "film-company" ? <FaCircleDot /> : null}
                     </div>

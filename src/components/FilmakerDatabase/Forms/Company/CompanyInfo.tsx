@@ -63,7 +63,7 @@ const CompanyInfo = ({
               placeholder="Enter your registered company name"
               required
             />
-            <div className="grid grid-cols-2 gap-x-8 gap-y-8 mt-10">
+            <div className="grid mid:grid-cols-2 gap-x-8 gap-y-8 mt-10">
               <Field
                 required
                 label="Company email address"

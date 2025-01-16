@@ -11,9 +11,9 @@ const SingleStepper = ({active, text, value}: Props) => {
     <div
     className={` border-2 ${
       active === value
-        ? "border-stepper-green text-black-3"
+        ? "border-stepper-green text-stepper-green"
         : "text-[#A5A5A5] border-stroke-12"
-    }  flex items-center py-2 px-4 rounded-full `}
+    }  flex items-center py-3 lg:py-2 px-6 lg:px-4 rounded-full w-[15rem] lg:w-auto mb-6 lg:mb-0`}
   >
     <div
       className={`mr-2 text-[0.88rem] border-2 ${

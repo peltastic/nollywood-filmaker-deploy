@@ -50,7 +50,7 @@ const JobsDoneInput = ({
     >
       {({ isValid }) => (
         <Form>
-          <div className="grid grid-cols-2 mt-8 gap-8">
+          <div className="grid mid:grid-cols-2 mt-8 gap-8">
             <Field
               label="Production title"
               labelColor="text-[#A5A5A5]"

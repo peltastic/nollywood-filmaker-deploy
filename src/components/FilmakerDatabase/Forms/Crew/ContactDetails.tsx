@@ -255,7 +255,7 @@ const ContactDetails = ({
             updateCrew(payload);
             prevStep();
           }}
-          class="mb-4 xs:mb-0 py-2 rounded-md px-6 border-stroke-2 w-full xs:w-auto border  xs:mr-4"
+          class="py-2 rounded-md px-6 border-stroke-2  border  xs:mr-4"
         >
           Back
         </UnstyledButton>

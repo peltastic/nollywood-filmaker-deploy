@@ -128,7 +128,7 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
         >
         {({ isValid }) => (
           <Form>
-            <div className="grid grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-2 gap-8">
               <Field
                 label="Address"
                 labelColor="text-[#A5A5A5]"
