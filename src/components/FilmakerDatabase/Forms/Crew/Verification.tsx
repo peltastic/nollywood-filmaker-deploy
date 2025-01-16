@@ -73,7 +73,7 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
         bio: data.bio,
         department: data.department,
         dob: data.dob,
-        email: data.email,
+        email: data.email?.trim().toLowerCase(),
         fee: data.fee,
         firstName: data.firstName,
         lastName: data.lastName,

@@ -39,7 +39,7 @@ const UserDetails = ({ setPageProps, setDataProps, data }: Props) => {
         }}
         onSubmit={(values) => {
           setDataProps({
-            email: values.email,
+            email: values.email.trim().toLowerCase(),
             fname: values.fname,
             lname: values.lname,
             phone: values.phone,

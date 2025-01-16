@@ -171,17 +171,17 @@ const LoginForm = (props: Props) => {
           nprogress.start();
           if (props.loginType === "consultant") {
             loginConsultant({
-              email: email.trim(),
+              email: email.trim().toLowerCase(),
               password,
             });
           } else if (props.loginType === "admin") {
             loginAdmin({
-              email: email.trim(),
+              email: email.trim().toLowerCase(),
               password,
             });
           } else {
             loginUser({
-              email: email.trim(),
+              email: email.trim().toLowerCase(),
               password,
             });
           }

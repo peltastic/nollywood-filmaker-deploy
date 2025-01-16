@@ -116,7 +116,7 @@ const CreateNewConsultantModal = (props: Props) => {
           nprogress.start();
           const payload = {
             country,
-            email,
+            email: email.trim().toLowerCase(),
             expertise: expertiseData,
             fname: first_name,
             lname: last_name,

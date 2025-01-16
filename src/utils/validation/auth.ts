@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 export const userDetailsSchema = Yup.object({
-  email: Yup.string().trim().email().required("Email is required"),
+  email: Yup.string().lowercase().trim().email().required("Email is required"),
   lname: Yup.string().required("Last name is required"),
   fname: Yup.string().required("First name is required"),
   phone: Yup.string().required("Phone number is required"),
@@ -18,6 +18,6 @@ export const secureAccountSchema = Yup.object({
 
 
 export const loginSchema = Yup.object({
-  email: Yup.string().trim().required("Email is required"),
+  email: Yup.string().lowercase().trim().required("Email is required"),
   password: Yup.string().required("Password is required")
 })

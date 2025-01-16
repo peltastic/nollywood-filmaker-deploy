@@ -74,7 +74,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
         bio: data.bio,
         clientele: data.clientele,
         doc: file,
-        email: data.email,
+        email: data.email?.trim().toLowerCase(),
         fee: data.fee,
         file: data.file,
         mobile: data.mobile,
