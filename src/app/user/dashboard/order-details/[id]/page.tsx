@@ -87,7 +87,7 @@ const OrderDetailsPage = (props: Props) => {
     <ServiceLayout>
       <DashboardBodyLayout>
         {isFetching ? (
-          <OrderDetailsPageSkeleton />
+          <OrderDetailsPageSkeleton noUserInfo />
         ) : (
           <>
             <OrderDetailsHeader

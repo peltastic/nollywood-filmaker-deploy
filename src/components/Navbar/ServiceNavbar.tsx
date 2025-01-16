@@ -1,7 +1,8 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import Logo from "/public/assets/nav/logo.svg";
+
+import Logo from "/public/assets/logo2.png";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { HiBell } from "react-icons/hi";

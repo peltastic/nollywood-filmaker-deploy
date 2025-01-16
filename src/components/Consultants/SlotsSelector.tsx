@@ -22,9 +22,9 @@ const SlotsSelector = ({ slots, updateSlots }: Props) => {
       <p className=" text-sm   mt-8 font-medium mb-2">
         select availability hour slots by clicking on them
       </p>
-      <div className="text-xs font-medium flex items-center mb-6 my-1 ">
-        <p className=" mr-3">Shortcuts:</p>
-        <div className="flex items-center ">
+      <div className="text-xs font-medium flex flex-wrap items-center mb-6 my-1 ">
+        <p className=" mr-3 mt-2">Shortcuts:</p>
+        <div className="flex items-center mt-2 ">
           <p className="mr-2">morning hours</p>
           <div className="cursor-pointer">
             <SwitchComponent
@@ -42,7 +42,7 @@ const SlotsSelector = ({ slots, updateSlots }: Props) => {
             />
           </div>
         </div>
-        <div className="flex items-center ml-2">
+        <div className="flex items-center ml-2 mt-2">
           <p className="mr-2">day hours</p>
           <div className="cursor-pointer">
             <SwitchComponent
@@ -67,7 +67,7 @@ const SlotsSelector = ({ slots, updateSlots }: Props) => {
             />
           </div>
         </div>
-        <div className="flex items-center ml-2">
+        <div className="flex items-center ml-2 mt-2">
           <p className="mr-2">night hours</p>
           <div className="cursor-pointer">
             <SwitchComponent
@@ -91,7 +91,7 @@ const SlotsSelector = ({ slots, updateSlots }: Props) => {
             />
           </div>
         </div>
-        <div className="flex items-center ml-2">
+        <div className="flex items-center ml-2 mt-2">
           <p className="mr-2">odd hours</p>
           <div className="cursor-pointer">
             <SwitchComponent
@@ -118,7 +118,7 @@ const SlotsSelector = ({ slots, updateSlots }: Props) => {
             />
           </div>
         </div>
-        <div className="flex items-center ml-2">
+        <div className="flex items-center ml-2 mt-2">
           <p className="mr-2">even hours</p>
           <div className="cursor-pointer">
             <SwitchComponent

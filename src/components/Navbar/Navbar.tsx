@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
-import Logo from "/public/assets/nav/logo.svg";
+
+import Logo from "/public/assets/logo2.png";
 import Image from "next/image";
 import Link from "next/link";
 import UnstyledButton from "../Button/UnstyledButton";

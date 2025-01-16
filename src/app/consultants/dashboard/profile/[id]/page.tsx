@@ -142,19 +142,18 @@ const ConsultantProfilePage = (props: Props) => {
               </MenuComponent>
             </div>
           </header>
-          <div className="flex flex-wrap chatbp:flex-nowrap items-start mt-14 md:mt-10">
-            <div className="w-full chatbp:w-[30%]">
-              <ConsultantProfileLeft />
+          <div className="flex flex-wrap lg:flex-nowrap items-start mt-10">
+            <div className="w-full sm:w-[70%] md:w-[50%] lg:w-[30%] mx-auto lg:mx-0 mb-10 lg:mb-0">
+              <ConsultantProfileLeft isFetching={isFetching} />
             </div>
-            {data && (
-              <div className="px-4 chatbp:px-0 mt-8 chatbp:mt-0 w-full chatbp:w-[70%]">
-                <ConsultantProfileRight
-                  avalilability={result.data?.availability}
-                  isFetching={isFetching}
-                  data={data}
-                />
-              </div>
-            )}
+
+            <div className="px-4 chatbp:px-0 mt-8 chatbp:mt-0 w-full chatbp:w-[70%]">
+              <ConsultantProfileRight
+                avalilability={result.data?.availability}
+                isFetching={isFetching}
+                data={data}
+              />
+            </div>
           </div>
         </DashboardBodyLayout>
       </>

@@ -12,8 +12,6 @@ import React, { useEffect, useState } from "react";
 type Props = {};
 
 const OrderDetails = (props: Props) => {
-
-
   const params = useParams();
 
   const [getCustomerReqDetails, { isFetching, data, isSuccess }] =
@@ -34,7 +32,7 @@ const OrderDetails = (props: Props) => {
     <ServiceLayout consultant>
       <DashboardBodyLayout>
         {isFetching ? (
-          <OrderDetailsPageSkeleton />
+          <OrderDetailsPageSkeleton  />
         ) : (
           <>
             <OrderDetailsHeader

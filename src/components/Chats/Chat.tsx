@@ -86,7 +86,7 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
   //     const end_time = data.end_time;
   //     const isAfterStartTime = isAfter(now, start_time);
   //     const isBeforeEndTime = isBefore(now, end_time);
-      
+
   //     if (isAfterStartTime && isBeforeEndTime && orderId !== data.orderId) {
   //       chat_socket.on("message", (data) => {
   //         console.log(data.message);
@@ -182,7 +182,15 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
         </div>
       </div>
       <div
-        onClick={() => router.push(`/user/dashboard/chats/${data.orderId}`)}
+        onClick={() =>
+          router.push(
+            `${
+              type === "consultant"
+                ? `/consultants/dashboard/chats/${data.orderId}`
+                : `/user/dashboard/chats/${data.orderId}`
+            }`
+          )
+        }
         className={` flex chatbp:hidden rounded-md items-start py-4 mb-2 px-4  `}
       >
         <div className="w-[3rem] mr-3 h-[3rem] rounded-full bg-black flex items-center justify-center">

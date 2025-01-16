@@ -96,10 +96,10 @@ const CustomerChatRight = ({
   }, [res]);
 
   useEffect(() => {
-    if (orderId) {
+    if (orderId && type === "consultant") {
       getCustomerReqDetails(orderId);
     }
-  }, [orderId]);
+  }, [orderId, type]);
   const [extensionOpened, extensionOpenedFuncs] = useDisclosure();
   const [reportModOpened, funcs] = useDisclosure();
   const [extensionAuthUrl, setExtensionAuthUrl] = useState("");
