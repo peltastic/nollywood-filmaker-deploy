@@ -36,6 +36,7 @@ import { adminIssuesApi } from "./features/admin/issues/issues";
 import { adminFeedbackApi } from "./features/admin/feedback/feedback";
 import { issuesApi } from "./features/users/issues/issues";
 import { filmmakerDatabaseApi } from "./features/users/filmmaker-database/filmmaker-database";
+import { adminChatsApi } from "./features/admin/chats/chats";
 
 const persistConfig = {
   key: "root",
@@ -83,6 +84,7 @@ export const store = configureStore({
     [adminFeedbackApi.reducerPath]: adminFeedbackApi.reducer,
     [issuesApi.reducerPath]: issuesApi.reducer,
     [filmmakerDatabaseApi.reducerPath]: filmmakerDatabaseApi.reducer,
+    [adminChatsApi.reducerPath]: adminChatsApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -110,6 +112,7 @@ export const store = configureStore({
       adminFeedbackApi.middleware,
       issuesApi.middleware,
       filmmakerDatabaseApi.middleware,
+      adminChatsApi.middleware
     ]), 
   devTools: process.env.NODE_ENV !== "production",
 });

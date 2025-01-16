@@ -4,13 +4,18 @@ import CustomerChatRight from "@/components/Chats/CustomerChat/CustomerChatRight
 import CustomerChatMiddle from "@/components/Chats/CustomerChat/CutomerChatMiddle";
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
-import React from "react";
+import { useLazyFetchConversationsQuery } from "@/lib/features/admin/chats/chats";
+import React, { useEffect } from "react";
 import { useState } from "react";
 
 type Props = {};
 
 const AdminChats = (props: Props) => {
+  const [fetchConversations, {}] = useLazyFetchConversationsQuery();
   const [closeRight, setCloseRight] = useState<boolean>(false);
+  useEffect(() => {
+    fetchConversations();
+  }, []);
   return (
     <ServiceLayout admin>
       <DashboardBodyLayout>
