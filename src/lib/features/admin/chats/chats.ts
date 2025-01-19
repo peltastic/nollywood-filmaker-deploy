@@ -27,7 +27,7 @@ export const adminChatsApi = createApi({
         if (page) {
           query += `&page=${page}`;
         }
-        return { url: `/api/admin/appointments/conversations` };
+        return { url: `/api/admin/appointments/conversations${query}` };
       },
     }),
     fetchSingleConversationByAdmin: build.query<IGetUserConversations, string>({

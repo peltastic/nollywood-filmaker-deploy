@@ -16,6 +16,7 @@ import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import { DataTable } from "@/components/Tables/DataTable";
 import WithdrawalAmount from "@/components/WithdrawalAmount/WithdrawalAmount";
+import { useProtectRouteConsultantRoute } from "@/hooks/useProtectConsultantRoute";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { IoIosArrowBack } from "react-icons/io";
@@ -121,6 +122,7 @@ const withdrawal_data: IWithdrawalsData[] = [
 type Props = {};
 
 const CommissionsAndWithdrawalsPage = (props: Props) => {
+  useProtectRouteConsultantRoute()
   const router = useRouter();
   return (
     <ServiceLayout consultant>

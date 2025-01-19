@@ -6,18 +6,23 @@ import CustomerChatRight from "@/components/Chats/CustomerChat/CustomerChatRight
 import CustomerChatMiddle from "@/components/Chats/CustomerChat/CutomerChatMiddle";
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
+import { useProtectAdmin } from "@/hooks/useProtectAdminRoute";
 import {
   useLazyFetchConversationsQuery,
   useLazyFetchSingleConversationByAdminQuery,
   useLazyGetChatFilesByAdminQuery,
 } from "@/lib/features/admin/chats/chats";
-import { useSearchParams } from "next/navigation";
+import { Pagination } from "@mantine/core";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 
 type Props = {};
 
 const AdminChats = (props: Props) => {
+  useProtectAdmin()
+  const router = useRouter()
+  const [activePage, setActivePage] = useState<number>(1);
   const [fetchSingleConversationDataByAdmin, result] =
     useLazyFetchSingleConversationByAdminQuery();
 
@@ -127,6 +132,23 @@ const AdminChats = (props: Props) => {
             />
           </section>
         </div>
+        {data && (
+          <Pagination
+            total={data.pagination.totalPages}
+            value={activePage}
+            color="#333333"
+            onChange={(val) => {
+              fetchConversations({
+                limit: 10,
+                page: val,
+              });
+              setActivePage(val);
+              setCloseRight(true)
+              router.push("/admin/dashboard/chats")
+            }}
+            mt={"xl"}
+          />
+        )}
       </DashboardBodyLayout>
     </ServiceLayout>
   );
