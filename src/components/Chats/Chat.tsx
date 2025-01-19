@@ -100,6 +100,11 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
   // }, [orderId, data]);
 
   useEffect(() => {
+    if (type === "admin") {
+      setStatus(data.status);
+      setChatTimeStatus(moment(data.end_time).fromNow());
+      return () => {};
+    }
     let beforeTimeTimeout: NodeJS.Timeout | undefined;
     let timeout: NodeJS.Timeout | undefined;
     if (data) {
@@ -143,7 +148,7 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
           setnewMessage("");
           router.push(
             type === "consultant"
-              ? `/consultants/dashboard/chats?chat=${data.orderId}`
+              ? `/consultants/dashboard/chats?chat=${data.orderId}` : type === "admin"  ?`/admin/dashboard/chats?chat=${data.orderId}`  
               : `/user/dashboard/chats?chat=${data.orderId}`
           );
         }}

@@ -23,6 +23,8 @@ import InitializingTransactionModal from "@/components/Services/InitializingTran
 import RequestExtension from "../ModalComponents/RequestExtension";
 import ModalComponent from "@/components/Modal/Modal";
 import ReportAnIssue from "../ModalComponents/ReportAnIssue";
+import { useLazyGetCustomerRequestDetailByAdminQuery } from "@/lib/features/admin/chats/chats";
+import { ICustomerReqDetails } from "@/interfaces/consultants/dashboard/request";
 type Props = {
   close: () => void;
   opened?: string;
@@ -81,31 +83,57 @@ const CustomerChatRight = ({
   const userData = useSelector(
     (state: RootState) => state.persistedState.user.user
   );
-
+  const [userInfoData, setUserInfoData] = useState<
+    ICustomerReqDetails | undefined
+  >();
   const [chatFiles, setChatFiles] = useState<IChatFiles[]>([]);
   const [paymentStatus, setPaymentStatus] = useState<
-  "initialized" | "pending" | "completed"
->("initialized");
+    "initialized" | "pending" | "completed"
+  >("initialized");
   const [getCustomerReqDetails, result] =
     useLazyGetCustomerRequestDetailQuery();
+  const [getCustomerReqDetailsByAdmin, ByAdminres] =
+    useLazyGetCustomerRequestDetailByAdminQuery();
 
   useEffect(() => {
+    console.log(res)
     if (res) {
       setChatFiles(res);
+    } else {
+      setChatFiles([])
     }
   }, [res]);
 
   useEffect(() => {
-    if (orderId && type === "consultant") {
-      getCustomerReqDetails(orderId);
+    if (orderId) {
+      if (type === "consultant") {
+        getCustomerReqDetails(orderId);
+      } else if (type === "admin") {
+        getCustomerReqDetailsByAdmin(orderId);
+      }
     }
   }, [orderId, type]);
+
+  // useEffect(() => {
+  //   if (orderId) {
+  //     setChatFiles([]);
+  //   }
+  // }, [orderId]);
   const [extensionOpened, extensionOpenedFuncs] = useDisclosure();
   const [reportModOpened, funcs] = useDisclosure();
   const [extensionAuthUrl, setExtensionAuthUrl] = useState("");
   const [transOpened, transFunc] = useDisclosure();
   const [extentionValue, setExtensionValue] = useState<string>("");
   const [transref, setTransRef] = useState<string>("");
+
+  useEffect(() => {
+    if (result.data) {
+      setUserInfoData(result.data);
+    }
+    if (ByAdminres.data) {
+      setUserInfoData(ByAdminres.data);
+    }
+  }, [ByAdminres.data, result.data]);
 
   return (
     <>
@@ -263,10 +291,10 @@ const CustomerChatRight = ({
           </section>
         )}
 
-        {type === "consultant" && (
+        {(type === "consultant" || type === "admin") && (
           <div className="py-6 px-4 border-b border-b-stroke-8">
             <h1 className=" text-[0.88rem] font-semibold mr-2">Chat info</h1>
-            {result.data && (
+            {userInfoData && (
               <div className="py-6">
                 <div className="flex items-center">
                   {userProfilePic && (
@@ -283,13 +311,13 @@ const CustomerChatRight = ({
                     </div>
                   )}
                   <div className="text-[0.88rem]">
-                    <p>{result.data.user.fullName}</p>
-                    <p className="text-[0.75rem]">{result.data.user.email}</p>
+                    <p>{userInfoData.user.fullName}</p>
+                    <p className="text-[0.75rem]">{userInfoData.user.email}</p>
                   </div>
                 </div>
                 <div className="text-[0.75rem] mt-6">
                   <h1 className="font-semibold">Summary</h1>
-                  <p>{truncateStr(result.data.request.summary, 500)}</p>
+                  <p>{truncateStr(userInfoData.request.summary, 500)}</p>
                 </div>
               </div>
             )}

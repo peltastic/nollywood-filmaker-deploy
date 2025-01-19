@@ -117,6 +117,7 @@ const ChatRoom = (props: Props) => {
   ////////////////CUSTOM CHAT LISTENERS - OPEN///////////////////////////
 
   useEffect(() => {
+    if (props.type === "admin") return () => {};
     chat_socket.on("connect", () => {
       console.log("i connected");
       //   while (messageQueueRef.current.length > 0) {
@@ -139,6 +140,7 @@ const ChatRoom = (props: Props) => {
   }, []);
 
   useEffect(() => {
+    if (props.type === "admin") return () => {};
     if (props.sessionOver) return () => {};
     chat_socket.on("disconnect", (data) => {
       console.log("i disconnected", console.log(data));
@@ -150,6 +152,7 @@ const ChatRoom = (props: Props) => {
   }, [props.sessionOver]);
 
   useEffect(() => {
+    if (props.type === "admin") return () => {};
     chat_socket.on("reconnect_attempt", () => {
       console.log("reconnecting...");
     });
@@ -171,9 +174,9 @@ const ChatRoom = (props: Props) => {
   //join room
 
   useEffect(() => {
+    if (props.type === "admin") return () => {};
     if (props.sessionOver || !props.isTime) return () => {};
     if (props.userData) {
-      console.log("i joined");
       joinChatRoom({
         room: props.orderId,
         name: `${props.userData.fname} ${props.userData.lname}`,
@@ -270,6 +273,7 @@ const ChatRoom = (props: Props) => {
   //custom ping interval
 
   useEffect(() => {
+    if (props.type === "admin") return () => {};
     let interval: NodeJS.Timeout | undefined;
     if (props.sessionOver) return () => {};
     if (props.isTime) {
@@ -289,6 +293,7 @@ const ChatRoom = (props: Props) => {
   }, [props.isTime, props.sessionOver]);
 
   useEffect(() => {
+    if (props.type === "admin") return () => {};
     if (props.sessionOver) return () => {};
     if (props.isTime) {
       chat_socket.on("roomPing", () => {
@@ -304,6 +309,7 @@ const ChatRoom = (props: Props) => {
   //socket listener for new messages
 
   useEffect(() => {
+    if (props.type === "admin") return () => {};
     chat_socket.on(
       "message",
       (data: {
@@ -354,6 +360,7 @@ const ChatRoom = (props: Props) => {
   //socket listener for new files
 
   useEffect(() => {
+    if (props.type === "admin") return () => {};
     chat_socket.on(
       "fileMessage",
       (data: {
@@ -396,6 +403,7 @@ const ChatRoom = (props: Props) => {
   }, [chat_socket.connected]);
 
   useEffect(() => {
+    if (props.type === "admin") return () => {};
     document.addEventListener("visibilitychange", () => {
       console.log(document.visibilityState, "visibility state log");
       if (document.visibilityState === "visible" && !chat_socket.connected) {
@@ -422,6 +430,7 @@ const ChatRoom = (props: Props) => {
   //open feedback after chat session is over
 
   useEffect(() => {
+    if (props.type === "admin") return () => {};
     let timer: NodeJS.Timeout | undefined;
     if (props.endTime && props.type === "user") {
       const now = new Date();
@@ -476,8 +485,10 @@ const ChatRoom = (props: Props) => {
                       lastmessage={
                         props.data[props.data.length - 1].id === el.id
                       }
-                      // setActiveId={props.isTime?  setActiveIdHandler : undefined}
-                      setActiveId={setActiveIdHandler}
+                      setActiveId={
+                        props.isTime ? setActiveIdHandler : undefined
+                      }
+                      // setActiveId={setActiveIdHandler}
                       id={el.id}
                       activeId={activeId}
                       setReplyDataProps={(val) => setReplyData(val)}
@@ -563,236 +574,241 @@ const ChatRoom = (props: Props) => {
             replyData={replyData}
           />
         )}
-        <div className="h-[10%] relative ">
-          {props.sessionOver ? (
-            <div className="absolute bottom-0 w-[90%] xs:w-[93%] sm:w-[95%]   flex items-center text-[0.88rem] bg-gray-bg-7 border mx-4 mt-8 py-2 rounded-md px-4 border-border-gray">
-              <MdInfoOutline className="text-gray-4 mr-4 text-xl " />
-              <p className="text-gray-4">This conversation has ended</p>
-            </div>
-          ) : props.isTime ? (
-            <div className="h-full ">
-              <div className="w-full   px-6  absolute bottom-0 mt-5">
-                {fileInputValue && (
-                  <div className=" flex items-center mb-6 bg-white shadow-[rgba(0,0,10,0.1)_2px_2px_2px_4px] ml-10 w-fit py-4 px-6 rounded-md">
-                    <div
-                      className=""
-                      onClick={() => {
-                        setFileInputValue(null);
-                        setBase64File(null);
-                      }}
-                    >
-                      <MdCancel className="text-2xl text-red-1 mr-2 cursor-pointer" />
-                    </div>
-                    <div className="max-w-[30rem] flex items-center break-words  border w-fit py-3 px-2 text-white rounded-md bg-black-2 ">
-                      <FaFile className="mr-4" />
-                      <p>{fileInputValue.name}</p>
-                    </div>
-                    <div className="ml-2">
-                      <UnstyledButton
-                        clicked={() => {
-                          const id = uuidv4();
-                          if (base64File && props.userData) {
-                            const payload = {
-                              fileData: base64File,
-                              fileName: fileInputValue.name,
-                              room: props.orderId,
-                              sender: {
-                                type: fileType,
-                                name: `${props.userData.fname} ${props.userData.lname}`,
-                                role: props.type,
-                                userid: props.userData.id,
-                                chatRoomId: searchVal as string,
-                                mid: id,
-                                replyto: replyData.reply,
-                                replytoId: replyData.id,
-                                replytousertype: replyData.user,
-                              },
-                            };
-                            // if (chat_socket.connected) {
-                            sendFileMessage(payload);
-                            // } else {
-                            //   fileQueueRef.current.push(payload);
-                            // }
-                            props.updateChatHandlerProps({
-                              text: fileInputValue.name,
-                              user: props.type,
-                              id,
-                              file: base64File as string,
-                              filename: fileInputValue.name,
-                              type: fileType,
-                              replyTo: replyData.reply,
-                              replyToId: replyData.id,
-                              replytousertype: replyData.user,
-                            });
-                            setFileInputValue(null);
-                            setReplyData({
-                              id: "",
-                              reply: "",
-                              user: null,
-                            });
-                          }
+        {props.type === "admin" ? null : (
+          <div className="h-[10%] relative ">
+            {props.sessionOver ? (
+              <div className="absolute bottom-0 w-[90%] xs:w-[93%] sm:w-[95%]   flex items-center text-[0.88rem] bg-gray-bg-7 border mx-4 mt-8 py-2 rounded-md px-4 border-border-gray">
+                <MdInfoOutline className="text-gray-4 mr-4 text-xl " />
+                <p className="text-gray-4">This conversation has ended</p>
+              </div>
+            ) : props.isTime ? (
+              <div className="h-full ">
+                <div className="w-full   px-6  absolute bottom-0 mt-5">
+                  {fileInputValue && (
+                    <div className=" flex items-center mb-6 bg-white shadow-[rgba(0,0,10,0.1)_2px_2px_2px_4px] ml-10 w-fit py-4 px-6 rounded-md">
+                      <div
+                        className=""
+                        onClick={() => {
+                          setFileInputValue(null);
+                          setBase64File(null);
                         }}
-                        class="flex hover:bg-blue-1 transition-all items-center bg-black-2 text-white py-2 px-4 rounded-md"
                       >
-                        <p className="mr-2">Send</p>
-                        <RiSendPlane2Line className=" text-xl" />
-                      </UnstyledButton>
-                    </div>
-                  </div>
-                )}
-                <div className="flex items-center">
-                  <UnstyledButton>
-                    <FileButtonComponent
-                      accept=""
-                      setFile={(file) => {
-                        setFileType("file");
-                        setFileInputValue(file);
-                        if (file) {
-                          getBase64(file).then((res) => {
-                            const id = uuidv4();
-                            if (res) {
-                              if (res && props.userData) {
-                                const payload = {
-                                  fileData: res as string,
-                                  fileName: file.name,
-                                  room: props.orderId,
-                                  sender: {
-                                    type: fileType,
-                                    name: `${props.userData.fname} ${props.userData.lname}`,
-                                    role: props.type,
-                                    userid: props.userData.id,
-                                    chatRoomId: searchVal as string,
-                                    mid: id,
-                                    replyto: replyData.reply,
-                                    replytoId: replyData.id,
-                                    replytousertype: replyData.user,
-                                  },
-                                };
-                                // if (chat_socket.connected) {
-                                sendFileMessage(payload);
-                                // } else {
-                                //   fileQueueRef.current.push(payload);
-                                // }
-                                props.updateChatHandlerProps({
-                                  text: file.name,
-                                  user: props.type,
-                                  id,
-                                  file: res as string,
-                                  filename: file.name,
-                                  type: fileType,
-                                  replyTo: replyData.reply,
-                                  replyToId: replyData.id,
-                                  replytousertype: replyData.user,
-                                });
-                                setFileInputValue(null);
-                                setReplyData({
-                                  id: "",
-                                  reply: "",
-                                  user: null,
-                                });
-                              }
-                              // setBase64File(res as any);
-                            }
-                          });
-                        }
-                      }}
-                    >
-                      <div className="mr-3 md:mr-10">
-                        <Image src={AttachIcon} alt="attach-icon" />
+                        <MdCancel className="text-2xl text-red-1 mr-2 cursor-pointer" />
                       </div>
-                    </FileButtonComponent>
-                  </UnstyledButton>
-                  <form className="w-full" onSubmit={(e) => e.preventDefault()}>
-                    <div className="w-full relative hidden lg:block">
-                      <Textarea
-                        ref={ref}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" && !e.shiftKey) {
-                            e.preventDefault();
-                            sendMessageHandler();
+                      <div className="max-w-[30rem] flex items-center break-words  border w-fit py-3 px-2 text-white rounded-md bg-black-2 ">
+                        <FaFile className="mr-4" />
+                        <p>{fileInputValue.name}</p>
+                      </div>
+                      <div className="ml-2">
+                        <UnstyledButton
+                          clicked={() => {
+                            const id = uuidv4();
+                            if (base64File && props.userData) {
+                              const payload = {
+                                fileData: base64File,
+                                fileName: fileInputValue.name,
+                                room: props.orderId,
+                                sender: {
+                                  type: fileType,
+                                  name: `${props.userData.fname} ${props.userData.lname}`,
+                                  role: props.type,
+                                  userid: props.userData.id,
+                                  chatRoomId: searchVal as string,
+                                  mid: id,
+                                  replyto: replyData.reply,
+                                  replytoId: replyData.id,
+                                  replytousertype: replyData.user,
+                                },
+                              };
+                              // if (chat_socket.connected) {
+                              sendFileMessage(payload);
+                              // } else {
+                              //   fileQueueRef.current.push(payload);
+                              // }
+                              props.updateChatHandlerProps({
+                                text: fileInputValue.name,
+                                user: props.type,
+                                id,
+                                file: base64File as string,
+                                filename: fileInputValue.name,
+                                type: fileType,
+                                replyTo: replyData.reply,
+                                replyToId: replyData.id,
+                                replytousertype: replyData.user,
+                              });
+                              setFileInputValue(null);
+                              setReplyData({
+                                id: "",
+                                reply: "",
+                                user: null,
+                              });
+                            }
+                          }}
+                          class="flex hover:bg-blue-1 transition-all items-center bg-black-2 text-white py-2 px-4 rounded-md"
+                        >
+                          <p className="mr-2">Send</p>
+                          <RiSendPlane2Line className=" text-xl" />
+                        </UnstyledButton>
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex items-center">
+                    <UnstyledButton>
+                      <FileButtonComponent
+                        accept=""
+                        setFile={(file) => {
+                          setFileType("file");
+                          setFileInputValue(file);
+                          if (file) {
+                            getBase64(file).then((res) => {
+                              const id = uuidv4();
+                              if (res) {
+                                if (res && props.userData) {
+                                  const payload = {
+                                    fileData: res as string,
+                                    fileName: file.name,
+                                    room: props.orderId,
+                                    sender: {
+                                      type: fileType,
+                                      name: `${props.userData.fname} ${props.userData.lname}`,
+                                      role: props.type,
+                                      userid: props.userData.id,
+                                      chatRoomId: searchVal as string,
+                                      mid: id,
+                                      replyto: replyData.reply,
+                                      replytoId: replyData.id,
+                                      replytousertype: replyData.user,
+                                    },
+                                  };
+                                  // if (chat_socket.connected) {
+                                  sendFileMessage(payload);
+                                  // } else {
+                                  //   fileQueueRef.current.push(payload);
+                                  // }
+                                  props.updateChatHandlerProps({
+                                    text: file.name,
+                                    user: props.type,
+                                    id,
+                                    file: res as string,
+                                    filename: file.name,
+                                    type: fileType,
+                                    replyTo: replyData.reply,
+                                    replyToId: replyData.id,
+                                    replytousertype: replyData.user,
+                                  });
+                                  setFileInputValue(null);
+                                  setReplyData({
+                                    id: "",
+                                    reply: "",
+                                    user: null,
+                                  });
+                                }
+                                // setBase64File(res as any);
+                              }
+                            });
                           }
                         }}
-                        minRows={0}
-                        autosize
-                        size="md"
-                        radius={"md"}
-                        value={inputValue}
-                        onChange={(event) => {
-                          emitTypingEvent(
-                            props.orderId,
-                            `${props.userData?.id}`
-                          );
-                          setInputValue(event.currentTarget.value);
-                          setTimeout(() => {
-                            stopTypingEmit(
+                      >
+                        <div className="mr-3 md:mr-10">
+                          <Image src={AttachIcon} alt="attach-icon" />
+                        </div>
+                      </FileButtonComponent>
+                    </UnstyledButton>
+                    <form
+                      className="w-full"
+                      onSubmit={(e) => e.preventDefault()}
+                    >
+                      <div className="w-full relative hidden lg:block">
+                        <Textarea
+                          ref={ref}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" && !e.shiftKey) {
+                              e.preventDefault();
+                              sendMessageHandler();
+                            }
+                          }}
+                          minRows={0}
+                          autosize
+                          size="md"
+                          radius={"md"}
+                          value={inputValue}
+                          onChange={(event) => {
+                            emitTypingEvent(
                               props.orderId,
                               `${props.userData?.id}`
                             );
-                          }, 3000);
-                        }}
-                        classNames={{
-                          input: classes.input,
-                        }}
-                      />
-                      <div className=" flex items-center absolute right-6 -translate-y-1/2 top-1/2">
-                        <button
-                          onClick={sendMessageHandler}
-                          disabled={!inputValue}
-                          className="w-fit disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
-                        >
-                          <Image src={SendImg} alt="send-img" />
-                        </button>
+                            setInputValue(event.currentTarget.value);
+                            setTimeout(() => {
+                              stopTypingEmit(
+                                props.orderId,
+                                `${props.userData?.id}`
+                              );
+                            }, 3000);
+                          }}
+                          classNames={{
+                            input: classes.input,
+                          }}
+                        />
+                        <div className=" flex items-center absolute right-6 -translate-y-1/2 top-1/2">
+                          <button
+                            onClick={sendMessageHandler}
+                            disabled={!inputValue}
+                            className="w-fit disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                          >
+                            <Image src={SendImg} alt="send-img" />
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                    <div className="w-full relative block lg:hidden">
-                      <Textarea
-                        ref={ref}
-                        // onKeyDown={(e) => {
-                        //   if (e.key === "Enter" && !e.shiftKey) {
-                        //     e.preventDefault();
-                        //     sendMessageHandler();
-                        //   }
-                        // }}
-                        minRows={0}
-                        autosize
-                        size="md"
-                        radius={"md"}
-                        value={inputValue}
-                        onChange={(event) => {
-                          emitTypingEvent(
-                            props.orderId,
-                            `${props.userData?.id}`
-                          );
-                          setInputValue(event.currentTarget.value);
-                          setTimeout(() => {
-                            stopTypingEmit(
+                      <div className="w-full relative block lg:hidden">
+                        <Textarea
+                          ref={ref}
+                          // onKeyDown={(e) => {
+                          //   if (e.key === "Enter" && !e.shiftKey) {
+                          //     e.preventDefault();
+                          //     sendMessageHandler();
+                          //   }
+                          // }}
+                          minRows={0}
+                          autosize
+                          size="md"
+                          radius={"md"}
+                          value={inputValue}
+                          onChange={(event) => {
+                            emitTypingEvent(
                               props.orderId,
                               `${props.userData?.id}`
                             );
-                          }, 3000);
-                        }}
-                        classNames={{
-                          input: classes.input,
-                        }}
-                      />
-                      <div className=" flex items-center absolute right-6 -translate-y-1/2 top-1/2">
-                        <button
-                          onClick={sendMessageHandler}
-                          disabled={!inputValue}
-                          className="w-fit disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
-                        >
-                          <Image src={SendImg} alt="send-img" />
-                        </button>
+                            setInputValue(event.currentTarget.value);
+                            setTimeout(() => {
+                              stopTypingEmit(
+                                props.orderId,
+                                `${props.userData?.id}`
+                              );
+                            }, 3000);
+                          }}
+                          classNames={{
+                            input: classes.input,
+                          }}
+                        />
+                        <div className=" flex items-center absolute right-6 -translate-y-1/2 top-1/2">
+                          <button
+                            onClick={sendMessageHandler}
+                            disabled={!inputValue}
+                            className="w-fit disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                          >
+                            <Image src={SendImg} alt="send-img" />
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </form>
+                    </form>
+                  </div>
                 </div>
               </div>
-            </div>
-          ) : (
-            <div className=""></div>
-          )}
-        </div>
+            ) : (
+              <div className=""></div>
+            )}
+          </div>
+        )}
       </div>
     </>
   );

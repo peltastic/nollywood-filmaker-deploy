@@ -31,6 +31,7 @@ import InitializingTransactionModal from "@/components/Services/InitializingTran
 import { chat_socket, primary_socket } from "@/lib/socket";
 import { nprogress } from "@mantine/nprogress";
 import { useSetChatAsCompleteMutation } from "@/lib/features/consultants/dashboard/request";
+import { useLazyFetchChatMessagesByAdminQuery } from "@/lib/features/admin/chats/chats";
 
 export interface ChatPayload {
   text: string;
@@ -97,18 +98,23 @@ const CustomerChatMiddle = ({
   >("initialized");
   const [fetchConsultantChatMessages, consultantRes] =
     useLazyFetchConsultantChatMessagesQuery();
+  const [fetchChatMessagesByAdmin, byAdminRes] =
+    useLazyFetchChatMessagesByAdminQuery();
 
   useEffect(() => {
     if (data) {
       if (type === "user") {
         fetchUserChatMessages(data.orderId);
-      } else {
+      } else if (type === "consultant") {
         fetchConsultantChatMessages(data.orderId);
+      } else {
+        fetchChatMessagesByAdmin(data.orderId);
       }
     }
   }, [data]);
 
   useEffect(() => {
+    if (type === "admin") return () => {};
     let timeout: NodeJS.Timeout | undefined;
     if (data) {
       const now = new Date();
@@ -144,6 +150,7 @@ const CustomerChatMiddle = ({
   }, [data]);
 
   useEffect(() => {
+    if (type === "admin") return () => {};
     let timeout: NodeJS.Timeout | undefined;
     if (data) {
       const now = new Date();
@@ -174,6 +181,10 @@ const CustomerChatMiddle = ({
   const [chatData, setChatData] = useState<ChatPayload[]>([]);
 
   useEffect(() => {
+setChatData([])
+  }, [orderId])
+
+  useEffect(() => {
     if (result.data) {
       const chat_data: ChatPayload[] = result.data.messages.map((el) => {
         return {
@@ -185,12 +196,12 @@ const CustomerChatMiddle = ({
           type: el.type,
           replyTo: el.replyto,
           replyToId: el.replytoId,
-          replytousertype: el.replytousertype
+          replytousertype: el.replytousertype,
         };
       });
       setChatData([
         {
-          text: "Hi... This is Nollywood filmmaker how can we help you",
+          text: `Welcome to Nollywood Filmmaker!  🎥\nHow can we make your experience amazing today?\n\nQuick Tips for an Easy Chat:\n\n✨ Replying Made Simple: Just right-click on any message and hit “Reply.”\n\n✨ Keep the Conversation Flowing: You can export chats or flag any issues for review.\n\n✨ File Access: Need to check out shared files? You’ll find them conveniently on the right-hand side.\n\n⏳ Time Reminder: We’ll remind you when you’re 10 minutes away from the end of your session, and a timer will pop up to help ...`,
           user: "consultant",
           id: "nollywood-filmaker",
           type: "text",
@@ -205,6 +216,10 @@ const CustomerChatMiddle = ({
   }, [result.data]);
 
   useEffect(() => {
+
+  }, [])
+
+  useEffect(() => {
     if (consultantRes.data) {
       const chat_data: ChatPayload[] = consultantRes.data.messages.map((el) => {
         return {
@@ -216,12 +231,12 @@ const CustomerChatMiddle = ({
           type: el.type,
           replyTo: el.replyto,
           replyToId: el.replytoId,
-          replytousertype: el.replytousertype
+          replytousertype: el.replytousertype,
         };
       });
       setChatData([
         {
-          text: "Hi... This is Nollywood filmmaker how can we help you",
+          text: `Welcome to Nollywood Filmmaker!  🎥\nHow can we make your experience amazing today?\n\nQuick Tips for an Easy Chat:\n\n✨ Replying Made Simple: Just right-click on any message and hit “Reply.”\n\n✨ Keep the Conversation Flowing: You can export chats or flag any issues for review.\n\n✨ File Access: Need to check out shared files? You’ll find them conveniently on the right-hand side.\n\n⏳ Time Reminder: We’ll remind you when you’re 10 minutes away from the end of your session, and a timer will pop up to help ...`,
           user: "consultant",
           id: "nollywood-filmaker",
           type: "text",
@@ -235,11 +250,36 @@ const CustomerChatMiddle = ({
     }
   }, [consultantRes.data]);
 
-  // useEffect(() => {
-  //   if (isFetching) {
-  //     setChatData([]);
-  //   }
-  // }, [isFetching]);
+  useEffect(() => {
+    if (byAdminRes.data) {
+      const chat_data: ChatPayload[] = byAdminRes.data.messages.map((el) => {
+        return {
+          text: el.message,
+          user: el.role,
+          id: el._id,
+          file: el.type === "file" ? el.message : "",
+          filename: el.type === "file" ? el.filename : "",
+          type: el.type,
+          replyTo: el.replyto,
+          replyToId: el.replytoId,
+          replytousertype: el.replytousertype,
+        };
+      });
+      setChatData([
+        {
+          text: `Welcome to Nollywood Filmmaker!  🎥\nHow can we make your experience amazing today?\n\nQuick Tips for an Easy Chat:\n\n✨ Replying Made Simple: Just right-click on any message and hit “Reply.”\n\n✨ Keep the Conversation Flowing: You can export chats or flag any issues for review.\n\n✨ File Access: Need to check out shared files? You’ll find them conveniently on the right-hand side.\n\n⏳ Time Reminder: We’ll remind you when you’re 10 minutes away from the end of your session, and a timer will pop up to help ...`,
+          user: "consultant",
+          id: "nollywood-filmaker",
+          type: "text",
+          file: "",
+          filename: "",
+          replyTo: "",
+          replyToId: "",
+        },
+        ...chat_data,
+      ]);
+    }
+  }, [byAdminRes.data]);
 
   const updateChatDataHandler = (newEntry: ChatPayload) => {
     setChatData((prev) => [...prev, newEntry]);
@@ -290,6 +330,7 @@ const CustomerChatMiddle = ({
   }, [paymentStatus]);
 
   useEffect(() => {
+    if (type === "admin") return () => {};
     let timeout: NodeJS.Timeout | undefined;
     if (type === "consultant") {
       chat_socket.on("refresh", () => {
