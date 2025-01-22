@@ -93,35 +93,35 @@ const bar_chart_data = [
   { month: "Dec", commissions: 11000, revenue: 10000 },
 ];
 
-const revenue_data: IRevenueTableData[] = [
-  {
-    amount: "55.80",
-    availabilty: "Sep 13, 2024",
-    created_at: "Sep 13, 2024",
-    order_id: "O-NG240629806487",
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Completed",
-  },
-  {
-    amount: "55.80",
-    availabilty: "Sep 13, 2024",
-    created_at: "Sep 13, 2024",
-    order_id: "O-NG240629806487",
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Completed",
-  },
-  {
-    amount: "55.80",
-    availabilty: "Sep 13, 2024",
-    created_at: "Sep 13, 2024",
-    order_id: "O-NG240629806487",
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Completed",
-  },
-];
+// const revenue_data: IRevenueTableData[] = [
+//   {
+//     amount: "55.80",
+//     availabilty: "Sep 13, 2024",
+//     created_at: "Sep 13, 2024",
+//     order_id: "O-NG240629806487",
+//     script: "Mikolo",
+//     service_type: "Read my script",
+//     status: "Completed",
+//   },
+//   {
+//     amount: "55.80",
+//     availabilty: "Sep 13, 2024",
+//     created_at: "Sep 13, 2024",
+//     order_id: "O-NG240629806487",
+//     script: "Mikolo",
+//     service_type: "Read my script",
+//     status: "Completed",
+//   },
+//   {
+//     amount: "55.80",
+//     availabilty: "Sep 13, 2024",
+//     created_at: "Sep 13, 2024",
+//     order_id: "O-NG240629806487",
+//     script: "Mikolo",
+//     service_type: "Read my script",
+//     status: "Completed",
+//   },
+// ];
 
 const withdrawal_data: IAdminWithdrawalHistoryData[] = [
   {
@@ -259,13 +259,13 @@ const RevenueAndWithdrawalsPage = (props: Props) => {
               </section>
             </DashboardPlate>
           </div>
-          <div className="mt-10">
+          {/* <div className="mt-10">
             <DataTable
               title="Revenue history"
               columns={revenue_column}
               data={revenue_data}
             />
-          </div>
+          </div> */}
           <div className="mt-10">
             <DataTable
               title="Withdrawal history"
