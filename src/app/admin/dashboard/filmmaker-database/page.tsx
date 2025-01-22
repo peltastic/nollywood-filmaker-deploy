@@ -11,12 +11,14 @@ import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import SelectComponent from "@/components/Select/SelectComponent";
 import { DataTable } from "@/components/Tables/DataTable";
+import { useProtectAdmin } from "@/hooks/useProtectAdminRoute";
 import { useLazyFetchCompanyorCrewQuery } from "@/lib/features/admin/filmmaker-database/filmmaker-database";
 import React, { useEffect, useState } from "react";
 
 type Props = {};
 
 const AdminFilmmakerDatabasePage = (props: Props) => {
+  useProtectAdmin()
   const [databaseData, setDatabaseData] = useState<
     ICrewFilmmakerDatabaseColumnData[]
   >([]);

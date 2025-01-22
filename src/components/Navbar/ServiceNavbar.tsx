@@ -179,7 +179,9 @@ const ServiceNavbar = (props: Props) => {
             <div className="flex text-gray-5 gap-4 text-[1.6rem] ml-auto items-center">
               <div className="gap-4 hidden md:flex items-center">
                 <HiBell />
+                <Link href={"/faq"}>
                 <BsFillQuestionCircleFill className="text-[1.4rem]" />
+                </Link>
                 <Link
                   href={
                     props.admin
