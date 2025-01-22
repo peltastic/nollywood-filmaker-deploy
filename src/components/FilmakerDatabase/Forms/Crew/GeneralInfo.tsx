@@ -26,7 +26,7 @@ const GeneralInfo = ({ nextStep, updateCrew, updatePfp, data, pfp }: Props) => {
     data.dob ? new Date(data.dob) : null
   );
   const [aboutval, setAboutVal] = useState<string>(data.bio || "");
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(data.file || null);
   return (
     <div className="">
       <h1 className="font-medium py-8">Personal Information</h1>

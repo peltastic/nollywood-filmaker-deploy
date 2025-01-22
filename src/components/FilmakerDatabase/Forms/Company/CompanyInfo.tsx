@@ -1,6 +1,5 @@
 import Field from "@/components/Field/Field";
 import { Form, Formik } from "formik";
-import PhoneInput from "react-phone-number-input";
 import React, { useState } from "react";
 import TextArea from "@/components/TextArea/TextArea";
 import PhotoImg from "/public/assets/filmmaker-database/photo-bg-img.svg";

@@ -23,6 +23,7 @@ type Props = {
 };
 
 const Verification = ({ prevStep, data, updateCrew }: Props) => {
+  const [idData, setIdData] = useState<string>("");
   const router = useRouter();
   const [joinCrew, result] = useJoinCrewMutation();
   const [createCrew, crewRes] = useCreateCrewOrCompanyMutation();
@@ -83,6 +84,7 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
         works: data.works,
         userId: crewRes.data.crewCompany.id,
       };
+      setIdData(crewRes.data.crewCompany.id);
       joinCrew(payload);
     }
   }, [crewRes.isSuccess, crewRes.isError]);
@@ -99,9 +101,7 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
     if (result.isSuccess) {
       // notify("success", "Information uploaded successfully!")
       nprogress.complete();
-      router.push(
-        `/success-page/filmaker-database?email=${data.email}&type=crew`
-      );
+      router.push(`/success-page/filmaker-database?id=${idData}&type=crew`);
     }
   }, [result.isError, result.isSuccess]);
   return (

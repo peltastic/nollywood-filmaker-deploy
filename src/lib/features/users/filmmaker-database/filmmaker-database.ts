@@ -96,7 +96,7 @@ export interface ICompanyDataResponse {
 }
 
 export interface ICrewDataResponse {
-  crewMember: {
+  crew: {
     location: {
       address: string;
       city: string;

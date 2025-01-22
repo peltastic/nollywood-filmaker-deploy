@@ -1,4 +1,4 @@
-import FilmmakerDatabaseProfileDrawer from "@/components/Admin/FilmmakerDatabaseProfileDrawer";
+import CompanyDatabaseProfile from "@/components/Admin/CompanyDatabaseProfile";
 import CheckboxComponent from "@/components/Checkbox/Checkbox";
 import MenuComponent from "@/components/Menu/MenuComponent";
 import { ICompanyOrCrewData } from "@/interfaces/admin/filmmaker-database/filmmaker-database";
@@ -7,20 +7,19 @@ import { useDisclosure } from "@mantine/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
-export interface ICrewFilmmakerDatabaseColumnData {
-  fullname: string;
+export interface ICompanyFilmmakerDatabaseColumnData {
+  name: string;
   category: string;
-  role: string;
+  company_type: string;
   location: string;
   fee?: string;
   email: string;
   phone: string;
-  consultant?: boolean;
-  department: string;
+  consultant?: string;
   fulldata: ICompanyOrCrewData;
 }
 
-export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[] =
+export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnData>[] =
   [
     {
       id: "select",
@@ -35,19 +34,19 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
       ),
     },
     {
-      accessorKey: "fullname",
-      header: () => <div className=" py-4">Fullname</div>,
+      accessorKey: "name",
+      header: () => <div className=" py-4">Company name</div>,
       cell: ({ row }) => {
         return (
           <div className="">
-            <p>{row.getValue("fullname")}</p>
+            <p>{row.getValue("name")}</p>
           </div>
         );
       },
     },
     {
       accessorKey: "category",
-      header: () => <div className="">Category</div>,
+      header: () => <div className=" ">Category</div>,
       cell: ({ row }) => {
         return (
           <div className="py-4">
@@ -57,34 +56,12 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
       },
     },
     {
-      accessorKey: "department",
-      header: () => <div className="">Department</div>,
-      cell: ({ row }) => {
-        return (
-          <div className="py-4">
-            <p>{row.getValue("department")}</p>
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "role",
-      header: () => <div className="">Role</div>,
+      accessorKey: "company_type",
+      header: () => <div className=" py-4">Company Type</div>,
       cell: ({ row }) => {
         return (
           <div className="">
-            <p>{row.getValue("role")}</p>
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "location",
-      header: () => <div className="">Location</div>,
-      cell: ({ row }) => {
-        return (
-          <div className="">
-            <p>{row.getValue("location")}</p>
+            <p>{row.getValue("company_type")}</p>
           </div>
         );
       },
@@ -124,12 +101,18 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
     },
     {
       id: "actions",
-      cell: ({row}) => {
+      cell: ({ row }) => {
         const [opened, { open, close }] = useDisclosure();
         return (
           <>
-            <Drawer opened={opened} onClose={close} position="right" withCloseButton={false} size={"lg"}>
-              <FilmmakerDatabaseProfileDrawer data={row.original.fulldata} />
+            <Drawer
+              opened={opened}
+              onClose={close}
+              position="right"
+              withCloseButton={false}
+              size={"lg"}
+            >
+              <CompanyDatabaseProfile data={row.original.fulldata} />
             </Drawer>
             <MenuComponent
               target={

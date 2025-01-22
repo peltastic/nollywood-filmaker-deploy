@@ -101,10 +101,10 @@ const CrewProfile = (props: Props) => {
               <div className="flex items-start px-4 lg:px-16 flex-wrap">
                 <div className="flex items-center mr-auto flex-wrap ">
                   <div className="h-[6rem] mid:h-[9rem] -mt-10 w-[6rem] mid:w-[9rem] rounded-full bg-black-2 border-white flex items-center justify-center border">
-                    {data?.crewMember.propic ? (
+                    {data?.crew.propic ? (
                       <AspectRatio ratio={1800 / 1800}>
                         <Image
-                          src={data.crewMember.propic}
+                          src={data.crew.propic}
                           width={100}
                           height={100}
                           className="w-full h-full rounded-full"
@@ -117,21 +117,21 @@ const CrewProfile = (props: Props) => {
                   </div>
                   <div className="text-black-2  mt-4 md:ml-4 mr-auto w-full md:w-auto">
                     <p className="font-bold text-[1.8rem]">
-                      {data?.crewMember.firstName} {data?.crewMember.lastName}
+                      {data?.crew.firstName} {data?.crew.lastName}
                     </p>
                     <div className="flex  items-center mt-3">
                       <IoBriefcaseOutline className="text-2xl mr-3" />
                       <div className="flex items-center">
                         <p className="text-lg">
-                          {data?.crewMember.department} |
+                          {data?.crew.department} |
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center mt-3">
                       <IoLocationOutline className="text-2xl mr-3" />
                       <p className="text-lg">
-                        {data?.crewMember.location.state},{" "}
-                        {data?.crewMember.location.country}
+                        {data?.crew.location.state},{" "}
+                        {data?.crew.location.country}
                       </p>
                     </div>
                   </div>
@@ -154,32 +154,32 @@ const CrewProfile = (props: Props) => {
                   </Tabs.List>
                   <Tabs.Panel value="about">
                     <section>
-                      {data?.crewMember.bio && (
+                      {data?.crew.bio && (
                         <div className="mt-8">
                           <p className="text-[#A5A5A5]">Bio</p>
                           <p className="mt-2 text-[#4B5563]">
-                            {data.crewMember.bio}
+                            {data.crew.bio}
                           </p>
                         </div>
                       )}
                       <div className="mt-8">
                         <p className="text-[#A5A5A5]">Email</p>
                         <p className="mt-2 text-[#4B5563]">
-                          {data?.crewMember.email}
+                          {data?.crew.email}
                         </p>
                       </div>
                       <div className="mt-8">
                         <p className="text-[#A5A5A5]">Mobile</p>
                         <p className="mt-2 text-[#4B5563]">
-                          {data?.crewMember.mobile}
+                          {data?.crew.mobile}
                         </p>
                       </div>
                       <div className="mt-8 ">
                         <p className="text-[#A5A5A5]">Roles</p>
                         <div className="flex items-center">
-                          {data?.crewMember.role.map((el, index) => {
+                          {data?.crew.role.map((el, index) => {
                             const islast =
-                              index === data.crewMember.role.length - 1;
+                              index === data.crew.role.length - 1;
                             return (
                               <p className="mt-2 text-[#4B5563]" key={el}>
                                 {el} <span>{islast ? "." : ","}</span>
@@ -192,13 +192,13 @@ const CrewProfile = (props: Props) => {
                   </Tabs.Panel>
                   <Tabs.Panel value="jobs">
                     <section>
-                      {data?.crewMember.works.length === 0 ? (
+                      {data?.crew.works.length === 0 ? (
                         <div className="mt-10 text-[#4B5563]">
                           <p>No Works</p>
                         </div>
                       ) : (
                         <div className="">
-                          {data?.crewMember.works.map((el) => (
+                          {data?.crew.works.map((el) => (
                             <div className="mt-6" key={el._id}>
                               <p className="text-[#A5A5A5] mb-1">{el.year}</p>
                               <p className="mb-1">{el.title}</p>
@@ -218,12 +218,12 @@ const CrewProfile = (props: Props) => {
                   </Tabs.Panel>
                   <Tabs.Panel value="rate">
                     <section>
-                      {data?.crewMember.fee ? (
+                      {data?.crew.fee ? (
                         <div className="mt-6">
                           <p className="text-[#A5A5A5]">Fee</p>
                           <p>
                             <span className="font-medium">NGN</span>{" "}
-                            {data.crewMember.fee}
+                            {data.crew.fee}
                           </p>
                         </div>
                       ) : (

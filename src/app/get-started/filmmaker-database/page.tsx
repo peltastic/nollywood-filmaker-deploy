@@ -190,7 +190,7 @@ const FilmakerDatabasePage = (props: Props) => {
                       alt="film-crew"
                       className="w-[1.3rem] mr-2"
                     />
-                    <p className="font-medium mr-auto mid::mr-10">
+                    <p className="font-medium mr-auto mid:mr-4">
                       Film Company
                     </p>
                     <div className="w-[1rem]">
