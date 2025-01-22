@@ -7,13 +7,23 @@ import { GoDotFill } from "react-icons/go";
 import { useDisclosure } from "@mantine/hooks";
 import ModalComponent from "@/components/Modal/Modal";
 import RevenueDetailsModal from "@/components/Admin/RevenueDetailsModal";
+import { generateColorClass, numberWithCommas } from "@/utils/helperFunction";
+import GenerateDarkServiceLogo from "@/components/Generate/GenerateDarkServiceLogo";
 
 export interface IRevenueTableData {
   created_at: string;
   script: string;
-  service_type: string;
-  status: "Ready" | "Ongoing" | "Completed" | "Pending";
-  availabilty: string;
+  id: string;
+  service_type:
+    | "Chat With A Professional"
+    | "Read my Script and advice"
+    | "Watch the Final cut of my film and advice"
+    | "Look at my Budget and advice"
+    | "Create a Marketing budget"
+    | "Create a Pitch based on my Script"
+    | "Draft Legal documents"
+    | "Create a Production budget";
+  status: "ready" | "ongoing" | "completed" | "pending";
   amount: string;
   order_id: string;
 }
@@ -49,8 +59,12 @@ export const revenue_column: ColumnDef<IRevenueTableData>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center w-[20rem] xl:w-auto py-4">
-          <div className="bg-gray-bg-3 h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4">
-            <Image src={ReadMyScriptDarkImg} alt="name-img" />
+          <div
+            className={`${generateColorClass(
+              row.original.service_type
+            )} h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4`}
+          >
+            <GenerateDarkServiceLogo service={row.original.service_type} />
           </div>
           <div className="text-[0.88rem]">
             <p className="text-black-4 font-medium">{row.getValue("script")}</p>
@@ -66,7 +80,7 @@ export const revenue_column: ColumnDef<IRevenueTableData>[] = [
     cell: ({ row }) => {
       return (
         <div className="text-[0.88rem] text-gray-1 w-[15rem] xl:w-auto">
-          <p>{row.getValue("order_id")}</p>
+          <p>{row.original.order_id.toUpperCase()}</p>
         </div>
       );
     },
@@ -76,9 +90,9 @@ export const revenue_column: ColumnDef<IRevenueTableData>[] = [
     header: "Status",
     cell: ({ row }) => {
       const className =
-        row.original.status === "Ready"
+        row.original.status === "ready"
           ? "bg-light-blue text-dark-blue"
-          : row.original.status === "Completed"
+          : row.original.status === "completed"
           ? "bg-light-green text-dark-green"
           : "bg-light-yellow text-dark-yellow";
       return (
@@ -95,31 +109,21 @@ export const revenue_column: ColumnDef<IRevenueTableData>[] = [
       );
     },
   },
-  {
-    accessorKey: "availabilty",
-    header: () => <div className="">Estimated availabilty</div>,
-    cell: ({ row }) => {
-      return (
-        <div className="text-[0.88rem] text-gray-1 w-[15rem] xl:w-auto">
-          <p>{row.getValue("availabilty")}</p>
-        </div>
-      );
-    },
-  },
+
   {
     accessorKey: "amount",
     header: () => <div className="">Amount</div>,
     cell: ({ row }) => {
       return (
         <div className="text-[0.88rem] text-gray-1 w-[15rem] xl:w-auto">
-          {row.getValue("amount")} USD
+          ₦ {numberWithCommas(Number(row.getValue("amount")))}
         </div>
       );
     },
   },
   {
     id: "action",
-    cell: ({}) => {
+    cell: ({row}) => {
       const [opened, { open, close }] = useDisclosure();
       return (
         <>
@@ -129,11 +133,11 @@ export const revenue_column: ColumnDef<IRevenueTableData>[] = [
             opened={opened}
             size="xl"
           >
-            <RevenueDetailsModal close={close} />
+            <RevenueDetailsModal id={row.original.id} close={close} />
           </ModalComponent>
           <UnstyledButton
             clicked={open}
-            class="bg-black-3 text-[0.88rem] text-white py-2 px-4 rounded-md"
+            class="transition-all hover:bg-blue-1 bg-black-3 text-[0.88rem] text-white py-2 px-4 rounded-md"
           >
             Open
           </UnstyledButton>

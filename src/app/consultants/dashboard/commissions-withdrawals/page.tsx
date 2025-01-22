@@ -17,9 +17,18 @@ import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import { DataTable } from "@/components/Tables/DataTable";
 import WithdrawalAmount from "@/components/WithdrawalAmount/WithdrawalAmount";
 import { useProtectRouteConsultantRoute } from "@/hooks/useProtectConsultantRoute";
+import {
+  useLazyFetchConsultantRevenueQuery,
+  useLazyFetchWalletBalanceQuery,
+  useLazyFetchWithdrawalsQuery,
+} from "@/lib/features/consultants/dashboard/withdrawals/withdrawals";
+import { RootState } from "@/lib/store";
+import { numberWithCommas } from "@/utils/helperFunction";
+import moment from "moment";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
+import { useSelector } from "react-redux";
 const plate_data: {
   change?: "increase" | "decrease";
   title: string;
@@ -65,65 +74,63 @@ const bar_chart_data = [
   { month: "Dec", value: 11000 },
 ];
 
-const revenue_data: IRevenueTableData[] = [
-  {
-    created_at: "Sep 13, 2024",
-    amount: "55.80",
-    availabilty: "Sep 13, 2024",
-    order_id: "O-NG240629806487",
-    script: "Mikolo",
-    service_type: "Read my script",
-    status: "Completed",
-  },
-  {
-    created_at: "Sep 13, 2024",
-    amount: "55.80",
-    availabilty: "Sep 13, 2024",
-    order_id: "O-NG240629806487",
-    script: "Jagun Jagun",
-    service_type: "Watch the Final cut of my film",
-    status: "Completed",
-  },
-  {
-    created_at: "Sep 13, 2024",
-    amount: "55.80",
-    availabilty: "Sep 13, 2024",
-    order_id: "O-NG240629806487",
-    script: "Criminal",
-    service_type: "Create a production  Budget",
-    status: "Completed",
-  },
-];
-
-const withdrawal_data: IWithdrawalsData[] = [
-  {
-    amount: "55.80",
-    bank: "Wells Fargo",
-    date: "2024-06-29 10:21:54",
-    sent_to: "*****564",
-    status: "sent",
-  },
-  {
-    amount: "55.80",
-    bank: "Wells Fargo",
-    date: "2024-06-29 10:21:54",
-    sent_to: "*****564",
-    status: "sent",
-  },
-  {
-    amount: "55.80",
-    bank: "Wells Fargo",
-    date: "2024-06-29 10:21:54",
-    sent_to: "*****564",
-    status: "sent",
-  },
-];
-
 type Props = {};
 
 const CommissionsAndWithdrawalsPage = (props: Props) => {
-  useProtectRouteConsultantRoute()
+  const [revenueData, setRevenueData] = useState<IRevenueTableData[]>([]);
+  const [withdrawalData, setWithdrawal] = useState<IWithdrawalsData[]>([]);
+  useProtectRouteConsultantRoute();
   const router = useRouter();
+  const consultantId = useSelector(
+    (state: RootState) => state.persistedState.consultant.user?.id
+  );
+  const [fetchWalletBalance, balance] = useLazyFetchWalletBalanceQuery();
+  const [fetchWithdrawals, withdrawals] = useLazyFetchWithdrawalsQuery();
+  const [fetchRevenue, revenue] = useLazyFetchConsultantRevenueQuery();
+
+  useEffect(() => {
+    if (consultantId) {
+      fetchWalletBalance(consultantId);
+      fetchWithdrawals(consultantId);
+      fetchRevenue(consultantId);
+    }
+  }, []);
+  useEffect(() => {
+    if (withdrawals.data) {
+      const transformed_data: IWithdrawalsData[] =
+        withdrawals.data.withdrawals.map((el) => {
+          return {
+            amount: el.amount,
+            bank: el.orderId,
+            date: moment(el.createdAt).format("YYYY-MM-DD"),
+            status: el.status,
+            withdrawal_account: "*****45678",
+            id: el._id,
+          };
+        });
+      setWithdrawal(transformed_data);
+    }
+  }, [withdrawals.data]);
+
+  useEffect(() => {
+    if (revenue.data) {
+      const transformed_data: IRevenueTableData[] = revenue.data.deposits.map(
+        (el) => {
+          return {
+            amount: el.amount,
+            created_at: moment(el.createdAt).format("YYYY-MM-DD"),
+            order_id: el.orderId,
+            script: el.movie_title,
+            service_type: el.nameofservice,
+            status: el.status,
+            id: el._id,
+          };
+        }
+      );
+      setRevenueData(transformed_data);
+    }
+  }, [revenue.data]);
+
   return (
     <ServiceLayout consultant>
       <DashboardBodyLayout>
@@ -146,7 +153,12 @@ const CommissionsAndWithdrawalsPage = (props: Props) => {
               <div className="grid lg:grid-cols-2 py-7 gap-x-5">
                 <WithdrawalAmount
                   title="Available funds"
-                  amount="0.00"
+                  amount={
+                    balance.data
+                      ? numberWithCommas(balance.data.balance)
+                      : "0.00"
+                  }
+                  isLoading={balance.isFetching}
                   info="Nothing to withdraw, yet. Accept and complete requests to start earning."
                 />
                 <WithdrawFunds />
@@ -185,14 +197,20 @@ const CommissionsAndWithdrawalsPage = (props: Props) => {
             <DataTable
               title="Revenue"
               columns={revenue_column}
-              data={revenue_data}
+              data={revenueData}
+              loaderLength={5}
+              isFetching={revenue.isFetching}
+              emptyHeader="No revenue yet"
             />
           </div>
           <div className="mt-16">
             <DataTable
               title="Withdrawal"
               columns={withdrawal_column}
-              data={withdrawal_data}
+              data={withdrawalData}
+              isFetching={withdrawals.isLoading}
+              emptyHeader="No withdrawal requests yet"
+              loaderLength={5}
             />
           </div>
         </div>

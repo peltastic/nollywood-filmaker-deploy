@@ -8,7 +8,6 @@ import { usePathname } from "next/navigation";
 import { HiBell } from "react-icons/hi";
 import { BsFillQuestionCircleFill } from "react-icons/bs";
 import { IoIosSettings } from "react-icons/io";
-import TestImage from "/public/assets/test-avatar.png";
 import MenuComponent from "../Menu/MenuComponent";
 import Advert from "./Advert";
 import UserprofileMenu from "../ProfileMenu/UserprofileMenu";
@@ -91,6 +90,10 @@ export const adminLinks = [
     name: "Feedback",
     link: "/admin/dashboard/feedbacks",
   },
+  {
+    name: "Database",
+    link: "/admin/dashboard/filmmaker-database"
+  }
 ];
 
 const navLinkMobile = [

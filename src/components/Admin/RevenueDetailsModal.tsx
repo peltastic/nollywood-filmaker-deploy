@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CancelImg from "/public/assets/cancel.svg";
 import Image from "next/image";
+import { useLazyFetchSingleRevenueDataQuery } from "@/lib/features/consultants/dashboard/withdrawals/withdrawals";
+import { Skeleton } from "@mantine/core";
+import { numberWithCommas } from "@/utils/helperFunction";
+import moment from "moment";
 
 type Props = {
   close: () => void;
+  id: string;
 };
 
 const RevenueDetailsModal = (props: Props) => {
+  const [fetchRevenue, { isFetching, data }] =
+    useLazyFetchSingleRevenueDataQuery();
+
+  useEffect(() => {
+    fetchRevenue(props.id);
+  }, []);
   return (
     <section className=" px-2 sm:px-6 py-6">
       <div className="flex">
@@ -21,34 +32,103 @@ const RevenueDetailsModal = (props: Props) => {
         </div>
       </div>
 
-      <div className="mt-8">
+      {/* <div className="mt-8">
         <h1 className="font-semibold text-[1.38rem]">Description</h1>
         <p className="mt-6">
           You earned $51.95 USD for $259.75 USD order made by Damilola Akinosun,
           which you resolved successfully.
         </p>
-      </div>
+      </div> */}
       <div className="border-t border-b border-stroke-10 py-6 mt-12">
-        <div className="">
-          <h3 className="font-medium text-[0.88rem] text-black-3">Amount</h3>
-          <p className="text-gray-1 text-[0.88rem]">$51.95 USD</p>
+        {isFetching ? (
+          <div className="">
+            <div className="w-[14rem]">
+              <Skeleton height={15} />
+            </div>
+            <div className="w-[7rem] mt-2">
+              <Skeleton height={15} />
+            </div>
+          </div>
+        ) : (
+          <div className="">
+            <h3 className="font-medium text-[0.88rem] text-black-3">Amount</h3>
+            <p className="text-gray-1 text-[0.88rem]">
+              {data?.deposit
+                ? `₦ ${numberWithCommas(Number(data.deposit.amount))}`
+                : null}
+            </p>
+          </div>
+        )}
+        <div className="mt-8">
+          {isFetching ? (
+            <div className="">
+              <div className="w-[14rem]">
+                <Skeleton height={15} />
+              </div>
+              <div className="w-[7rem] mt-2">
+                <Skeleton height={15} />
+              </div>
+            </div>
+          ) : (
+            <div className="">
+              <h3 className="font-medium text-[0.88rem] text-black-3">
+                Status
+              </h3>
+
+              <p className="text-gray-1 text-[0.88rem]">
+                {data?.deposit.status}
+              </p>
+            </div>
+          )}
         </div>
         <div className="mt-8">
-          <h3 className="font-medium text-[0.88rem] text-black-3">Status</h3>
-          <p className="text-gray-1 text-[0.88rem]">Pending Approval</p>
+          {isFetching ? (
+            <div className="">
+              <div className="w-[14rem]">
+                <Skeleton height={15} />
+              </div>
+              <div className="w-[7rem] mt-2">
+                <Skeleton height={15} />
+              </div>
+            </div>
+          ) : (
+            <div className="">
+              <h3 className="font-medium text-[0.88rem] text-black-3">
+                Created
+              </h3>
+
+              <p className="text-gray-1 text-[0.88rem]">
+                {data?.deposit
+                  ? `${moment(data.deposit.createdAt).format("ll")}`
+                  : null}
+              </p>
+            </div>
+          )}
         </div>
         <div className="mt-8">
-          <h3 className="font-medium text-[0.88rem] text-black-3">Created</h3>
-          <p className="text-gray-1 text-[0.88rem]">Aug 02, 2024</p>
-        </div>
-        <div className="mt-8">
-          <h3 className="font-medium text-[0.88rem] text-black-3">
-            Estimated available date
-          </h3>
-          <p className="text-gray-1 text-[0.88rem]">Sep 13, 2024</p>
+          {isFetching ? (
+            <div className="">
+              <div className="w-[14rem]">
+                <Skeleton height={15} />
+              </div>
+              <div className="w-[7rem] mt-2">
+                <Skeleton height={15} />
+              </div>
+            </div>
+          ) : (
+            <div className="">
+              <h3 className="font-medium text-[0.88rem] text-black-3">
+                ORDER ID
+              </h3>
+
+              <p className="text-gray-1 text-[0.88rem]">
+                {data?.deposit ? data.deposit.orderId.toUpperCase() : null}
+              </p>
+            </div>
+          )}
         </div>
       </div>
-      <div className="mt-8">
+      {/* <div className="mt-8">
         <div className="">
           <h3 className="font-medium text-[0.88rem] text-black-3">
             Customer name
@@ -75,7 +155,7 @@ const RevenueDetailsModal = (props: Props) => {
             267236-09-9E3W8-90PIOHJSDH
           </p>
         </div>
-      </div>
+      </div>  */}
     </section>
   );
 };

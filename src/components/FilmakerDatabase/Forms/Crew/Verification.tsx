@@ -81,6 +81,7 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
         file: data.file,
         role: data.role,
         works: data.works,
+        userId: crewRes.data.crewCompany.id,
       };
       joinCrew(payload);
     }
@@ -94,11 +95,13 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
         (result.error as any).data?.message || "An Error Occured"
       );
     }
-    
+
     if (result.isSuccess) {
       // notify("success", "Information uploaded successfully!")
       nprogress.complete();
-      router.push(`/success-page/filmaker-database?email=${data.email}&type=crew`);
+      router.push(
+        `/success-page/filmaker-database?email=${data.email}&type=crew`
+      );
     }
   }, [result.isError, result.isSuccess]);
   return (
@@ -125,7 +128,7 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
             });
           }
         }}
-        >
+      >
         {({ isValid }) => (
           <Form>
             <div className="grid md:grid-cols-2 gap-8">

@@ -275,3 +275,13 @@ export function sortTimeSlots(value: string[]): string[] {
   });
   return timeSlots
 }
+
+
+export function maskNumber (input: string) {
+  const str = input.toString();
+  
+  // Replace the first characters with asterisks, leaving the last four
+  const masked = str.slice(0, -4).replace(/./g, '*') + str.slice(-4);
+  
+  return masked
+}

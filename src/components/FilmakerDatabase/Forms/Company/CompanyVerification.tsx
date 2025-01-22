@@ -23,6 +23,7 @@ type Props = {
 };
 
 const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
+  const [idData, setIdData] = useState<string>("")
   const router = useRouter();
   const [joinCompany, result] = useJoinCompanyMutation();
   const [file, setFile] = useState<File | null>(data.doc || null);
@@ -84,7 +85,9 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
         type: data.type,
         verificationDocType: documentType,
         website: data.website,
+        userId: companyRes.data.crewCompany.id,
       };
+      setIdData(companyRes.data.crewCompany.id)
       joinCompany(payload);
     }
   }, [companyRes.isSuccess, companyRes.isError]);
@@ -102,7 +105,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
       // notify("success", "Information uploaded successfully!")
       nprogress.complete();
       router.push(
-        `/success-page/filmaker-database?email=${data.email}&type=company`
+        `/success-page/filmaker-database?id=${idData}&type=company`
       );
     }
   }, [result.isError, result.isSuccess]);

@@ -4,52 +4,54 @@ import WellsFargoImg from "/public/assets/dashboard/wells-fargo.png";
 import Image from "next/image";
 import { GoDotFill } from "react-icons/go";
 import UnstyledButton from "@/components/Button/UnstyledButton";
+import { numberWithCommas } from "@/utils/helperFunction";
 
 export interface IWithdrawalsData {
   date: string;
-  sent_to: string;
+  withdrawal_account: string;
   bank: string;
-  status: "sent";
+  status: "sent" | "pending";
   amount: string;
+  id: string;
 }
 
 export const withdrawal_column: ColumnDef<IWithdrawalsData>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <div className="pl-5">
-        <CheckboxComponent label />
-      </div>
-    ),
-    cell: () => (
-      <div className="pl-5">
-        <CheckboxComponent label />
-      </div>
-    ),
-  },
+  // {
+  //   id: "select",
+  //   header: ({ table }) => (
+  //     <div className="pl-5">
+  //       <CheckboxComponent label />
+  //     </div>
+  //   ),
+  //   cell: () => (
+  //     <div className="pl-5">
+  //       <CheckboxComponent label />
+  //     </div>
+  //   ),
+  // },
   {
     accessorKey: "date",
-    header: () => <div className="">Whithdrawal date</div>,
+    header: () => <div className="pl-6">Whithdrawal date</div>,
     cell: ({ row }) => {
       return (
-        <div className="text-[0.88rem] text-gray-1 w-[15rem] xl:w-auto">
+        <div className="text-[0.88rem] text-gray-1 w-[15rem] xl:w-auto pl-6">
           <p>{row.getValue("date")}</p>
         </div>
       );
     },
   },
   {
-    accessorKey: "sent_to",
-    header: () => <div className="py-4">Sent to</div>,
+    accessorKey: "withdrawal_account",
+    header: () => <div className="py-4">Withdrawal account</div>,
     cell: ({ row }) => {
       return (
         <div className="flex items-center w-[15rem] xl:w-auto py-4">
-          <div className="bg-gray-bg-3 h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4">
+          {/* <div className="bg-gray-bg-3 h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4">
             <Image src={WellsFargoImg} alt="name-img" />
-          </div>
+          </div> */}
           <div className="text-[0.88rem]">
             <p className="text-black-4 font-medium">
-              {row.getValue("sent_to")}
+              {row.getValue("withdrawal_account")}
             </p>
             <p className="text-gray-1">{row.original.bank}</p>
           </div>
@@ -62,7 +64,9 @@ export const withdrawal_column: ColumnDef<IWithdrawalsData>[] = [
     header: () => <div className="">Status</div>,
     cell: ({ row }) => {
       const className =
-        row.original.status === "sent" ? "bg-light-green text-dark-green" : "";
+        row.original.status === "sent"
+          ? "bg-light-green text-dark-green"
+          : "bg-stroke-4 text-black-6";
       return (
         <div className=" w-[10rem] xl:w-auto">
           <p
@@ -83,7 +87,7 @@ export const withdrawal_column: ColumnDef<IWithdrawalsData>[] = [
     cell: ({ row }) => {
       return (
         <div className="text-[0.88rem] text-gray-1 w-[15rem] xl:w-auto">
-          {row.getValue("amount")} USD
+          ₦ {numberWithCommas(Number(row.getValue("amount")))}
         </div>
       );
     },
@@ -92,7 +96,7 @@ export const withdrawal_column: ColumnDef<IWithdrawalsData>[] = [
     id: "action",
     cell: ({}) => {
       return (
-        <UnstyledButton class="bg-black-3 text-[0.88rem] text-white py-2 px-4 rounded-md">
+        <UnstyledButton class="transition-all hover:bg-blue-1 bg-black-3 text-[0.88rem] text-white py-2 px-4 rounded-md">
           Open
         </UnstyledButton>
       );

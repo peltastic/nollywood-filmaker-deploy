@@ -100,7 +100,7 @@ const FilmakerDatabasePage = (props: Props) => {
       <nav className="py-4 px-4">
         <Link href={"/"}>
           <div className="">
-            <Image src={Logo} alt="logo" className="w-[7rem]" />
+            <Image src={Logo} alt="logo" className="w-[3rem]" />
           </div>
         </Link>
       </nav>

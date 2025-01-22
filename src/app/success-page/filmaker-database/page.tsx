@@ -10,7 +10,7 @@ type Props = {};
 
 const page = (props: Props) => {
   const search = useSearchParams();
-  const email = search.get("email");
+  const email = search.get("id");
   const type = search.get("type");
   return (
     <div className="">

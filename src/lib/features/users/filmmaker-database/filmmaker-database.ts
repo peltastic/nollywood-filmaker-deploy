@@ -31,6 +31,7 @@ export interface IJoinCrew {
   password?: string;
   confirmPassword?: string;
   username?: string;
+  userId?: string
 }
 
 export interface IJoinCompany {
@@ -59,6 +60,7 @@ export interface IJoinCompany {
   password?: string;
   confirmPassword?: string;
   username?: string;
+  userId?: string
 }
 
 export interface ICompanyDataResponse {
@@ -152,7 +154,11 @@ export const filmmakerDatabaseApi = createApi({
       },
     }),
     createCrewOrCompany: build.mutation<
-      unknown,
+    {
+      crewCompany: {
+        id: string
+      }
+    },
       { username: string; email: string; password: string }
     >({
       query: (body) => ({
