@@ -20,33 +20,16 @@ import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import SelectComponent from "@/components/Select/SelectComponent";
 import { DataTable } from "@/components/Tables/DataTable";
 import WithdrawalAmount from "@/components/WithdrawalAmount/WithdrawalAmount";
+import { useFetchTransactionStatsQuery } from "@/lib/features/admin/dashboard/stats";
+import {
+  useLazyFetchTranscationStatQuery,
+  useLazyFetchWithdrawalsQuery,
+} from "@/lib/features/admin/dashboard/withdrawals";
+import { numberWithCommas } from "@/utils/helperFunction";
+import moment from "moment";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
-
-const data: IAdminWithdrawalRequestColumnData[] = [
-  {
-    amount: "55.80",
-    consultant: "Jenny Wilson",
-    date: "Sep 13, 2024",
-    email: "w.lawson@example.com",
-    status: "Pending",
-  },
-  {
-    amount: "55.80",
-    consultant: "Jenny Wilson",
-    date: "Sep 13, 2024",
-    email: "w.lawson@example.com",
-    status: "Pending",
-  },
-  {
-    amount: "55.80",
-    consultant: "Jenny Wilson",
-    date: "Sep 13, 2024",
-    email: "w.lawson@example.com",
-    status: "Pending",
-  },
-];
 
 const plate_data: {
   change?: "increase" | "decrease";
@@ -150,7 +133,37 @@ const withdrawal_data: IAdminWithdrawalHistoryData[] = [
 type Props = {};
 
 const RevenueAndWithdrawalsPage = (props: Props) => {
+  const [withdrawalData, setWithDrawalData] = useState<
+    IAdminWithdrawalRequestColumnData[]
+  >([]);
+  const [fetchTransactionStat, { isFetching, data }] =
+    useLazyFetchTranscationStatQuery();
+  const [fetchWithdrawals, withdrawals] = useLazyFetchWithdrawalsQuery();
   const router = useRouter();
+
+  useEffect(() => {
+    fetchTransactionStat();
+    fetchWithdrawals();
+  }, []);
+
+  useEffect(() => {
+    if (withdrawals.data) {
+      const transformed_data: IAdminWithdrawalRequestColumnData[] =
+        withdrawals.data.withdrawals.map((el) => {
+          return {
+            amount: el.amount.toString(),
+            consultant: `${el.consultant.fname} ${el.consultant.lname}`,
+            date: moment(el.createdAt).format("ll"),
+            email: el.consultant.email,
+            id: el._id,
+            status: el.status,
+            fname: el.consultant.fname,
+            lname: el.consultant.lname
+          };
+        });
+      setWithDrawalData(transformed_data);
+    }
+  }, [withdrawals.data]);
 
   return (
     <ServiceLayout admin>
@@ -171,12 +184,18 @@ const RevenueAndWithdrawalsPage = (props: Props) => {
             <DashboardPlate title="Revenue & withdrawals">
               <div className="grid lg:grid-cols-2 gap-x-5 mt-8 mb-6">
                 <WithdrawalAmount
-                  amount="100,000"
+                  isLoading={isFetching}
+                  amount={
+                    data ? numberWithCommas(data.totals.deposits) : "0.00"
+                  }
                   info="This is the amount accrued by the consultants"
                   title="Available for payout"
                 />
                 <WithdrawalAmount
-                  amount="45,000"
+                  isLoading={isFetching}
+                  amount={
+                    data ? numberWithCommas(data.totals.withdrawals) : "0.00"
+                  }
                   info="This is the amount already paid out to the consultants"
                   title="Total paid out"
                 />
@@ -185,9 +204,13 @@ const RevenueAndWithdrawalsPage = (props: Props) => {
           </div>
           <div className="mt-10">
             <DataTable
-              data={data}
+              data={withdrawalData}
               title="Withdrawal requests"
               columns={admin_withdrawal_request_columns}
+              isFetching={withdrawals.isFetching}
+              loaderLength={10}
+              emptyHeader="No withdrawal requests"
+              emptyBody="Any withdrawal request made by a consultant will show up here"
             />
           </div>
           <div className="mt-10">

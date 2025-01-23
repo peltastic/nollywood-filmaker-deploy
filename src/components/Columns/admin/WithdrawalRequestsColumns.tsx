@@ -9,13 +9,22 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useDisclosure } from "@mantine/hooks";
 import ModalComponent from "@/components/Modal/Modal";
 import WithdrawalRequestModal from "@/components/Admin/WithdrawalRequestModal";
+import { numberWithCommas } from "@/utils/helperFunction";
+import ApproveRequestModal from "@/components/Admin/ApproveRequestModal";
+import {
+  useLazyFetchTranscationStatQuery,
+  useLazyFetchWithdrawalsQuery,
+} from "@/lib/features/admin/dashboard/withdrawals";
 
 export interface IAdminWithdrawalRequestColumnData {
   consultant: string;
   email: string;
   date: string;
-  status: "Ready" | "Ongoing" | "Completed" | "Pending";
+  status: "pending" | "sent" | "completed";
   amount: string;
+  id: string;
+  fname: string;
+  lname: string;
 }
 
 export const admin_withdrawal_request_columns: ColumnDef<IAdminWithdrawalRequestColumnData>[] =
@@ -39,8 +48,8 @@ export const admin_withdrawal_request_columns: ColumnDef<IAdminWithdrawalRequest
       cell: ({ row }) => {
         return (
           <div className="flex items-center w-[20rem] xl:w-auto py-3">
-            <div className="mr-2">
-              <Image src={TestImage} alt="image" />
+            <div className="bg-black-3 font-bold text-[0.7rem] mr-4 h-[2.5rem] flex items-center justify-center w-[2.5rem] rounded-full text-white">
+              {row.original.fname[0]} {row.original.lname[0]}
             </div>
             <div className="">
               <h1 className=" text-black-4 font-medium">
@@ -57,12 +66,12 @@ export const admin_withdrawal_request_columns: ColumnDef<IAdminWithdrawalRequest
       header: "Status",
       cell: ({ row }) => {
         const className =
-          row.original.status === "Ready"
-            ? "bg-light-blue text-dark-blue"
-            : row.original.status === "Completed"
+          row.original.status === "sent"
             ? "bg-light-green text-dark-green"
-            : row.original.status === "Pending"
+            : row.original.status === "pending"
             ? "bg-stroke-4 text-black-6"
+            : row.original.status === "completed"
+            ? "bg-light-green text-dark-green"
             : "bg-light-yellow text-dark-yellow";
         return (
           <div className=" w-[10rem] xl:w-auto">
@@ -84,25 +93,63 @@ export const admin_withdrawal_request_columns: ColumnDef<IAdminWithdrawalRequest
       cell: ({ row }) => {
         return (
           <div className="text-[0.88rem] text-gray-1 w-[15rem] xl:w-auto">
-            $ {row.getValue("amount")}
+            ₦ {numberWithCommas(Number(row.original.amount))}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "date",
+      header: () => <div className="">Date Created</div>,
+      cell: ({ row }) => {
+        return (
+          <div className="text-[0.88rem] text-gray-1 w-[15rem] xl:w-auto">
+            {row.getValue("date")}
           </div>
         );
       },
     },
     {
       id: "actions",
-      cell: ({}) => {
+      cell: ({ row }) => {
         const [opened, { open, close }] = useDisclosure();
+        const [modalOpened, approvedModal] = useDisclosure();
+        const [fetchWithdrawals] = useLazyFetchWithdrawalsQuery();
+        const [fetchTransactionStat] = useLazyFetchTranscationStatQuery();
 
         return (
           <>
-            <ModalComponent withCloseButton={false} size="xl" onClose={close} opened={opened} centered>
-              <WithdrawalRequestModal close={close} />
+            <ModalComponent
+              withCloseButton={false}
+              size="xl"
+              onClose={approvedModal.close}
+              opened={modalOpened}
+              centered
+            >
+              <ApproveRequestModal
+                refetch={() => {
+                  fetchWithdrawals();
+                  fetchTransactionStat();
+                }}
+                amount={row.original.amount}
+                close={approvedModal.close}
+                consultant={row.original.consultant}
+                id={row.original.id}
+              />
+            </ModalComponent>
+            <ModalComponent
+              withCloseButton={false}
+              size="xl"
+              onClose={close}
+              opened={opened}
+              centered
+            >
+              <WithdrawalRequestModal id={row.original.id} close={close} />
             </ModalComponent>
             <MenuComponent
               target={
                 <div className="flex pr-8">
-                  <UnstyledButton class="ml-auto mr px-4 py-2 rounded-md items-center bg-black-3 text-white flex">
+                  <UnstyledButton class="transition-all hover:bg-blue-1 ml-auto mr px-4 py-2 rounded-md items-center bg-black-3 text-white flex">
                     <p className="mr-1 font-medium text-[0.88rem]">Actions</p>
                     <IoIosArrowDown />
                   </UnstyledButton>
@@ -118,17 +165,17 @@ export const admin_withdrawal_request_columns: ColumnDef<IAdminWithdrawalRequest
                     <p>View</p>
                   </li>
                   <li
-                    // onClick={open}
+                    onClick={approvedModal.open}
                     className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
                   >
                     <p>Approve</p>
                   </li>
-                  <li
+                  {/* <li
                     // onClick={open}
                     className="py-1 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
                   >
                     <p>Deny</p>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </MenuComponent>

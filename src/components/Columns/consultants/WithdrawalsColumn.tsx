@@ -5,6 +5,9 @@ import Image from "next/image";
 import { GoDotFill } from "react-icons/go";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import { numberWithCommas } from "@/utils/helperFunction";
+import ModalComponent from "@/components/Modal/Modal";
+import { useDisclosure } from "@mantine/hooks";
+import WithdrawalInfo from "@/components/Dashboard/Consultants/WithdrawalInfo";
 
 export interface IWithdrawalsData {
   date: string;
@@ -94,11 +97,17 @@ export const withdrawal_column: ColumnDef<IWithdrawalsData>[] = [
   },
   {
     id: "action",
-    cell: ({}) => {
+    cell: ({row}) => {
+      const [opened, {close, open, toggle}] = useDisclosure()
       return (
-        <UnstyledButton class="transition-all hover:bg-blue-1 bg-black-3 text-[0.88rem] text-white py-2 px-4 rounded-md">
+        <>
+        <ModalComponent onClose={close} withCloseButton={false} opened={opened} size="xl">
+          <WithdrawalInfo close={close} id={row.original.id} />
+        </ModalComponent>
+        <UnstyledButton clicked={open} class="transition-all hover:bg-blue-1 bg-black-3 text-[0.88rem] text-white py-2 px-4 rounded-md">
           Open
         </UnstyledButton>
+        </>
       );
     },
   },

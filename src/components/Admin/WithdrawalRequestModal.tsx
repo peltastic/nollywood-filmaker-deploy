@@ -1,17 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CancelImg from "/public/assets/cancel.svg";
 import Image from "next/image";
+import { useLazyFetchSingleWithdrawalQuery } from "@/lib/features/admin/dashboard/withdrawals";
+import { Skeleton } from "@mantine/core";
+import moment from "moment";
 
 type Props = {
   close: () => void;
+  id: string;
 };
 
 const WithdrawalRequestModal = (props: Props) => {
+  const [fetchSingleWithdrawal, { data, isFetching }] =
+    useLazyFetchSingleWithdrawalQuery();
+
+  useEffect(() => {
+    fetchSingleWithdrawal(props.id);
+  }, []);
+
   return (
     <section className=" px-2 xs:px-6 py-6">
       <div className="flex">
         <h1 className="font-semibold text-[1.6rem] sm:text-[2rem]">
-          Withdrawal Request
+          Withdrawal Request Details
         </h1>
         <div
           onClick={props.close}
@@ -21,34 +32,165 @@ const WithdrawalRequestModal = (props: Props) => {
         </div>
       </div>
 
-      <div className="mt-8">
+      {/* <div className="mt-8">
         <h1 className="font-semibold text-[1.38rem]">Description</h1>
         <p className="mt-6">
           You earned $51.95 USD for $259.75 USD order made by Damilola Akinosun,
           which you resolved successfully.
         </p>
-      </div>
+      </div> */}
       <div className="border-t border-b border-stroke-10 py-6 mt-12">
-        <div className="">
-          <h3 className="font-medium text-[0.88rem] text-black-3">Amount</h3>
-          <p className="text-gray-1 text-[0.88rem]">$51.95 USD</p>
+        {isFetching ? (
+          <div className="">
+            <div className="w-[14rem]">
+              <Skeleton height={15} />
+            </div>
+            <div className="w-[7rem] mt-2">
+              <Skeleton height={15} />
+            </div>
+          </div>
+        ) : (
+          <div className="">
+            <h3 className="font-medium text-[0.88rem] text-black-3">Amount</h3>
+            <p className="text-gray-1 text-[0.88rem]">
+              ₦ {data?.withdrawal.amount}
+            </p>
+          </div>
+        )}
+        <div className="mt-8">
+          {isFetching ? (
+            <div className="">
+              <div className="w-[14rem]">
+                <Skeleton height={15} />
+              </div>
+              <div className="w-[7rem] mt-2">
+                <Skeleton height={15} />
+              </div>
+            </div>
+          ) : (
+            <div className="">
+              <h3 className="font-medium text-[0.88rem] text-black-3">
+                Status
+              </h3>
+
+              <p className="text-gray-1 text-[0.88rem]">
+                {data?.withdrawal.status}
+              </p>
+            </div>
+          )}
         </div>
         <div className="mt-8">
-          <h3 className="font-medium text-[0.88rem] text-black-3">Status</h3>
-          <p className="text-gray-1 text-[0.88rem]">Pending Approval</p>
+          {isFetching ? (
+            <div className="">
+              <div className="w-[14rem]">
+                <Skeleton height={15} />
+              </div>
+              <div className="w-[7rem] mt-2">
+                <Skeleton height={15} />
+              </div>
+            </div>
+          ) : (
+            <div className="">
+              <h3 className="font-medium text-[0.88rem] text-black-3">
+                Withdrawal date
+              </h3>
+
+              <p className="text-gray-1 text-[0.88rem]">
+                {data?.withdrawal.createdAt
+                  ? `${moment(data.withdrawal.createdAt).format("ll")}`
+                  : null}
+              </p>
+            </div>
+          )}
         </div>
         <div className="mt-8">
-          <h3 className="font-medium text-[0.88rem] text-black-3">Created</h3>
-          <p className="text-gray-1 text-[0.88rem]">Aug 02, 2024</p>
+          {isFetching ? (
+            <div className="">
+              <div className="w-[14rem]">
+                <Skeleton height={15} />
+              </div>
+              <div className="w-[7rem] mt-2">
+                <Skeleton height={15} />
+              </div>
+            </div>
+          ) : (
+            <div className="">
+              <h3 className="font-medium text-[0.88rem] text-black-3">
+                Bank name
+              </h3>
+
+              <p className="text-gray-1 text-[0.88rem]">
+                {data?.withdrawal.bankname}
+              </p>
+            </div>
+          )}
         </div>
         <div className="mt-8">
-          <h3 className="font-medium text-[0.88rem] text-black-3">
-            Estimated available date
-          </h3>
-          <p className="text-gray-1 text-[0.88rem]">Sep 13, 2024</p>
+          {isFetching ? (
+            <div className="">
+              <div className="w-[14rem]">
+                <Skeleton height={15} />
+              </div>
+              <div className="w-[7rem] mt-2">
+                <Skeleton height={15} />
+              </div>
+            </div>
+          ) : (
+            <div className="">
+              <h3 className="font-medium text-[0.88rem] text-black-3">
+                Bank account
+              </h3>
+
+              <p className="text-gray-1 text-[0.88rem]">
+                {data?.withdrawal.accountnumber}
+              </p>
+            </div>
+          )}
+        </div>
+        <div className="mt-8">
+          {isFetching ? (
+            <div className="">
+              <div className="w-[14rem]">
+                <Skeleton height={15} />
+              </div>
+              <div className="w-[7rem] mt-2">
+                <Skeleton height={15} />
+              </div>
+            </div>
+          ) : (
+            <div className="">
+              <h3 className="font-medium text-[0.88rem] text-black-3">
+                Consultant
+              </h3>
+
+              <p className="text-gray-1 text-[0.88rem]">
+                {data?.consultant.fname} {data?.consultant.lname}
+              </p>
+            </div>
+          )}
+        </div>
+        <div className="mt-8">
+          {isFetching ? (
+            <div className="">
+              <div className="w-[14rem]">
+                <Skeleton height={15} />
+              </div>
+              <div className="w-[7rem] mt-2">
+                <Skeleton height={15} />
+              </div>
+            </div>
+          ) : (
+            <div className="">
+              <h3 className="font-medium text-[0.88rem] text-black-3">Email</h3>
+
+              <p className="text-gray-1 text-[0.88rem]">
+                {data?.consultant.email}
+              </p>
+            </div>
+          )}
         </div>
       </div>
-      <div className="mt-8">
+      {/* <div className="mt-8">
         <div className="">
           <h3 className="font-medium text-[0.88rem] text-black-3">
             Customer name
@@ -73,7 +215,7 @@ const WithdrawalRequestModal = (props: Props) => {
           </h3>
           <p className="text-gray-1 text-[0.88rem]">267236-09-9E3W8-90PIOHJSDH</p>
         </div>
-      </div>
+      </div> */}
     </section>
   );
 };

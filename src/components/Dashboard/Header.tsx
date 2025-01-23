@@ -74,6 +74,14 @@ const Header = (props: Props) => {
                   >
                     Edit Availability
                   </li>
+                  <li
+                    onClick={() =>
+                      router.push("/consultants/dashboard/commissions-withdrawals")
+                    }
+                    className="py-2 mb hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
+                  >
+                   Commissions & Withdrawals
+                  </li>
                 </ul>
               </div>
             ) : null}

@@ -2,6 +2,7 @@ import { IConsultantActiveReqResponse } from "@/interfaces/consultants/dashboard
 import {
   IConsultantRevenue,
   IConsultantRevenueResponse,
+  IConsultantWithdrawal,
   IConsultantWithdrawalResponse,
   IFetchWalletbalance,
 } from "@/interfaces/consultants/dashboard/withdrawals";
@@ -65,7 +66,10 @@ export const withdrawalsApi = createApi({
     fetchConsultantRevenue: build.query<IConsultantRevenueResponse, string>({
       query: (id) => `/api/consultants/wallet/revenues/${id}`,
     }),
-    fetchSingleWithdrawalData: build.query<unknown, string>({
+    fetchSingleWithdrawalData: build.query<
+      { withdrawal: IConsultantWithdrawal },
+      string
+    >({
       query: (id) => `/api/consultants/withdrawal/${id}`,
     }),
     fetchSingleRevenueData: build.query<
