@@ -26,6 +26,7 @@ export interface IRevenueTableData {
   status: "ready" | "ongoing" | "completed" | "pending";
   amount: string;
   order_id: string;
+  admin?: boolean;
 }
 
 export const revenue_column: ColumnDef<IRevenueTableData>[] = [
@@ -123,7 +124,7 @@ export const revenue_column: ColumnDef<IRevenueTableData>[] = [
   },
   {
     id: "action",
-    cell: ({row}) => {
+    cell: ({ row }) => {
       const [opened, { open, close }] = useDisclosure();
       return (
         <>
@@ -133,7 +134,11 @@ export const revenue_column: ColumnDef<IRevenueTableData>[] = [
             opened={opened}
             size="xl"
           >
-            <RevenueDetailsModal id={row.original.id} close={close} />
+            <RevenueDetailsModal
+              admin={row.original.admin}
+              id={row.original.id}
+              close={close}
+            />
           </ModalComponent>
           <UnstyledButton
             clicked={open}

@@ -22,6 +22,7 @@ import { DataTable } from "@/components/Tables/DataTable";
 import WithdrawalAmount from "@/components/WithdrawalAmount/WithdrawalAmount";
 import { useFetchTransactionStatsQuery } from "@/lib/features/admin/dashboard/stats";
 import {
+  useLazyFetchRevenueHistoryQuery,
   useLazyFetchTranscationStatQuery,
   useLazyFetchWithdrawalsQuery,
 } from "@/lib/features/admin/dashboard/withdrawals";
@@ -133,6 +134,8 @@ const withdrawal_data: IAdminWithdrawalHistoryData[] = [
 type Props = {};
 
 const RevenueAndWithdrawalsPage = (props: Props) => {
+  const [revenueHistory, setRevenueHistory] = useState<IRevenueTableData[]>([]);
+  const [fetchRevenueHistory, history] = useLazyFetchRevenueHistoryQuery();
   const [withdrawalData, setWithDrawalData] = useState<
     IAdminWithdrawalRequestColumnData[]
   >([]);
@@ -144,6 +147,7 @@ const RevenueAndWithdrawalsPage = (props: Props) => {
   useEffect(() => {
     fetchTransactionStat();
     fetchWithdrawals();
+    fetchRevenueHistory();
   }, []);
 
   useEffect(() => {
@@ -158,12 +162,32 @@ const RevenueAndWithdrawalsPage = (props: Props) => {
             id: el._id,
             status: el.status,
             fname: el.consultant.fname,
-            lname: el.consultant.lname
+            lname: el.consultant.lname,
           };
         });
       setWithDrawalData(transformed_data);
     }
   }, [withdrawals.data]);
+
+  useEffect(() => {
+    if (history.data) {
+      const transformed_data: IRevenueTableData[] = history.data.deposits.map(
+        (el) => {
+          return {
+            amount: el.amount.toString(),
+            created_at: moment(el.createdAt).format("ll"),
+            id: el._id,
+            order_id: el.orderId.toUpperCase(),
+            script: el.chat_title || el.movie_title,
+            service_type: el.nameofservice,
+            status: el.status,
+            admin: true,
+          };
+        }
+      );
+      setRevenueHistory(transformed_data);
+    }
+  }, [history.data]);
 
   return (
     <ServiceLayout admin>
@@ -282,20 +306,24 @@ const RevenueAndWithdrawalsPage = (props: Props) => {
               </section>
             </DashboardPlate>
           </div>
-          {/* <div className="mt-10">
+          <div className="mt-10">
             <DataTable
               title="Revenue history"
               columns={revenue_column}
-              data={revenue_data}
+              data={revenueHistory}
+              isFetching={history.isFetching}
+              loaderLength={10}
+              emptyBody=""
+              emptyHeader="No revenue history data"
             />
-          </div> */}
-          <div className="mt-10">
+          </div>
+          {/* <div className="mt-10">
             <DataTable
               title="Withdrawal history"
               columns={admin_withdrawal_column}
               data={withdrawal_data}
             />
-          </div>
+          </div> */}
         </div>
       </DashboardBodyLayout>
     </ServiceLayout>

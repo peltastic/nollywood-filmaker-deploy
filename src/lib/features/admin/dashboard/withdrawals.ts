@@ -1,7 +1,9 @@
 import {
+  IAdminRevenueHistoryResponse,
   IAdminWithdrawals,
   IAdminWithdrawalsResponse,
 } from "@/interfaces/admin/dashboard/withdrawals";
+import { IConsultantRevenue } from "@/interfaces/consultants/dashboard/withdrawals";
 import { adminBaseQueryWithReauth } from "@/lib/baseQuery";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
@@ -48,6 +50,16 @@ export const adminWithdrawalsApi = createApi({
         body,
       }),
     }),
+    fetchRevenueHistory: build.query<IAdminRevenueHistoryResponse, void>({
+      query: () => `/api/admin/deposits`,
+    }),
+
+    fetchSingleRevenueDataAdmin: build.query<
+      { deposit: IConsultantRevenue },
+      string
+    >({
+      query: (id) => `/api/admin/deposit/${id}`,
+    }),
   }),
 });
 
@@ -56,4 +68,6 @@ export const {
   useLazyFetchWithdrawalsQuery,
   useApproveWithdrawalMutation,
   useLazyFetchSingleWithdrawalQuery,
+  useLazyFetchRevenueHistoryQuery,
+  useLazyFetchSingleRevenueDataAdminQuery
 } = adminWithdrawalsApi;

@@ -1,23 +1,47 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CancelImg from "/public/assets/cancel.svg";
 import Image from "next/image";
 import { useLazyFetchSingleRevenueDataQuery } from "@/lib/features/consultants/dashboard/withdrawals/withdrawals";
 import { Skeleton } from "@mantine/core";
 import { numberWithCommas } from "@/utils/helperFunction";
 import moment from "moment";
+import { useLazyFetchSingleRevenueDataAdminQuery } from "@/lib/features/admin/dashboard/withdrawals";
+import { IConsultantRevenue } from "@/interfaces/consultants/dashboard/withdrawals";
 
 type Props = {
   close: () => void;
   id: string;
+  admin?: boolean;
 };
 
 const RevenueDetailsModal = (props: Props) => {
+  const [revenue, setRevenueData] = useState<{
+    deposit: IConsultantRevenue;
+  } | null>(null);
   const [fetchRevenue, { isFetching, data }] =
     useLazyFetchSingleRevenueDataQuery();
+  const [fetchRevenueAdmin, result] = useLazyFetchSingleRevenueDataAdminQuery();
 
   useEffect(() => {
-    fetchRevenue(props.id);
+    if (props.admin) {
+      fetchRevenueAdmin(props.id);
+    } else {
+      fetchRevenue(props.id);
+    }
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      setRevenueData(data);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (result.data) {
+      setRevenueData(result.data);
+    }
+  }, [result.data]);
+
   return (
     <section className=" px-2 sm:px-6 py-6">
       <div className="flex">
@@ -40,7 +64,7 @@ const RevenueDetailsModal = (props: Props) => {
         </p>
       </div> */}
       <div className="border-t border-b border-stroke-10 py-6 mt-12">
-        {isFetching ? (
+        {isFetching || result.isFetching ? (
           <div className="">
             <div className="w-[14rem]">
               <Skeleton height={15} />
@@ -53,14 +77,14 @@ const RevenueDetailsModal = (props: Props) => {
           <div className="">
             <h3 className="font-medium text-[0.88rem] text-black-3">Amount</h3>
             <p className="text-gray-1 text-[0.88rem]">
-              {data?.deposit
-                ? `₦ ${numberWithCommas(Number(data.deposit.amount))}`
+              {revenue?.deposit
+                ? `₦ ${numberWithCommas(Number(revenue.deposit.amount))}`
                 : null}
             </p>
           </div>
         )}
         <div className="mt-8">
-          {isFetching ? (
+          {isFetching || result.isFetching ? (
             <div className="">
               <div className="w-[14rem]">
                 <Skeleton height={15} />
@@ -76,13 +100,13 @@ const RevenueDetailsModal = (props: Props) => {
               </h3>
 
               <p className="text-gray-1 text-[0.88rem]">
-                {data?.deposit.status}
+                {revenue?.deposit.status}
               </p>
             </div>
           )}
         </div>
         <div className="mt-8">
-          {isFetching ? (
+          {isFetching || result.isFetching ? (
             <div className="">
               <div className="w-[14rem]">
                 <Skeleton height={15} />
@@ -98,15 +122,15 @@ const RevenueDetailsModal = (props: Props) => {
               </h3>
 
               <p className="text-gray-1 text-[0.88rem]">
-                {data?.deposit
-                  ? `${moment(data.deposit.createdAt).format("ll")}`
+                {revenue?.deposit
+                  ? `${moment(revenue.deposit.createdAt).format("ll")}`
                   : null}
               </p>
             </div>
           )}
         </div>
         <div className="mt-8">
-          {isFetching ? (
+          {isFetching || result.isFetching ? (
             <div className="">
               <div className="w-[14rem]">
                 <Skeleton height={15} />
@@ -122,7 +146,9 @@ const RevenueDetailsModal = (props: Props) => {
               </h3>
 
               <p className="text-gray-1 text-[0.88rem]">
-                {data?.deposit ? data.deposit.orderId.toUpperCase() : null}
+                {revenue?.deposit
+                  ? revenue.deposit.orderId.toUpperCase()
+                  : null}
               </p>
             </div>
           )}
