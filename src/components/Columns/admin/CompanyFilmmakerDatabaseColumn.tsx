@@ -1,11 +1,19 @@
 import CompanyDatabaseProfile from "@/components/Admin/CompanyDatabaseProfile";
 import CheckboxComponent from "@/components/Checkbox/Checkbox";
+import DeleteModal from "@/components/DeleteModal/DeleteModal";
 import MenuComponent from "@/components/Menu/MenuComponent";
+import ModalComponent from "@/components/Modal/Modal";
 import { ICompanyOrCrewData } from "@/interfaces/admin/filmmaker-database/filmmaker-database";
+import {
+  useDeleteCrewCompanyMutation,
+  useLazyFetchCompanyorCrewQuery,
+} from "@/lib/features/admin/filmmaker-database/filmmaker-database";
+import { notify } from "@/utils/notification";
 import { Drawer } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { nprogress } from "@mantine/nprogress";
 import { ColumnDef } from "@tanstack/react-table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
 export interface ICompanyFilmmakerDatabaseColumnData {
@@ -18,6 +26,7 @@ export interface ICompanyFilmmakerDatabaseColumnData {
   phone: string;
   consultant?: boolean;
   fulldata: ICompanyOrCrewData;
+  type?: "crew" | "company";
 }
 
 export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnData>[] =
@@ -34,10 +43,9 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
                   checked={row.getIsSelected()}
                   setCheckedProps={(val) => {
                     // setChecked(val);
-                    console.log(!!val)
+                    console.log(!!val);
                     row.toggleSelected(!!val);
                   }}
-               
                   label
                 />
               </div>
@@ -116,6 +124,30 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
       id: "actions",
       cell: ({ row }) => {
         const [opened, { open, close }] = useDisclosure();
+        const [deleteOpened, deleteFunc] = useDisclosure();
+        const [deleteProfile, { data, isLoading, isError, isSuccess, error }] =
+          useDeleteCrewCompanyMutation();
+        const [fetchCompanyOrCrew] = useLazyFetchCompanyorCrewQuery();
+
+        useEffect(() => {
+          if (isError) {
+            nprogress.complete();
+            notify(
+              "error",
+              "",
+              (error as any).data?.message || "An Error Occcured"
+            );
+          }
+
+          if (isSuccess) {
+            notify("success", "Bank details saved successfully");
+            nprogress.complete();
+            if (row.original.type) {
+              fetchCompanyOrCrew(row.original.type);
+            }
+            deleteFunc.close();
+          }
+        }, [isError, isSuccess]);
         return (
           <>
             <Drawer
@@ -127,6 +159,21 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
             >
               <CompanyDatabaseProfile data={row.original.fulldata} />
             </Drawer>
+            <ModalComponent
+              opened={deleteOpened}
+              onClose={deleteFunc.close}
+              centered
+              withCloseButton={true}
+              size="xl"
+            >
+              <DeleteModal
+                title="Delete Profile"
+                body={`Are you sure you want to delete ${row.original.name.toUpperCase()} filmmaker database profile permanently?`}
+                close={deleteFunc.close}
+                deleteAction={() => deleteProfile(row.original.fulldata.userId)}
+                isLoading={isLoading}
+              />
+            </ModalComponent>
             <MenuComponent
               target={
                 <div className="cursor-pointer">
@@ -139,6 +186,11 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
                   <li className="cursor-pointer px-2 py-2" onClick={open}>
                     <p>View Profile</p>
                   </li>
+                  {row.original.consultant ? null : (
+                    <li className="cursor-pointer px-2 py-2" onClick={deleteFunc.open}>
+                      <p>Delete</p>
+                    </li>
+                  )}
                 </ul>
               </div>
             </MenuComponent>

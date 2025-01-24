@@ -48,12 +48,13 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
               role: el.role[0],
               fee: el.fee || "N/A",
               fulldata: el,
+              type
             };
           });
-        setDatabaseData(transformedData);
-      }
-      if (type === "company") {
-        const transformedData: ICompanyFilmmakerDatabaseColumnData[] =
+          setDatabaseData(transformedData);
+        }
+        if (type === "company") {
+          const transformedData: ICompanyFilmmakerDatabaseColumnData[] =
           data.data.map((el) => {
             return {
               category: "Film company",
@@ -64,6 +65,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
               phone: el.mobile,
               fee: el.fee || "N/A",
               fulldata: el,
+              type
             };
           });
         setCompanyDatabase(transformedData);

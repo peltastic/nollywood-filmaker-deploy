@@ -13,7 +13,10 @@ export const adminFilmakerDatabaseApi = createApi({
     >({
       query: (type) => `/api/admin/join/fetchdata?type=${type}`,
     }),
+    deleteCrewCompany: build.mutation<unknown, string>({
+      query: (id) => ({ url: `/api/admin/crew-company/${id}`, method: "DELETE" }),
+    }),
   }),
 });
 
-export const { useLazyFetchCompanyorCrewQuery } = adminFilmakerDatabaseApi;
+export const { useLazyFetchCompanyorCrewQuery, useDeleteCrewCompanyMutation } = adminFilmakerDatabaseApi;

@@ -73,13 +73,6 @@ const AdminProfileMenu = (props: Props) => {
             </Link>
           </li>
         ))}
-        <div
-          onClick={() => router.push("/")}
-          className="cursor-pointer flex items-center border-t border-profile-menu-border pt-4 text-[0.88rem] px-3 mt-4"
-        >
-          <Image src={LoginIcon} alt="login-icon" className="mr-3" />
-          <p>Log out</p>
-        </div>
         
         {/* <li className="mb-3">
           <Link href={"/consultants/dashboard/chats"}>

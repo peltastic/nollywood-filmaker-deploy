@@ -25,7 +25,7 @@ const DeleteModal = (props: Props) => {
         >
           No, Cancel
         </UnstyledButton>
-        <UnstyledButton clicked={props.deleteAction} class="flex w-[8rem] py-2 px-4 transition-all rounded-md  justify-center items-center text-white border border-red-1 disabled:border-black-2  bg-red-1  disabled:opacity-50 text-[0.88rem] disabled:bg-black-2">
+        <UnstyledButton disabled={props.isLoading} clicked={props.deleteAction} class="flex w-[8rem] py-2 px-4 transition-all rounded-md  justify-center items-center text-white border border-red-1 disabled:border-black-2  bg-red-1  disabled:opacity-50 text-[0.88rem] disabled:bg-black-2">
           {props.isLoading ? (
             <div className="w-[1rem] py-1">
               <Spinner />
