@@ -33,7 +33,7 @@ const FilmakerDatabasePage = (props: Props) => {
   );
 
   const [crewData, setCrewData] = useState<IJoinCrew>({
-    department: "",
+    department: [],
     dob: "",
     doc: null,
     email: "",

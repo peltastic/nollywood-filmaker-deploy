@@ -10,7 +10,7 @@ export interface IJoinCrew {
   dob?: string;
   bio?: string;
   file?: File | null;
-  department?: string;
+  department?: string[];
   role?: string[];
   works?: {
     title: string;

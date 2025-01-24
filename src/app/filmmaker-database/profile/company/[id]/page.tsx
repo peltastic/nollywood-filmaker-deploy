@@ -136,7 +136,7 @@ const CompanyProfile = (props: Props) => {
                     </p>
                   </div>
                 </div>
-                <UnstyledButton class="bg-black-2 hover:bg-blue-1 transition-all text-white py-2 px-4 mt-6 rounded-md">
+                <UnstyledButton clicked={open} class="bg-black-2 hover:bg-blue-1 transition-all text-white py-2 px-4 mt-6 rounded-md">
                   Share profile
                 </UnstyledButton>
               </div>

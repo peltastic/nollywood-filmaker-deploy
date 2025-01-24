@@ -14,10 +14,10 @@ export function initializeTransactionListener(userId: string) {
 
 export interface IContactMessagePayload {
   room: string;
-  messsage: string;
+  message: string;
   sender: {
     mid: string;
-    uid: string;
+    userid: string;
     role: string;
     name: string;
     type: string;

@@ -42,13 +42,19 @@ export interface IChatMessages {
   room: string;
   message: string;
   timestamp: string;
-  type: "text" | "file" | "img";
+  type: "text" | "file" | "img" | "contacts";
   filename: string;
 
-  replyto?: string
-  replytoId?: string
-  replytousertype?: "user" | "consultant" | "admin" | null
-  mid: string
+  replyto?: string;
+  replytoId?: string;
+  replytousertype?: "user" | "consultant" | "admin" | null;
+  mid: string;
+  recommendations: {
+    type: "crew" | "company";
+    name: string;
+    propic: string;
+    userid: string;
+  }[];
 }
 
 export interface IChatMessagesResponse {
@@ -59,33 +65,32 @@ export interface IChatFiles {
   _id: string;
   path: string;
   filename?: string;
-  filesize: string
+  filesize: string;
 }
 
-
 export interface IChatFilesResponse {
-  files: IChatFiles[]
+  files: IChatFiles[];
 }
 
 export interface IRequestExtensionPayload {
-  title: "Extension Purchase",
-  userId: string
-  type: "time_extension",
-  length: number
-  orderId: string
+  title: "Extension Purchase";
+  userId: string;
+  type: "time_extension";
+  length: number;
+  orderId: string;
 }
 
 export interface IRequestExtensionResponse {
-  authorization_url: string
+  authorization_url: string;
   transaction: {
-    reference: string
-  }
+    reference: string;
+  };
 }
 
 export interface ISendFeedbackPayload {
-  orderId: string
-  userId: string
-  quality: number
-  speed: number
-  reason: string
+  orderId: string;
+  userId: string;
+  quality: number;
+  speed: number;
+  reason: string;
 }

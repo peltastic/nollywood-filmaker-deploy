@@ -29,9 +29,12 @@ const ContactDetails = ({
   updateCrew,
   active,
 }: Props) => {
-  const [department, setDepartment] = useState<string>(data.department || "");
+  const [department, setDepartment] = useState<string[]>(data.department || []);
+  const [departmentVal, setDepartmentVal] = useState<string>("");
+  const [departmentListState, setDepartmentListState] = useState<string[]>([]);
   const [roles, setRoles] = useState<string[]>(data.role || []);
   const [rolesList, setRolesList] = useState<string[] | null>(null);
+  const [persistedRolesList, setPersistedRolesList] = useState<string[]>([])
   const [val, setValue] = useState<string>("");
   const [budget, setBudget] = useState<string>(data.fee || "");
 
@@ -59,9 +62,30 @@ const ContactDetails = ({
   // }, [active]);
 
   useEffect(() => {
-    if (department) {
-      const list = film_crew_values.filter((el) => el.key === department);
-      setRolesList(list[0].value.filter((item) => !data.role?.includes(item)));
+    const list = departmentList.map((el) => el.label);
+    setDepartmentListState(list);
+  }, []);
+
+  useEffect(() => {
+    if (departmentVal) {
+      const list = film_crew_values.filter((el) => el.key === departmentVal);
+      if (rolesList) {
+        setPersistedRolesList([
+          ...rolesList,
+          ...list[0].value.filter((item) => !data.role?.includes(item)),
+        ]);
+        setRolesList([
+          ...rolesList,
+          ...list[0].value.filter((item) => !data.role?.includes(item)),
+        ]);
+      } else {
+        setPersistedRolesList(
+          list[0].value.filter((item) => !data.role?.includes(item))
+        );
+        setRolesList(
+          list[0].value.filter((item) => !data.role?.includes(item))
+        );
+      }
     }
   }, [department, active]);
 
@@ -101,20 +125,58 @@ const ContactDetails = ({
     <div>
       <div className="">
         <div className="mb-2 mt-6 flex font-medium text-[0.88rem] text-[#A5A5A5]">
-          <p>Department</p>
+          <p>Department (you can select multiple department)</p>
           <p>*</p>
         </div>
-        <SelectComponent
+        <Select
           data={departmentList}
+          classNames={{
+            input: classes.input,
+          }}
           label=""
           placeholder=""
-          value={department}
-          setValueProps={(val) => {
-            setRoles([]);
-            if (val) setDepartment(val);
+          value={departmentVal}
+          defaultValue={departmentVal}
+          onChange={(val) => {
+            if (val) {
+              setDepartmentVal(val)
+              // setRoles([]);
+              setDepartment([...department, val]);
+              const newDepartmentList = [...departmentListState];
+              const valIndex = departmentListState.findIndex(
+                (el) => val === el
+              );
+              newDepartmentList.splice(valIndex, 1);
+              setDepartmentListState(newDepartmentList);
+            }
+            // if (val) setDepartment(val);
           }}
           size="lg"
         />
+      </div>
+      <div className="flex flex-wrap mt-3 gap-4 text-[0.88rem]">
+        {department.map((el, index) => (
+          <div
+            key={el}
+            className="border flex items-center border-gray-2 py-2 px-2 rounded-md "
+          >
+            <p className="mr-2">{el}</p>
+            <div
+              className="w-[.7rem] cursor-pointer"
+              onClick={() => {
+                setValue("");
+                const newRoles = [...department];
+                department.splice(index, 1);
+                setDepartment(newRoles);
+                if (departmentListState) {
+                  setDepartmentListState((prev) => prev && [...prev, el]);
+                }
+              }}
+            >
+              <Image src={CancelImg} alt="cancel" className="" />
+            </div>
+          </div>
+        ))}
       </div>
       {rolesList && (
         <div className="">
@@ -185,19 +247,10 @@ const ContactDetails = ({
                   deleteJob={deleteJobDoneHandler}
                   editJob={editJobDoneHandler}
                   index={index}
-                  roles={
-                    film_crew_values.filter((el) => el.key === department)[0]
-                      .value
-                  }
+                  roles={persistedRolesList}
                 />
               ))}
-              <JobsDoneInput
-                roles={
-                  film_crew_values.filter((el) => el.key === department)[0]
-                    .value
-                }
-                addJob={addJobDoneHandler}
-              />
+              <JobsDoneInput roles={persistedRolesList} addJob={addJobDoneHandler} />
               <div className="mt-8">
                 <div className="mb-2  flex font-medium text-[0.88rem] text-[#A5A5A5]">
                   <p>Fee range</p>

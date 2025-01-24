@@ -223,7 +223,7 @@ const ChatRoom = (props: Props) => {
       const id = uuidv4();
 
       const payload: IContactMessagePayload = {
-        messsage: "",
+        message: "contacts",
         room: props.orderId,
         sender: {
           replyto: replyData.reply,
@@ -233,7 +233,7 @@ const ChatRoom = (props: Props) => {
           chatRoomId: searchVal as string,
           role: props.type,
           type: "contacts",
-          uid: props.userData.id,
+          userid: props.userData.id,
           name: `${props.userData.fname} ${props.userData.lname}`,
           recommendations: data.map((el) => {
             return {
@@ -245,6 +245,7 @@ const ChatRoom = (props: Props) => {
           }),
         },
       };
+      console.log(payload)
       sendContactData(payload);
       for (const el of payload.sender.recommendations) {
         props.updateChatHandlerProps({
@@ -274,7 +275,7 @@ const ChatRoom = (props: Props) => {
       const id = uuidv4();
 
       const payload: IContactMessagePayload = {
-        messsage: "",
+        message: "contacts",
         room: props.orderId,
         sender: {
           replyto: replyData.reply,
@@ -284,7 +285,7 @@ const ChatRoom = (props: Props) => {
           chatRoomId: searchVal as string,
           role: props.type,
           type: "contacts",
-          uid: props.userData.id,
+          userid: props.userData.id,
           name: `${props.userData.fname} ${props.userData.lname}`,
           recommendations: data.map((el) => {
             return {
@@ -338,6 +339,7 @@ const ChatRoom = (props: Props) => {
           replytousertype: replyData.user,
         },
       };
+      console.log(payload)
 
       // if (chat_socket.connected) {
       sendChatMessageEvent(payload);
@@ -430,7 +432,7 @@ const ChatRoom = (props: Props) => {
       }) => {
         if (
           props.userData?.id === data.sender.userid ||
-          props.userData?.id === data.sender.uid
+          props.userData?.id === data.sender.userid
         ) {
         } else {
           if (searchVal === data.sender.chatRoomId) {

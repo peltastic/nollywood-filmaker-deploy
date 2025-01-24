@@ -530,8 +530,8 @@ export const departmentList = [
     value: "Art Department",
   },
   {
-    label: "Customer Department",
-    value: "Customer Department",
+    label: "Costume Department",
+    value: "Costume Department",
   },
   {
     label: "Hair and Makeup Department",

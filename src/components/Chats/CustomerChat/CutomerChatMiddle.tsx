@@ -203,6 +203,7 @@ const CustomerChatMiddle = ({
           replyTo: el.replyto,
           replyToId: el.replytoId,
           replytousertype: el.replytousertype,
+          recommendations: el.recommendations[0],
         };
       });
       setChatData([
@@ -236,6 +237,7 @@ const CustomerChatMiddle = ({
           replyTo: el.replyto,
           replyToId: el.replytoId,
           replytousertype: el.replytousertype,
+          recommendations: el.recommendations[0],
         };
       });
       setChatData([
@@ -267,6 +269,7 @@ const CustomerChatMiddle = ({
           replyTo: el.replyto,
           replyToId: el.replytoId,
           replytousertype: el.replytousertype,
+          recommendations: el.recommendations[0],
         };
       });
       setChatData([
