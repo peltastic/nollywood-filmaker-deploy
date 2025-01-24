@@ -26,6 +26,24 @@ export const authApi = createApi({
         body,
       }),
     }),
+    loginAsFilmmaker: builder.mutation<
+      {
+        token: string
+        crewCompany: {
+          id: string;
+        };
+      },
+      {
+        usernameOrEmail: string;
+        password: string;
+      }
+    >({
+      query: (body) => ({
+        url: "/api/join/crewcompany/login",
+        body,
+        method: "POST",
+      }),
+    }),
     verifyEmail: builder.query<unknown, string>({
       query: (code) => `/api/users/verify/${code}`,
     }),
@@ -61,5 +79,6 @@ export const {
   useLoginMutation,
   useLazyVerifyEmailQuery,
   useForgotPasswordMutation,
-  useResetPasswordMutation
+  useResetPasswordMutation,
+  useLoginAsFilmmakerMutation,
 } = authApi;

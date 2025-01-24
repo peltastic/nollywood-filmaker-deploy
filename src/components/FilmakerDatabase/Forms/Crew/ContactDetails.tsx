@@ -34,7 +34,7 @@ const ContactDetails = ({
   const [departmentListState, setDepartmentListState] = useState<string[]>([]);
   const [roles, setRoles] = useState<string[]>(data.role || []);
   const [rolesList, setRolesList] = useState<string[] | null>(null);
-  const [persistedRolesList, setPersistedRolesList] = useState<string[]>([])
+  const [persistedRolesList, setPersistedRolesList] = useState<string[]>([]);
   const [val, setValue] = useState<string>("");
   const [budget, setBudget] = useState<string>(data.fee || "");
 
@@ -50,16 +50,6 @@ const ContactDetails = ({
         })
       : []
   );
-
-  // useEffect(() => {
-  //   console.log("damn 1");
-  //   if (rolesList && data.role) {
-  //     console.log("damn 2");
-  //     setRolesList((prev) =>
-  //       prev ? prev.filter((item) => data.role?.includes(item)) : prev
-  //     );
-  //   }
-  // }, [active]);
 
   useEffect(() => {
     const list = departmentList.map((el) => el.label);
@@ -85,6 +75,15 @@ const ContactDetails = ({
         setRolesList(
           list[0].value.filter((item) => !data.role?.includes(item))
         );
+      }
+    } else {
+      const stateData = [];
+      for (const val of department) {
+        const list = film_crew_values.filter((el) => el.key === val);
+        stateData.push(
+          ...list[0].value.filter((item) => !data.role?.includes(item))
+        );
+        setRolesList(stateData)
       }
     }
   }, [department, active]);
@@ -135,11 +134,13 @@ const ContactDetails = ({
           }}
           label=""
           placeholder=""
+          rightSection={icon}
           value={departmentVal}
+          className="border border-stroke-9 rounded-md"
           defaultValue={departmentVal}
           onChange={(val) => {
             if (val) {
-              setDepartmentVal(val)
+              setDepartmentVal(val);
               // setRoles([]);
               setDepartment([...department, val]);
               const newDepartmentList = [...departmentListState];
@@ -164,9 +165,9 @@ const ContactDetails = ({
             <div
               className="w-[.7rem] cursor-pointer"
               onClick={() => {
-                setValue("");
+                setDepartmentVal("")
                 const newRoles = [...department];
-                department.splice(index, 1);
+                newRoles.splice(index, 1);
                 setDepartment(newRoles);
                 if (departmentListState) {
                   setDepartmentListState((prev) => prev && [...prev, el]);
@@ -250,7 +251,10 @@ const ContactDetails = ({
                   roles={persistedRolesList}
                 />
               ))}
-              <JobsDoneInput roles={persistedRolesList} addJob={addJobDoneHandler} />
+              <JobsDoneInput
+                roles={persistedRolesList}
+                addJob={addJobDoneHandler}
+              />
               <div className="mt-8">
                 <div className="mb-2  flex font-medium text-[0.88rem] text-[#A5A5A5]">
                   <p>Fee range</p>

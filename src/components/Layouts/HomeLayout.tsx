@@ -9,9 +9,10 @@ import ServiceLayout from "./ServiceLayout";
 type Props = {
   children: ReactNode;
   hasFooter?: boolean;
+  hideLogin?: boolean
 };
 
-const HomeLayout = ({ children, hasFooter }: Props) => {
+const HomeLayout = ({ children, hasFooter, hideLogin }: Props) => {
   const authStatus = useSelector(
     (state: RootState) => state.persistedState.auth.status
   );
@@ -23,7 +24,7 @@ const HomeLayout = ({ children, hasFooter }: Props) => {
         </ServiceLayout>
       ) : (
         <div className="">
-          <Navbar />
+          <Navbar hideLogin={hideLogin} />
           <div className="max-w-[1680px] mx-auto ">{children}</div>
           {hasFooter ? <Footer /> : null}
         </div>

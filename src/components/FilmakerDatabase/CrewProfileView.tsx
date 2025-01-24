@@ -1,33 +1,24 @@
-"use client";
-import Image from "next/image";
-import React, { useEffect } from "react";
-import Logo from "/public/assets/logo22.png";
-import ProfileBanner from "/public/assets/filmmaker-database/filmmaker-profile-banner.png";
 import { useLazyFetchCrewDataQuery } from "@/lib/features/users/filmmaker-database/filmmaker-database";
+import { useDisclosure } from "@mantine/hooks";
 import { useParams } from "next/navigation";
-import FilmmakerSkeletonProfile from "@/components/Skeletons/FilmmakerSkeletonProfile";
+import React, { useEffect } from "react";
+import ModalComponent from "../Modal/Modal";
+import Image from "next/image";
+import CancelImg from "/public/assets/cancel.svg";
+import { TwitterShareButton, WhatsappIcon, WhatsappShareButton, XIcon } from "react-share";
+import { notify } from "@/utils/notification";
+import { IoMdClipboard } from "react-icons/io";
+import FilmmakerSkeletonProfile from "../Skeletons/FilmmakerSkeletonProfile";
+import ProfileBanner from "/public/assets/filmmaker-database/filmmaker-profile-banner.png";
+import { AspectRatio, Tabs } from "@mantine/core";
 import { FaUser } from "react-icons/fa";
 import { IoBriefcaseOutline, IoLocationOutline } from "react-icons/io5";
-import UnstyledButton from "@/components/Button/UnstyledButton";
-import { AspectRatio, Tabs } from "@mantine/core";
+import UnstyledButton from "../Button/UnstyledButton";
 import Link from "next/link";
-import ModalComponent from "@/components/Modal/Modal";
-import { useDisclosure } from "@mantine/hooks";
-import CancelImg from "/public/assets/cancel.svg";
-import { IoMdClipboard } from "react-icons/io";
-import {
-  TwitterShareButton,
-  XIcon,
-  WhatsappShareButton,
-  WhatsappIcon,
-} from "react-share";
-import { notify } from "@/utils/notification";
-import HomeLayout from "@/components/Layouts/HomeLayout";
 
 type Props = {};
 const tabs_list = ["About", "Jobs", "Rate"];
-const origin = window.location.href;
-const CrewProfile = (props: Props) => {
+const CrewProfileView = (props: Props) => {
   const [fetchCrewData, { isFetching, data }] = useLazyFetchCrewDataQuery();
   const params = useParams<{ id: string }>();
   useEffect(() => {
@@ -80,8 +71,6 @@ const CrewProfile = (props: Props) => {
           </div>
         </div>
       </ModalComponent>
-      <HomeLayout>
-
 
       <div className="">
         {/* <nav className="py-8 px-10">
@@ -92,9 +81,8 @@ const CrewProfile = (props: Props) => {
         <section className="w-[90%] lg:w-[70%] mx-auto mt-10">
           {isFetching ? (
             <FilmmakerSkeletonProfile />
-          ) : (
+          ) : data?.crew ? (
             <>
-              {" "}
               <div
                 className="w-full  h-[15rem] rounded-lg"
                 style={{
@@ -126,9 +114,7 @@ const CrewProfile = (props: Props) => {
                     <div className="flex  items-center mt-3">
                       <IoBriefcaseOutline className="text-2xl mr-3" />
                       <div className="flex items-center">
-                        <p className="text-lg">
-                          {data?.crew.department} |
-                        </p>
+                        <p className="text-lg">{data?.crew.department} |</p>
                       </div>
                     </div>
                     <div className="flex items-center mt-3">
@@ -161,9 +147,7 @@ const CrewProfile = (props: Props) => {
                       {data?.crew.bio && (
                         <div className="mt-8">
                           <p className="text-[#A5A5A5]">Bio</p>
-                          <p className="mt-2 text-[#4B5563]">
-                            {data.crew.bio}
-                          </p>
+                          <p className="mt-2 text-[#4B5563]">{data.crew.bio}</p>
                         </div>
                       )}
                       <div className="mt-8">
@@ -182,8 +166,7 @@ const CrewProfile = (props: Props) => {
                         <p className="text-[#A5A5A5]">Roles</p>
                         <div className="flex items-center">
                           {data?.crew.role.map((el, index) => {
-                            const islast =
-                              index === data.crew.role.length - 1;
+                            const islast = index === data.crew.role.length - 1;
                             return (
                               <p className="mt-2 text-[#4B5563]" key={el}>
                                 {el} <span>{islast ? "." : ","}</span>
@@ -242,12 +225,11 @@ const CrewProfile = (props: Props) => {
                 </Tabs>
               </section>
             </>
-          )}
+          ):      <h1 className="text-2xl">No crew profile for this account</h1>}
         </section>
       </div>
-      </HomeLayout>
     </>
   );
 };
 
-export default CrewProfile;
+export default CrewProfileView;

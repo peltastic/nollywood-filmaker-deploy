@@ -9,7 +9,9 @@ import { usePathname } from "next/navigation";
 import Advert from "./Advert";
 import NavMobile from "./NavMobile";
 
-type Props = {};
+type Props = {
+  hideLogin?: boolean
+};
 const homeLink = [
   {
     name: "Home",
@@ -57,7 +59,7 @@ const Navbar = (props: Props) => {
             </li>
           ))}
         </ul>
-        <ul className="hidden md:flex items-center text-[0.9rem]">
+       {props.hideLogin ? null : <ul className="hidden md:flex items-center text-[0.9rem]">
           <li className="hover:bg-gray-bg-3 py-1 px-3 transition-all rounded-md mr-4">
             <Link href="/auth/register">
               <UnstyledButton class="">Sign up</UnstyledButton>
@@ -70,7 +72,7 @@ const Navbar = (props: Props) => {
               </UnstyledButton>
             </Link>
           </li>
-        </ul>
+        </ul>}
       </nav>
     </>
   );

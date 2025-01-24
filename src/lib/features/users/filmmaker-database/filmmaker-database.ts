@@ -34,7 +34,7 @@ export interface IJoinCrew {
   userId?: string
 }
 
-export interface IJoinCompany {
+export interface  IJoinCompany {
   name?: string;
   email?: string;
   mobile?: string;
