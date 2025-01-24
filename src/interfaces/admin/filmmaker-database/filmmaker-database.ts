@@ -16,7 +16,7 @@ export interface ICompanyOrCrewData {
   dob: string;
   bio: string;
   propic: string;
-  department: string;
+  department: string[];
   role: string[];
   type: string
   works: {

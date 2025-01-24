@@ -16,7 +16,7 @@ export interface ICrewFilmmakerDatabaseColumnData {
   email: string;
   phone: string;
   consultant?: boolean;
-  department: string;
+  department: string[];
   fulldata: ICompanyOrCrewData;
 }
 
@@ -28,7 +28,11 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
         <>
           {row.original.consultant ? (
             <div className="pl-5">
-              <CheckboxComponent label />
+              <CheckboxComponent
+                checked={row.getIsSelected()}
+                setCheckedProps={(value) => row.toggleSelected(!!value)}
+                label
+              />
             </div>
           ) : null}
         </>
@@ -124,11 +128,17 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
     },
     {
       id: "actions",
-      cell: ({row}) => {
+      cell: ({ row }) => {
         const [opened, { open, close }] = useDisclosure();
         return (
           <>
-            <Drawer opened={opened} onClose={close} position="right" withCloseButton={false} size={"lg"}>
+            <Drawer
+              opened={opened}
+              onClose={close}
+              position="right"
+              withCloseButton={false}
+              size={"lg"}
+            >
               <FilmmakerDatabaseProfileDrawer data={row.original.fulldata} />
             </Drawer>
             <MenuComponent

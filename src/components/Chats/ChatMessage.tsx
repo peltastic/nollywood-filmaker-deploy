@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import AdminProfileImg from "/public/assets/dashboard/admin-profile-img.svg";
 import Image from "next/image";
-import { FaDownload } from "react-icons/fa";
+import { FaDownload, FaExternalLinkAlt } from "react-icons/fa";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
@@ -16,7 +16,7 @@ type Props = {
   prevUser: "admin" | "user" | "consultant" | null;
   index: number;
   lastmessage?: boolean;
-  type: "text" | "file" | "img" | "typing";
+  type: "text" | "file" | "img" | "typing" | "contacts";
   filename: string;
   file: string;
   id?: string;
@@ -30,7 +30,12 @@ type Props = {
   repliedText?: string;
   repliedTextId?: string;
   repliedToUser?: "admin" | "user" | "consultant" | null;
-
+  recommendations?: {
+    type: "crew" | "company";
+    name: string;
+    userid: string;
+    propic: string;
+  };
   selectedRepliedToMessageId?: string;
   setSelectedRepliedToMessageId?: (val: string) => void;
 };
@@ -53,6 +58,7 @@ const ChatMessage = ({
   selectedRepliedToMessageId,
   setSelectedRepliedToMessageId,
   repliedToUser,
+  recommendations,
 }: Props) => {
   const [temporarySelectedHighlight, setTemporarySelectedHighlight] =
     useState<string>("transparent");
@@ -250,6 +256,40 @@ const ChatMessage = ({
             ) : type === "typing" ? (
               <div className="w-[3rem]">
                 <Lottie animationData={TypingLottie} />
+              </div>
+            ) : type === "contacts" && recommendations ? (
+              <div className="flex items-start ">
+                <div className="">
+                  <div className="h-[2.5rem] w-[2.5rem]">
+                    <AspectRatio ratio={1800 / 1800}>
+                      <Image
+                        src={recommendations.propic}
+                        alt="propic"
+                        width={100}
+                        height={100}
+                        className="rounded-full  h-full w-full"
+                      />
+                    </AspectRatio>
+                  </div>
+                  <p className="mt-2">{recommendations.name}</p>
+                  <p className="font-semibold">
+                    {recommendations.type === "crew"
+                      ? "Film crew"
+                      : "Film company"}
+                  </p>
+                </div>
+                <Link
+                  target="_blank"
+                  href={
+                    recommendations.type === "crew"
+                      ? `/filmmaker-database/profile/crew/${recommendations.userid}`
+                      : `/filmmaker-database/profile/company/${recommendations.userid}`
+                  }
+                >
+                  <div className="rounded-full px-3 py-3 transition-all mt-2 cursor-pointer ml-10  hover:bg-slate-500 w-fit">
+                    <FaExternalLinkAlt className="text-xl  text-black" />
+                  </div>
+                </Link>
               </div>
             ) : (
               <>

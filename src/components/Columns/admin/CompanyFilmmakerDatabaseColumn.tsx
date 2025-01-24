@@ -5,6 +5,7 @@ import { ICompanyOrCrewData } from "@/interfaces/admin/filmmaker-database/filmma
 import { Drawer } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { ColumnDef } from "@tanstack/react-table";
+import { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
 export interface ICompanyFilmmakerDatabaseColumnData {
@@ -15,7 +16,7 @@ export interface ICompanyFilmmakerDatabaseColumnData {
   fee?: string;
   email: string;
   phone: string;
-  consultant?: string;
+  consultant?: boolean;
   fulldata: ICompanyOrCrewData;
 }
 
@@ -23,15 +24,27 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
   [
     {
       id: "select",
-      cell: ({ row }) => (
-        <>
-          {row.original.consultant ? (
-            <div className="pl-5">
-              <CheckboxComponent label />
-            </div>
-          ) : null}
-        </>
-      ),
+      cell: ({ row }) => {
+        const [checked, setChecked] = useState<boolean>(false);
+        return (
+          <>
+            {row.original.consultant ? (
+              <div className="pl-5">
+                <CheckboxComponent
+                  checked={row.getIsSelected()}
+                  setCheckedProps={(val) => {
+                    // setChecked(val);
+                    console.log(!!val)
+                    row.toggleSelected(!!val);
+                  }}
+               
+                  label
+                />
+              </div>
+            ) : null}
+          </>
+        );
+      },
     },
     {
       accessorKey: "name",

@@ -481,7 +481,7 @@ export const film_crew_values = [
     ],
   },
   {
-    key: "Customer Department",
+    key: "Costume Department",
     value: [
       "Costume Designer",
       "Wardrobe Supervisor",

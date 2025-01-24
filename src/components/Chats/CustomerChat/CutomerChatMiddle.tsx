@@ -39,10 +39,16 @@ export interface ChatPayload {
   id: string;
   file: string;
   filename: string;
-  type: "text" | "file" | "img" | "typing";
+  type: "text" | "file" | "img" | "typing" | "contacts";
   replyTo?: string;
   replyToId?: string;
   replytousertype?: "user" | "consultant" | "admin" | null;
+  recommendations?: {
+    type: "crew" | "company";
+    name: string;
+    userid: string;
+    propic: string;
+  };
 }
 
 type Props = {
@@ -181,8 +187,8 @@ const CustomerChatMiddle = ({
   const [chatData, setChatData] = useState<ChatPayload[]>([]);
 
   useEffect(() => {
-setChatData([])
-  }, [orderId])
+    setChatData([]);
+  }, [orderId]);
 
   useEffect(() => {
     if (result.data) {
@@ -215,9 +221,7 @@ setChatData([])
     }
   }, [result.data]);
 
-  useEffect(() => {
-
-  }, [])
+  useEffect(() => {}, []);
 
   useEffect(() => {
     if (consultantRes.data) {

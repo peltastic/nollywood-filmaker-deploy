@@ -8,8 +8,11 @@ import { MdCancel } from "react-icons/md";
 import {
   chat_socket,
   emitTypingEvent,
+  IChatMessagePayload,
+  IContactMessagePayload,
   joinChatRoom,
   sendChatMessageEvent,
+  sendContactData,
   sendFileMessage,
   stopTypingEmit,
 } from "@/lib/socket";
@@ -30,6 +33,11 @@ import classes from "@/app/styles/Input.module.css";
 import ReplyBox from "./ReplyBox";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
+import MenuComponent from "../Menu/MenuComponent";
+import { IoMdContact } from "react-icons/io";
+import FilmmakerDatabaseModal from "./ModalComponents/FilmmakerDatabaseModal";
+import { ICrewFilmmakerDatabaseColumnData } from "../Columns/admin/CrewFilmmakerDatabaseColumn";
+import { ICompanyFilmmakerDatabaseColumnData } from "../Columns/admin/CompanyFilmmakerDatabaseColumn";
 
 type Props = {
   type: "user" | "consultant" | "admin";
@@ -210,25 +218,112 @@ const ChatRoom = (props: Props) => {
     setActiveId(id || null);
   };
 
+  const sendCrewContactMessage = (data: ICrewFilmmakerDatabaseColumnData[]) => {
+    if (props.userData) {
+      const id = uuidv4();
+
+      const payload: IContactMessagePayload = {
+        messsage: "",
+        room: props.orderId,
+        sender: {
+          replyto: replyData.reply,
+          replytoId: replyData.id,
+          mid: id,
+          replytousertype: replyData.user,
+          chatRoomId: searchVal as string,
+          role: props.type,
+          type: "contacts",
+          uid: props.userData.id,
+          name: `${props.userData.fname} ${props.userData.lname}`,
+          recommendations: data.map((el) => {
+            return {
+              name: el.fullname,
+              propic: el.fulldata.propic,
+              type: "crew",
+              userid: el.fulldata.userId,
+            };
+          }),
+        },
+      };
+      sendContactData(payload);
+      for (const el of payload.sender.recommendations) {
+        props.updateChatHandlerProps({
+          text: "",
+          user: props.type,
+          id: id,
+          file: "",
+          filename: "",
+          type: "contacts",
+          replyTo: replyData.reply,
+          replyToId: replyData.id,
+          replytousertype: replyData.user,
+          recommendations: {
+            name: el.name,
+            propic: el.propic,
+            type: el.type,
+            userid: el.userid,
+          },
+        });
+      }
+    }
+  };
+  const sendCompanyContactMessage = (
+    data: ICompanyFilmmakerDatabaseColumnData[]
+  ) => {
+    if (props.userData) {
+      const id = uuidv4();
+
+      const payload: IContactMessagePayload = {
+        messsage: "",
+        room: props.orderId,
+        sender: {
+          replyto: replyData.reply,
+          replytoId: replyData.id,
+          mid: id,
+          replytousertype: replyData.user,
+          chatRoomId: searchVal as string,
+          role: props.type,
+          type: "contacts",
+          uid: props.userData.id,
+          name: `${props.userData.fname} ${props.userData.lname}`,
+          recommendations: data.map((el) => {
+            return {
+              name: el.name,
+              propic: el.fulldata.propic,
+              type: "company",
+              userid: el.fulldata.userId,
+            };
+          }),
+        },
+      };
+      sendContactData(payload);
+      console.log(payload.sender.recommendations);
+      for (const el of payload.sender.recommendations) {
+        props.updateChatHandlerProps({
+          text: "",
+          user: props.type,
+          id: id,
+          file: "",
+          filename: "",
+          type: "contacts",
+          replyTo: replyData.reply,
+          replyToId: replyData.id,
+          replytousertype: replyData.user,
+          recommendations: {
+            name: el.name,
+            propic: el.propic,
+            type: el.type,
+            userid: el.userid,
+          },
+        });
+      }
+    }
+  };
   const sendMessageHandler = () => {
     stopTypingEmit(props.orderId, `${props.userData?.id}`);
     const id = uuidv4();
     if (props.userData) {
-      const payload: {
-        room: string;
-        message: string;
-        sender: {
-          mid: string;
-          type: "text";
-          userid: string;
-          name: string;
-          role: "user" | "consultant" | "admin";
-          chatRoomId: string;
-          replyto: string;
-          replytoId: string;
-          replytousertype: "user" | "consultant" | "admin" | null;
-        };
-      } = {
+      const payload: IChatMessagePayload = {
         room: props.orderId,
         message: inputValue,
         sender: {
@@ -317,28 +412,61 @@ const ChatRoom = (props: Props) => {
           name: string;
           role: "user" | "consultant" | "admin";
           userid: string;
+          uid: string;
           chatRoomId: string;
           replyto: string;
           replytoId: string;
           mid: string;
+          type: string;
           replytousertype?: "user" | "consultant" | "admin" | null;
+          recommendations: {
+            type: "crew" | "company";
+            name: string;
+            userid: string;
+            propic: string;
+          }[];
         };
         message: string;
       }) => {
-        if (props.userData?.id === data.sender.userid) {
+        if (
+          props.userData?.id === data.sender.userid ||
+          props.userData?.id === data.sender.uid
+        ) {
         } else {
           if (searchVal === data.sender.chatRoomId) {
-            props.updateChatHandlerProps({
-              text: data.message,
-              user: data.sender.role,
-              id: data.sender.mid,
-              type: "text",
-              file: "",
-              filename: "",
-              replyTo: data.sender.replyto,
-              replyToId: data.sender.replytoId,
-              replytousertype: data.sender.replytousertype,
-            });
+            if (data.sender.type === "contacts") {
+              for (const el of data.sender.recommendations) {
+                props.updateChatHandlerProps({
+                  text: "",
+                  user: data.sender.role,
+                  id: data.sender.mid,
+                  file: "",
+                  filename: "",
+                  type: "contacts",
+                  replyTo: data.sender.replyto,
+                  replyToId: data.sender.replytoId,
+                  replytousertype: data.sender.replytousertype,
+                  recommendations: {
+                    name: el.name,
+                    propic: el.propic,
+                    type: el.type,
+                    userid: el.userid,
+                  },
+                });
+              }
+            } else {
+              props.updateChatHandlerProps({
+                text: data.message,
+                user: data.sender.role,
+                id: data.sender.mid,
+                type: "text",
+                file: "",
+                filename: "",
+                replyTo: data.sender.replyto,
+                replyToId: data.sender.replytoId,
+                replytousertype: data.sender.replytousertype,
+              });
+            }
           }
         }
       }
@@ -455,6 +583,8 @@ const ChatRoom = (props: Props) => {
     }
   }, [replyData.reply]);
 
+  const [databaseOpened, database] = useDisclosure();
+
   return (
     <>
       <ModalComponent
@@ -466,12 +596,25 @@ const ChatRoom = (props: Props) => {
       >
         <RateYourExperience orderId={props.orderId} close={close} />
       </ModalComponent>
+      <ModalComponent
+        onClose={database.close}
+        fullscreen
+        withCloseButton={false}
+        size="xl"
+        opened={databaseOpened}
+      >
+        <FilmmakerDatabaseModal
+          sendCrewContact={sendCrewContactMessage}
+          close={database.close}
+          sendCompanyContact={sendCompanyContactMessage}
+        />
+      </ModalComponent>
       <div className=" py-6  h-full  relative bg-white">
         <div className=" overflow-y-scroll nolly-film-hide-scrollbar w-full h-[90%] pb-8">
           {props.data && (
             <>
               {props.data.map((el, index) => (
-                <div key={el.id}>
+                <div key={el.id + uuidv4()}>
                   {props.type === "user" ? (
                     <ChatMessage
                       file={el.file}
@@ -499,9 +642,11 @@ const ChatRoom = (props: Props) => {
                         setSelectedRepliedToMessageId(val)
                       }
                       repliedToUser={el.replytousertype}
+                      recommendations={el.recommendations}
                     />
                   ) : (
                     <ConsultantChatMessage
+                      recommendations={el.recommendations}
                       file={el.file}
                       filename={el.filename}
                       type={el.type}
@@ -653,67 +798,101 @@ const ChatRoom = (props: Props) => {
                     </div>
                   )}
                   <div className="flex items-center">
-                    <UnstyledButton>
-                      <FileButtonComponent
-                        accept=""
-                        setFile={(file) => {
-                          setFileType("file");
-                          setFileInputValue(file);
-                          if (file) {
-                            getBase64(file).then((res) => {
-                              const id = uuidv4();
-                              if (res) {
-                                if (res && props.userData) {
-                                  const payload = {
-                                    fileData: res as string,
-                                    fileName: file.name,
-                                    room: props.orderId,
-                                    sender: {
-                                      type: fileType,
-                                      name: `${props.userData.fname} ${props.userData.lname}`,
-                                      role: props.type,
-                                      userid: props.userData.id,
-                                      chatRoomId: searchVal as string,
-                                      mid: id,
-                                      replyto: replyData.reply,
-                                      replytoId: replyData.id,
-                                      replytousertype: replyData.user,
-                                    },
-                                  };
-                                  // if (chat_socket.connected) {
-                                  sendFileMessage(payload);
-                                  // } else {
-                                  //   fileQueueRef.current.push(payload);
-                                  // }
-                                  props.updateChatHandlerProps({
-                                    text: file.name,
-                                    user: props.type,
-                                    id,
-                                    file: res as string,
-                                    filename: file.name,
-                                    type: fileType,
-                                    replyTo: replyData.reply,
-                                    replyToId: replyData.id,
-                                    replytousertype: replyData.user,
-                                  });
-                                  setFileInputValue(null);
-                                  setReplyData({
-                                    id: "",
-                                    reply: "",
-                                    user: null,
-                                  });
-                                }
-                                // setBase64File(res as any);
-                              }
-                            });
-                          }
-                        }}
-                      >
-                        <div className="mr-3 md:mr-10">
-                          <Image src={AttachIcon} alt="attach-icon" />
+                    <MenuComponent
+                      position="top-start"
+                      target={
+                        <div className="cursor-pointer">
+                          <div className="mr-3 md:mr-10">
+                            <Image src={AttachIcon} alt="attach-icon" />
+                          </div>
                         </div>
-                      </FileButtonComponent>
-                    </UnstyledButton>
+                      }
+                    >
+                      <div className="">
+                        <ul className=" text-black-2 py-2 px-2">
+                          <li className="">
+                            <UnstyledButton class="hover:bg-gray-bg-9 transition-all py-1 rounded-md px-3 w-full">
+                              <FileButtonComponent
+                                accept=""
+                                setFile={(file) => {
+                                  setFileType("file");
+                                  setFileInputValue(file);
+                                  if (file) {
+                                    getBase64(file).then((res) => {
+                                      const id = uuidv4();
+                                      if (res) {
+                                        if (res && props.userData) {
+                                          const payload = {
+                                            fileData: res as string,
+                                            fileName: file.name,
+                                            room: props.orderId,
+                                            sender: {
+                                              type: fileType,
+                                              name: `${props.userData.fname} ${props.userData.lname}`,
+                                              role: props.type,
+                                              userid: props.userData.id,
+                                              chatRoomId: searchVal as string,
+                                              mid: id,
+                                              replyto: replyData.reply,
+                                              replytoId: replyData.id,
+                                              replytousertype: replyData.user,
+                                            },
+                                          };
+                                          sendFileMessage(payload);
+                                          // if (chat_socket.connected) {
+                                          // } else {
+                                          //   fileQueueRef.current.push(payload);
+                                          // }
+                                          props.updateChatHandlerProps({
+                                            text: file.name,
+                                            user: props.type,
+                                            id,
+                                            file: res as string,
+                                            filename: file.name,
+                                            type: fileType,
+                                            replyTo: replyData.reply,
+                                            replyToId: replyData.id,
+                                            replytousertype: replyData.user,
+                                          });
+                                          setFileInputValue(null);
+                                          setReplyData({
+                                            id: "",
+                                            reply: "",
+                                            user: null,
+                                          });
+                                        }
+                                        // setBase64File(res as any);
+                                      }
+                                    });
+                                  }
+                                }}
+                              >
+                                <div className="flex items-center">
+                                  <div className="h-[2rem] mr-2 flex items-center justify-center w-[2rem] rounded-full bg-gray-300">
+                                    <FaFile className="text-md" />
+                                  </div>
+                                  <p>File</p>
+                                </div>
+                                {/* <div className="mr-3 md:mr-10">
+                            <Image src={AttachIcon} alt="attach-icon" />
+                          </div> */}
+                              </FileButtonComponent>
+                            </UnstyledButton>
+                          </li>
+                          {props.type === "consultant" && (
+                            <li
+                              onClick={database.open}
+                              className="flex items-center px-3 mt-4 hover:bg-gray-bg-9 cursor-pointer transition-all py-1 rounded-md"
+                            >
+                              <div className="h-[2rem] mr-2 flex items-center justify-center w-[2rem] rounded-full bg-gray-300">
+                                <IoMdContact className="text-md" />
+                              </div>
+                              <p>Contact</p>
+                            </li>
+                          )}
+                        </ul>
+                      </div>
+                    </MenuComponent>
                     <form
                       className="w-full"
                       onSubmit={(e) => e.preventDefault()}

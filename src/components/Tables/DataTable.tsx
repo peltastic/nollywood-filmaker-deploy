@@ -22,6 +22,7 @@ import UnstyledButton from "../Button/UnstyledButton";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@mantine/core";
 import SelectComponent from "../Select/SelectComponent";
+import { useEffect, useState } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -38,9 +39,11 @@ interface DataTableProps<TData, TValue> {
   dropdowndata?: { label: string; value: string }[];
   updateDropdownData?: (val: string) => void;
   dropdownValue?: string;
-  dropdownDefaultVal?: string
-  emptyHeader?: string
-  emptyBody?: string
+  dropdownDefaultVal?: string;
+  emptyHeader?: string;
+  emptyBody?: string;
+  setRowSelectData?: (val: any) => void;
+  crew?: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -60,14 +63,28 @@ export function DataTable<TData, TValue>({
   dropdownValue,
   dropdownDefaultVal,
   emptyBody,
-  emptyHeader
+  emptyHeader,
+  setRowSelectData,
+  crew,
 }: DataTableProps<TData, TValue>) {
+  const [rowSelection, setRowSelectionState] = useState({});
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    onRowSelectionChange: (val) => {
+      // table.toggleAllRowsSelected(false)
+      setRowSelectionState(val);
+      setRowSelectData && setRowSelectData(val);
+    },
+    state: {
+      rowSelection: rowSelection,
+    },
   });
 
+  useEffect(() => {
+    table.toggleAllRowsSelected(false);
+  }, [crew]);
   const router = useRouter();
 
   return (
@@ -94,7 +111,7 @@ export function DataTable<TData, TValue>({
           {dropdownFilter &&
             dropdowndata &&
             updateDropdownData &&
-            dropdownValue  && (
+            dropdownValue && (
               <SelectComponent
                 value={dropdownValue}
                 data={dropdowndata}

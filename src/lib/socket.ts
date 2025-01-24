@@ -12,6 +12,44 @@ export function initializeTransactionListener(userId: string) {
   primary_socket.emit("register", userId);
 }
 
+export interface IContactMessagePayload {
+  room: string;
+  messsage: string;
+  sender: {
+    mid: string;
+    uid: string;
+    role: string;
+    name: string;
+    type: string;
+    chatRoomId: string;
+    replyto: string;
+    replytoId: string;
+    replytousertype: "user" | "consultant" | "admin" | null;
+    recommendations: {
+      type: "crew" | "company";
+      name: string;
+      userid: string;
+      propic: string;
+    }[];
+  };
+}
+
+export interface IChatMessagePayload {
+  room: string;
+  message: string;
+  sender: {
+    mid: string;
+    type: "text";
+    userid: string;
+    name: string;
+    role: "user" | "consultant" | "admin";
+    chatRoomId: string;
+    replyto: string;
+    replytoId: string;
+    replytousertype: "user" | "consultant" | "admin" | null;
+  };
+}
+
 export function joinChatRoom(data: {
   room: string;
   userId: string;
@@ -21,22 +59,12 @@ export function joinChatRoom(data: {
   chat_socket.emit("joinRoom", data);
 }
 
-export function sendChatMessageEvent(data: {
-  room: string;
-  message: string;
-  sender: {
-    mid: string
-    type: "text";
-    userid: string;
-    name: string;
-    role: "user" | "consultant" | "admin";
-    chatRoomId: string;
-    replyto: string
-    replytoId: string
-    replytousertype: "user" | "consultant" | "admin" | null
-  };
-}) {
-  console.log(data, "send message")
+export function sendChatMessageEvent(data: IChatMessagePayload) {
+  chat_socket.emit("chatMessage", data);
+}
+
+export function sendContactData(data: IContactMessagePayload) {
+  console.log(data, "contact message sent");
   chat_socket.emit("chatMessage", data);
 }
 
@@ -50,13 +78,12 @@ export function sendFileMessage(data: {
     name: string;
     role: "user" | "consultant" | "admin";
     chatRoomId: string;
-    mid: string
-    replyto: string
-    replytoId: string
-    replytousertype: "user" | "consultant" | "admin" | null
+    mid: string;
+    replyto: string;
+    replytoId: string;
+    replytousertype: "user" | "consultant" | "admin" | null;
   };
 }) {
-  console.log(data, "send file message")
   chat_socket.emit("sendFile", data);
 }
 
