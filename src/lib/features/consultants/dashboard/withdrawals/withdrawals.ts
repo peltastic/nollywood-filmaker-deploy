@@ -23,8 +23,8 @@ export const withdrawalsApi = createApi({
       unknown,
       {
         amount: string;
-        accountNumber: string;
-        bankName: string;
+        accountnumber: string;
+        bankname: string;
       }
     >({
       query: (body) => {

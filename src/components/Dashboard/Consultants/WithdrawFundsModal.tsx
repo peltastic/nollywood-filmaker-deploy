@@ -64,7 +64,11 @@ const WithdrawFundsModal = (props: Props) => {
               }}
               onSubmit={(values) => {
                 nprogress.start();
-                createWithdrawalRequest(values);
+                createWithdrawalRequest({
+                  accountnumber: values.accountNumber,
+                  amount: values.amount,
+                  bankname: values.bankName
+                });
               }}
               validationSchema={withdrawalRequestSchema}
             >
