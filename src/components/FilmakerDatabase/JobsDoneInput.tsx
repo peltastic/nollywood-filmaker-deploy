@@ -12,7 +12,7 @@ type Props = {
   defaultVal?: JobsDoneList;
   edit?: boolean;
   removeEdit?: (val: boolean) => void;
-  company?: boolean;
+  company?: boolean
 };
 
 const JobsDoneInput = ({
@@ -104,6 +104,7 @@ const JobsDoneInput = ({
             </div>
           </div>
           <button
+          // type={notSubmit? "button": "submit"}
             disabled={
               company ? !isValid || !dateInput : !isValid || !dateInput || !role
             }

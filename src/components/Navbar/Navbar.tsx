@@ -29,6 +29,10 @@ const homeLink = [
     name: "Contact us",
     link: "/contact-us",
   },
+  {
+    name: "Filmmaker database",
+    link: "/auth/login-filmmaker-database"
+  }
 ];
 
 const Navbar = (props: Props) => {

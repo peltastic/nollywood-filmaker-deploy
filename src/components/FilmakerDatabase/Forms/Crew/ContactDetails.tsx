@@ -83,7 +83,7 @@ const ContactDetails = ({
         stateData.push(
           ...list[0].value.filter((item) => !data.role?.includes(item))
         );
-        setRolesList(stateData)
+        setRolesList(stateData);
       }
     }
   }, [department, active]);
@@ -140,8 +140,10 @@ const ContactDetails = ({
           defaultValue={departmentVal}
           onChange={(val) => {
             if (val) {
+              if (department.includes(val)) {
+                return
+              }
               setDepartmentVal(val);
-              // setRoles([]);
               setDepartment([...department, val]);
               const newDepartmentList = [...departmentListState];
               const valIndex = departmentListState.findIndex(
@@ -165,7 +167,7 @@ const ContactDetails = ({
             <div
               className="w-[.7rem] cursor-pointer"
               onClick={() => {
-                setDepartmentVal("")
+                setDepartmentVal("");
                 const newRoles = [...department];
                 newRoles.splice(index, 1);
                 setDepartment(newRoles);

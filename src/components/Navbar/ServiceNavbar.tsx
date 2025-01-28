@@ -36,6 +36,10 @@ const navLink = [
     name: "Chats",
     link: "/user/dashboard/chats",
   },
+  {
+    name: "Filmmaker database",
+    link: "/auth/login-filmmaker-database",
+  },
 ];
 
 const consultantLink = [
@@ -92,8 +96,8 @@ export const adminLinks = [
   },
   {
     name: "Database",
-    link: "/admin/dashboard/filmmaker-database"
-  }
+    link: "/admin/dashboard/filmmaker-database",
+  },
 ];
 
 const navLinkMobile = [
@@ -180,7 +184,7 @@ const ServiceNavbar = (props: Props) => {
               <div className="gap-4 hidden md:flex items-center">
                 <HiBell />
                 <Link href={"/faq"}>
-                <BsFillQuestionCircleFill className="text-[1.4rem]" />
+                  <BsFillQuestionCircleFill className="text-[1.4rem]" />
                 </Link>
                 <Link
                   href={

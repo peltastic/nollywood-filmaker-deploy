@@ -6,7 +6,6 @@ import DirectDeposit from "/public/assets/dashboard/direct-deposit.png";
 import PayPalImg from "/public/assets/dashboard/paypal.png";
 import StripeImg from "/public/assets/dashboard/stripe.png";
 import UnstyledButton from "@/components/Button/UnstyledButton";
-import PaymentMethodDetails from "./PaymentMethodDetails";
 import { Form, Formik } from "formik";
 import Field from "@/components/Field/Field";
 import { withdrawalsSchema } from "@/utils/validation/withdrawals";

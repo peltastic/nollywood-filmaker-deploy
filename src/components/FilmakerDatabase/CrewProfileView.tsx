@@ -1,11 +1,16 @@
 import { useLazyFetchCrewDataQuery } from "@/lib/features/users/filmmaker-database/filmmaker-database";
 import { useDisclosure } from "@mantine/hooks";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import ModalComponent from "../Modal/Modal";
 import Image from "next/image";
 import CancelImg from "/public/assets/cancel.svg";
-import { TwitterShareButton, WhatsappIcon, WhatsappShareButton, XIcon } from "react-share";
+import {
+  TwitterShareButton,
+  WhatsappIcon,
+  WhatsappShareButton,
+  XIcon,
+} from "react-share";
 import { notify } from "@/utils/notification";
 import { IoMdClipboard } from "react-icons/io";
 import FilmmakerSkeletonProfile from "../Skeletons/FilmmakerSkeletonProfile";
@@ -15,10 +20,12 @@ import { FaUser } from "react-icons/fa";
 import { IoBriefcaseOutline, IoLocationOutline } from "react-icons/io5";
 import UnstyledButton from "../Button/UnstyledButton";
 import Link from "next/link";
+import { TbEdit } from "react-icons/tb";
 
 type Props = {};
 const tabs_list = ["About", "Jobs", "Rate"];
 const CrewProfileView = (props: Props) => {
+  const router = useRouter();
   const [fetchCrewData, { isFetching, data }] = useLazyFetchCrewDataQuery();
   const params = useParams<{ id: string }>();
   useEffect(() => {
@@ -73,11 +80,6 @@ const CrewProfileView = (props: Props) => {
       </ModalComponent>
 
       <div className="">
-        {/* <nav className="py-8 px-10">
-          <div className="w-[4rem]">
-            <Image src={Logo} alt="logo" />
-          </div>
-        </nav> */}
         <section className="w-[90%] lg:w-[70%] mx-auto mt-10">
           {isFetching ? (
             <FilmmakerSkeletonProfile />
@@ -126,12 +128,23 @@ const CrewProfileView = (props: Props) => {
                     </div>
                   </div>
                 </div>
-                <UnstyledButton
-                  clicked={open}
-                  class="bg-black-2 transition-all hover:bg-blue-1 text-white py-2 px-4 mt-6 rounded-md"
-                >
-                  Share profile
-                </UnstyledButton>
+                <div className="flex items-center mt-6">
+                  <UnstyledButton
+                    clicked={open}
+                    class="bg-black-2 transition-all hover:bg-blue-1 text-white py-2 px-4 mr-1  rounded-md"
+                  >
+                    Share profile
+                  </UnstyledButton>
+                  <div
+                    onClick={() =>
+                      router.push(`/filmmaker-database/user/${params.id}/edit/crew`)
+                    }
+                    className="flex ml-4 items-center hover:bg-gray-bg-9 py-2 px-4 rounded-md transition-all cursor-pointer"
+                  >
+                    <p className="mr-2">Edit</p>
+                    <TbEdit className="text-3xl" />
+                  </div>
+                </div>
               </div>
               <section className="mt-16 mb-20">
                 <Tabs color="#181818" defaultValue={"about"}>
@@ -225,7 +238,9 @@ const CrewProfileView = (props: Props) => {
                 </Tabs>
               </section>
             </>
-          ):      <h1 className="text-2xl">No crew profile for this account</h1>}
+          ) : (
+            <h1 className="text-2xl">No crew profile for this account</h1>
+          )}
         </section>
       </div>
     </>

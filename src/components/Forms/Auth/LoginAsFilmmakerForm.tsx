@@ -93,6 +93,13 @@ const LoginAsFilmmakerForm = (props: Props) => {
               />
             </div>
 
+<div className="text-sm mt-2">
+  <p>Want to join or know more about fillmaker database? <span className="underline hover:text-blue-1 cursor-pointer">
+    <Link href={"/get-started"}>
+    click here
+    </Link>
+    </span> </p>
+</div>
             <UnstyledButton
               // clicked={() => router.push("/")}
               disabled={!(dirty && isValid) || isLoading}

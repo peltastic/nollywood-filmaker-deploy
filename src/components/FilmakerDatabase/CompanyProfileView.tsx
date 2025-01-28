@@ -1,6 +1,6 @@
 import { useLazyFetchCompanyDataQuery } from "@/lib/features/users/filmmaker-database/filmmaker-database";
 import { useDisclosure } from "@mantine/hooks";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import ModalComponent from "../Modal/Modal";
 import Image from "next/image";
@@ -21,11 +21,13 @@ import { AspectRatio, Tabs } from "@mantine/core";
 import { RiAttachment2 } from "react-icons/ri";
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
+import { TbEdit } from "react-icons/tb";
 
 type Props = {};
 
 const tabs_list = ["About", "Clientele", "Rate"];
 const CompanyProfileView = (props: Props) => {
+  const router = useRouter();
   const origin = window.location.href;
   const [fetchCompanyData, { isFetching, data }] =
     useLazyFetchCompanyDataQuery();
@@ -133,12 +135,23 @@ const CompanyProfileView = (props: Props) => {
                     </p>
                   </div>
                 </div>
-                <UnstyledButton
-                  clicked={open}
-                  class="bg-black-2 hover:bg-blue-1 transition-all text-white py-2 px-4 mt-6 rounded-md"
-                >
-                  Share profile
-                </UnstyledButton>
+                <div className="flex items-center mt-6">
+                  <UnstyledButton
+                    clicked={open}
+                    class="bg-black-2 hover:bg-blue-1 transition-all text-white py-2 px-4 rounded-md"
+                  >
+                    Share profile
+                  </UnstyledButton>
+                  <div
+                    onClick={() =>
+                      router.push(`/filmmaker-database/user/${params.id}/edit/company`)
+                    }
+                    className="flex ml-4 items-center hover:bg-gray-bg-9 py-2 px-4 rounded-md transition-all cursor-pointer"
+                  >
+                    <p className="mr-2">Edit</p>
+                    <TbEdit className="text-3xl" />
+                  </div>
+                </div>
               </div>
               <section className="mt-16 mb-20">
                 <Tabs color="#181818" defaultValue={"about"}>

@@ -31,10 +31,10 @@ export interface IJoinCrew {
   password?: string;
   confirmPassword?: string;
   username?: string;
-  userId?: string
+  userId?: string;
 }
 
-export interface  IJoinCompany {
+export interface IJoinCompany {
   name?: string;
   email?: string;
   mobile?: string;
@@ -60,7 +60,7 @@ export interface  IJoinCompany {
   password?: string;
   confirmPassword?: string;
   username?: string;
-  userId?: string
+  userId?: string;
 }
 
 export interface ICompanyDataResponse {
@@ -111,7 +111,7 @@ export interface ICrewDataResponse {
     dob: string;
     bio: string;
     propic: string;
-    department: string;
+    department: string[];
     role: string[];
     works: {
       title: string;
@@ -122,6 +122,50 @@ export interface ICrewDataResponse {
     }[];
 
     fee: string;
+  };
+}
+
+export interface IEditCrewPayload {
+  userId: string;
+  firstName?: string;
+  lastName?: string;
+  mobile?: string;
+  bio?: string;
+  role?: string[];
+  department?: string[];
+  works?: {
+    title: string;
+    role: string;
+    link: string;
+    year: string;
+  }[];
+  location: {
+    address: string;
+    city: string;
+    state: string;
+    country: string;
+  };
+}
+
+export interface IEditCompanyPayload {
+  userId?: string;
+  mobile?: string;
+  website?: string;
+  bio?: string;
+  clientele?: {
+    title: string;
+    link: string;
+    year: string;
+  }[];
+  type?: string
+  useRateCard?: string;
+  rateCard?: File | null;
+  fee?: string;
+  location: {
+    address: string;
+    city: string;
+    state: string;
+    country: string;
   };
 }
 
@@ -154,11 +198,11 @@ export const filmmakerDatabaseApi = createApi({
       },
     }),
     createCrewOrCompany: build.mutation<
-    {
-      crewCompany: {
-        id: string
-      }
-    },
+      {
+        crewCompany: {
+          id: string;
+        };
+      },
       { username: string; email: string; password: string }
     >({
       query: (body) => ({
@@ -173,6 +217,34 @@ export const filmmakerDatabaseApi = createApi({
     fetchCrewData: build.query<ICrewDataResponse, string>({
       query: (id) => `/api/join/crew/${id}`,
     }),
+    editCrew: build.mutation<unknown, IEditCrewPayload>({
+      query: (body) => {
+        const token = sessionStorage.getItem("filmmaker_token");
+        return {
+          url: "/api/join/update-crew",
+          body,
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+    }),
+    editCompany: build.mutation<unknown, IEditCompanyPayload>({
+      query: (data) => {
+        const formData = new FormData();
+        const body = appendToFormData(formData, data);
+        const token = sessionStorage.getItem("filmmaker_token");
+        return {
+          url: "/api/join/company/update",
+          body,
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+    }),
   }),
 });
 
@@ -182,4 +254,6 @@ export const {
   useCreateCrewOrCompanyMutation,
   useLazyFetchCompanyDataQuery,
   useLazyFetchCrewDataQuery,
+  useEditCrewMutation,
+  useEditCompanyMutation,
 } = filmmakerDatabaseApi;

@@ -115,24 +115,7 @@ const CompanyDetails = ({
               <p>*</p>
             </div>
             <SelectComponent
-              //   data={[
-              //     {
-              //       label: "0 - 500k",
-              //       value: "0 - 500k",
-              //     },
-              //     {
-              //       label: "500k - 2m",
-              //       value: "500k - 2m",
-              //     },
-              //     {
-              //       label: "2m - 5m",
-              //       value: "2m - 5m",
-              //     },
-              //     {
-              //       label: "5m+",
-              //       value: "5m+",
-              //     },
-              //   ]}
+  
               data={[
                 {
                   label: "Yes",
