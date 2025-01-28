@@ -160,7 +160,7 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
             notify("success", "Bank details saved successfully");
             nprogress.complete();
             if (row.original.type) {
-              fetchCompanyOrCrew(row.original.type);
+              fetchCompanyOrCrew({type: row.original.type});
             }
             deleteFunc.close();
           }

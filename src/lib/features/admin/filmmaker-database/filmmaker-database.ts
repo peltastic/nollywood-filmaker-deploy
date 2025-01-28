@@ -1,7 +1,6 @@
 import { ICompanyOrCrewDataResponse } from "@/interfaces/admin/filmmaker-database/filmmaker-database";
 import { adminBaseQueryWithReauth } from "@/lib/baseQuery";
 import { createApi } from "@reduxjs/toolkit/query/react";
-import build from "next/dist/build";
 
 export const adminFilmakerDatabaseApi = createApi({
   reducerPath: "adminFilmakerDatabaseApi",
@@ -9,14 +8,34 @@ export const adminFilmakerDatabaseApi = createApi({
   endpoints: (build) => ({
     fetchCompanyorCrew: build.query<
       ICompanyOrCrewDataResponse,
-      "crew" | "company"
+      { type: "crew" | "company"; roles?: string; location?: string; companyType?: string }
     >({
-      query: (type) => `/api/admin/join/fetchdata?type=${type}`,
+      query: ({ type, location, roles, companyType }) => {
+        let query = "";
+        if (roles) {
+          query += `&roles=${roles}`;
+        }
+        if (location) {
+          query += `&location=${location}`;
+        }
+        if (companyType) {
+          query += `&typeFilter=${companyType}`
+        }
+        return {
+          url: `/api/admin/join/fetchdata?type=${type}${query}`,
+        };
+      },
     }),
     deleteCrewCompany: build.mutation<unknown, string>({
-      query: (id) => ({ url: `/api/admin/crew-company/${id}`, method: "DELETE" }),
+      query: (id) => {
+        return {
+          url: `/api/admin/crew-company/${id}`,
+          method: "DELETE",
+        };
+      },
     }),
   }),
 });
 
-export const { useLazyFetchCompanyorCrewQuery, useDeleteCrewCompanyMutation } = adminFilmakerDatabaseApi;
+export const { useLazyFetchCompanyorCrewQuery, useDeleteCrewCompanyMutation } =
+  adminFilmakerDatabaseApi;

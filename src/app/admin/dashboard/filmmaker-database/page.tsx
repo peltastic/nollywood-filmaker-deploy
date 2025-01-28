@@ -13,12 +13,13 @@ import SelectComponent from "@/components/Select/SelectComponent";
 import { DataTable } from "@/components/Tables/DataTable";
 import { useProtectAdmin } from "@/hooks/useProtectAdminRoute";
 import { useLazyFetchCompanyorCrewQuery } from "@/lib/features/admin/filmmaker-database/filmmaker-database";
+import { companyTypeList } from "@/utils/constants/constants";
 import React, { useEffect, useState } from "react";
 
 type Props = {};
 
 const AdminFilmmakerDatabasePage = (props: Props) => {
-  useProtectAdmin()
+  useProtectAdmin();
   const [databaseData, setDatabaseData] = useState<
     ICrewFilmmakerDatabaseColumnData[]
   >([]);
@@ -26,11 +27,17 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
     ICompanyFilmmakerDatabaseColumnData[]
   >([]);
 
+  const [companyType, setCompanyType] = useState<string>("");
+
+  const [location, setLocation] = useState<string>("");
+
   const [type, setType] = useState<"crew" | "company">("crew");
   const [fetchCompanyOrCrew, { data, isFetching }] =
     useLazyFetchCompanyorCrewQuery();
   useEffect(() => {
-    fetchCompanyOrCrew(type);
+    fetchCompanyOrCrew({
+      type,
+    });
   }, []);
 
   useEffect(() => {
@@ -48,13 +55,13 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
               role: el.role[0],
               fee: el.fee || "N/A",
               fulldata: el,
-              type
+              type,
             };
           });
-          setDatabaseData(transformedData);
-        }
-        if (type === "company") {
-          const transformedData: ICompanyFilmmakerDatabaseColumnData[] =
+        setDatabaseData(transformedData);
+      }
+      if (type === "company") {
+        const transformedData: ICompanyFilmmakerDatabaseColumnData[] =
           data.data.map((el) => {
             return {
               category: "Film company",
@@ -65,7 +72,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
               phone: el.mobile,
               fee: el.fee || "N/A",
               fulldata: el,
-              type
+              type,
             };
           });
         setCompanyDatabase(transformedData);
@@ -76,25 +83,75 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
     <ServiceLayout admin>
       <DashboardBodyLayout>
         <section>
-          <div className="bg-white py-6 px-4">
-            <div className="w-[10rem]">
-              <SelectComponent
-                data={[
-                  {
-                    label: "Crew",
-                    value: "crew",
-                  },
-                  {
-                    label: "Company",
-                    value: "company",
-                  },
-                ]}
-                label=""
-                placeholder=""
-                value={type}
-                setValueProps={(val: any) => {
-                  setType(val);
-                  fetchCompanyOrCrew(val);
+          <div className="bg-white py-6 px-4 flex items-center">
+            <div className="flex items-center text-sm font-medium">
+              <div
+                onClick={() => {
+                  setType("crew");
+                  setCompanyType("");
+                  setLocation("");
+                  fetchCompanyOrCrew({ type: "crew" });
+                }}
+                className={`${
+                  type === "crew" ? "border border-black-2" : "border"
+                }  py-2 px-6 rounded-md mr-2 cursor-pointer`}
+              >
+                <p>Crew</p>
+              </div>
+              <div
+                onClick={() => {
+                  setType("company");
+                  setLocation("");
+                  fetchCompanyOrCrew({ type: "company" });
+                }}
+                className={`${
+                  type === "company" ? "border border-black-2" : "border"
+                } py-2 px-6 rounded-md mr-2 cursor-pointer`}
+              >
+                <p>Company</p>
+              </div>
+            </div>
+            <div className="ml-auto flex">
+              {type === "company" ? (
+                <div className="mr-2">
+                  <SelectComponent
+                    data={companyTypeList}
+                    label=""
+                    placeholder="Select company type"
+                    value={companyType}
+                    // defaultValue={ty}
+                    setValueProps={(val) => {
+                      if (val) {
+                        setCompanyType(val);
+                        fetchCompanyOrCrew({
+                          type,
+                          companyType: val,
+                          location,
+                        });
+                      }
+                    }}
+                    size="md"
+                  />
+                </div>
+              ) : null}
+              <input
+                type="text"
+                placeholder="Search by Location"
+                value={location}
+                className="outline-none border focus:border py-2 px-6 rounded-md text-md"
+                onChange={(e) => {
+                  if (e.target.value) {
+                    setLocation(e.target.value);
+                    fetchCompanyOrCrew({
+                      type,
+                      location,
+                    });
+                  } else {
+                    setLocation(e.target.value);
+                    fetchCompanyOrCrew({
+                      type,
+                    });
+                  }
                 }}
               />
             </div>
@@ -107,7 +164,11 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                 isFetching={isFetching}
                 loaderLength={10}
                 columns={crew_database_column}
-                emptyHeader="No crew profiles registered yet"
+                emptyHeader={
+                  location
+                    ? "No results found for your search"
+                    : "No crew profiles registered yet"
+                }
               />
             ) : (
               <DataTable
@@ -116,7 +177,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                 isFetching={isFetching}
                 loaderLength={10}
                 columns={company_database_column}
-                emptyHeader="No company profiles registered yet"
+                emptyHeader={(companyType || location ) ? "No results found for your search" :"No company profiles registered yet"}
               />
             )}
           </div>

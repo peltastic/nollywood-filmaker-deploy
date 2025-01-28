@@ -143,7 +143,7 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
             notify("success", "Bank details saved successfully");
             nprogress.complete();
             if (row.original.type) {
-              fetchCompanyOrCrew(row.original.type);
+              fetchCompanyOrCrew({ type: row.original.type });
             }
             deleteFunc.close();
           }
@@ -187,7 +187,10 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
                     <p>View Profile</p>
                   </li>
                   {row.original.consultant ? null : (
-                    <li className="cursor-pointer px-2 py-2" onClick={deleteFunc.open}>
+                    <li
+                      className="cursor-pointer px-2 py-2"
+                      onClick={deleteFunc.open}
+                    >
                       <p>Delete</p>
                     </li>
                   )}
