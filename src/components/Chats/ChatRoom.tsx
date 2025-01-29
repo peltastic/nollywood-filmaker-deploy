@@ -943,12 +943,6 @@ const ChatRoom = (props: Props) => {
                       <div className="w-full relative block lg:hidden">
                         <Textarea
                           ref={ref}
-                          // onKeyDown={(e) => {
-                          //   if (e.key === "Enter" && !e.shiftKey) {
-                          //     e.preventDefault();
-                          //     sendMessageHandler();
-                          //   }
-                          // }}
                           minRows={0}
                           autosize
                           size="md"

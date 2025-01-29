@@ -40,7 +40,7 @@ const ConsultantSingleChat = (props: Props) => {
                 getChatFiles(params.id);
               }
             }}
-            type="user"
+            type="consultant"
             orderId={params.id}
             refreshChat={() => {
               if (params.id) {
