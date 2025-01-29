@@ -6,9 +6,13 @@ import InputComponent from "@/components/Input/Input";
 import SelectComponent from "@/components/Select/SelectComponent";
 import ServiceInfo from "@/components/ServiceInfo/ServiceInfo";
 import TextArea from "@/components/TextArea/TextArea";
-import { testExhibitionData, testSelectData } from "@/utils/constants/constants";
+import {
+  testExhibitionData,
+  testSelectData,
+} from "@/utils/constants/constants";
+import { Switch } from "@mantine/core";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 
 type Props = {
@@ -18,7 +22,7 @@ type Props = {
   setScriptProps: (key: string, value: string) => void;
   setFileProps: (value: File | null) => void;
   proceed: () => void;
-  isLoading?: boolean
+  isLoading?: boolean;
 };
 
 const BudgetAndAdviceForm = ({
@@ -28,9 +32,10 @@ const BudgetAndAdviceForm = ({
   disabled,
   fileName,
   proceed,
-  isLoading
+  isLoading,
 }: Props) => {
   const router = useRouter();
+  const [checked, setChecked] = useState<boolean>(false);
   return (
     <div className="w-full xl:w-[80%]">
       <form
@@ -47,6 +52,32 @@ const BudgetAndAdviceForm = ({
           className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
           type=""
         />
+        <div className="mt-10 mb-10 cursor-pointer">
+          <Switch
+            label="Series"
+            color="#181818"
+            checked={checked}
+            size="md"
+            onChange={(val) => {
+              if (val.currentTarget.checked) {
+                setScriptProps("showType", "Yes");
+              } else {
+                setScriptProps("showType", "No");
+              }
+              setChecked(val.currentTarget.checked);
+            }}
+          />
+        </div>
+        {checked && (
+          <InputComponent
+            value={data.episodes}
+            label="No. of episodes"
+            placeholder="Text"
+            changed={(val) => setScriptProps("episodes", val)}
+            className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
+            type=""
+          />
+        )}
         <div className="mt-10">
           <TextArea
             placeholder=""
@@ -116,7 +147,7 @@ const BudgetAndAdviceForm = ({
             disabled={disabled}
             class="flex justify-center w-[12rem] py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
           >
-             {isLoading ? (
+            {isLoading ? (
               <div className="w-[1rem] py-1">
                 <Spinner />
               </div>

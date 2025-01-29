@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { MantineProvider } from "@mantine/core";
+import { MantineProvider, createTheme } from "@mantine/core";
 import "@mantine/core/styles.css";
 import "@mantine/charts/styles.css";
 import Providers from "@/components/Providers/Providers";
@@ -38,6 +38,7 @@ export default function RootLayout({
               headings: {
                 fontFamily: "Instrument Sans, sans-serif",
               },
+              cursorType: "pointer",
             }}
           >
             <NavigationProgress color="#f11946" />

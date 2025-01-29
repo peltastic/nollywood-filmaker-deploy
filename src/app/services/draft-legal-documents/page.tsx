@@ -23,6 +23,8 @@ export interface IDraftLegalDocumentState {
   title: string;
   production_company: string;
   information: string;
+  showType: string;
+  episodes: string;
 }
 
 const DraftLegalDocumentPage = (props: Props) => {
@@ -42,6 +44,8 @@ const DraftLegalDocumentPage = (props: Props) => {
     information: "",
     production_company: "",
     title: "",
+    episodes: "",
+    showType: ""
   });
 
   const setScriptDataHandler = (key: string, value: string) => {
@@ -123,6 +127,8 @@ const DraftLegalDocumentPage = (props: Props) => {
                         productionCompany: scriptData.production_company,
                         title: "Draft Legal documents",
                         type: "Movie Pitch",
+                        showtype: scriptData.showType,
+                        episodes: scriptData.episodes,
                         userId,
                       });
                       initializeTransactionListener(userId);

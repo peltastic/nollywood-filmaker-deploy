@@ -28,6 +28,8 @@ export interface ICreatePitchState {
   visual: string;
   information: string;
   budget: string;
+  showType: string;
+  episodes: string;
 }
 
 const CreatePitchPage = (props: Props) => {
@@ -50,6 +52,8 @@ const CreatePitchPage = (props: Props) => {
     information: "",
     visual: "",
     platform: "",
+    episodes: "",
+    showType: ""
   });
   const { paymentStatus } = useServicePayment(
     isError,
@@ -148,6 +152,8 @@ const CreatePitchPage = (props: Props) => {
                       title: "Create a Pitch based on my Script",
                       type: "request",
                       userId,
+                      showtype: scriptData.showType,
+                      episodes: scriptData.episodes,
                       visualStyle: scriptData.visual,
                       fileName: file?.name || ""
                     });

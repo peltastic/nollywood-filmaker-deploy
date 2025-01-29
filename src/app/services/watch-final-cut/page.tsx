@@ -27,6 +27,8 @@ export interface IWatchFinalCutState {
   platform: string;
   link: string;
   concerns: string;
+  showType: string;
+  episodes: string;
 }
 
 const page = (props: Props) => {
@@ -56,6 +58,8 @@ const page = (props: Props) => {
     logline: "",
     movie_title: "",
     platform: "",
+    episodes: "",
+    showType: "",
   });
   const setScriptDataHandler = (key: string, value: string) => {
     setScriptData({
@@ -82,7 +86,7 @@ const page = (props: Props) => {
           status={paymentStatus}
           info="Final Cut watch can take between 3-5 days. You will be mailed with calendar dates to choose a chat"
         />
-       ) : null} 
+      ) : null}
       <ServiceLayout nonDashboard>
         <div className="flex flex-wrap items-start">
           <ServiceLeft
@@ -121,10 +125,7 @@ const page = (props: Props) => {
               <PaymentWindow successRoute="/success-page/watch-final-cut" />
             </div>
           ) : (
-            <ServiceRight
-              subtitle=""
-              title="Let’s start with your details"
-            >
+            <ServiceRight subtitle="" title="Let’s start with your details">
               <WatchFinalCutForm
                 proceed={() => {
                   if (userId) {
@@ -137,6 +138,8 @@ const page = (props: Props) => {
                       title: "Watch the Final cut of my film and advice",
                       movie_title: scriptData.movie_title,
                       type: "request",
+                      showtype: scriptData.showType,
+                      episodes: scriptData.episodes,
                       userId,
                     });
                     initializeTransactionListener(userId);

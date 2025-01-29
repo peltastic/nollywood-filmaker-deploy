@@ -39,6 +39,8 @@ const page = (props: Props) => {
     genre: "",
     logline: "",
     platform: "",
+    episodes: "",
+    showType: ""
   });
   const setScriptDataHandler = (key: string, value: string) => {
     setScriptData({
@@ -129,6 +131,8 @@ const page = (props: Props) => {
                       synopsis: scriptData.logline,
                       title: "Look at my Budget and advice",
                       type: "request",
+                      showtype: scriptData.showType,
+                      episodes: scriptData.episodes,
                       fileName: file?.name || "" ,
                       userId,
                     });

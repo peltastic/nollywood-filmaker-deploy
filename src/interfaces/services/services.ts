@@ -1,6 +1,8 @@
 interface GeneralType {
   userId: string;
   movie_title: string;
+  showtype: string;
+  episodes?: string;
 }
 
 interface InitializeReadMyScriptPayload extends GeneralType {
@@ -11,7 +13,7 @@ interface InitializeReadMyScriptPayload extends GeneralType {
   files: File | null;
   concerns?: string;
   type: "request";
-  fileName: string
+  fileName: string;
 }
 interface IServiceResponse {
   result: {
@@ -46,7 +48,7 @@ interface InitializeBudgetAndAdvicePayload extends GeneralType {
   genre: string;
   platform: string;
   concerns: string;
-  fileName: string
+  fileName: string;
   files: File | null;
 }
 
@@ -60,7 +62,7 @@ interface InitializeCreateProductionBudgetPayload extends GeneralType {
   actors: string;
   info: string;
   type: "request";
-  fileName: string
+  fileName: string;
 }
 
 interface InitializeCreateMartketingBudgetPayload extends GeneralType {
@@ -84,7 +86,7 @@ interface InitializeCreatePitchPayload extends GeneralType {
   visualStyle: string;
   info: string;
   budgetrange: string;
-  fileName: string
+  fileName: string;
 }
 
 interface InitializaeDraftLegalDocument extends GeneralType {

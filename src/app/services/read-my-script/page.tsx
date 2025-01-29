@@ -25,6 +25,8 @@ export interface IReadMyScriptState {
   genre: string;
   platform: string;
   concerns: string;
+  showType: string;
+  episodes: string;
 }
 const ReadMyScriptPage = (props: Props) => {
   useProtectRoute();
@@ -53,6 +55,8 @@ const ReadMyScriptPage = (props: Props) => {
     genre: "",
     logline: "",
     platform: "",
+    showType: "",
+    episodes: ""
   });
   const setScriptDataHandler = (key: string, value: string) => {
     setScriptData({
@@ -81,7 +85,7 @@ const ReadMyScriptPage = (props: Props) => {
           info="Script reading can take between 1-2 weeks. You will be mailed with
           calendar dates to choose a chat"
         />
-       ) : null} 
+      ) : null}
       <ServiceLayout nonDashboard>
         <div className="flex flex-wrap items-start">
           <ServiceLeft
@@ -133,6 +137,8 @@ const ReadMyScriptPage = (props: Props) => {
                         type: "request",
                         files: file,
                         fileName: file?.name || "",
+                        episodes: scriptData.episodes,
+                        showtype: scriptData.showType,
                       });
                       initializeTransactionListener(userId);
                       nprogress.start();

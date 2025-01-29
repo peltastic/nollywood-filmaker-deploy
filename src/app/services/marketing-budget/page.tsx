@@ -27,6 +27,8 @@ export interface IMarketingBudgetState {
   target_social: string;
   target_ooh: string;
   budget: string;
+  showType: string;
+  episodes: string;
 }
 
 const MarketingBudget = (props: Props) => {
@@ -49,6 +51,8 @@ const MarketingBudget = (props: Props) => {
     platform: "",
     target_ooh: "",
     target_social: "",
+    episodes: "",
+    showType: ""
   });
   const setScriptDataHandler = (key: string, value: string) => {
     setScriptData({
@@ -139,6 +143,8 @@ const MarketingBudget = (props: Props) => {
                       platform: scriptData.platform,
                       social: scriptData.target_social,
                       title: "Create a Marketing budget",
+                      showtype: scriptData.showType,
+                      episodes: scriptData.episodes,
                       type: "request",
                       userId,
                     });

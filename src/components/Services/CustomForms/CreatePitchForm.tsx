@@ -7,8 +7,9 @@ import SelectComponent from "@/components/Select/SelectComponent";
 import ServiceInfo from "@/components/ServiceInfo/ServiceInfo";
 import TextArea from "@/components/TextArea/TextArea";
 import { testExhibitionData, testSelectData } from "@/utils/constants/constants";
+import { Switch } from "@mantine/core";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 
 type Props = {
@@ -31,6 +32,7 @@ const CreatePitchForm = ({
   isLoading,
 }: Props) => {
   const router = useRouter();
+  const [checked, setChecked] = useState<boolean>(false);
   return (
     <div className="w-full xl:w-[80%]">
       <form
@@ -47,6 +49,32 @@ const CreatePitchForm = ({
           className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
           type=""
         />
+         <div className="mt-10 mb-10 cursor-pointer">
+          <Switch
+            label="Series"
+            color="#181818"
+            checked={checked}
+            size="md"
+            onChange={(val) => {
+              if (val.currentTarget.checked) {
+                setScriptProps("showType", "Yes");
+              } else {
+                setScriptProps("showType", "No");
+              }
+              setChecked(val.currentTarget.checked);
+            }}
+          />
+        </div>
+        {checked && (
+          <InputComponent
+            value={data.episodes}
+            label="No. of episodes"
+            placeholder="Text"
+            changed={(val) => setScriptProps("episodes", val)}
+            className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
+            type=""
+          />
+        )}
         <div className="mt-8">
           <label className="block mb-2 text-black-2 font-medium text-[0.88rem]">
             Upload your script

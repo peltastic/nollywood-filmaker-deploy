@@ -28,6 +28,8 @@ export interface IProductionBudgetState {
   number_of_days: string;
   information: string;
   budget: string;
+  showType: string;
+  episodes: string;
 }
 
 const ProductionBudgetPage = (props: Props) => {
@@ -52,6 +54,8 @@ const ProductionBudgetPage = (props: Props) => {
     information: "",
     number_of_days: "",
     platform: "",
+    episodes: "",
+    showType: ""
   });
   const setScriptDataHandler = (key: string, value: string) => {
     setScriptData({
@@ -151,7 +155,9 @@ const ProductionBudgetPage = (props: Props) => {
                       info: scriptData.information,
                       userId,
                       type: "request",
-                      fileName: file?.name || ""
+                      fileName: file?.name || "",
+                      showtype: scriptData.showType,
+                      episodes: scriptData.episodes
                     });
                     initializeTransactionListener(userId);
                     nprogress.start();
