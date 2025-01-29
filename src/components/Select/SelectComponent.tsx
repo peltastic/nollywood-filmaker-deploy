@@ -1,6 +1,5 @@
 import React from "react";
 import { ComboboxItem, Select } from "@mantine/core";
-import { FaCheck } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
 import classes from "@/app/styles/Select.module.css";
 

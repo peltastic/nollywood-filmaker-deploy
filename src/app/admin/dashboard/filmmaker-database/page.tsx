@@ -7,14 +7,20 @@ import {
   ICrewFilmmakerDatabaseColumnData,
   crew_database_column,
 } from "@/components/Columns/admin/CrewFilmmakerDatabaseColumn";
+import HoverCardComponent from "@/components/HoverCard/HoverCardComponent";
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import SelectComponent from "@/components/Select/SelectComponent";
 import { DataTable } from "@/components/Tables/DataTable";
 import { useProtectAdmin } from "@/hooks/useProtectAdminRoute";
 import { useLazyFetchCompanyorCrewQuery } from "@/lib/features/admin/filmmaker-database/filmmaker-database";
-import { companyTypeList } from "@/utils/constants/constants";
+import {
+  companyTypeList,
+  departmentList,
+  film_crew_values,
+} from "@/utils/constants/constants";
 import React, { useEffect, useState } from "react";
+import { MdRefresh } from "react-icons/md";
 
 type Props = {};
 
@@ -29,9 +35,16 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
 
   const [companyType, setCompanyType] = useState<string>("");
 
+  const [companyDepartmentVal, setCompanyDepartmentVal] = useState<string>("");
+  const [rolesList, setRolesList] = useState<string[]>([]);
+  const [roleVal, setRoleVal] = useState<string>("");
+
   const [location, setLocation] = useState<string>("");
 
   const [type, setType] = useState<"crew" | "company">("crew");
+
+  const [refresh, setRefresh] = useState<boolean>(false);
+
   const [fetchCompanyOrCrew, { data, isFetching }] =
     useLazyFetchCompanyorCrewQuery();
   useEffect(() => {
@@ -39,6 +52,14 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
       type,
     });
   }, []);
+  useEffect(() => {
+    if (companyDepartmentVal) {
+      const list = film_crew_values.filter(
+        (el) => el.key === companyDepartmentVal
+      );
+      setRolesList(list[0].value);
+    }
+  }, [companyDepartmentVal]);
 
   useEffect(() => {
     if (data) {
@@ -87,6 +108,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
             <div className="flex items-center text-sm font-medium">
               <div
                 onClick={() => {
+                  setRefresh(false);
                   setType("crew");
                   setCompanyType("");
                   setLocation("");
@@ -100,9 +122,12 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
               </div>
               <div
                 onClick={() => {
+                  setRefresh(false);
                   setType("company");
                   setLocation("");
                   fetchCompanyOrCrew({ type: "company" });
+                  setCompanyDepartmentVal("");
+                  setRoleVal("");
                 }}
                 className={`${
                   type === "company" ? "border border-black-2" : "border"
@@ -111,7 +136,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                 <p>Company</p>
               </div>
             </div>
-            <div className="ml-auto flex">
+            <div className="ml-auto flex items-center">
               {type === "company" ? (
                 <div className="mr-2">
                   <SelectComponent
@@ -119,9 +144,9 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                     label=""
                     placeholder="Select company type"
                     value={companyType}
-                    // defaultValue={ty}
                     setValueProps={(val) => {
                       if (val) {
+                        setRefresh(true);
                         setCompanyType(val);
                         fetchCompanyOrCrew({
                           type,
@@ -133,7 +158,61 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                     size="md"
                   />
                 </div>
-              ) : null}
+              ) : (
+                <div className="flex mr-4 items-center">
+                  <div className="">
+                    <SelectComponent
+                      data={departmentList}
+                      label=""
+                      placeholder="Select department"
+                      size="md"
+                      value={companyDepartmentVal}
+                      defaultValue={companyDepartmentVal}
+                      setValueProps={(val) => {
+                        if (val) {
+                          setCompanyDepartmentVal(val);
+                          setRefresh(true);
+                          fetchCompanyOrCrew({
+                            type,
+                            roles: roleVal,
+                            department: val,
+                            location,
+                          });
+                        }
+                      }}
+                    />
+                  </div>
+                  {rolesList.length > 0 && (
+                    <div className="ml-4">
+                      <SelectComponent
+                        data={rolesList.map((el) => {
+                          return {
+                            label: el,
+                            value: el,
+                          };
+                        })}
+                        size="md"
+                        label=""
+                        placeholder="Select role"
+                        value={roleVal}
+                        defaultValue={roleVal}
+                        setValueProps={(val) => {
+                          if (val) {
+                            setRoleVal(val);
+                            setRefresh(true);
+                            fetchCompanyOrCrew({
+                              type,
+                              roles: val,
+                              department: companyDepartmentVal,
+                              location,
+                            });
+                          }
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
               <input
                 type="text"
                 placeholder="Search by Location"
@@ -154,6 +233,30 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                   }
                 }}
               />
+              {refresh && (
+                <HoverCardComponent
+                  target={
+                    <div
+                      onClick={() => {
+                        fetchCompanyOrCrew({
+                          type,
+                        });
+                        setCompanyDepartmentVal("");
+                        setCompanyType("");
+                        setRoleVal("");
+                        setRolesList([])
+                        setLocation("");
+                        setRefresh(false)
+                      }}
+                      className="text-2xl ml-6 cursor-pointer transition-all hover:bg-gray-bg-9 rounded-full py-1 px-1"
+                    >
+                      <MdRefresh />
+                    </div>
+                  }
+                >
+                  <p className="text-sm">Refresh table</p>
+                </HoverCardComponent>
+              )}
             </div>
           </div>
           <div className="">
@@ -177,7 +280,11 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                 isFetching={isFetching}
                 loaderLength={10}
                 columns={company_database_column}
-                emptyHeader={(companyType || location ) ? "No results found for your search" :"No company profiles registered yet"}
+                emptyHeader={
+                  companyType || location
+                    ? "No results found for your search"
+                    : "No company profiles registered yet"
+                }
               />
             )}
           </div>

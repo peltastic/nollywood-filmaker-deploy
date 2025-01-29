@@ -8,18 +8,27 @@ export const adminFilmakerDatabaseApi = createApi({
   endpoints: (build) => ({
     fetchCompanyorCrew: build.query<
       ICompanyOrCrewDataResponse,
-      { type: "crew" | "company"; roles?: string; location?: string; companyType?: string }
+      {
+        type: "crew" | "company";
+        roles?: string;
+        location?: string;
+        companyType?: string;
+        department?: string;
+      }
     >({
-      query: ({ type, location, roles, companyType }) => {
+      query: ({ type, location, roles, companyType, department }) => {
         let query = "";
         if (roles) {
           query += `&roles=${roles}`;
+        }
+        if (department) {
+          query += `&department=${department}`;
         }
         if (location) {
           query += `&location=${location}`;
         }
         if (companyType) {
-          query += `&typeFilter=${companyType}`
+          query += `&typeFilter=${companyType}`;
         }
         return {
           url: `/api/admin/join/fetchdata?type=${type}${query}`,
