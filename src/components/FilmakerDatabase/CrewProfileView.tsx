@@ -206,7 +206,7 @@ const CrewProfileView = (props: Props) => {
                               <Link
                                 target="_blank"
                                 className="text-[#4B5563] border-b"
-                                href={el.link}
+                                href={el.link || "/"}
                               >
                                 View project
                               </Link>
