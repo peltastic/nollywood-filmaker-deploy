@@ -13,6 +13,13 @@ import { useLazyGetCompanyOrCrewDataQuery } from "@/lib/features/consultants/das
 import { DataTable } from "@/components/Tables/DataTable";
 import SelectComponent from "@/components/Select/SelectComponent";
 import UnstyledButton from "@/components/Button/UnstyledButton";
+import HoverCardComponent from "@/components/HoverCard/HoverCardComponent";
+import { MdRefresh } from "react-icons/md";
+import {
+  companyTypeList,
+  departmentList,
+  film_crew_values,
+} from "@/utils/constants/constants";
 
 type Props = {
   close: () => void;
@@ -37,12 +44,22 @@ const FilmmakerDatabaseModal = (props: Props) => {
   const [companyDatabaseData, setCompanyDatabase] = useState<
     ICompanyFilmmakerDatabaseColumnData[]
   >([]);
+
   const [type, setType] = useState<"crew" | "company">("crew");
+
+  const [refresh, setRefresh] = useState<boolean>(false);
+
+  const [companyType, setCompanyType] = useState<string>("");
+
+  const [companyDepartmentVal, setCompanyDepartmentVal] = useState<string>("");
+  const [rolesList, setRolesList] = useState<string[]>([]);
+  const [roleVal, setRoleVal] = useState<string>("");
+  const [location, setLocation] = useState<string>("");
 
   const [fetchCompanyOrCrew, { data, isFetching }] =
     useLazyGetCompanyOrCrewDataQuery();
   useEffect(() => {
-    fetchCompanyOrCrew(type);
+    fetchCompanyOrCrew({ type });
   }, []);
 
   useEffect(() => {
@@ -55,6 +72,15 @@ const FilmmakerDatabaseModal = (props: Props) => {
     const selectedValues = arr.map((index) => companyDatabaseData[index]);
     setSelectedCompanyDataArray(selectedValues);
   }, [companySelectedData]);
+
+  useEffect(() => {
+    if (companyDepartmentVal) {
+      const list = film_crew_values.filter(
+        (el) => el.key === companyDepartmentVal
+      );
+      setRolesList(list[0].value);
+    }
+  }, [companyDepartmentVal]);
 
   useEffect(() => {
     if (data) {
@@ -109,29 +135,159 @@ const FilmmakerDatabaseModal = (props: Props) => {
           <Image src={CancelImg} alt="cancel-img" />
         </div>
       </div>
-      <div className="bg-white py-6 flex items-center ">
-        <div className="w-[10rem]">
-          <SelectComponent
-            data={[
-              {
-                label: "Crew",
-                value: "crew",
-              },
-              {
-                label: "Company",
-                value: "company",
-              },
-            ]}
-            label=""
-            placeholder=""
-            value={type}
-            setValueProps={(val: any) => {
-              setSelectedCompanyDataArray([])
-              setSelectedCrewDataArray([])
-              setType(val);
-              fetchCompanyOrCrew(val);
+      <div className="bg-white py-6 flex items-center flex-wrap ">
+        <div className="flex items-center text-sm font-medium">
+          <div
+            onClick={() => {
+              setRefresh(false);
+              setType("crew");
+              setCompanyType("");
+              setLocation("");
+              fetchCompanyOrCrew({ type: "crew" });
+            }}
+            className={`${
+              type === "crew" ? "border border-black-2" : "border"
+            }  py-2 px-6 rounded-md mr-2 cursor-pointer`}
+          >
+            <p>Crew</p>
+          </div>
+          <div
+            onClick={() => {
+              setRefresh(false);
+              setType("company");
+              setLocation("");
+              fetchCompanyOrCrew({ type: "company" });
+              setCompanyDepartmentVal("");
+              setRoleVal("");
+            }}
+            className={`${
+              type === "company" ? "border border-black-2" : "border"
+            } py-2 px-6 rounded-md mr-2 cursor-pointer`}
+          >
+            <p>Company</p>
+          </div>
+        </div>
+        <div className="ml-auto flex flex-wrap items-center w-full lg:w-auto mt-8 lg:mt-0">
+          {type === "company" ? (
+            <div className="mid:mr-2 w-full mid:w-auto mb-6 mid:mb-auto">
+              <SelectComponent
+                data={companyTypeList}
+                label=""
+                placeholder="Select company type"
+                value={companyType}
+                setValueProps={(val) => {
+                  if (val) {
+                    setRefresh(true);
+                    setCompanyType(val);
+                    fetchCompanyOrCrew({
+                      type,
+                      companyType: val,
+                      location,
+                    });
+                  }
+                }}
+                size="md"
+              />
+            </div>
+          ) : (
+            <div className="flex flex-wrap mid:mr-4 items-center w-full mid:w-auto">
+              <div className="w-full mid:w-auto mb-6 mid:mb-auto">
+                <SelectComponent
+                  data={departmentList}
+                  label=""
+                  placeholder="Select department"
+                  size="md"
+                  value={companyDepartmentVal}
+                  defaultValue={companyDepartmentVal}
+                  setValueProps={(val) => {
+                    if (val) {
+                      setCompanyDepartmentVal(val);
+                      setRefresh(true);
+                      fetchCompanyOrCrew({
+                        type,
+                        roles: roleVal,
+                        department: val,
+                        location,
+                      });
+                    }
+                  }}
+                />
+              </div>
+              {rolesList.length > 0 && (
+                <div className="mid:ml-4 w-full mid:w-auto mb-6 mid:mb-auto">
+                  <SelectComponent
+                    data={rolesList.map((el) => {
+                      return {
+                        label: el,
+                        value: el,
+                      };
+                    })}
+                    size="md"
+                    label=""
+                    placeholder="Select role"
+                    value={roleVal}
+                    defaultValue={roleVal}
+                    setValueProps={(val) => {
+                      if (val) {
+                        setRoleVal(val);
+                        setRefresh(true);
+                        fetchCompanyOrCrew({
+                          type,
+                          roles: val,
+                          department: companyDepartmentVal,
+                          location,
+                        });
+                      }
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+          <input
+            type="text"
+            placeholder="Search by Location"
+            value={location}
+            className="outline-none border focus:border py-2 px-6 rounded-md text-md w-full mid:w-auto"
+            onChange={(e) => {
+              if (e.target.value) {
+                setLocation(e.target.value);
+                fetchCompanyOrCrew({
+                  type,
+                  location,
+                });
+              } else {
+                setLocation(e.target.value);
+                fetchCompanyOrCrew({
+                  type,
+                });
+              }
             }}
           />
+          {refresh && (
+            <HoverCardComponent
+              target={
+                <div
+                  onClick={() => {
+                    fetchCompanyOrCrew({
+                      type,
+                    });
+                    setCompanyDepartmentVal("");
+                    setCompanyType("");
+                    setRoleVal("");
+                    setRolesList([]);
+                    setLocation("");
+                    setRefresh(false);
+                  }}
+                  className=" mt-8 mid:mt-auto text-2xl mid:ml-6 cursor-pointer transition-all hover:bg-gray-bg-9 rounded-full py-1 px-1"
+                >
+                  <MdRefresh />
+                </div>
+              }
+            >
+              <p className="text-sm">Refresh table</p>
+            </HoverCardComponent>
+          )}
         </div>
         {selectedCrewDataArray.length > 0 ||
         selectedCompanyDataArray.length > 0 ? (
@@ -144,7 +300,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
               }
               props.close();
             }}
-            class="ml-auto transition-all hover:bg-blue-1 bg-black-3 text-white text-[0.88rem] py-2 px-4 rounded-md"
+            class="mt-10 lg:mt-0 lg:ml-6 transition-all hover:bg-blue-1 bg-black-3 text-white text-[0.88rem] py-2 px-4 rounded-md"
           >
             Upload to chat
           </UnstyledButton>

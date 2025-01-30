@@ -8,9 +8,31 @@ export const filmmakerDatabaseConsultantApi = createApi({
   endpoints: (build) => ({
     getCompanyOrCrewData: build.query<
       ICompanyOrCrewDataResponse,
-      "crew" | "company"
+      {
+        type: "crew" | "company";
+        roles?: string;
+        location?: string;
+        companyType?: string;
+        department?: string;
+      }
     >({
-      query: (type) => `/api/consultants/fetch-data?type=${type}`,
+      query: ({ type, location, roles, companyType, department }) => {
+        let query = "";
+        if (roles) {
+          query += `&roles=${roles}`;
+        }
+        if (department) {
+          query += `&department=${department}`;
+        }
+        if (location) {
+          query += `&location=${location}`;
+        }
+        if (companyType) {
+          query += `&typeFilter=${companyType}`;
+        }
+
+        return { url: `/api/consultants/fetch-data?type=${type}${query}` };
+      },
     }),
   }),
 });

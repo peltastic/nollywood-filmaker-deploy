@@ -11,9 +11,11 @@ import OrderDetailsBody from "@/components/OrderDetails/OrderDetailsBody";
 
 import OrderDetailsPageSkeleton from "@/components/Skeletons/OrderDetailsPageSkeleton";
 import { useLazyGetCustomerRequestDetailQuery } from "@/lib/features/admin/requests/request";
+import { useProtectAdmin } from "@/hooks/useProtectAdminRoute";
 type Props = {};
 
 const CustomerOrderDetailsPage = (props: Props) => {
+  useProtectAdmin()
   const [getCustomerReqDetails, { data, isFetching }] =
     useLazyGetCustomerRequestDetailQuery();
   const search = useSearchParams();

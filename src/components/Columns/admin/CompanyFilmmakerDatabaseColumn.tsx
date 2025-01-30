@@ -59,7 +59,7 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
       header: () => <div className=" py-4">Company name</div>,
       cell: ({ row }) => {
         return (
-          <div className="">
+          <div className="w-[10rem] xl:w-auto">
             <p>{row.getValue("name")}</p>
           </div>
         );
@@ -70,7 +70,7 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
       header: () => <div className=" ">Category</div>,
       cell: ({ row }) => {
         return (
-          <div className="py-4">
+          <div className="py-4 w-[10rem] xl:w-auto">
             <p>{row.getValue("category")}</p>
           </div>
         );
@@ -78,7 +78,7 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
     },
     {
       accessorKey: "company_type",
-      header: () => <div className=" py-4">Company Type</div>,
+      header: () => <div className=" py-4 w-[20rem] xl:w-auto">Company Type</div>,
       cell: ({ row }) => {
         return (
           <div className="">
@@ -92,7 +92,7 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
       header: () => <div className="">Fee range</div>,
       cell: ({ row }) => {
         return (
-          <div className="">
+          <div className="w-[10rem] xl:w-auto">
             <p>{row.getValue("fee")}</p>
           </div>
         );
@@ -103,7 +103,7 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
       header: () => <div className="">Email</div>,
       cell: ({ row }) => {
         return (
-          <div className="">
+          <div className="w-[10rem] xl:w-auto">
             <p>{row.getValue("email")}</p>
           </div>
         );
@@ -114,7 +114,7 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
       header: () => <div className="">Phone number</div>,
       cell: ({ row }) => {
         return (
-          <div className="">
+          <div className="w-[10rem] xl:w-auto">
             <p>{row.getValue("phone")}</p>
           </div>
         );

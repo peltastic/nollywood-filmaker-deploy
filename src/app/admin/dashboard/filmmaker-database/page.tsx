@@ -104,7 +104,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
     <ServiceLayout admin>
       <DashboardBodyLayout>
         <section>
-          <div className="bg-white py-6 px-4 flex items-center">
+          <div className="bg-white py-6 px-4 flex items-center flex-wrap">
             <div className="flex items-center text-sm font-medium">
               <div
                 onClick={() => {
@@ -136,9 +136,9 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                 <p>Company</p>
               </div>
             </div>
-            <div className="ml-auto flex items-center">
+            <div className="ml-auto flex flex-wrap items-center w-full lg:w-auto mt-8 lg:mt-0">
               {type === "company" ? (
-                <div className="mr-2">
+                <div className="mid:mr-2 w-full mid:w-auto mb-6 mid:mb-auto">
                   <SelectComponent
                     data={companyTypeList}
                     label=""
@@ -159,8 +159,8 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                   />
                 </div>
               ) : (
-                <div className="flex mr-4 items-center">
-                  <div className="">
+                <div className="flex flex-wrap mid:mr-4 items-center w-full mid:w-auto">
+                  <div className="w-full mid:w-auto mb-6 mid:mb-auto">
                     <SelectComponent
                       data={departmentList}
                       label=""
@@ -183,7 +183,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                     />
                   </div>
                   {rolesList.length > 0 && (
-                    <div className="ml-4">
+                    <div className="mid:ml-4 w-full mid:w-auto mb-6 mid:mb-auto">
                       <SelectComponent
                         data={rolesList.map((el) => {
                           return {
@@ -217,7 +217,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                 type="text"
                 placeholder="Search by Location"
                 value={location}
-                className="outline-none border focus:border py-2 px-6 rounded-md text-md"
+                className="outline-none border focus:border py-2 px-6 rounded-md text-md w-full mid:w-auto"
                 onChange={(e) => {
                   if (e.target.value) {
                     setLocation(e.target.value);
@@ -248,7 +248,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                         setLocation("");
                         setRefresh(false)
                       }}
-                      className="text-2xl ml-6 cursor-pointer transition-all hover:bg-gray-bg-9 rounded-full py-1 px-1"
+                      className=" mt-8 mid:mt-auto text-2xl mid:ml-6 cursor-pointer transition-all hover:bg-gray-bg-9 rounded-full py-1 px-1"
                     >
                       <MdRefresh />
                     </div>

@@ -12,7 +12,6 @@ import { notify } from "@/utils/notification";
 import { Drawer } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { nprogress } from "@mantine/nprogress";
-import { original } from "@reduxjs/toolkit";
 import { ColumnDef } from "@tanstack/react-table";
 import { useEffect } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -51,7 +50,7 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
     },
     {
       accessorKey: "fullname",
-      header: () => <div className=" py-4">Fullname</div>,
+      header: () => <div className=" py-4 w-[10rem] xl:w-auto">Fullname</div>,
       cell: ({ row }) => {
         return (
           <div className="">
@@ -65,7 +64,7 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
       header: () => <div className="py-4">Category</div>,
       cell: ({ row }) => {
         return (
-          <div className="py-4">
+          <div className="py-4 w-[10rem] xl:w-auto">
             <p>{row.getValue("category")}</p>
           </div>
         );
@@ -76,7 +75,7 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
       header: () => <div className="">Department</div>,
       cell: ({ row }) => {
         return (
-          <div className="py-4">
+          <div className="py-4 w-[20rem] xl:w-auto">
             <p>{row.getValue("department")}</p>
           </div>
         );
@@ -109,7 +108,7 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
       header: () => <div className="">Fee range</div>,
       cell: ({ row }) => {
         return (
-          <div className="">
+          <div className="w-[10rem] xl:w-auto">
             <p>{row.getValue("fee")}</p>
           </div>
         );
@@ -120,7 +119,7 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
       header: () => <div className="">Email</div>,
       cell: ({ row }) => {
         return (
-          <div className="">
+          <div className="w-[10rem] xl:w-auto">
             <p>{row.getValue("email")}</p>
           </div>
         );
@@ -131,7 +130,7 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
       header: () => <div className="">Phone number</div>,
       cell: ({ row }) => {
         return (
-          <div className="">
+          <div className="w-[10rem] xl:w-auto">
             <p>{row.getValue("phone")}</p>
           </div>
         );
