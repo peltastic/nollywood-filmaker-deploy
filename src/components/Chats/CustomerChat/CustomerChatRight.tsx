@@ -25,6 +25,10 @@ import ModalComponent from "@/components/Modal/Modal";
 import ReportAnIssue from "../ModalComponents/ReportAnIssue";
 import { useLazyGetCustomerRequestDetailByAdminQuery } from "@/lib/features/admin/chats/chats";
 import { ICustomerReqDetails } from "@/interfaces/consultants/dashboard/request";
+import { useLazyExtentTimeQuery } from "@/lib/features/users/dashboard/chat/chat";
+import { notify } from "@/utils/notification";
+import { nprogress } from "@mantine/nprogress";
+import { chat_socket, primary_socket } from "@/lib/socket";
 type Props = {
   close: () => void;
   opened?: string;
@@ -39,6 +43,7 @@ type Props = {
   res?: IChatFiles[];
   userProfilePic?: string;
   admin?: string;
+  refreshChat?: () => void;
 };
 
 export interface IFilesData {
@@ -78,6 +83,7 @@ const CustomerChatRight = ({
   isLoading,
   res,
   userProfilePic,
+  refreshChat,
   admin,
 }: Props) => {
   const userData = useSelector(
@@ -87,6 +93,7 @@ const CustomerChatRight = ({
     ICustomerReqDetails | undefined
   >();
   const [chatFiles, setChatFiles] = useState<IChatFiles[]>([]);
+  const [extendTime, extendRes] = useLazyExtentTimeQuery();
   const [paymentStatus, setPaymentStatus] = useState<
     "initialized" | "pending" | "completed"
   >("initialized");
@@ -96,11 +103,10 @@ const CustomerChatRight = ({
     useLazyGetCustomerRequestDetailByAdminQuery();
 
   useEffect(() => {
-    console.log(res)
     if (res) {
       setChatFiles(res);
     } else {
-      setChatFiles([])
+      setChatFiles([]);
     }
   }, [res]);
 
@@ -134,6 +140,46 @@ const CustomerChatRight = ({
       setUserInfoData(ByAdminres.data);
     }
   }, [ByAdminres.data, result.data]);
+
+  useEffect(() => {
+    if (extendRes.isError) {
+      notify("error", "could not extend time, something went wrong");
+    }
+    if (extendRes.isSuccess) {
+      nprogress.complete();
+      if (orderId) {
+        chat_socket.emit("triggerRefresh", {
+          room: orderId,
+        });
+        transFunc.close();
+        refreshChat && refreshChat();
+      }
+    }
+  }, [extendRes.isSuccess, extendRes.isError]);
+
+  useEffect(() => {
+    if (paymentStatus === "pending") {
+      transFunc.open();
+      primary_socket.on(
+        "completed",
+        (data: {
+          transaction: {
+            status: "completed";
+          };
+        }) => {
+          if (data.transaction.status === "completed") {
+            if (orderId) {
+              extendTime({
+                orderId: orderId,
+                length: Number(extentionValue),
+                transRef: transref,
+              });
+            }
+          }
+        }
+      );
+    }
+  }, [paymentStatus]);
 
   return (
     <>

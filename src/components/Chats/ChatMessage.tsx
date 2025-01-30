@@ -232,7 +232,7 @@ const ChatMessage = ({
               }}
               className={`cursor-pointer ${
                 user === "user" ? "bg-gray-1" : "bg-gray-bg-8"
-              } px-2 rounded-md py-1 mb-1 text-[0.88rem] ${
+              } px-2 rounded-md py-1 mb-1 text-[0.8rem] sm:text-[0.88rem] ${
                 repliedToUser === "user"
                   ? "border-l-dark-yellow"
                   : "border-l-dark-red"

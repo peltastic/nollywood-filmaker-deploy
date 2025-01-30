@@ -55,6 +55,7 @@ const ConsultantSingleChat = (props: Props) => {
             sessionOver={sessionOver}
             setIsSessionOverProps={(val) => setSessionOver(val)}
             setIsTimeProps={(val) => setIsTime(val)}
+            profilepic={data?.userinfo.profilepics}
           />
         </div>
         <section
@@ -73,6 +74,7 @@ const ConsultantSingleChat = (props: Props) => {
             isLoading={res.isFetching}
             res={res.data?.files}
             type="consultant"
+            userProfilePic={data?.userinfo.profilepics}
        
           />
         </section>

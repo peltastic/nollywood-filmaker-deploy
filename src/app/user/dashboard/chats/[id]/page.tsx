@@ -3,6 +3,7 @@ import CustomerChatRight from "@/components/Chats/CustomerChat/CustomerChatRight
 import CustomerChatMiddle from "@/components/Chats/CustomerChat/CutomerChatMiddle";
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
+import { useProtectRoute } from "@/hooks/useProtectRoute";
 import { useLazyFetchSingleConversationDataQuery } from "@/lib/features/users/dashboard/chat/chat";
 import { useLazyGetChatFilesQuery } from "@/lib/features/users/services/chat/chat";
 import { useParams, useSearchParams } from "next/navigation";
@@ -11,6 +12,7 @@ import React, { useEffect, useState } from "react";
 type Props = {};
 
 const SingleChatPage = (props: Props) => {
+  useProtectRoute();
   const [getChatFiles, res] = useLazyGetChatFilesQuery();
   const [fetchConversationData, { isFetching, data }] =
     useLazyFetchSingleConversationDataQuery();
@@ -63,6 +65,11 @@ const SingleChatPage = (props: Props) => {
           } `}
         >
           <CustomerChatRight
+            refreshChat={() => {
+              if (params.id) {
+                fetchConversationData(params.id);
+              }
+            }}
             data={data}
             closeRight={closeRight}
             openRight={() => setCloseRight(false)}

@@ -20,6 +20,7 @@ import { RootState } from "@/lib/store";
 import { initializeTransactionListener } from "@/lib/socket";
 import { nprogress } from "@mantine/nprogress";
 import Spinner from "@/app/Spinner/Spinner";
+import { useProtectRoute } from "@/hooks/useProtectRoute";
 
 type Props = {};
 
@@ -32,6 +33,7 @@ export interface IChatState {
 }
 
 const GetStartedChatPage = (props: Props) => {
+  useProtectRoute()
   const router = useRouter();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [chatData, setChatData] = useState<IChatState>({
