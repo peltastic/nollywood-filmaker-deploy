@@ -584,9 +584,9 @@ const ChatRoom = (props: Props) => {
       ref.current.focus();
     }
   }, [replyData.reply]);
-  useEffect(() => {
-   database.open()
-  }, [])
+  // useEffect(() => {
+  //  database.open()
+  // }, [])
 
   const [databaseOpened, database] = useDisclosure();
 
