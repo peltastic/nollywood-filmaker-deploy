@@ -14,7 +14,7 @@ const HomeHeader = (props: Props) => {
   return (
     <header className="md:px-[2rem] md:pt-[2rem] lg:pb-0 text-white">
       <div
-        className={`${classes.Header} w-full sm:h-screen chatbp:h-[120vh] relative md:rounded-2xl flex `}
+        className={`${classes.Header} w-full md:h-[120vh] min-h-screen relative md:rounded-2xl flex  mx-auto`}
       >
         <div className="absolute top-12 -left-1">
           <Image src={Vector1} alt="vector-1" className="" />
@@ -34,7 +34,7 @@ const HomeHeader = (props: Props) => {
                 The one-stop spot for all the film-making help you need
               </h1>
             </div>
-            <div className="mt-8 flex items-center">
+            <div className="mt-8 flex items-center ">
               <Image src={Profiles} alt="profiles" className="w-[6rem]" />
               <div className="w-[18rem] ml-4 pr-4">
                 <p className="tracking wider">
@@ -46,28 +46,31 @@ const HomeHeader = (props: Props) => {
                 </p>
               </div>
             </div>
-            <div className="mt-10 text-black-2 flex flex-wrap items-center font-semibold">
-              <Link href={"/get-started"} className="w-full sm:w-auto">
+            <div className="mt-10 text-black-2 flex flex-wrap items-center font-semibold w-full sm:w-[25rem] mb-[5rem] md::mb-auto">
+              <Link href={"/get-started"} className="w-full sm:w-auto order-1">
                 <UnstyledButton class="w-full sm:w-[12rem] sm:mr-7 text-red rounded-md hover:before:bg-redborder-red-500 relative h-[50px]  overflow-hidden border border-yellow-1 bg-yellow-1 px-3 text-black-2 shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-black-3 before:transition-all before:duration-500 hover:text-yellow-1 hover:before:left-0 hover:before:w-full">
                   <span className="relative z-10">Get Started</span>
                 </UnstyledButton>
               </Link>
-              <Link href={"https://www.youtube.com/"} target="_blank">
-                <UnstyledButton class="transition-all hover:scale-110 duration-300 hover:rotate-3 py-4 w-full sm:w-auto mx-auto xs:mx-0 flex justify-center items-center mt-5 xs:mt-0">
+              <Link
+                href={"https://www.youtube.com/"}
+                target="_blank"
+                className="order-3 sm:order-2 w-full sm:w-auto mt-8 sm:mt-0"
+              >
+                <UnstyledButton class="transition-all hover:scale-110 duration-300 hover:rotate-3 py-4 w-full sm:w-auto mx-auto xs:mx-0 flex justify-center items-center ">
                   <Image src={PlayButtonImage} alt="play-button" />
                   <p className="text-white ml-2">Watch tutorial</p>
                 </UnstyledButton>
               </Link>
-            </div>
-            <div className="mt-8 mb-32">
-              <p className="mb-4">
+              {/* <p className="mb-4">
                 Do you want us to recommend your services to our clients?
-              </p>
-              <Link href={"/get-started/filmmaker-database"} className="w-fit">
-                <UnstyledButton class="font-semibold w-full sm:w-[28rem] sm:mr-7 text-red rounded-md hover:before:bg-redborder-red-500 relative h-[50px]  overflow-hidden border border-yellow-1 bg-yellow-1 px-3 text-black-2 shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-black-3 before:transition-all before:duration-500 hover:text-yellow-1 hover:before:left-0 hover:before:w-full">
-                  <span className="relative z-10">
-                    Join our filmmmaker database now
-                  </span>
+                </p> */}
+              <Link
+                href={"/get-started/filmmaker-database"}
+                className="w-full sm:w-[25rem] block  mt-8 sm:mt-2 order-2 sm:order-3"
+              >
+                <UnstyledButton class="font-semibold w-full  sm:mr-7 text-red rounded-md hover:before:bg-redborder-red-500 relative h-[50px]  overflow-hidden border border-yellow-1 bg-yellow-1 px-3 text-black-2 shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-black-3 before:transition-all before:duration-500 hover:text-yellow-1 hover:before:left-0 hover:before:w-full">
+                  <span className="relative z-10">Join crew database</span>
                 </UnstyledButton>
               </Link>
             </div>
