@@ -88,7 +88,7 @@ const page = (props: Props) => {
         />
       ) : null}
       <ServiceLayout nonDashboard>
-        <div className="flex flex-wrap items-start">
+        <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft
             cost="150,000"
             title="Watch the final cut of my film"

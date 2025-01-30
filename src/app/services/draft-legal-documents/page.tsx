@@ -86,7 +86,7 @@ const DraftLegalDocumentPage = (props: Props) => {
         />
       ) : null}
       <ServiceLayout nonDashboard>
-        <div className="flex flex-wrap items-start">
+        <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft
             title="Draft Legal Documents"
             cost="250,000"

@@ -89,7 +89,7 @@ const CreatePitchPage = (props: Props) => {
         />
       ) : null}
       <ServiceLayout nonDashboard>
-        <div className="flex flex-wrap items-start">
+        <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft
             title="Create a Movie Schedule"
             cost="250,000"

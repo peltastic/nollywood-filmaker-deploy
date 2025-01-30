@@ -91,7 +91,7 @@ const ProductionBudgetPage = (props: Props) => {
         />
       ) : null}
       <ServiceLayout nonDashboard>
-        <div className="flex flex-wrap items-start">
+        <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft
             cost="250,000"
             title="Create a production budget"
