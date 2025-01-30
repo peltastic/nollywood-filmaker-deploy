@@ -142,6 +142,7 @@ const LoginForm = (props: Props) => {
       dispatch(setConsultantAuthStatus("LOGGED_IN"));
       dispatch(setConsultantLogoutType("expired"));
       dispatch(setConsultantInfo(result.data.user));
+      console.log(result.data.user)
       setCookie("con_refresh", result.data.refreshToken, {
         path: "/",
         expires: new Date(Date.now() + 6.5 * 24 * 60 * 60 * 1000),

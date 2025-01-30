@@ -14,6 +14,8 @@ const expertise = [
   "Cinematographer",
   "Editor",
   "Writer",
+  "VFX/Animator",
+  "Marketing"
 ];
 const Expertise = ({ data, setExpertise, small, maximum }: Props) => {
   return (

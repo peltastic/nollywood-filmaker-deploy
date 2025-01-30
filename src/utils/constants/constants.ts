@@ -106,6 +106,14 @@ export const consultantTypesData = [
     label: "Writer",
     value: "Writer",
   },
+  {
+    label: "VFX/Animator",
+    value: "VFX/Animator",
+  },
+  {
+    label: "Marketing",
+    value: "Marketing",
+  },
 ];
 export const paymentOptions = [
   {
