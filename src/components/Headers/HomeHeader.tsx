@@ -14,7 +14,7 @@ const HomeHeader = (props: Props) => {
   return (
     <header className="md:px-[2rem] md:pt-[2rem] lg:pb-0 text-white">
       <div
-        className={`${classes.Header} w-full h-screen chatbp:h-[120vh] relative md:rounded-2xl flex `}
+        className={`${classes.Header} w-full sm:h-screen chatbp:h-[120vh] relative md:rounded-2xl flex `}
       >
         <div className="absolute top-12 -left-1">
           <Image src={Vector1} alt="vector-1" className="" />
