@@ -17,6 +17,7 @@ const config: Config = {
         lg: "1024px",
         xl: "1200px",
         chatbp: "1300px",
+        chatbp2: "1400px",
         xxl: "1680px",
       },
       colors: {
