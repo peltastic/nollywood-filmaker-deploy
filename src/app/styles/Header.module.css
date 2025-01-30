@@ -17,7 +17,7 @@
 
 @media (max-width: 768px) {
   .Header {
-    background: linear-gradient(#111111c1, #151515b0),
+    background: linear-gradient(#111111cd, #151515de),
       url("../../../public/assets/header/header-background.png");
     background-size: cover;
     background-repeat: no-repeat;
