@@ -73,13 +73,13 @@ const UserChatMenu = (props: Props) => {
               Request an extension
             </li>
           )}
-          {props.chat_title && props.orderId && (
+          {/* {props.chat_title && props.orderId && (
             <UnstyledButton disabled={isFetching} clicked={exportChatHandler}>
               <li className="py-2 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
                 Export conversation
               </li>
             </UnstyledButton>
-          )}
+          )} */}
           {props.type === "user" && (
             <li
               onClick={props.openReportIssue}
