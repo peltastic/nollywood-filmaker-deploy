@@ -29,6 +29,7 @@ import { sortTimeSlots } from "@/utils/helperFunction";
 type Props = {
   close: () => void;
   refresh: () => void;
+  expertise: string[]
 };
 
 const SetStandardHoursModal = (props: Props) => {
@@ -49,7 +50,7 @@ const SetStandardHoursModal = (props: Props) => {
 
   useEffect(() => {
     if (result.error) {
-      if (consultantExpertise) {
+      if (props.expertise) {
         const defaultHours: ICreateAvailabilityPayloadV2[] =
           defaultAvailabilityHoursV2.map((el) => {
             return {
@@ -96,7 +97,7 @@ const SetStandardHoursModal = (props: Props) => {
       slots: sortTimeSlots(payload),
       day: currPayload.day,
       status: currPayload.status,
-      expertise: consultantExpertise ? consultantExpertise : [],
+      expertise: props.expertise ? props.expertise : [],
     });
 
     setAvailableHours(currAvalabilityHours);
@@ -109,7 +110,7 @@ const SetStandardHoursModal = (props: Props) => {
       slots: status === "open" ? currPayload.slots : [],
       day: currPayload.day,
       status,
-      expertise: consultantExpertise ? consultantExpertise : [],
+      expertise: props.expertise ? props.expertise : [],
     });
     setAvailableHours(currAvalabilityHours);
   };

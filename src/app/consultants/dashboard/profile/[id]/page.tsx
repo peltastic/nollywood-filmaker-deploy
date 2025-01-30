@@ -85,15 +85,18 @@ const ConsultantProfilePage = (props: Props) => {
           centered
           size="xl"
         >
-          <SetStandardHoursModal
-            close={close}
-            refresh={() => {
-              if (consultantId) {
-                fetchConsultantProfile(consultantId);
-                getConsultantAvailability(consultantId);
-              }
-            }}
-          />
+          {data && (
+            <SetStandardHoursModal
+              close={close}
+              expertise={data.expertise}
+              refresh={() => {
+                if (consultantId) {
+                  fetchConsultantProfile(consultantId);
+                  getConsultantAvailability(consultantId);
+                }
+              }}
+            />
+          )}
         </ModalComponent>
         <DashboardBodyLayout>
           <header className="flex flex-wrap md:flex-nowrap items-center pt-10 px-4 chatbp:px-0">
@@ -106,41 +109,45 @@ const ConsultantProfilePage = (props: Props) => {
               </div>
               <h1 className="text-black-2 font-bold">Profile details</h1>
             </div>
-            <div className="flex items-center mt-10 md:mt-0 px-4 md:px-0">
-              <p className="font-bold mr-3">Availability</p>
-              <p
-                className={`${statusClassname} font-medium, w-fit flex text-[0.75rem] items-center font-medium py-2 px-4 rounded-full`}
-              >
-                <span className="block pr-1">
-                  <GoDotFill />
-                </span>
-                Active
-              </p>
-              <MenuComponent
-                target={
-                  <div>
-                    <UnstyledButton class="ml-6 px-4 py-2 hover:bg-blue-1 rounded-md items-center bg-black-3 text-white flex">
-                      <p className="mr-1 font-medium text-[0.88rem]">Actions</p>
-                      <IoIosArrowDown />
-                    </UnstyledButton>
+            {data && (
+              <div className="flex items-center mt-10 md:mt-0 px-4 md:px-0">
+                <p className="font-bold mr-3">Availability</p>
+                <p
+                  className={`${statusClassname} font-medium, w-fit flex text-[0.75rem] items-center font-medium py-2 px-4 rounded-full`}
+                >
+                  <span className="block pr-1">
+                    <GoDotFill />
+                  </span>
+                  Active
+                </p>
+                <MenuComponent
+                  target={
+                    <div>
+                      <UnstyledButton class="ml-6 px-4 py-2 hover:bg-blue-1 rounded-md items-center bg-black-3 text-white flex">
+                        <p className="mr-1 font-medium text-[0.88rem]">
+                          Actions
+                        </p>
+                        <IoIosArrowDown />
+                      </UnstyledButton>
+                    </div>
+                  }
+                >
+                  <div className="bg-white min-w-[10rem] ">
+                    <ul className="px-1 text-gray-6 text-[0.88rem]">
+                      <li
+                        onClick={open}
+                        className="py-2 mb hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
+                      >
+                        Edit Availability
+                      </li>
+                      <li className="py-2 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4">
+                        Delete Account
+                      </li>
+                    </ul>
                   </div>
-                }
-              >
-                <div className="bg-white min-w-[10rem] ">
-                  <ul className="px-1 text-gray-6 text-[0.88rem]">
-                    <li
-                      onClick={open}
-                      className="py-2 mb hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4"
-                    >
-                      Edit Availability
-                    </li>
-                    <li className="py-2 hover:bg-gray-bg-1 cursor-pointer transition-all rounded-md px-4">
-                      Delete Account
-                    </li>
-                  </ul>
-                </div>
-              </MenuComponent>
-            </div>
+                </MenuComponent>
+              </div>
+            )}
           </header>
           <div className="flex flex-wrap lg:flex-nowrap items-start mt-10">
             <div className="w-full sm:w-[70%] md:w-[50%] lg:w-[30%] mx-auto lg:mx-0 mb-10 lg:mb-0">
