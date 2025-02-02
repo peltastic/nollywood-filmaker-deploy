@@ -246,8 +246,7 @@ const ChatRoom = (props: Props) => {
           }),
         },
       };
-      console.log(payload)
-      sendContactData(payload);
+      sendContactData(payload)
       for (const el of payload.sender.recommendations) {
         props.updateChatHandlerProps({
           text: "",
@@ -274,7 +273,6 @@ const ChatRoom = (props: Props) => {
   ) => {
     if (props.userData) {
       const id = uuidv4();
-
       const payload: IContactMessagePayload = {
         message: "contacts",
         room: props.orderId,
@@ -536,9 +534,9 @@ const ChatRoom = (props: Props) => {
     if (props.type === "admin") return () => {};
     document.addEventListener("visibilitychange", () => {
       if (document.visibilityState === "visible" && !chat_socket.connected) {
-        notify("message", "Your connection got lost, refreshing chat")
+        notify("message", "Your connection got lost, refreshing chat");
         chat_socket.connect();
-        props.refreshChat()
+        props.refreshChat();
       }
     });
   }, []);
@@ -845,10 +843,7 @@ const ChatRoom = (props: Props) => {
                                             },
                                           };
                                           sendFileMessage(payload);
-                                          // if (chat_socket.connected) {
-                                          // } else {
-                                          //   fileQueueRef.current.push(payload);
-                                          // }
+
                                           props.updateChatHandlerProps({
                                             text: file.name,
                                             user: props.type,
@@ -879,9 +874,6 @@ const ChatRoom = (props: Props) => {
                                   </div>
                                   <p>File</p>
                                 </div>
-                                {/* <div className="mr-3 md:mr-10">
-                            <Image src={AttachIcon} alt="attach-icon" />
-                          </div> */}
                               </FileButtonComponent>
                             </UnstyledButton>
                           </li>

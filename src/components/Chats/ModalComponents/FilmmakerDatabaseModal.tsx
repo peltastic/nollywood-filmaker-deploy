@@ -296,6 +296,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
               if (type === "crew") {
                 props.sendCrewContact(selectedCrewDataArray);
               } else {
+                console.log(selectedCompanyDataArray)
                 props.sendCompanyContact(selectedCompanyDataArray);
               }
               props.close();

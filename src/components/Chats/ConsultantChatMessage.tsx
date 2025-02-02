@@ -133,7 +133,7 @@ const ConsultantChatMessage = ({
       <div
         className={`${
           user === "consultant" ? "flex-row-reverse ml-auto" : ""
-        } flex items-center `}
+        } flex items-start `}
       >
         {prevUser === user && index + 1 !== 1 ? null : (
           <>
@@ -174,14 +174,14 @@ const ConsultantChatMessage = ({
           className={` ${
             noPfpRow && user === "user"
               ? "ml-[3.2rem]"
-              : noPfpRow && user === "user"
+              : noPfpRow && user !== "user"
               ? "mr-[3.2rem]"
               : ""
           } ${
             type === "file" && user === "user"
               ? "bg-admin-chat-bg mr-2 text-black hover:bg-gray-2 transition-all"
               : type === "file" && user !== "user"
-              ? "bg-black-2 text-white hover:bg-black-9 transition-all"
+              ? "bg-black-2 text-white hover:bg-black-9 transition-all mr-2"
               : user === "user"
               ? "bg-admin-chat-bg text-black"
               : "bg-black-3 text-white mr-2"

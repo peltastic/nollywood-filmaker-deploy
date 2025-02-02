@@ -42,8 +42,6 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
                 <CheckboxComponent
                   checked={row.getIsSelected()}
                   setCheckedProps={(val) => {
-                    // setChecked(val);
-                    console.log(!!val);
                     row.toggleSelected(!!val);
                   }}
                   label

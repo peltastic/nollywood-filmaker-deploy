@@ -193,7 +193,7 @@ const ChatMessage = ({
               : ""
           } ${
             type === "file" && user === "user"
-              ? "bg-black-2 text-white hover:bg-black-9 transition-all"
+              ? "bg-black-2 text-white hover:bg-black-9 transition-all mr-2"
               : type === "file" && user !== "user"
               ? "bg-admin-chat-bg  text-black hover:bg-gray-2 transition-al"
               : user !== "user"
