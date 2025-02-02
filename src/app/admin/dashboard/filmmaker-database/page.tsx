@@ -35,9 +35,11 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
 
   const [companyType, setCompanyType] = useState<string>("");
 
-  const [companyDepartmentVal, setCompanyDepartmentVal] = useState<string>("");
+  const [companyDepartmentVal, setCompanyDepartmentVal] = useState<
+    string | null
+  >(null);
   const [rolesList, setRolesList] = useState<string[]>([]);
-  const [roleVal, setRoleVal] = useState<string>("");
+  const [roleVal, setRoleVal] = useState<string | null>(null);
 
   const [location, setLocation] = useState<string>("");
 
@@ -53,7 +55,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
     });
   }, []);
   useEffect(() => {
-    if (companyDepartmentVal) {
+    if (companyDepartmentVal && companyDepartmentVal !== "all") {
       const list = film_crew_values.filter(
         (el) => el.key === companyDepartmentVal
       );
@@ -73,7 +75,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
               fullname: `${el.firstName} ${el.lastName}`,
               location: `${el.location.state},${el.location.country}`,
               phone: el.mobile,
-              role: el.role[0],
+              role: el.role,
               fee: el.fee || "N/A",
               fulldata: el,
               type,
@@ -127,7 +129,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                   setLocation("");
                   fetchCompanyOrCrew({ type: "company" });
                   setCompanyDepartmentVal("");
-                  setRoleVal("");
+                  setRoleVal(null);
                 }}
                 className={`${
                   type === "company" ? "border border-black-2" : "border"
@@ -162,19 +164,33 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                 <div className="flex flex-wrap mid:mr-4 items-center w-full mid:w-auto">
                   <div className="w-full mid:w-auto mb-6 mid:mb-auto">
                     <SelectComponent
-                      data={departmentList}
+                      data={[
+                        {
+                          label: "All",
+                          value: "all",
+                        },
+                        ...departmentList,
+                      ]}
                       label=""
                       placeholder="Select department"
                       size="md"
                       value={companyDepartmentVal}
                       defaultValue={companyDepartmentVal}
                       setValueProps={(val) => {
-                        if (val) {
-                          setCompanyDepartmentVal(val);
+                        if (val === "all") {
+                          setCompanyDepartmentVal(null);
+                          setRoleVal(null);
                           setRefresh(true);
                           fetchCompanyOrCrew({
                             type,
-                            roles: roleVal,
+                            location,
+                          });
+                        } else if (val) {
+                          setCompanyDepartmentVal(val);
+                          setRefresh(true);
+                          setRoleVal(null);
+                          fetchCompanyOrCrew({
+                            type,
                             department: val,
                             location,
                           });
@@ -185,25 +201,43 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                   {rolesList.length > 0 && (
                     <div className="mid:ml-4 w-full mid:w-auto mb-6 mid:mb-auto">
                       <SelectComponent
-                        data={rolesList.map((el) => {
-                          return {
-                            label: el,
-                            value: el,
-                          };
-                        })}
+                        data={[
+                          {
+                            label: "All",
+                            value: "all",
+                          },
+                          ...rolesList.map((el) => {
+                            return {
+                              label: el,
+                              value: el,
+                            };
+                          }),
+                        ]}
                         size="md"
                         label=""
                         placeholder="Select role"
                         value={roleVal}
                         defaultValue={roleVal}
                         setValueProps={(val) => {
-                          if (val) {
+                          if (val === "all") {
+                            setRoleVal(null);
+                            setRefresh(true);
+                            fetchCompanyOrCrew({
+                              type,
+                              department: companyDepartmentVal
+                              ? companyDepartmentVal
+                              : "",
+                              location,
+                            });
+                          } else if (val) {
                             setRoleVal(val);
                             setRefresh(true);
                             fetchCompanyOrCrew({
                               type,
                               roles: val,
-                              department: companyDepartmentVal,
+                              department: companyDepartmentVal
+                                ? companyDepartmentVal
+                                : "",
                               location,
                             });
                           }
@@ -241,12 +275,12 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                         fetchCompanyOrCrew({
                           type,
                         });
-                        setCompanyDepartmentVal("");
+                        setCompanyDepartmentVal(null);
                         setCompanyType("");
-                        setRoleVal("");
-                        setRolesList([])
+                        setRoleVal(null);
+                        setRolesList([]);
                         setLocation("");
-                        setRefresh(false)
+                        setRefresh(false);
                       }}
                       className=" mt-8 mid:mt-auto text-2xl mid:ml-6 cursor-pointer transition-all hover:bg-gray-bg-9 rounded-full py-1 px-1"
                     >

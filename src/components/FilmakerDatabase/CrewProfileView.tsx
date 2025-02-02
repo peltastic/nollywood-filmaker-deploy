@@ -33,6 +33,13 @@ const CrewProfileView = (props: Props) => {
       fetchCrewData(params.id);
     }
   }, [params.id]);
+  const origin =
+    window.origin +
+    "/filmmaker-database" +
+    "/profile" +
+    "/crew" +
+    "/" +
+    params.id;
   const [opened, { open, close }] = useDisclosure();
   return (
     <>
@@ -55,10 +62,10 @@ const CrewProfileView = (props: Props) => {
               <Image src={CancelImg} alt="cancel-img" />
             </div>
           </div>
-          <div className="my-4 bg-gray-bg-3 w-fit py-2 px-4 rounded-md cursor-pointer flex items-center">
-            <p>{origin}</p>
+          <div className="my-4 bg-gray-bg-3  break-words py-2 px-4 rounded-md cursor-pointer text-center">
+            <p className="break-words">{origin}</p>
           </div>
-          <div className="flex gap-6 mt-8">
+          <div className="flex flex-wrap gap-6 mt-8">
             <TwitterShareButton url={origin}>
               <XIcon size={40} />
             </TwitterShareButton>
@@ -80,13 +87,15 @@ const CrewProfileView = (props: Props) => {
       </ModalComponent>
 
       <div className="">
-        <section className="w-[90%] lg:w-[70%] mx-auto mt-10">
+        <section className=" mt-10">
           {isFetching ? (
-            <FilmmakerSkeletonProfile />
+            <div className="w-full sm:w-[90%] lg:w-[70%] mx-auto">
+              <FilmmakerSkeletonProfile />
+            </div>
           ) : data?.crew ? (
-            <>
+            <div className="w-full sm:w-[90%] lg:w-[70%] mx-auto">
               <div
-                className="w-full  h-[15rem] rounded-lg"
+                className="w-full  h-[7rem] sm:h-[15rem] rounded-lg"
                 style={{
                   backgroundImage: `url(${ProfileBanner.src})`,
                   backgroundSize: "cover",
@@ -110,25 +119,41 @@ const CrewProfileView = (props: Props) => {
                     )}
                   </div>
                   <div className="text-black-2  mt-4 md:ml-4 mr-auto w-full md:w-auto">
-                    <p className="font-bold text-[1.8rem]">
+                    <p className="font-bold text-[1.4rem] sm:text-[1.8rem]">
                       {data?.crew.firstName} {data?.crew.lastName}
                     </p>
-                    <div className="flex  items-center mt-3">
-                      <IoBriefcaseOutline className="text-2xl mr-3" />
+                    <div className="flex items-start sm:items-center mt-6 sm:mt-3">
+                      <IoBriefcaseOutline className="text-2xl mr-5 xs:mr-3 mt-[0.2rem] sm:mt-0" />
                       <div className="flex items-center">
-                        <p className="text-lg">{data?.crew.department} |</p>
+                        {data && data.crew ? (
+                          <div className="flex items-center flex-wrap">
+                            {data.crew.department.map((el, index) => {
+                              return (
+                                <p key={el}>
+                                  {el}
+                                  <span>
+                                    {index === data.crew.department.length - 1
+                                      ? ""
+                                      : ","}
+                                    &nbsp;
+                                  </span>
+                                </p>
+                              );
+                            })}
+                          </div>
+                        ) : null}
                       </div>
                     </div>
-                    <div className="flex items-center mt-3">
+                    <div className="flex items-center mt-6 sm:mt-3">
                       <IoLocationOutline className="text-2xl mr-3" />
-                      <p className="text-lg">
+                      <p className="text-md sm:text-lg">
                         {data?.crew.location.state},{" "}
                         {data?.crew.location.country}
                       </p>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center mt-6">
+                <div className="flex items-center mt-14 sm:mt-6">
                   <UnstyledButton
                     clicked={open}
                     class="bg-black-2 transition-all hover:bg-blue-1 text-white py-2 px-4 mr-1  rounded-md"
@@ -137,7 +162,9 @@ const CrewProfileView = (props: Props) => {
                   </UnstyledButton>
                   <div
                     onClick={() =>
-                      router.push(`/filmmaker-database/user/${params.id}/edit/crew`)
+                      router.push(
+                        `/filmmaker-database/user/${params.id}/edit/crew`
+                      )
                     }
                     className="flex ml-4 items-center hover:bg-gray-bg-9 py-2 px-4 rounded-md transition-all cursor-pointer"
                   >
@@ -146,7 +173,7 @@ const CrewProfileView = (props: Props) => {
                   </div>
                 </div>
               </div>
-              <section className="mt-16 mb-20">
+              <section className="mt-16 mb-20 h-[50rem] md:h-auto">
                 <Tabs color="#181818" defaultValue={"about"}>
                   <Tabs.List>
                     {tabs_list.map((el) => (
@@ -237,9 +264,9 @@ const CrewProfileView = (props: Props) => {
                   </Tabs.Panel>
                 </Tabs>
               </section>
-            </>
+            </div>
           ) : (
-            <h1 className="text-2xl">No crew profile for this account</h1>
+            <h1 className="">No crew profile for this account</h1>
           )}
         </section>
       </div>

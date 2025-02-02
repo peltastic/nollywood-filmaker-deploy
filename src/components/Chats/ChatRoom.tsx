@@ -38,6 +38,7 @@ import { IoMdContact } from "react-icons/io";
 import FilmmakerDatabaseModal from "./ModalComponents/FilmmakerDatabaseModal";
 import { ICrewFilmmakerDatabaseColumnData } from "../Columns/admin/CrewFilmmakerDatabaseColumn";
 import { ICompanyFilmmakerDatabaseColumnData } from "../Columns/admin/CompanyFilmmakerDatabaseColumn";
+import { notify } from "@/utils/notification";
 
 type Props = {
   type: "user" | "consultant" | "admin";
@@ -339,7 +340,6 @@ const ChatRoom = (props: Props) => {
           replytousertype: replyData.user,
         },
       };
-      console.log(payload)
 
       // if (chat_socket.connected) {
       sendChatMessageEvent(payload);
@@ -535,9 +535,10 @@ const ChatRoom = (props: Props) => {
   useEffect(() => {
     if (props.type === "admin") return () => {};
     document.addEventListener("visibilitychange", () => {
-      console.log(document.visibilityState, "visibility state log");
       if (document.visibilityState === "visible" && !chat_socket.connected) {
+        notify("message", "Your connection got lost, refreshing chat")
         chat_socket.connect();
+        props.refreshChat()
       }
     });
   }, []);

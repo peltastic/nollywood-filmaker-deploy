@@ -94,7 +94,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
               fullname: `${el.firstName} ${el.lastName}`,
               location: `${el.location.state},${el.location.country}`,
               phone: el.mobile,
-              role: el.role[0],
+              role: el.role,
               fee: el.fee || "N/A",
               fulldata: el,
               consultant: true,

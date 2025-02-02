@@ -23,7 +23,7 @@ const FilmmakerUser = (props: Props) => {
   }, [token]);
   return (
     <HomeLayout hideLogin>
-      <section className="px-10 py-10">
+      <section className="px-4 md:px-10 py-10">
         <Tabs color="#181818" defaultValue={"Crew"}>
           <Tabs.List>
             <Tabs.Tab value="Crew">

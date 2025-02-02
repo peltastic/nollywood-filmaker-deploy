@@ -89,69 +89,65 @@ const CompanyProfile = (props: Props) => {
 
       <HomeLayout>
         <div className="">
-          {/* <nav className="py-8 px-10">
-          <div className="w-[4rem]">
-          <Image src={Logo} alt="logo" />
-          </div>
-          </nav> */}
-
-          <section className="w-[70%] mx-auto mt-10">
+          <section className="w-[90%] lg:w-[70%] mx-auto mt-10">
             {isFetching ? (
               <FilmmakerSkeletonProfile />
             ) : (
               <>
                 <div
-                  className="w-full  h-[15rem] rounded-lg"
+                  className="w-full h-[7rem] sm:h-[15rem] rounded-lg"
                   style={{
                     backgroundImage: `url(${ProfileBanner.src})`,
                     backgroundSize: "cover",
                   }}
                 ></div>
-                <div className="flex items-start px-16 ">
-                  <div className="h-[9rem] -mt-10 w-[9rem] rounded-full bg-black-2 border-white flex items-center justify-center border">
-                    {data?.company.propic ? (
-                      <AspectRatio ratio={1800 / 1800}>
-                        <Image
-                          src={data.company.propic}
-                          width={100}
-                          height={100}
-                          className="w-full h-full rounded-full"
-                          alt="profile-pic"
-                        />
-                      </AspectRatio>
-                    ) : (
-                      <FaUser className="text-[5rem] text-white" />
-                    )}
-                  </div>
-                  <div className="text-black-2  mt-4 ml-4 mr-auto">
-                    <p className="font-bold text-[1.8rem]">
-                      {data?.company.name}
-                    </p>
-                    <div className="flex  items-center mt-3">
-                      <IoBriefcaseOutline className="text-2xl mr-3" />
-                      <p className="text-lg">{data?.company.type}</p>
+                <div className="flex items-start px-4 lg:px-16 flex-wrap ">
+                  <div className="flex items-center mr-auto flex-wrap ">
+                    <div className="h-[6rem] mid:h-[9rem] -mt-10 w-[6rem] mid:w-[9rem] rounded-full bg-black-2 border-white flex items-center justify-center border">
+                      {data?.company.propic ? (
+                        <AspectRatio ratio={1800 / 1800}>
+                          <Image
+                            src={data.company.propic}
+                            width={100}
+                            height={100}
+                            className="w-full h-full rounded-full"
+                            alt="profile-pic"
+                          />
+                        </AspectRatio>
+                      ) : (
+                        <FaUser className="text-[5rem] text-white" />
+                      )}
                     </div>
-                    <div className="flex items-center mt-3">
-                      <IoLocationOutline className="text-2xl mr-3" />
-                      <p className="text-lg">
-                        {data?.company.location.state},{" "}
-                        {data?.company.location.country}
+                    <div className="text-black-2  mt-4 md:ml-4 mr-auto w-full md:w-auto">
+                      <p className="font-bold text-[1.4rem] sm:text-[1.8rem]">
+                        {data?.company.name}
                       </p>
+                      <div className="flex items-start sm:items-center mt-6 sm:mt-3">
+                        <IoBriefcaseOutline className="text-2xl mr-5 xs:mr-3 mt-[0.2rem] sm:mt-0" />
+                        <p className="text-lg">{data?.company.type}</p>
+                      </div>
+                      <div className="flex items-center mt-3">
+                        <IoLocationOutline className="text-2xl mr-3" />
+                        <p className="text-md sm:text-lg">
+                          {data?.company.location.state},{" "}
+                          {data?.company.location.country}
+                        </p>
+                      </div>
                     </div>
                   </div>
                   <UnstyledButton
                     clicked={open}
-                    class="bg-black-2 hover:bg-blue-1 transition-all text-white py-2 px-4 mt-6 rounded-md"
+                    class="bg-black-2 hover:bg-blue-1 transition-all text-white py-2 px-4 mt-14 sm:mt-6 rounded-md"
                   >
                     Share profile
                   </UnstyledButton>
                 </div>
-                <section className="mt-16 mb-20">
+                <section className="mt-16 mb-20 h-[50rem] md:h-auto">
                   <Tabs color="#181818" defaultValue={"about"}>
                     <Tabs.List>
                       {tabs_list.map((el) => (
                         <Tabs.Tab value={el.toLowerCase()}>
-                          <p className="text-lg px-6">{el}</p>
+                          <p className="text-lg px-2 sm:px-6">{el}</p>
                         </Tabs.Tab>
                       ))}
                     </Tabs.List>

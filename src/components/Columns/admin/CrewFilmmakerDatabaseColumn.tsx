@@ -19,7 +19,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 export interface ICrewFilmmakerDatabaseColumnData {
   fullname: string;
   category: string;
-  role: string;
+  role: string[];
   location: string;
   fee?: string;
   email: string;
@@ -72,22 +72,36 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
     },
     {
       accessorKey: "department",
-      header: () => <div className="">Department</div>,
+      header: () => <div className="">Department(s)</div>,
       cell: ({ row }) => {
         return (
-          <div className="py-4 w-[20rem] xl:w-auto">
-            <p>{row.getValue("department")}</p>
+          <div className="w-[20rem] xl:w-auto">
+            {row.original.department.map((el, index) => {
+              const islast = index === row.original.department.length - 1;
+              return (
+                <p className="mt-2 text-[#4B5563]" key={el}>
+                  {el} <span>{islast ? "" : ","}</span>
+                </p>
+              );
+            })}
           </div>
         );
       },
     },
     {
       accessorKey: "role",
-      header: () => <div className="">Role</div>,
+      header: () => <div className="">Roles</div>,
       cell: ({ row }) => {
         return (
-          <div className="">
-            <p>{row.getValue("role")}</p>
+          <div className="w-[20rem] xl:w-auto">
+            {row.original.role.map((el, index) => {
+              const islast = index === row.original.role.length - 1;
+              return (
+                <p className="mt-2 text-[#4B5563]" key={el}>
+                  {el} <span>{islast ? "" : ","}</span>
+                </p>
+              );
+            })}
           </div>
         );
       },
@@ -159,7 +173,7 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
             notify("success", "Bank details saved successfully");
             nprogress.complete();
             if (row.original.type) {
-              fetchCompanyOrCrew({type: row.original.type});
+              fetchCompanyOrCrew({ type: row.original.type });
             }
             deleteFunc.close();
           }
@@ -204,7 +218,10 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
                     <p>View Profile</p>
                   </li>
                   {row.original.consultant ? null : (
-                    <li className="cursor-pointer px-2 py-2" onClick={deleteFunc.open}>
+                    <li
+                      className="cursor-pointer px-2 py-2"
+                      onClick={deleteFunc.open}
+                    >
                       <p>Delete</p>
                     </li>
                   )}

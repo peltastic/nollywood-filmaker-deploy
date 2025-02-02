@@ -17,7 +17,7 @@ type Props = {
   largeLabel?: boolean;
   noIcon?: boolean;
   darkBorder?: boolean
-  defaultValue?: string
+  defaultValue?: string | null
   disabled?: boolean
 };
 
