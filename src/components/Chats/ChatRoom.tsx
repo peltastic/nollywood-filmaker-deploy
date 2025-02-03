@@ -123,33 +123,6 @@ const ChatRoom = (props: Props) => {
     useState<string>("");
 
   const [opened, { open, close }] = useDisclosure();
-
-  ///////////////UPDATE TYPING CHAT
-
-  ////////////////CUSTOM CHAT LISTENERS - OPEN///////////////////////////
-  // useEffect(() => {
-  //   if (props.type === "admin") return () => {};
-  //   chat_socket.on("connect", () => {
-  //     console.log("i connected");
-  //     //   while (messageQueueRef.current.length > 0) {
-  //     //     const queuedMessage = messageQueueRef.current.shift();
-  //     //     if (queuedMessage) {
-  //     //       sendChatMessageEvent(queuedMessage);
-  //     //     }
-  //     //   }
-  //     //   while (fileQueueRef.current.length > 0) {
-  //     //     const fileMessage = fileQueueRef.current.shift();
-  //     //     if (fileMessage) {
-  //     //       sendFileMessage(fileMessage);
-  //     //     }
-  //     //   }
-  //   });
-
-  //   return () => {
-  //     chat_socket.off("connect");
-  //   };
-  // }, []);
-
   // useEffect(() => {
   //   if (!socket) return;
   //   if (props.type === "admin") return () => {};
@@ -437,7 +410,7 @@ const ChatRoom = (props: Props) => {
           props.userData?.id === data.sender.userid
         ) {
         } else {
-          if (searchVal === data.sender.chatRoomId) {
+          if (props.orderId === data.sender.chatRoomId) {
             if (data.sender.type === "contacts") {
               for (const el of data.sender.recommendations) {
                 props.updateChatHandlerProps({
