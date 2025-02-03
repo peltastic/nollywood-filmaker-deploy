@@ -175,7 +175,7 @@ const ChatRoom = (props: Props) => {
 
       return;
     }
-  }, [props.isTime]);
+  }, [props.isTime, socket]);
 
   //send message
 
@@ -265,7 +265,6 @@ const ChatRoom = (props: Props) => {
       if (socket) {
         sendContactData(payload, socket);
       }
-      console.log(payload.sender.recommendations);
       for (const el of payload.sender.recommendations) {
         props.updateChatHandlerProps({
           text: "",
@@ -314,7 +313,6 @@ const ChatRoom = (props: Props) => {
         sendChatMessageEvent(payload, socket);
       }
       // } else {
-      //   console.log("queued");
       //   messageQueueRef.current.push(payload);
       // }
       props.updateChatHandlerProps({
@@ -367,7 +365,6 @@ const ChatRoom = (props: Props) => {
     if (props.sessionOver) return () => {};
     if (props.isTime) {
       socket.on("roomPing", () => {
-        console.log("received my ping", moment(new Date()).format("h:mm a"));
         setMissedPongs(0);
       });
       return () => {
@@ -404,7 +401,6 @@ const ChatRoom = (props: Props) => {
         };
         message: string;
       }) => {
-        console.log(data, "received")
         if (
           props.userData?.id === data.sender.userid ||
           props.userData?.id === data.sender.userid
@@ -452,7 +448,7 @@ const ChatRoom = (props: Props) => {
     return () => {
       socket.off("message");
     };
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     if (!socket) return;
@@ -488,7 +484,6 @@ const ChatRoom = (props: Props) => {
         if (props.userData?.id === data.sender.userid) {
         } else {
           if (props.orderId === data.sender.chatRoomId) {
-            console.log("file message received", data);
             props.updateChatHandlerProps({
               text: data.fileName,
               user: data.sender.role,
@@ -507,7 +502,7 @@ const ChatRoom = (props: Props) => {
     return () => {
       socket.off("fileMessage");
     };
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     if (props.type === "admin") return () => {};

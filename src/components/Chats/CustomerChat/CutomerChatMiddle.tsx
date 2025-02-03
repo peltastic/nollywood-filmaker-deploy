@@ -32,7 +32,7 @@ import { nprogress } from "@mantine/nprogress";
 import { useSetChatAsCompleteMutation } from "@/lib/features/consultants/dashboard/request";
 import { useLazyFetchChatMessagesByAdminQuery } from "@/lib/features/admin/chats/chats";
 import { useSocket } from "@/components/Providers/SocketProviders";
-import { primary_socket } from "@/lib/socket";
+import { chat_socket, primary_socket } from "@/lib/socket";
 
 export interface ChatPayload {
   text: string;
@@ -316,7 +316,7 @@ const CustomerChatMiddle = ({
       }
     }
   }, [res.isSuccess, res.isError]);
-
+  
   useEffect(() => {
     if (paymentStatus === "pending") {
       transFunc.open();
@@ -328,6 +328,7 @@ const CustomerChatMiddle = ({
           };
         }) => {
           if (data.transaction.status === "completed") {
+            setPaymentStatus("completed")
             if (orderId) {
               extendTime({
                 orderId: orderId,
@@ -339,13 +340,16 @@ const CustomerChatMiddle = ({
         }
       );
     }
+    return () => {
+      primary_socket.off("completed")
+    }
   }, [paymentStatus]);
-
+  
   useEffect(() => {
     if (!socket) return;
     if (type === "admin") return () => {};
     let timeout: NodeJS.Timeout | undefined;
-    if (type === "consultant") {
+    if (type === "consultant" && socket) {
       socket.on("refresh", () => {
         notify(
           "message",
@@ -357,11 +361,12 @@ const CustomerChatMiddle = ({
       });
     }
     return () => {
+      socket.off("refresh")
       if (timeout) {
         clearTimeout(timeout);
       }
     };
-  }, [type]);
+  }, [type, socket]);
 
   useEffect(() => {
     const now = new Date();

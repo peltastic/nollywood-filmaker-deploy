@@ -57,6 +57,7 @@ const RequestExtension = (props: Props) => {
     }
 
     if (isSuccess) {
+      console.log("success")
       props.setAuthUrl(data.result.authorization_url);
       props.setTransRef(data.result.transaction.reference);
       props.setPaymentStatus("pending");
@@ -64,7 +65,7 @@ const RequestExtension = (props: Props) => {
       nprogress.start();
       props.close();
     }
-  }, [isError, isSuccess]);
+  }, [isError, isSuccess, isLoading]);
 
   return (
     <>
