@@ -1,12 +1,9 @@
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 
 import config from "@/config/config";
 
 export const primary_socket = io(config.API_URL);
-export const chat_socket = io(config.CHAT_API_URL, {
-  reconnectionAttempts: Infinity,
-  reconnectionDelay: 2000,
-});
+export const chat_socket = io(config.CHAT_API_URL);
 
 export function initializeTransactionListener(userId: string) {
   primary_socket.emit("register", userId);
@@ -50,45 +47,54 @@ export interface IChatMessagePayload {
   };
 }
 
-export function joinChatRoom(data: {
-  room: string;
-  userId: string;
-  name: string;
-  role: "user" | "consultant";
-}) {
-  chat_socket.emit("joinRoom", data);
-}
-
-export function sendChatMessageEvent(data: IChatMessagePayload) {
-  chat_socket.emit("chatMessage", data);
-}
-
-export function sendContactData(data: IContactMessagePayload) {
-  console.log(data, "contact message sent");
-  chat_socket.emit("chatMessage", data);
-}
-
-export function sendFileMessage(data: {
-  room: string;
-  fileData: string | ArrayBuffer;
-  fileName: string;
-  sender: {
-    type: "img" | "file";
-    userid: string;
+export function joinChatRoom(
+  data: {
+    room: string;
+    userId: string;
     name: string;
-    role: "user" | "consultant" | "admin";
-    chatRoomId: string;
-    mid: string;
-    replyto: string;
-    replytoId: string;
-    replytousertype: "user" | "consultant" | "admin" | null;
-  };
-}) {
-  chat_socket.emit("sendFile", data);
+    role: "user" | "consultant";
+  },
+  socket: Socket
+) {
+  socket.emit("joinRoom", data);
 }
 
-export function emitTypingEvent(room: string, userId: string) {
-  chat_socket.emit("typing", {
+export function sendChatMessageEvent(
+  data: IChatMessagePayload,
+  socket: Socket
+) {
+  socket.emit("chatMessage", data);
+}
+
+export function sendContactData(data: IContactMessagePayload, socket: Socket) {
+  console.log(data, "contact message sent");
+  socket.emit("chatMessage", data);
+}
+
+export function sendFileMessage(
+  data: {
+    room: string;
+    fileData: string | ArrayBuffer;
+    fileName: string;
+    sender: {
+      type: "img" | "file";
+      userid: string;
+      name: string;
+      role: "user" | "consultant" | "admin";
+      chatRoomId: string;
+      mid: string;
+      replyto: string;
+      replytoId: string;
+      replytousertype: "user" | "consultant" | "admin" | null;
+    };
+  },
+  socket: Socket
+) {
+  socket.emit("sendFile", data);
+}
+
+export function emitTypingEvent(room: string, userId: string, socket: Socket) {
+  socket.emit("typing", {
     room,
     sender: {
       userId,
@@ -96,8 +102,8 @@ export function emitTypingEvent(room: string, userId: string) {
   });
 }
 
-export function stopTypingEmit(room: string, userId: string) {
-  chat_socket.emit("stopped", {
+export function stopTypingEmit(room: string, userId: string, socket: Socket) {
+  socket.emit("stopped", {
     room,
     sender: {
       userId,

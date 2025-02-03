@@ -5,6 +5,7 @@ import Image from "next/image";
 import SendImg from "/public/assets/chats/send-icon.svg";
 import { Textarea } from "@mantine/core";
 import { MdCancel } from "react-icons/md";
+import config from "@/config/config";
 import {
   chat_socket,
   emitTypingEvent,
@@ -39,6 +40,7 @@ import FilmmakerDatabaseModal from "./ModalComponents/FilmmakerDatabaseModal";
 import { ICrewFilmmakerDatabaseColumnData } from "../Columns/admin/CrewFilmmakerDatabaseColumn";
 import { ICompanyFilmmakerDatabaseColumnData } from "../Columns/admin/CompanyFilmmakerDatabaseColumn";
 import { notify } from "@/utils/notification";
+import { useSocket } from "../Providers/SocketProviders";
 
 type Props = {
   type: "user" | "consultant" | "admin";
@@ -61,6 +63,7 @@ export interface IChatMessagesData {
 }
 
 const ChatRoom = (props: Props) => {
+  const { socket } = useSocket();
   const ref = useRef<HTMLTextAreaElement>(null);
   const [missedPongs, setMissedPongs] = useState(0);
   const [fileType, setFileType] = useState<"file" | "img">("file");
@@ -124,59 +127,41 @@ const ChatRoom = (props: Props) => {
   ///////////////UPDATE TYPING CHAT
 
   ////////////////CUSTOM CHAT LISTENERS - OPEN///////////////////////////
+  // useEffect(() => {
+  //   if (props.type === "admin") return () => {};
+  //   chat_socket.on("connect", () => {
+  //     console.log("i connected");
+  //     //   while (messageQueueRef.current.length > 0) {
+  //     //     const queuedMessage = messageQueueRef.current.shift();
+  //     //     if (queuedMessage) {
+  //     //       sendChatMessageEvent(queuedMessage);
+  //     //     }
+  //     //   }
+  //     //   while (fileQueueRef.current.length > 0) {
+  //     //     const fileMessage = fileQueueRef.current.shift();
+  //     //     if (fileMessage) {
+  //     //       sendFileMessage(fileMessage);
+  //     //     }
+  //     //   }
+  //   });
+
+  //   return () => {
+  //     chat_socket.off("connect");
+  //   };
+  // }, []);
 
   useEffect(() => {
-    if (props.type === "admin") return () => {};
-    chat_socket.on("connect", () => {
-      console.log("i connected");
-      //   while (messageQueueRef.current.length > 0) {
-      //     const queuedMessage = messageQueueRef.current.shift();
-      //     if (queuedMessage) {
-      //       sendChatMessageEvent(queuedMessage);
-      //     }
-      //   }
-      //   while (fileQueueRef.current.length > 0) {
-      //     const fileMessage = fileQueueRef.current.shift();
-      //     if (fileMessage) {
-      //       sendFileMessage(fileMessage);
-      //     }
-      //   }
-    });
-
-    return () => {
-      chat_socket.off("connect");
-    };
-  }, []);
-
-  useEffect(() => {
+    if (!socket) return;
     if (props.type === "admin") return () => {};
     if (props.sessionOver) return () => {};
-    chat_socket.on("disconnect", (data) => {
+    socket.on("disconnect", (data) => {
       console.log("i disconnected", console.log(data));
-      chat_socket.connect();
+      socket.connect();
     });
     return () => {
-      chat_socket.off("disconnect");
+      socket.off("disconnect");
     };
   }, [props.sessionOver]);
-
-  useEffect(() => {
-    if (props.type === "admin") return () => {};
-    chat_socket.on("reconnect_attempt", () => {
-      console.log("reconnecting...");
-    });
-    return () => {
-      chat_socket.off("reconnect_attempt");
-    };
-  }, []);
-  useEffect(() => {
-    chat_socket.on("reconnect", () => {
-      console.log("reconnected");
-    });
-    return () => {
-      chat_socket.off("reconnect");
-    };
-  }, []);
 
   ////////////////CUSTOM CHAT LISTENERS - CLOSE///////////////////////
 
@@ -186,24 +171,30 @@ const ChatRoom = (props: Props) => {
     if (props.type === "admin") return () => {};
     if (props.sessionOver || !props.isTime) return () => {};
     if (props.userData) {
-      joinChatRoom({
-        room: props.orderId,
-        name: `${props.userData.fname} ${props.userData.lname}`,
-        role: "user",
-        userId: props.userData.id,
-      });
+      if (socket) {
+        joinChatRoom(
+          {
+            room: props.orderId,
+            name: `${props.userData.fname} ${props.userData.lname}`,
+            role: "user",
+            userId: props.userData.id,
+          },
+          socket
+        );
+      }
     }
   }, [props.isTime, props.sessionOver, props.orderId]);
 
   //typing listeners
   useEffect(() => {
+    if (!socket) return;
     if (props.isTime) {
-      chat_socket.on("stoptyping", (data) => {
+      socket.on("stoptyping", (data) => {
         if (data.userId !== props.userData?.id) {
           setIsTyping(false);
         }
       });
-      chat_socket.on("istyping", (data) => {
+      socket.on("istyping", (data) => {
         if (data.userId !== props.userData?.id) {
           setIsTyping(true);
         }
@@ -246,7 +237,9 @@ const ChatRoom = (props: Props) => {
           }),
         },
       };
-      sendContactData(payload)
+      if (socket) {
+        sendContactData(payload, socket);
+      }
       for (const el of payload.sender.recommendations) {
         props.updateChatHandlerProps({
           text: "",
@@ -296,7 +289,9 @@ const ChatRoom = (props: Props) => {
           }),
         },
       };
-      sendContactData(payload);
+      if (socket) {
+        sendContactData(payload, socket);
+      }
       console.log(payload.sender.recommendations);
       for (const el of payload.sender.recommendations) {
         props.updateChatHandlerProps({
@@ -320,7 +315,9 @@ const ChatRoom = (props: Props) => {
     }
   };
   const sendMessageHandler = () => {
-    stopTypingEmit(props.orderId, `${props.userData?.id}`);
+    if (socket) {
+      stopTypingEmit(props.orderId, `${props.userData?.id}`, socket);
+    }
     const id = uuidv4();
     if (props.userData) {
       const payload: IChatMessagePayload = {
@@ -339,8 +336,11 @@ const ChatRoom = (props: Props) => {
         },
       };
 
-      // if (chat_socket.connected) {
-      sendChatMessageEvent(payload);
+      // if (socket.connected) {
+      if (socket) {
+
+        sendChatMessageEvent(payload, socket);
+      }
       // } else {
       //   console.log("queued");
       //   messageQueueRef.current.push(payload);
@@ -368,15 +368,17 @@ const ChatRoom = (props: Props) => {
   //custom ping interval
 
   useEffect(() => {
-    if (props.type === "admin") return () => {};
+    if (props.type === "admin") return;
     let interval: NodeJS.Timeout | undefined;
-    if (props.sessionOver) return () => {};
+    if (props.sessionOver) return;
     if (props.isTime) {
       interval = setInterval(() => {
         // console.log("i sent ping", moment(new Date()).format("h:mm a"));
-        chat_socket.emit("triggerPing", {
-          room: props.orderId,
-        });
+        if (socket) {
+          socket.emit("triggerPing", {
+            room: props.orderId,
+          });
+        }
         setMissedPongs((prev) => prev + 1);
       }, 20000);
     }
@@ -388,15 +390,16 @@ const ChatRoom = (props: Props) => {
   }, [props.isTime, props.sessionOver]);
 
   useEffect(() => {
+    if (!socket) return;
     if (props.type === "admin") return () => {};
     if (props.sessionOver) return () => {};
     if (props.isTime) {
-      chat_socket.on("roomPing", () => {
+      socket.on("roomPing", () => {
         console.log("received my ping", moment(new Date()).format("h:mm a"));
         setMissedPongs(0);
       });
       return () => {
-        chat_socket.off("roomPing");
+        socket.off("roomPing");
       };
     }
   }, [props.isTime, props.sessionOver]);
@@ -404,8 +407,9 @@ const ChatRoom = (props: Props) => {
   //socket listener for new messages
 
   useEffect(() => {
+    if (!socket) return;
     if (props.type === "admin") return () => {};
-    chat_socket.on(
+    socket.on(
       "message",
       (data: {
         sender: {
@@ -473,13 +477,14 @@ const ChatRoom = (props: Props) => {
     );
 
     return () => {
-      chat_socket.off("message");
+      socket.off("message");
     };
-  }, [chat_socket.connected]);
+  }, []);
 
   useEffect(() => {
+    if (!socket) return;
     if (missedPongs > 3) {
-      chat_socket.connect();
+      socket.connect();
       setMissedPongs(0);
       console.log("missed my pong, i am reconnecting..");
     }
@@ -488,8 +493,9 @@ const ChatRoom = (props: Props) => {
   //socket listener for new files
 
   useEffect(() => {
+    if (!socket) return;
     if (props.type === "admin") return () => {};
-    chat_socket.on(
+    socket.on(
       "fileMessage",
       (data: {
         fileUrl: string;
@@ -526,14 +532,14 @@ const ChatRoom = (props: Props) => {
       }
     );
     return () => {
-      chat_socket.off("fileMessage");
+      socket.off("fileMessage");
     };
-  }, [chat_socket.connected]);
+  }, []);
 
   useEffect(() => {
     if (props.type === "admin") return () => {};
     document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible" && !chat_socket.connected) {
+      if (document.visibilityState === "visible" && !socket?.connected) {
         notify("message", "Your connection got lost, refreshing chat");
         chat_socket.connect();
         props.refreshChat();
@@ -770,7 +776,9 @@ const ChatRoom = (props: Props) => {
                                 },
                               };
                               // if (chat_socket.connected) {
-                              sendFileMessage(payload);
+                              if (socket) {
+                                sendFileMessage(payload, socket);
+                              }
                               // } else {
                               //   fileQueueRef.current.push(payload);
                               // }
@@ -842,7 +850,9 @@ const ChatRoom = (props: Props) => {
                                               replytousertype: replyData.user,
                                             },
                                           };
-                                          sendFileMessage(payload);
+                                          if (socket) {
+                                            sendFileMessage(payload, socket);
+                                          }
 
                                           props.updateChatHandlerProps({
                                             text: file.name,
@@ -910,17 +920,21 @@ const ChatRoom = (props: Props) => {
                           radius={"md"}
                           value={inputValue}
                           onChange={(event) => {
-                            emitTypingEvent(
-                              props.orderId,
-                              `${props.userData?.id}`
-                            );
-                            setInputValue(event.currentTarget.value);
-                            setTimeout(() => {
-                              stopTypingEmit(
+                            if (socket) {
+                              emitTypingEvent(
                                 props.orderId,
-                                `${props.userData?.id}`
+                                `${props.userData?.id}`,
+                                socket
                               );
-                            }, 3000);
+                              setInputValue(event.currentTarget.value);
+                              setTimeout(() => {
+                                stopTypingEmit(
+                                  props.orderId,
+                                  `${props.userData?.id}`,
+                                  socket
+                                );
+                              }, 3000);
+                            }
                           }}
                           classNames={{
                             input: classes.input,
@@ -945,17 +959,21 @@ const ChatRoom = (props: Props) => {
                           radius={"md"}
                           value={inputValue}
                           onChange={(event) => {
-                            emitTypingEvent(
-                              props.orderId,
-                              `${props.userData?.id}`
-                            );
                             setInputValue(event.currentTarget.value);
-                            setTimeout(() => {
-                              stopTypingEmit(
+                            if (socket) {
+                              emitTypingEvent(
                                 props.orderId,
-                                `${props.userData?.id}`
+                                `${props.userData?.id}`,
+                                socket
                               );
-                            }, 3000);
+                              setTimeout(() => {
+                                stopTypingEmit(
+                                  props.orderId,
+                                  `${props.userData?.id}`,
+                                  socket
+                                );
+                              }, 3000);
+                            }
                           }}
                           classNames={{
                             input: classes.input,

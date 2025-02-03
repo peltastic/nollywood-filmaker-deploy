@@ -28,10 +28,11 @@ import RequestExtension from "../ModalComponents/RequestExtension";
 import ReportAnIssue from "../ModalComponents/ReportAnIssue";
 import { useDisclosure } from "@mantine/hooks";
 import InitializingTransactionModal from "@/components/Services/InitializingTransactionModal";
-import { chat_socket, primary_socket } from "@/lib/socket";
 import { nprogress } from "@mantine/nprogress";
 import { useSetChatAsCompleteMutation } from "@/lib/features/consultants/dashboard/request";
 import { useLazyFetchChatMessagesByAdminQuery } from "@/lib/features/admin/chats/chats";
+import { useSocket } from "@/components/Providers/SocketProviders";
+import { primary_socket } from "@/lib/socket";
 
 export interface ChatPayload {
   text: string;
@@ -84,6 +85,8 @@ const CustomerChatMiddle = ({
   refetch,
   profilepic,
 }: Props) => {
+  const { socket } = useSocket();
+
   const userData = useSelector(
     (state: RootState) => state.persistedState.user.user
   );
@@ -303,9 +306,11 @@ const CustomerChatMiddle = ({
     if (res.isSuccess) {
       nprogress.complete();
       if (orderId) {
-        chat_socket.emit("triggerRefresh", {
-          room: orderId,
-        });
+        if (socket) {
+          socket.emit("triggerRefresh", {
+            room: orderId,
+          });
+        }
         transFunc.close();
         refreshChat();
       }
@@ -337,10 +342,11 @@ const CustomerChatMiddle = ({
   }, [paymentStatus]);
 
   useEffect(() => {
+    if (!socket) return;
     if (type === "admin") return () => {};
     let timeout: NodeJS.Timeout | undefined;
     if (type === "consultant") {
-      chat_socket.on("refresh", () => {
+      socket.on("refresh", () => {
         notify(
           "message",
           "Customer extended session, chat will refresh to update time"
