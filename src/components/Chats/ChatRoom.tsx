@@ -328,7 +328,7 @@ const ChatRoom = (props: Props) => {
           name: `${props.userData.fname} ${props.userData.lname}`,
           role: props.type,
           userid: props.userData.id,
-          chatRoomId: searchVal as string,
+          chatRoomId: props.orderId,
           replyto: replyData.reply,
           replytoId: replyData.id,
           mid: id,
@@ -431,6 +431,7 @@ const ChatRoom = (props: Props) => {
         };
         message: string;
       }) => {
+        console.log(data, "received")
         if (
           props.userData?.id === data.sender.userid ||
           props.userData?.id === data.sender.userid
@@ -771,7 +772,7 @@ const ChatRoom = (props: Props) => {
                                   name: `${props.userData.fname} ${props.userData.lname}`,
                                   role: props.type,
                                   userid: props.userData.id,
-                                  chatRoomId: searchVal as string,
+                                  chatRoomId: props.orderId,
                                   mid: id,
                                   replyto: replyData.reply,
                                   replytoId: replyData.id,

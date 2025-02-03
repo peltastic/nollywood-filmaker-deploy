@@ -63,6 +63,7 @@ export function sendChatMessageEvent(
   data: IChatMessagePayload,
   socket: Socket
 ) {
+  console.log(data, "sent")
   socket.emit("chatMessage", data);
 }
 
