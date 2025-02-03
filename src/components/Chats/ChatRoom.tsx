@@ -150,18 +150,18 @@ const ChatRoom = (props: Props) => {
   //   };
   // }, []);
 
-  useEffect(() => {
-    if (!socket) return;
-    if (props.type === "admin") return () => {};
-    if (props.sessionOver) return () => {};
-    socket.on("disconnect", (data) => {
-      console.log("i disconnected", console.log(data));
-      socket.connect();
-    });
-    return () => {
-      socket.off("disconnect");
-    };
-  }, [props.sessionOver]);
+  // useEffect(() => {
+  //   if (!socket) return;
+  //   if (props.type === "admin") return () => {};
+  //   if (props.sessionOver) return () => {};
+  //   socket.on("disconnect", (data) => {
+  //     console.log("i disconnected", console.log(data));
+  //     socket.connect();
+  //   });
+  //   return () => {
+  //     socket.off("disconnect");
+  //   };
+  // }, [props.sessionOver]);
 
   ////////////////CUSTOM CHAT LISTENERS - CLOSE///////////////////////
 
@@ -338,7 +338,6 @@ const ChatRoom = (props: Props) => {
 
       // if (socket.connected) {
       if (socket) {
-
         sendChatMessageEvent(payload, socket);
       }
       // } else {
@@ -538,13 +537,17 @@ const ChatRoom = (props: Props) => {
 
   useEffect(() => {
     if (props.type === "admin") return () => {};
-    document.addEventListener("visibilitychange", () => {
+    const handleVisibilityChange = () => {
       if (document.visibilityState === "visible" && !socket?.connected) {
         notify("message", "Your connection got lost, refreshing chat");
         chat_socket.connect();
         props.refreshChat();
       }
-    });
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, []);
 
   //get base64 for chat files to be uploaded
