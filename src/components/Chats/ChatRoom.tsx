@@ -487,7 +487,7 @@ const ChatRoom = (props: Props) => {
         props.refetch();
         if (props.userData?.id === data.sender.userid) {
         } else {
-          if (searchVal === data.sender.chatRoomId) {
+          if (props.orderId === data.sender.chatRoomId) {
             console.log("file message received", data);
             props.updateChatHandlerProps({
               text: data.fileName,
