@@ -17,6 +17,7 @@ import { useServicePayment } from "@/hooks/useServicePayment";
 import InitializingTransactionModal from "@/components/Services/InitializingTransactionModal";
 import { initializeTransactionListener } from "@/lib/socket";
 import { nprogress } from "@mantine/nprogress";
+import { numberWithCommas } from "@/utils/helperFunction";
 
 type Props = {};
 
@@ -34,6 +35,7 @@ export interface ICreatePitchState {
 
 const CreatePitchPage = (props: Props) => {
   useProtectRoute();
+  const [cost, setCost] = useState<number>(150000)
   const [createPitch, { data, isLoading, isSuccess, isError, error }] =
     useInitializeCreatePitchMutation();
   const router = useRouter();
@@ -92,7 +94,7 @@ const CreatePitchPage = (props: Props) => {
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft
             title="Create a Movie Schedule"
-            cost="250,000"
+            cost={numberWithCommas(cost)}
             image={<Image src={CreatePitchImg} alt="create-pitch" />}
             body={[
               {
@@ -173,6 +175,7 @@ const CreatePitchPage = (props: Props) => {
                 setScriptProps={setScriptDataHandler}
                 data={scriptData}
                 fileName={file?.name}
+                setCost={(val) => setCost(val)}
               />
             </ServiceRight>
           )}

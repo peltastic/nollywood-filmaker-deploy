@@ -509,7 +509,9 @@ const ChatRoom = (props: Props) => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible" && !socket?.connected) {
         notify("message", "Your connection got lost, refreshing chat");
-        chat_socket.connect();
+        if (socket) {
+          socket.connect();
+        }
         props.refreshChat();
       }
     };
@@ -517,7 +519,7 @@ const ChatRoom = (props: Props) => {
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, []);
+  }, [socket]);
 
   //get base64 for chat files to be uploaded
 

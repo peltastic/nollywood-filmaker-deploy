@@ -17,6 +17,7 @@ type Props = {
   setScriptProps: (key: string, value: string) => void;
   proceed: () => void;
   isLoading?: boolean;
+  setCost: (value: number) => void
 };
 
 const MarketingBudgetForm = ({
@@ -25,6 +26,7 @@ const MarketingBudgetForm = ({
   disabled,
   proceed,
   isLoading,
+  setCost
 }: Props) => {
   const router = useRouter();
   const [checked, setChecked] = useState<boolean>(false);
@@ -53,7 +55,10 @@ const MarketingBudgetForm = ({
             onChange={(val) => {
               if (val.currentTarget.checked) {
                 setScriptProps("showType", "Yes");
+                setCost(350000)
+                
               } else {
+                setCost(250000)
                 setScriptProps("showType", "No");
               }
               setChecked(val.currentTarget.checked);

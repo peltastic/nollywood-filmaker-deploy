@@ -17,6 +17,7 @@ import { useDisclosure } from "@mantine/hooks";
 import InitializingTransactionModal from "@/components/Services/InitializingTransactionModal";
 import { initializeTransactionListener } from "@/lib/socket";
 import { nprogress } from "@mantine/nprogress";
+import { numberWithCommas } from "@/utils/helperFunction";
 
 type Props = {};
 
@@ -33,6 +34,7 @@ export interface IProductionBudgetState {
 }
 
 const ProductionBudgetPage = (props: Props) => {
+  const [cost, setCost] = useState<number>(250000)
   useProtectRoute();
   const [
     createProductionBudget,
@@ -93,7 +95,7 @@ const ProductionBudgetPage = (props: Props) => {
       <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft
-            cost="250,000"
+            cost={numberWithCommas(cost)}
             title="Create a production budget"
             image={<Image src={ProductionBudgetImg} alt="production-budget" />}
             body={[
@@ -174,6 +176,7 @@ const ProductionBudgetPage = (props: Props) => {
                 isLoading={isLoading}
                 setFileProps={(file) => setFile(file)}
                 setScriptProps={setScriptDataHandler}
+                updateCost={(value) => setCost(value)}
                 data={scriptData}
                 fileName={file?.name}
               />

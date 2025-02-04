@@ -17,6 +17,7 @@ import { RootState } from "@/lib/store";
 import { initializeTransactionListener } from "@/lib/socket";
 import { nprogress } from "@mantine/nprogress";
 import InitializingTransactionModal from "@/components/Services/InitializingTransactionModal";
+import { numberWithCommas } from "@/utils/helperFunction";
 
 type Props = {};
 
@@ -40,6 +41,8 @@ const MarketingBudget = (props: Props) => {
   const userId = useSelector(
     (state: RootState) => state.persistedState.user.user?.id
   );
+
+  const [cost, setCost] = useState<number>(250000)
   const router = useRouter();
   const searchParam = useSearchParams();
   const search = searchParam.get("page");
@@ -91,7 +94,7 @@ const MarketingBudget = (props: Props) => {
       <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft
-            cost="250,000"
+            cost={numberWithCommas(cost)}
             title="Create a marketing budget"
             image={<Image src={MarketingBudgetImg} alt="production-budget" />}
             body={[
@@ -162,6 +165,7 @@ const MarketingBudget = (props: Props) => {
                 isLoading={isLoading}
                 setScriptProps={setScriptDataHandler}
                 data={scriptData}
+                setCost={(value) => setCost(value)}
               />
             </ServiceRight>
           )}

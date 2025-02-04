@@ -20,6 +20,7 @@ type Props = {
   setFileProps: (value: File | null) => void;
   proceed: () => void;
   isLoading?: boolean;
+  updateCost: (value: number) => void
 };
 
 const ProductionBudgetForm = ({
@@ -30,6 +31,7 @@ const ProductionBudgetForm = ({
   fileName,
   proceed,
   isLoading,
+  updateCost
 }: Props) => {
   const router = useRouter();
   const [checked, setChecked] = useState<boolean>(false);
@@ -58,8 +60,11 @@ const ProductionBudgetForm = ({
             onChange={(val) => {
               if (val.currentTarget.checked) {
                 setScriptProps("showType", "Yes");
+                updateCost(350000)
+                
               } else {
                 setScriptProps("showType", "No");
+                updateCost(250000)
               }
               setChecked(val.currentTarget.checked);
             }}

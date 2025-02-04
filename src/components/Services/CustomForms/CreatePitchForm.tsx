@@ -20,6 +20,7 @@ type Props = {
   setFileProps: (value: File | null) => void;
   proceed: () => void;
   isLoading?: boolean;
+  setCost: (value: number) => void
 };
 
 const CreatePitchForm = ({
@@ -30,6 +31,7 @@ const CreatePitchForm = ({
   fileName,
   proceed,
   isLoading,
+  setCost
 }: Props) => {
   const router = useRouter();
   const [checked, setChecked] = useState<boolean>(false);
@@ -58,8 +60,10 @@ const CreatePitchForm = ({
             onChange={(val) => {
               if (val.currentTarget.checked) {
                 setScriptProps("showType", "Yes");
+                setCost(150000)
               } else {
                 setScriptProps("showType", "No");
+                setCost(300000)
               }
               setChecked(val.currentTarget.checked);
             }}
