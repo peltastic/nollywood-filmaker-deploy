@@ -511,6 +511,17 @@ const ChatRoom = (props: Props) => {
         notify("message", "Your connection got lost, refreshing chat");
         if (socket) {
           socket.connect();
+          if (props.userData) {
+            joinChatRoom(
+              {
+                room: props.orderId,
+                name: `${props.userData.fname} ${props.userData.lname}`,
+                role: "user",
+                userId: props.userData.id,
+              },
+              socket
+            );
+          }
         }
         props.refreshChat();
       }
