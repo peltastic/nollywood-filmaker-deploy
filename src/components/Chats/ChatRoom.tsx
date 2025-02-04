@@ -136,6 +136,8 @@ const ChatRoom = (props: Props) => {
   //   };
   // }, [props.sessionOver]);
 
+  // useEffect
+
   ////////////////CUSTOM CHAT LISTENERS - CLOSE///////////////////////
 
   //join room
@@ -511,17 +513,6 @@ const ChatRoom = (props: Props) => {
         notify("message", "Your connection got lost, refreshing chat");
         if (socket) {
           socket.connect();
-          if (props.userData) {
-            joinChatRoom(
-              {
-                room: props.orderId,
-                name: `${props.userData.fname} ${props.userData.lname}`,
-                role: "user",
-                userId: props.userData.id,
-              },
-              socket
-            );
-          }
         }
         props.refreshChat();
       }
@@ -529,6 +520,28 @@ const ChatRoom = (props: Props) => {
     document.addEventListener("visibilitychange", handleVisibilityChange);
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    if (props.type === "admin") return;
+    if (!socket) return;
+
+    socket.on("connect", () => {
+      if (props.userData) {
+        joinChatRoom(
+          {
+            room: props.orderId,
+            name: `${props.userData.fname} ${props.userData.lname}`,
+            role: "user",
+            userId: props.userData.id,
+          },
+          socket
+        );
+      }
+    });
+    return () => {
+      socket.off("connect");
     };
   }, [socket]);
 
