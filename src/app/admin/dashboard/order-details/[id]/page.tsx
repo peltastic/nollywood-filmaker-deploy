@@ -10,19 +10,30 @@ import OrderDetailsTop from "@/components/OrderDetails/OrderDetailsTop";
 import OrderDetailsBody from "@/components/OrderDetails/OrderDetailsBody";
 
 import OrderDetailsPageSkeleton from "@/components/Skeletons/OrderDetailsPageSkeleton";
-import { useLazyGetCustomerRequestDetailQuery } from "@/lib/features/admin/requests/request";
+import {
+  useLazyGetCustomerRequestDetailQuery,
+  useLazyGetResolvedFilesQuery,
+} from "@/lib/features/admin/requests/request";
 import { useProtectAdmin } from "@/hooks/useProtectAdminRoute";
+import {
+  IResolveFilesColumnData,
+  resolve_files_columns,
+} from "@/components/Columns/ResolveFilesColumn";
+import moment from "moment";
+import { DataTable } from "@/components/Tables/DataTable";
 type Props = {};
 
 const CustomerOrderDetailsPage = (props: Props) => {
-  useProtectAdmin()
+  useProtectAdmin();
   const [getCustomerReqDetails, { data, isFetching }] =
     useLazyGetCustomerRequestDetailQuery();
-  const search = useSearchParams();
-  const params = useParams();
-  const [bodyData, setBodyData] = useState<
-    { title: string; content: string }[]
+  const [resolveFilesData, setResolveFilesData] = useState<
+    IResolveFilesColumnData[]
   >([]);
+  const [getResolvedFiles, result] = useLazyGetResolvedFilesQuery();
+  const params = useParams<{ id: string }>();
+
+  const [isResolvedFiles, setIsResolveFiles] = useState<boolean>(false);
 
   useEffect(() => {
     if (params.id) {
@@ -30,7 +41,32 @@ const CustomerOrderDetailsPage = (props: Props) => {
     }
   }, [params]);
 
-  const searchVal = search.get("status") || "Pending";
+  useEffect(() => {
+    if (data && (data.request.stattusof === "ready" || data.request.stattusof === "completed")) {
+      if (params.id) {
+        getResolvedFiles(params.id);
+      }
+      setIsResolveFiles(true);
+    }
+  }, [data, params]);
+
+  useEffect(() => {
+    if (result.data) {
+      const refined_data: IResolveFilesColumnData[] = result.data.resolves.map(
+        (el) => {
+          return {
+            date: moment(el.createdAt).fromNow(),
+            last_updated: moment(el.updatedAt).fromNow(),
+            file: el.filepath,
+            name: el.filename,
+            size: `${(el.size / 1000000).toFixed(2)} MB`,
+            uploaded_by: "Consultant",
+          };
+        }
+      );
+      setResolveFilesData(refined_data);
+    }
+  }, [result.data]);
 
   return (
     <ServiceLayout admin>
@@ -80,7 +116,7 @@ const CustomerOrderDetailsPage = (props: Props) => {
                     order_type={data?.request.nameofservice}
                     isChat={data?.request.type === "Chat"}
                     // rating="5"
-                    />
+                  />
                   <OrderDetailsBody
                     chat={
                       data?.request.nameofservice === "Chat With A Professional"
@@ -104,6 +140,9 @@ const CustomerOrderDetailsPage = (props: Props) => {
                         ? data?.request.movie_title
                         : null
                     }
+                    showType={data?.request.showtype}
+                    episodes={data?.request.episodes}
+                    series_files={data?.request.files}
                     fileLink={data?.request.files && data.request.files[0]}
                     title={data?.request.movie_title}
                     link={data?.request.link}
@@ -119,7 +158,18 @@ const CustomerOrderDetailsPage = (props: Props) => {
                     booktime={data?.request.booktime}
                     contact_info={data?.request.contactInfo}
                   />
-                
+                  {isResolvedFiles && (
+                    <div className="mt-14">
+                      <DataTable
+                        isFetching={result.isFetching}
+                        columns={resolve_files_columns}
+                        data={resolveFilesData}
+                        title="Resolved Files"
+                        faded
+                        loaderLength={5}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

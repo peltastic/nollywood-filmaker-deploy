@@ -3,6 +3,7 @@ import {
   IFetchCustomerRequestsResponse,
 } from "@/interfaces/admin/requests/requests";
 import {
+  IAdminResolvedFiles,
   IAppointConsultantPayload,
   ICustomerReqDetails,
   IFetchConsultantsResponse,
@@ -83,6 +84,15 @@ export const adminRequestApi = createApi({
     >({
       query: () => `/api/admin/fetch/consultants`,
     }),
+    getResolvedFiles: build.query<IAdminResolvedFiles, string>({
+      query: (id) => `/api/admin/resolves/${id}`,
+    }),
+    setAdminTaskAsCompleted: build.mutation<unknown, string>({
+      query: (id) => ({
+        url: `/api/admin/request/status/completed/${id}`,
+        method: "PATCH"
+      }),
+    }),
   }),
 });
 
@@ -95,4 +105,6 @@ export const {
   useAssignServiceToConsultantMutation,
   useLazyGetCustomerRequestDetailQuery,
   useLazyGetConsultantForTaskQuery,
+  useLazyGetResolvedFilesQuery,
+  useSetAdminTaskAsCompletedMutation
 } = adminRequestApi;

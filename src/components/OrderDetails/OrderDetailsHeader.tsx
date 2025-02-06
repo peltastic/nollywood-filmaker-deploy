@@ -129,19 +129,44 @@ const OrderDetailsHeader = ({
     case "ongoing":
       adminMenuContent = (
         <MenuContent
-          data={isChat ? [{ name: "Go to Chat", link: `/`, function: () => {} }] : []}
+          data={
+            isChat
+              ? [
+                  {
+                    name: "Go to Chat",
+                    link: `/`,
+                    function: () => {},
+                  },
+                ]
+              : []
+          }
+        />
+      );
+      break;
+    case "ready":
+      adminMenuContent = (
+        <MenuContent
+          data={[
+            {
+              name: "Set as completed",
+              link: "/",
+              function: () => {
+                setAsCompletedOptions.open();
+              },
+            },
+          ]}
         />
       );
       break;
     case "completed":
       adminMenuContent = adminMenuContent = (
         <MenuContent
-          data={[
+          data={isChat ? [
             {
               name: "Go To Chat",
               link: "/admin/dashboard/customers/1/chat/1",
             },
-          ]}
+          ] : []}
         />
       );
       break;
@@ -235,7 +260,9 @@ const OrderDetailsHeader = ({
                 {capitalizeFirstLetter(statusValue)}
               </p>
             )}
-            {user && (status === "ongoing" || status === "ready") && !isChat ? null : (
+            {user &&
+            (status === "ongoing" || status === "ready") &&
+            !isChat ? null : (
               <>
                 {(status !== "pending" || admin) && (
                   <MenuComponent

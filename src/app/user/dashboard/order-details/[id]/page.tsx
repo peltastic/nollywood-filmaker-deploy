@@ -74,7 +74,7 @@ const OrderDetailsPage = (props: Props) => {
             last_updated: moment(el.createdAt).fromNow(),
             name: el.filename,
             file: el.filepath,
-            size: `${el.size / 1000000} MB`,
+            size: `${(el.size / 1000000).toFixed(2)} MB`,
             uploaded_by: "Admin",
           };
         }
@@ -143,6 +143,9 @@ const OrderDetailsPage = (props: Props) => {
                 company={data?.request.productionCompany}
                 contact_info={data?.request.contactInfo}
                 booktime={data?.request.booktime}
+                episodes={data?.request.episodes}
+                series_files={data?.request.files}
+                showType={data?.request.showtype}
               />
               {isResolveFileState && (
                 <div className="mt-14" ref={ref}>
@@ -151,6 +154,8 @@ const OrderDetailsPage = (props: Props) => {
                     data={resolveFilesData}
                     title="Request Resolve Files"
                     faded
+                    isFetching={result.isFetching}
+                    loaderLength={5}
                   />
                 </div>
               )}

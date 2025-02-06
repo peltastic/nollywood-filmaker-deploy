@@ -35,6 +35,8 @@ const ReadMyScriptPage = (props: Props) => {
   const userId = useSelector(
     (state: RootState) => state.persistedState.user.user?.id
   );
+  const [seriesFiles, setSeriesFiles] = useState<File[]>([]);
+  const [filesPageCount, setFilesPageCount] = useState<number[]>([]);
   const [opened, { close, open }] = useDisclosure();
 
   const { paymentStatus } = useServicePayment(
@@ -55,8 +57,8 @@ const ReadMyScriptPage = (props: Props) => {
     genre: "",
     logline: "",
     platform: "",
-    showType: "",
-    episodes: ""
+    showType: "No",
+    episodes: "",
   });
   const setScriptDataHandler = (key: string, value: string) => {
     setScriptData({
@@ -92,6 +94,10 @@ const ReadMyScriptPage = (props: Props) => {
             cost="150,000"
             title="Read my script"
             image={<Image src={ReadMyScriptImg} alt="read-my-script" />}
+            episodes={scriptData.episodes}
+            series={scriptData.showType === "Yes"}
+            files={seriesFiles}
+            seriesPageCount={filesPageCount}
             body={[
               { title: "Movie title", content: scriptData.movie_title },
               {
@@ -135,28 +141,38 @@ const ReadMyScriptPage = (props: Props) => {
                         title: "Read my Script and advice",
                         concerns: scriptData.concerns,
                         type: "request",
-                        files: file,
-                        fileName: file?.name || "",
+                        files:
+                          scriptData.showType === "Yes" ? seriesFiles : [file],
+                        fileName: file?.name || "Series",
                         episodes: scriptData.episodes,
                         showtype: scriptData.showType,
+                        pageCount: filesPageCount,
                       });
                       initializeTransactionListener(userId);
                       nprogress.start();
                       open();
                     }
                   }}
+                  setSeriesFilesData={(files) => {
+                    setSeriesFiles(files);
+                  }}
+                  setSeriesCount={(counts) => {
+                    setFilesPageCount(counts);
+                  }}
                   disabled={
                     !scriptData.movie_title ||
                     !scriptData.genre ||
                     !scriptData.platform ||
                     !scriptData.logline ||
-                    !file
+                    (scriptData.showType === "No" ? !file : !seriesFiles.length)
                   }
                   setFileProps={(file) => setFile(file)}
                   setScriptProps={setScriptDataHandler}
                   data={scriptData}
                   fileName={file?.name}
                   isLoading={isLoading}
+                  files={seriesFiles}
+                  seriesPageCount={filesPageCount}
                 />
               }
             </ServiceRight>

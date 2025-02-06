@@ -6,7 +6,7 @@ import InputComponent from "@/components/Input/Input";
 import SelectComponent from "@/components/Select/SelectComponent";
 import ServiceInfo from "@/components/ServiceInfo/ServiceInfo";
 import TextArea from "@/components/TextArea/TextArea";
-import { testExhibitionData, testSelectData } from "@/utils/constants/constants";
+import { seriesExhibitionData, testExhibitionData, testSelectData } from "@/utils/constants/constants";
 import { Switch } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -101,7 +101,7 @@ const ProductionBudgetForm = ({
             value={data.platform}
             setValueProps={(val) => setScriptProps("platform", val!)}
             label="Platform for exhibition"
-            data={testExhibitionData}
+            data={checked ? seriesExhibitionData : testExhibitionData}
             placeholder="Select"
           />
         </div>

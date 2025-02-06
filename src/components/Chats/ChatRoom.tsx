@@ -507,7 +507,7 @@ const ChatRoom = (props: Props) => {
   }, [socket]);
 
   useEffect(() => {
-    if (props.type === "admin") return () => {};
+    if (typeof document === "undefined" || props.type === "admin") return;
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible" && !socket?.connected) {
         notify("message", "Your connection got lost, refreshing chat");
@@ -520,7 +520,7 @@ const ChatRoom = (props: Props) => {
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [socket]);
+  }, [socket, props.type]);
 
   useEffect(() => {
     if (props.type === "admin") return;

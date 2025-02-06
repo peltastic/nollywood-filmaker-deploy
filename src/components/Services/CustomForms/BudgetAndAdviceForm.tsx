@@ -7,6 +7,7 @@ import SelectComponent from "@/components/Select/SelectComponent";
 import ServiceInfo from "@/components/ServiceInfo/ServiceInfo";
 import TextArea from "@/components/TextArea/TextArea";
 import {
+  seriesExhibitionData,
   testExhibitionData,
   testSelectData,
 } from "@/utils/constants/constants";
@@ -103,7 +104,7 @@ const BudgetAndAdviceForm = ({
               value={data.platform}
               setValueProps={(val) => setScriptProps("platform", val!)}
               label="Platform for exhibition"
-              data={testExhibitionData}
+              data={checked ? seriesExhibitionData : testExhibitionData}
               placeholder="Select"
             />
           </div>

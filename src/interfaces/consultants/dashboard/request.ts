@@ -63,6 +63,8 @@ export interface ICustomerReqDetails {
     socialTarget: string;
     oohTarget: string;
     visualStyle: string;
+    episodes: string
+    showtype: string
   };
   user: {
     fullName: string;
@@ -170,4 +172,16 @@ export interface IRequestHistoryResponse {
     email: string
     profilepics: string;
   };
+}
+
+export interface IAdminResolvedFiles {
+  resolves: {
+    _id: string
+    orderId: string
+    filename: string
+    filepath: string
+    size: number
+    createdAt: string
+    updatedAt: string
+  }[]
 }

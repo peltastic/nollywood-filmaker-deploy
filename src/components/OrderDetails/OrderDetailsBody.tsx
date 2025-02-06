@@ -29,6 +29,9 @@ type Props = {
   contact_info?: string;
   isChat?: boolean;
   booktime?: string;
+  episodes?: string;
+  showType?: string;
+  series_files?: string[];
 };
 
 const OrderDetailsBody = ({
@@ -55,29 +58,54 @@ const OrderDetailsBody = ({
   contact_info,
   isChat,
   booktime,
+  episodes,
+  showType,
+  series_files,
 }: Props) => {
   return (
     <div className="text-black-2 bg-white px-6 py-6 mt-8 rounded-2xl border border-stroke-5 shadow-md shadow-[#1018280F]">
       {chat ? null : (
         <div className="border-b border-b-stroke-4">
           <div className="mb-4">
-            <h1 className="font-bold mb-1">Movie Title</h1>
+            <h1 className="font-bold mb-1">
+              {showType === "Yes" ? "Series title" : "Movie title"}
+            </h1>
             <p className="text-[0.88rem]">{title}</p>
           </div>
-          {script && (
-            <div className=" mb-4">
-              <h1 className="font-bold mb-1">Script</h1>
-              {fileLink ? (
-                <Link href={fileLink}>
-                  <div className="flex rounded-sm w-fit items-center px-2 py-1 font-medium bg-border-gray text-black-3 text-[0.88rem]">
-                    <p className="mr-1">{script}</p>
-                    <IoMdDownload />
+          {showType === "Yes" && series_files ? (
+            <>
+              <h1 className="font-bold mb-4">Series episodes' scripts</h1>
+              <div className="">
+                {series_files?.map((el, index) => (
+                  <div className=" mb-4" key={el}>
+                    <Link href={el}>
+                      <div className="flex rounded-sm w-fit items-center px-2 py-1 font-medium bg-border-gray text-black-3 text-[0.88rem]">
+                        <p className="mr-1">{`Series script ${index + 1}`}</p>
+                        <IoMdDownload />
+                      </div>
+                    </Link>
                   </div>
-                </Link>
-              ) : (
-                <p className="text-black-3 text-[0.88rem] font-medium">
-                  {script}
-                </p>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="">
+              {script && (
+                <div className=" mb-4">
+                  <h1 className="font-bold mb-1">Script</h1>
+                  {fileLink ? (
+                    <Link href={fileLink}>
+                      <div className="flex rounded-sm w-fit items-center px-2 py-1 font-medium bg-border-gray text-black-3 text-[0.88rem]">
+                        <p className="mr-1">{script}</p>
+                        <IoMdDownload />
+                      </div>
+                    </Link>
+                  ) : (
+                    <p className="text-black-3 text-[0.88rem] font-medium">
+                      {script}
+                    </p>
+                  )}
+                </div>
               )}
             </div>
           )}
@@ -116,6 +144,14 @@ const OrderDetailsBody = ({
           <h1 className="font-bold mb-1">Summary</h1>
           <div className="text-[0.88rem]">
             <RenderTextAreaInput text={summary} />
+          </div>
+        </div>
+      )}
+      {episodes && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-1">No. of episodes</h1>
+          <div className="text-[0.88rem]">
+          <p>{episodes}</p>
           </div>
         </div>
       )}

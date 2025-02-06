@@ -10,10 +10,13 @@ interface InitializeReadMyScriptPayload extends GeneralType {
   synopsis: string;
   genre: string;
   platforms: string;
-  files: File | null;
+  files?: (File | null)[] | File[][];
   concerns?: string;
   type: "request";
   fileName: string;
+  episodes?: string
+  pageCount?: number[]
+
 }
 interface IServiceResponse {
   result: {

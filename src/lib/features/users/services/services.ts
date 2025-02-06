@@ -1,5 +1,5 @@
 import { baseQueryWithReauth } from "@/lib/baseQuery";
-import { formDataHandler } from "@/utils/helperFunction";
+import { appendToFormData, formDataHandler } from "@/utils/helperFunction";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const servicesApi = createApi({
@@ -11,11 +11,25 @@ export const servicesApi = createApi({
       InitializeReadMyScriptPayload
     >({
       query: (body) => {
-        const payload = formDataHandler(body);
+        const formData = new FormData();
+        for (const key in body) {
+          if (key === "files") {
+            console.log(body[key], "sdskj");
+            for (const el of body[key as keyof typeof body] as File[]) {
+              formData.append(key, el);
+            }
+          } else if (key === "pageCount") {
+              formData.append(key, JSON.stringify(body[key as keyof typeof body] as number[]));
+            
+          } else {
+            formData.append(key, body[key as keyof typeof body] as string);
+          }
+        }
+
         return {
           url: "/api/users/transaction/read",
           method: "POST",
-          body: payload,
+          body: formData,
         };
       },
     }),
@@ -100,5 +114,5 @@ export const {
   useInitializeCreateProductionBudgetMutation,
   useInitializeCreateMarketingBudgetMutation,
   useInitializeCreatePitchMutation,
-  useInitializeDraftLegalDocumentMutation
+  useInitializeDraftLegalDocumentMutation,
 } = servicesApi;

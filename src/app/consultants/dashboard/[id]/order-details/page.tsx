@@ -109,6 +109,9 @@ const OrderDetails = (props: Props) => {
                   company={data?.request.productionCompany}
                   contact_info={data?.request.contactInfo}
                   booktime={data?.request.booktime}
+                  episodes={data?.request.episodes}
+                  series_files={data?.request.files}
+                  showType={data?.request.showtype}
                 />
               </div>
             </div>

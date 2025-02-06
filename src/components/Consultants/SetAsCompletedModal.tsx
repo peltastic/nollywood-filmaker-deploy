@@ -5,6 +5,7 @@ import UnstyledButton from "../Button/UnstyledButton";
 import { nprogress } from "@mantine/nprogress";
 import Spinner from "@/app/Spinner/Spinner";
 import { notify } from "@/utils/notification";
+import { useSetAdminTaskAsCompletedMutation } from "@/lib/features/admin/requests/request";
 
 type Props = {
   close: () => void;
@@ -13,7 +14,7 @@ type Props = {
 
 const SetAsCompletedModal = (props: Props) => {
   const [setAsCompleted, { isLoading, isError, isSuccess, error }] =
-    useSetChatAsCompleteMutation();
+    useSetAdminTaskAsCompletedMutation();
   useEffect(() => {
     if (isError) {
       nprogress.complete();
@@ -26,12 +27,13 @@ const SetAsCompletedModal = (props: Props) => {
         "Service set to completed"
       );
       nprogress.complete();
+      window.location.reload()
       props.close();
     }
   }, [isError, isSuccess]);
   return (
     <div className=" py-8 px-8">
-      <FaCheckCircle className="text-[3rem] text-[#8fcb95] mb-4" />
+      <FaCheckCircle className="text-[5rem] text-[#8fcb95] mb-4" />
       <h1 className="font-semibold text-black-2 text-2xl">
         Set service as completed
       </h1>
@@ -39,7 +41,7 @@ const SetAsCompletedModal = (props: Props) => {
       <div className="w-full flex flex-wrap mt-[2rem]">
         <UnstyledButton
           clicked={props.close}
-          class="mb-4 xs:mb-0 py-1 rounded-md px-3 border-stroke-2 w-full xs:w-auto border ml-auto xs:mr-4"
+          class="mb-4 xs:mb-0 py-2 rounded-md px-3 border-stroke-2 w-full xs:w-auto border ml-auto xs:mr-4"
         >
           No, cancel
         </UnstyledButton>
@@ -49,7 +51,7 @@ const SetAsCompletedModal = (props: Props) => {
             nprogress.start();
             setAsCompleted(props.orderId);
           }}
-          class="w-[8rem] flex py-1 px-3 disabled:opacity-50 transition-all rounded-md justify-center items-center text-white border border-black-3 disabled:border-black-2  bg-black-3 text-[0.88rem] disabled:bg-black-2"
+          class="w-[8rem] flex py-2 px-3 disabled:opacity-50 transition-all rounded-md justify-center items-center text-white border border-black-3 disabled:border-black-2  bg-black-3 text-[0.88rem] disabled:bg-black-2"
         >
           {isLoading ? (
             <div className="py-1 w-[1rem]">

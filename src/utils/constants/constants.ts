@@ -81,6 +81,29 @@ export const testExhibitionData = [
   },
 ];
 
+export const seriesExhibitionData = [
+  {
+    label: "Netflix",
+    value: "Netflix",
+  },
+  {
+    label: "Amazon Prime Video",
+    value: "Amazon Prime Video",
+  },
+  {
+    label: "Youtube",
+    value: "Youtube",
+  },
+  {
+    label: "TV Broadcast",
+    value: "TV Broadcast",
+  },
+  {
+    label: "Not Decided Yet",
+    value: "Not Decided Yet",
+  },
+];
+
 export const consultantTypesData = [
   {
     label: "Producer",
