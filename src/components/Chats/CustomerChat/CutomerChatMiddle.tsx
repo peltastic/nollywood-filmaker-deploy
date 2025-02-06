@@ -195,20 +195,39 @@ const CustomerChatMiddle = ({
 
   useEffect(() => {
     if (result.data) {
-      const chat_data: ChatPayload[] = result.data.messages.map((el) => {
-        return {
-          text: el.message,
-          user: el.role,
-          id: el._id,
-          file: el.type === "file" ? el.message : "",
-          filename: el.type === "file" ? el.filename : "",
-          type: el.type,
-          replyTo: el.replyto,
-          replyToId: el.replytoId,
-          replytousertype: el.replytousertype,
-          recommendations: el.recommendations[0],
-        };
-      });
+      const chat_data: ChatPayload[] = [];
+      for (const el of result.data.messages) {
+        if (el.recommendations.length > 0) {
+          for (const val of el.recommendations) {
+            chat_data.push({
+              text: el.message,
+              user: el.role,
+              id: el._id,
+              file: el.type === "file" ? el.message : "",
+              filename: el.type === "file" ? el.filename : "",
+              type: el.type,
+              replyTo: el.replyto,
+              replyToId: el.replytoId,
+              replytousertype: el.replytousertype,
+              recommendations: val,
+            });
+          }
+        } else {
+          chat_data.push({
+            text: el.message,
+            user: el.role,
+            id: el._id,
+            file: el.type === "file" ? el.message : "",
+            filename: el.type === "file" ? el.filename : "",
+            type: el.type,
+            replyTo: el.replyto,
+            replyToId: el.replytoId,
+            replytousertype: el.replytousertype,
+            // recommendations: [],
+          });
+        }
+      }
+
       setChatData([
         {
           text: `Welcome to Nollywood Filmmaker!  🎥\nHow can we make your experience amazing today?\n\nQuick Tips for an Easy Chat:\n\n✨ Replying Made Simple: Just right-click on any message and hit “Reply.”\n\n✨ Keep the Conversation Flowing: You can export chats or flag any issues for review.\n\n✨ File Access: Need to check out shared files? You’ll find them conveniently on the right-hand side.\n\n⏳ Time Reminder: We’ll remind you when you’re 10 minutes away from the end of your session, and a timer will pop up to help ...`,
@@ -229,20 +248,38 @@ const CustomerChatMiddle = ({
 
   useEffect(() => {
     if (consultantRes.data) {
-      const chat_data: ChatPayload[] = consultantRes.data.messages.map((el) => {
-        return {
-          text: el.message,
-          user: el.role,
-          id: el._id,
-          file: el.type === "file" ? el.message : "",
-          filename: el.type === "file" ? el.filename : "",
-          type: el.type,
-          replyTo: el.replyto,
-          replyToId: el.replytoId,
-          replytousertype: el.replytousertype,
-          recommendations: el.recommendations[0],
-        };
-      });
+      const chat_data: ChatPayload[] = [];
+      for (const el of consultantRes.data.messages) {
+        if (el.recommendations.length > 0) {
+          for (const val of el.recommendations) {
+            chat_data.push({
+              text: el.message,
+              user: el.role,
+              id: el._id,
+              file: el.type === "file" ? el.message : "",
+              filename: el.type === "file" ? el.filename : "",
+              type: el.type,
+              replyTo: el.replyto,
+              replyToId: el.replytoId,
+              replytousertype: el.replytousertype,
+              recommendations: val,
+            });
+          }
+        } else {
+          chat_data.push({
+            text: el.message,
+            user: el.role,
+            id: el._id,
+            file: el.type === "file" ? el.message : "",
+            filename: el.type === "file" ? el.filename : "",
+            type: el.type,
+            replyTo: el.replyto,
+            replyToId: el.replytoId,
+            replytousertype: el.replytousertype,
+            // recommendations: [],
+          });
+        }
+      }
       setChatData([
         {
           text: `Welcome to Nollywood Filmmaker!  🎥\nHow can we make your experience amazing today?\n\nQuick Tips for an Easy Chat:\n\n✨ Replying Made Simple: Just right-click on any message and hit “Reply.”\n\n✨ Keep the Conversation Flowing: You can export chats or flag any issues for review.\n\n✨ File Access: Need to check out shared files? You’ll find them conveniently on the right-hand side.\n\n⏳ Time Reminder: We’ll remind you when you’re 10 minutes away from the end of your session, and a timer will pop up to help ...`,
@@ -261,20 +298,38 @@ const CustomerChatMiddle = ({
 
   useEffect(() => {
     if (byAdminRes.data) {
-      const chat_data: ChatPayload[] = byAdminRes.data.messages.map((el) => {
-        return {
-          text: el.message,
-          user: el.role,
-          id: el._id,
-          file: el.type === "file" ? el.message : "",
-          filename: el.type === "file" ? el.filename : "",
-          type: el.type,
-          replyTo: el.replyto,
-          replyToId: el.replytoId,
-          replytousertype: el.replytousertype,
-          recommendations: el.recommendations[0],
-        };
-      });
+      const chat_data: ChatPayload[] = [];
+      for (const el of byAdminRes.data.messages) {
+        if (el.recommendations.length > 0) {
+          for (const val of el.recommendations) {
+            chat_data.push({
+              text: el.message,
+              user: el.role,
+              id: el._id,
+              file: el.type === "file" ? el.message : "",
+              filename: el.type === "file" ? el.filename : "",
+              type: el.type,
+              replyTo: el.replyto,
+              replyToId: el.replytoId,
+              replytousertype: el.replytousertype,
+              recommendations: val,
+            });
+          }
+        } else {
+          chat_data.push({
+            text: el.message,
+            user: el.role,
+            id: el._id,
+            file: el.type === "file" ? el.message : "",
+            filename: el.type === "file" ? el.filename : "",
+            type: el.type,
+            replyTo: el.replyto,
+            replyToId: el.replytoId,
+            replytousertype: el.replytousertype,
+            // recommendations: [],
+          });
+        }
+      }
       setChatData([
         {
           text: `Welcome to Nollywood Filmmaker!  🎥\nHow can we make your experience amazing today?\n\nQuick Tips for an Easy Chat:\n\n✨ Replying Made Simple: Just right-click on any message and hit “Reply.”\n\n✨ Keep the Conversation Flowing: You can export chats or flag any issues for review.\n\n✨ File Access: Need to check out shared files? You’ll find them conveniently on the right-hand side.\n\n⏳ Time Reminder: We’ll remind you when you’re 10 minutes away from the end of your session, and a timer will pop up to help ...`,
@@ -316,7 +371,7 @@ const CustomerChatMiddle = ({
       }
     }
   }, [res.isSuccess, res.isError]);
-  
+
   useEffect(() => {
     if (paymentStatus === "pending") {
       transFunc.open();
@@ -328,7 +383,7 @@ const CustomerChatMiddle = ({
           };
         }) => {
           if (data.transaction.status === "completed") {
-            setPaymentStatus("completed")
+            setPaymentStatus("completed");
             if (orderId) {
               extendTime({
                 orderId: orderId,
@@ -341,10 +396,10 @@ const CustomerChatMiddle = ({
       );
     }
     return () => {
-      primary_socket.off("completed")
-    }
+      primary_socket.off("completed");
+    };
   }, [paymentStatus]);
-  
+
   useEffect(() => {
     if (!socket) return;
     if (type === "admin") return () => {};
@@ -361,7 +416,7 @@ const CustomerChatMiddle = ({
       });
     }
     return () => {
-      socket.off("refresh")
+      socket.off("refresh");
       if (timeout) {
         clearTimeout(timeout);
       }

@@ -514,7 +514,6 @@ const ChatRoom = (props: Props) => {
         if (socket) {
           socket.connect();
         }
-        props.refreshChat();
       }
     };
     document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -538,6 +537,7 @@ const ChatRoom = (props: Props) => {
           },
           socket
         );
+        props.refreshChat()
       }
     });
     return () => {
