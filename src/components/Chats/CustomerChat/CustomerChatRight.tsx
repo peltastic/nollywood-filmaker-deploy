@@ -1,5 +1,5 @@
+"use client"
 import React, { useEffect, useState } from "react";
-import TestImage from "/public/assets/test-avatar-big.png";
 import HamburgerIcon from "/public/assets/chats/hamburger.svg";
 import Image from "next/image";
 import FileImg from "/public/assets/dashboard/file.svg";

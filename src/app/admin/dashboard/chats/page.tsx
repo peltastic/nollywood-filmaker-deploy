@@ -3,7 +3,7 @@ import CustomerChatLeft, {
   IChatData,
 } from "@/components/Chats/CustomerChat/CustomerChatLeft";
 import CustomerChatRight from "@/components/Chats/CustomerChat/CustomerChatRight";
-import CustomerChatMiddle from "@/components/Chats/CustomerChat/CutomerChatMiddle";
+// import CustomerChatMiddle from "@/components/Chats/CustomerChat/CutomerChatMiddle";
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import { useProtectAdmin } from "@/hooks/useProtectAdminRoute";
@@ -13,11 +13,19 @@ import {
   useLazyGetChatFilesByAdminQuery,
 } from "@/lib/features/admin/chats/chats";
 import { Pagination } from "@mantine/core";
+import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 
 type Props = {};
+const CustomerChatMiddle = dynamic(
+  () => import ("@/components/Chats/CustomerChat/CutomerChatMiddle"),
+  {
+    ssr: false
+  }
+)
+
 
 const AdminChats = (props: Props) => {
   useProtectAdmin()

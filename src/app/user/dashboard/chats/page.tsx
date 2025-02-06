@@ -3,7 +3,7 @@ import CustomerChatLeft, {
   IChatData,
 } from "@/components/Chats/CustomerChat/CustomerChatLeft";
 import CustomerChatRight from "@/components/Chats/CustomerChat/CustomerChatRight";
-import CustomerChatMiddle from "@/components/Chats/CustomerChat/CutomerChatMiddle";
+// import CustomerChatMiddle from "@/components/Chats/CustomerChat/CutomerChatMiddle";
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import { useProtectRoute } from "@/hooks/useProtectRoute";
@@ -13,11 +13,19 @@ import {
 } from "@/lib/features/users/dashboard/chat/chat";
 import { useLazyGetChatFilesQuery } from "@/lib/features/users/services/chat/chat";
 import { RootState } from "@/lib/store";
+import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 type Props = {};
+
+const CustomerChatMiddle = dynamic(
+  () => import ("@/components/Chats/CustomerChat/CutomerChatMiddle"),
+  {
+    ssr: false
+  }
+)
 
 const ChatsPage = (props: Props) => {
   useProtectRoute();

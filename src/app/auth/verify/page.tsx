@@ -9,6 +9,7 @@ import { FaCircleCheck } from "react-icons/fa6";
 import { MdCancel } from "react-icons/md";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useLazyVerifyEmailQuery } from "@/lib/features/users/auth/auth";
+import { LazyLottie } from "@/components/LazyLottie/LaxyLottie";
 
 type Props = {};
 
@@ -46,7 +47,9 @@ const VerifyEmail = (props: Props) => {
         <div className="w-full  md:w-[95%] mx-auto xl:w-[55%] pl-2 md:pl-[5rem] pr-2 md:pr-[3rem]">
           {status === "loading" ? (
             <div className="w-[5rem] mx-auto">
-              <Lottie animationData={LoadingLottie} loop />
+              {/* <LazyLottie 
+              animationData={LoadingLottie} 
+              loop /> */}
             </div>
           ) : status === "success" ? (
             <FaCircleCheck className="mx-auto text-[5rem] text-green-600" />
