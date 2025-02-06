@@ -56,27 +56,24 @@ const ReadMyScriptForm = ({
 
   const getPdfPageCount = async (file: File): Promise<number> => {
     const reader = new FileReader();
-    reader.readAsArrayBuffer(file);
-
-    return new Promise((resolve, reject) => {
-      reader.onload = async (event) => {
-        const result = event.target?.result;
-        if (!result || !(result instanceof ArrayBuffer)) {
-          console.error("Invalid file data");
-          reject(new Error("Invalid file data"));
-          return;
-        }
-
+  
+    return new Promise<number>((resolve, reject) => {
+      reader.onload = async () => {
         try {
+          const result = reader.result;
+          if (!(result instanceof ArrayBuffer)) {
+            return reject(new Error("Invalid file data"));
+          }
+  
           const pdf = await pdfjs.getDocument({ data: result }).promise;
           resolve(pdf.numPages);
         } catch (error) {
-          console.error("Error loading PDF:", error);
           reject(error);
         }
       };
-
+  
       reader.onerror = () => reject(new Error("Failed to read file"));
+      reader.readAsArrayBuffer(file);
     });
   };
 
