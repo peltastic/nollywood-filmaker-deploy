@@ -69,9 +69,10 @@ const WatchFinalCutForm = ({
             value={data.episodes}
             label="No. of episodes"
             placeholder="Text"
+            
             changed={(val) => setScriptProps("episodes", val)}
             className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
-            type=""
+            type="number"
           />
         )}
         <div className="mt-6">

@@ -17,6 +17,7 @@ import { nprogress } from "@mantine/nprogress";
 import { initializeTransactionListener } from "@/lib/socket";
 import { useServicePayment } from "@/hooks/useServicePayment";
 import { useProtectRoute } from "@/hooks/useProtectRoute";
+import { numberWithCommas } from "@/utils/helperFunction";
 
 type Props = {};
 
@@ -90,7 +91,7 @@ const page = (props: Props) => {
       <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft
-            cost="150,000"
+            cost={scriptData.showType === "Yes" ? numberWithCommas(Number(scriptData.episodes) * 50000) :"150,000"}
             title="Watch the final cut of my film"
             image={<Image src={WatchFinalCutImage} alt="watch-final-cut" />}
             body={[

@@ -36,6 +36,7 @@ type Props = {
   setSeriesCount: (counts: number[]) => void;
   files?: File[];
   seriesPageCount: number[];
+  setSeriesPrices: (value: number | null) => void
 };
 
 const ReadMyScriptForm = ({
@@ -50,6 +51,7 @@ const ReadMyScriptForm = ({
   setSeriesCount,
   files,
   seriesPageCount,
+  setSeriesPrices
 }: Props) => {
   const router = useRouter();
   const [checked, setChecked] = useState<boolean>(false);
@@ -104,6 +106,7 @@ const ReadMyScriptForm = ({
               if (val.currentTarget.checked) {
                 setScriptProps("showType", "Yes");
               } else {
+                setSeriesPrices(null)
                 setScriptProps("showType", "No");
               }
               setChecked(val.currentTarget.checked);
@@ -141,14 +144,23 @@ const ReadMyScriptForm = ({
               }}
               setFiles={async (files) => {
                 setSeriesCount([]);
+                setSeriesPrices(null)
                 setSeriesFilesData(files);
                 const pageCount = [];
+                const prices = []
 
                 for (const el of files) {
                   const page = await getPdfPageCount(el);
+                  if (page <= 50) {
+                    prices.push(50)
+                  } else {
+                    prices.push(100)
+                  }
                   pageCount.push(page);
                 }
                 setSeriesCount(pageCount);
+                console.log(prices)
+                setSeriesPrices(prices.reduce((acc, num) => acc + num, 0))
               }}
             >
               <div

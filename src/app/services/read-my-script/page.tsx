@@ -17,6 +17,7 @@ import { nprogress } from "@mantine/nprogress";
 import { initializeTransactionListener } from "@/lib/socket";
 import { useServicePayment } from "@/hooks/useServicePayment";
 import { useProtectRoute } from "@/hooks/useProtectRoute";
+import { numberWithCommas } from "@/utils/helperFunction";
 
 type Props = {};
 export interface IReadMyScriptState {
@@ -35,6 +36,7 @@ const ReadMyScriptPage = (props: Props) => {
   const userId = useSelector(
     (state: RootState) => state.persistedState.user.user?.id
   );
+  const [seriesPrices, setSeriesPrices] = useState<number | null>(null)
   const [seriesFiles, setSeriesFiles] = useState<File[]>([]);
   const [filesPageCount, setFilesPageCount] = useState<number[]>([]);
   const [opened, { close, open }] = useDisclosure();
@@ -91,7 +93,7 @@ const ReadMyScriptPage = (props: Props) => {
       <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft
-            cost="150,000"
+            cost={seriesPrices ? numberWithCommas(seriesPrices * 1000) :"150,000"}
             title="Read my script"
             image={<Image src={ReadMyScriptImg} alt="read-my-script" />}
             episodes={scriptData.episodes}
@@ -173,6 +175,7 @@ const ReadMyScriptPage = (props: Props) => {
                   isLoading={isLoading}
                   files={seriesFiles}
                   seriesPageCount={filesPageCount}
+                  setSeriesPrices={(val) => setSeriesPrices(val)}
                 />
               }
             </ServiceRight>
