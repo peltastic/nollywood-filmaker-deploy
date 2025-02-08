@@ -2,6 +2,8 @@
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import HomeLayout from "@/components/Layouts/HomeLayout";
 import RadixSelect from "@/components/Select/RadixSelect";
+import SelectComponent from "@/components/Select/SelectComponent";
+import ServiceInfo from "@/components/ServiceInfo/ServiceInfo";
 import { setFallbackRoute } from "@/lib/slices/routeSlice";
 import { updateService } from "@/lib/slices/servicesSlice";
 import { RootState } from "@/lib/store";
@@ -17,6 +19,7 @@ type Props = {};
 const ServicePage = (props: Props) => {
   const dispatch = useDispatch();
   const [value, setValue] = useState<string | null>(null);
+  const [moreInfo, setMoreInfo] = useState<string>("");
   const service = useSelector(
     (state: RootState) => state.persistedState.services.service
   );
@@ -69,13 +72,41 @@ const ServicePage = (props: Props) => {
     <HomeLayout>
       <div className="text-black-2 w-[90%] md:w-[50%] mx-auto mt-[10rem] mb-[10rem]">
         <h1 className=" text-[1.5rem] font-bold">What service do you need?</h1>
-        {/* <h2 className="text-[1.13rem]">
-          
-        </h2> */}
         <h3 className="font-medium text-[0.88rem] mt-10 mb-2">
           Choose your service
         </h3>
-        <RadixSelect changed={setValueHandler} data={serviceData} />
+        <div className="block sm:hidden">
+          <SelectComponent
+            label=""
+            placeholder="Select"
+            size="md"
+            setValueProps={(value) => {
+              if (value) {
+                const info = serviceData.filter((el) => el.value === value);
+                setMoreInfo(
+                  `${info[0].label} ${info[0].caption.toLowerCase()}`
+                );
+                setValueHandler(value);
+              } else {
+                setMoreInfo("")
+              }
+            }}
+            data={serviceData.map((el) => {
+              return {
+                label: el.label,
+                value: el.value,
+              };
+            })}
+          />
+        </div>
+        <div className="hidden sm:block">
+          <RadixSelect changed={setValueHandler} data={serviceData} />
+        </div>
+        {moreInfo && (
+          <div className="">
+            <ServiceInfo content={moreInfo} activeColor />
+          </div>
+        )}
         <div className="w-full flex mt-[10rem]">
           <UnstyledButton
             clicked={() => router.back()}
@@ -92,8 +123,8 @@ const ServicePage = (props: Props) => {
                   "Login Required",
                   "You need to log in to use a service"
                 );
-                router.push("/auth/login")
-              } else { 
+                router.push("/auth/login");
+              } else {
                 router.push(`/services/${service}`);
               }
             }}

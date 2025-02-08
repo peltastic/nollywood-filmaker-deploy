@@ -30,7 +30,7 @@ const LoginPage = (props: Props) => {
 
             <Link
               href={"/auth/register"}
-              className="hover:opacity-80 hover:text-blue-1  transition-all"
+              className="hover:opacity-80 hover:text-blue-1  transition-all hidden sm:block"
             >
               <p className="text-[1.25rem]">Create an account</p>
             </Link>
@@ -39,6 +39,7 @@ const LoginPage = (props: Props) => {
             <h1 className="font-bold text-[1.5rem]">Welcome back</h1>
           </div>
           <LoginForm
+            login
             loginType="user"
             successRoute={
               service ? `/services/${service}` : "/get-started/service"

@@ -49,7 +49,9 @@ const ProfileSettingForm = (props: Props) => {
     const data = [...nonInputValues.expertise];
     if (type === "add") {
       data.push(value);
+      console.log("yes")
     } else {
+      console.log("no")
       const index = nonInputValues.expertise.indexOf(value);
       data.splice(index, 1);
     }

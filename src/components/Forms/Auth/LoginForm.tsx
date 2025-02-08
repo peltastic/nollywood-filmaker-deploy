@@ -41,6 +41,7 @@ type Props = {
   forgotPasswordLink?: string;
   admin?: boolean;
   loginType: "user" | "admin" | "consultant";
+  login?: boolean;
 };
 
 const LoginForm = (props: Props) => {
@@ -142,7 +143,7 @@ const LoginForm = (props: Props) => {
       dispatch(setConsultantAuthStatus("LOGGED_IN"));
       dispatch(setConsultantLogoutType("expired"));
       dispatch(setConsultantInfo(result.data.user));
-      console.log(result.data.user)
+      console.log(result.data.user);
       setCookie("con_refresh", result.data.refreshToken, {
         path: "/",
         expires: new Date(Date.now() + 6.5 * 24 * 60 * 60 * 1000),
@@ -208,8 +209,20 @@ const LoginForm = (props: Props) => {
                 password
               />
             </div>
+            {props.login && (
+              <div className="mt-6 text-sm block sm:hidden">
+                <p>
+                  Don't have an account?{" "}
+                  <span className="underline font-medium">
+                    <Link href={"/auth/register"}>
+                    create an account here
+                    </Link>
+                  </span>
+                </p>
+              </div>
+            )}
             {(props.loginType === "user" || props.loginType === "admin") && (
-              <div className="flex items-center text-black-5 mt-8">
+              <div className="flex items-center text-black-5 mt-6">
                 {/* <div className="mr-auto">
                   <CheckboxComponent
                     label={

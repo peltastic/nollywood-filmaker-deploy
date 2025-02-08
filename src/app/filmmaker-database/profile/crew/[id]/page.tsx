@@ -26,7 +26,6 @@ import HomeLayout from "@/components/Layouts/HomeLayout";
 
 type Props = {};
 const tabs_list = ["About", "Jobs", "Rate"];
-const origin = window.location.href;
 const CrewProfile = (props: Props) => {
   const [fetchCrewData, { isFetching, data }] = useLazyFetchCrewDataQuery();
   const params = useParams<{ id: string }>();
@@ -35,6 +34,12 @@ const CrewProfile = (props: Props) => {
       fetchCrewData(params.id);
     }
   }, [params.id]);
+  const origin =  window.origin +
+  "/filmmaker-database" +
+  "/profile" +
+  "/crew" +
+  "/" +
+  params.id;
   const [opened, { open, close }] = useDisclosure();
   return (
     <>
@@ -45,7 +50,7 @@ const CrewProfile = (props: Props) => {
         withCloseButton={false}
         size="xl"
       >
-        <div className=" my-4 px-4">
+            <div className=" my-4 px-4">
           <div className="flex items-center">
             <h1 className="font-semibold text-[1.6rem] sm:text-[2rem]">
               Share Profile
@@ -57,10 +62,10 @@ const CrewProfile = (props: Props) => {
               <Image src={CancelImg} alt="cancel-img" />
             </div>
           </div>
-          <div className="my-4 bg-gray-bg-3 w-fit py-2 px-4 rounded-md cursor-pointer flex items-center">
-            <p>{origin}</p>
+          <div className="my-4 bg-gray-bg-3  break-words py-2 px-4 rounded-md cursor-pointer text-center">
+            <p className="break-words">{origin}</p>
           </div>
-          <div className="flex gap-6 mt-8">
+          <div className="flex flex-wrap gap-6 mt-8">
             <TwitterShareButton url={origin}>
               <XIcon size={40} />
             </TwitterShareButton>
@@ -186,13 +191,13 @@ const CrewProfile = (props: Props) => {
                         </div>
                         <div className="mt-8 ">
                           <p className="text-[#A5A5A5]">Roles</p>
-                          <div className="flex items-center">
+                          <div className="flex flex-wrap items-center">
                             {data?.crew.role.map((el, index) => {
                               const islast =
                                 index === data.crew.role.length - 1;
                               return (
                                 <p className="mt-2 text-[#4B5563]" key={el}>
-                                  {el} <span>{islast ? "." : ","}</span>
+                                  {el}<span>{islast ? "." : ","}</span> &nbsp;
                                 </p>
                               );
                             })}

@@ -63,7 +63,7 @@ const OrderDetailsBody = ({
   series_files,
 }: Props) => {
   return (
-    <div className="text-black-2 bg-white px-6 py-6 mt-8 rounded-2xl border border-stroke-5 shadow-md shadow-[#1018280F]">
+    <div className="text-black-2 bg-white px-6 py-6 mt-8 rounded-2xl border border-stroke-5 shadow-md shadow-[#1018280F] mb-20">
       {chat ? null : (
         <div className="border-b border-b-stroke-4">
           <div className="mb-4">

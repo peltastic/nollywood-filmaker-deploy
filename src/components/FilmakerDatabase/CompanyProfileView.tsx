@@ -67,10 +67,10 @@ const CompanyProfileView = (props: Props) => {
               <Image src={CancelImg} alt="cancel-img" />
             </div>
           </div>
-          <div className="my-4 bg-gray-bg-3 w-fit py-2 px-4 rounded-md cursor-pointer flex items-center">
-            <p>{origin}</p>
+          <div className="my-4 bg-gray-bg-3  break-words py-2 px-4 rounded-md cursor-pointer text-center">
+            <p className="break-words">{origin}</p>
           </div>
-          <div className="flex gap-6 mt-8">
+          <div className="flex flex-wrap gap-6 mt-8">
             <TwitterShareButton url={origin}>
               <XIcon size={40} />
             </TwitterShareButton>

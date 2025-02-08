@@ -139,7 +139,7 @@ const EditCrewForm = ({ data, id }: Props) => {
           onChange={(val) => {
             if (val) {
               if (department.includes(val)) {
-                return
+                return;
               }
               setDepartmentVal(val);
               // setRoles([]);
@@ -301,7 +301,7 @@ const EditCrewForm = ({ data, id }: Props) => {
       >
         <Form>
           <div className="mt-8">
-          <h2 className="text-left font-medium text-xl py-8">User details</h2>
+            <h2 className="text-left font-medium text-xl py-8">User details</h2>
             <div className="grid md:grid-cols-2 gap-8">
               <Field
                 label="First name"
@@ -395,7 +395,16 @@ const EditCrewForm = ({ data, id }: Props) => {
               />
             </div>
           </div>
-          <div className="flex mt-10 mb-10">
+          <div className="flex items-center mt-10 mb-10">
+            <UnstyledButton
+              type="button"
+              clicked={() => {
+                router.back();
+              }}
+              class=" xs:mb-0 py-2 rounded-md px-6 border-stroke-2   border  "
+            >
+              Back
+            </UnstyledButton>
             <UnstyledButton
               type="submit"
               disabled={result.isLoading}

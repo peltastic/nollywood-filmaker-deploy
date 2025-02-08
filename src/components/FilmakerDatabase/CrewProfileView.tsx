@@ -204,12 +204,12 @@ const CrewProfileView = (props: Props) => {
                       </div>
                       <div className="mt-8 ">
                         <p className="text-[#A5A5A5]">Roles</p>
-                        <div className="flex items-center">
+                        <div className="flex flex-wrap items-center">
                           {data?.crew.role.map((el, index) => {
                             const islast = index === data.crew.role.length - 1;
                             return (
                               <p className="mt-2 text-[#4B5563]" key={el}>
-                                {el} <span>{islast ? "." : ","}</span>
+                                {el}<span>{islast ? "." : ", "}</span>&nbsp;
                               </p>
                             );
                           })}
