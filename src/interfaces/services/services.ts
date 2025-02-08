@@ -10,11 +10,10 @@ interface InitializeReadMyScriptPayload extends GeneralType {
   synopsis: string;
   genre: string;
   platforms: string;
-  files?: (File | null)[] | File[][];
+  files?: File | null
   concerns?: string;
   type: "request";
   fileName: string;
-  episodes?: string
   pageCount?: number[]
 
 }
@@ -80,16 +79,17 @@ interface InitializeCreateMartketingBudgetPayload extends GeneralType {
 }
 
 interface InitializeCreatePitchPayload extends GeneralType {
-  title: "Create a Pitch based on my Script";
+  title: "Creating A Movie Schedule";
   type: "request";
   platform: string;
-  files: File | null;
+  files?: (File | null)[] | File[][];
   crew: string;
   actors: string;
   visualStyle: string;
   info: string;
   budgetrange: string;
   fileName: string;
+  pageCount?: number[]
 }
 
 interface InitializaeDraftLegalDocument extends GeneralType {

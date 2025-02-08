@@ -53,24 +53,20 @@ const LoginForm = (props: Props) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
   const fallBackRoute = useSelector(
-    (state: RootState) => state.persistedState.route.fallbackRoute
+    (state: RootState) => state.route.fallbackRoute
   );
 
   const consultantFallbackRoute = useSelector(
-    (state: RootState) =>
-      state.persistedState.consultantRoute.consultantFallbackRoute
+    (state: RootState) => state.consultantRoute.consultantFallbackRoute
   );
   const adminFallbackRoute = useSelector(
-    (state: RootState) => state.persistedState.adminRoute.adminFallbackRoute
+    (state: RootState) => state.adminRoute.adminFallbackRoute
   );
 
   useEffect(() => {
     if (isError) {
       nprogress.complete();
-      // if (!(error as any).data.isverified) {
-      //   notify("message", "Please verify your account before logging in");
-      //   return router.push("/auth/email-verification");
-      // }
+
       setErrorMessage((error as any).data?.message || "An Error Occured");
     }
     if (isSuccess) {
@@ -91,7 +87,7 @@ const LoginForm = (props: Props) => {
       });
       setTokenCookie(data.accessToken);
 
-      router.push("/get-started");
+      router.push(fallBackRoute || "/get-started");
     }
   }, [isSuccess, isError]);
 
@@ -120,7 +116,7 @@ const LoginForm = (props: Props) => {
         expires: new Date(Date.now() + 6.5 * 24 * 60 * 60 * 1000),
       });
       setAdminToken(loginAdminRes.data.accessToken);
-      router.push("/admin/dashboard");
+      router.push( adminFallbackRoute || "/admin/dashboard");
     }
   }, [loginAdminRes.isError, loginAdminRes.isSuccess]);
 
@@ -149,7 +145,7 @@ const LoginForm = (props: Props) => {
         expires: new Date(Date.now() + 6.5 * 24 * 60 * 60 * 1000),
       });
       setConsultantToken(result.data.accessToken);
-      router.push("/consultants/dashboard");
+      router.push( consultantFallbackRoute ||"/consultants/dashboard");
     }
   }, [result.isError, result.isSuccess]);
 
@@ -214,9 +210,7 @@ const LoginForm = (props: Props) => {
                 <p>
                   Don't have an account?{" "}
                   <span className="underline font-medium">
-                    <Link href={"/auth/register"}>
-                    create an account here
-                    </Link>
+                    <Link href={"/auth/register"}>create an account here</Link>
                   </span>
                 </p>
               </div>

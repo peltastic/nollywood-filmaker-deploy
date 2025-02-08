@@ -2,12 +2,12 @@ import React, { ReactNode } from "react";
 import { FileButton } from "@mantine/core";
 
 type Props = {
-  setFile: (file: File | null) => void;
+  setFile: (file: File  | null) => void;
   accept: string;
   children: ReactNode;
 };
 
-const FileInput = ({ setFile, accept, children }: Props) => {
+const FileInput = ({ setFile, accept, children, }: Props) => {
   return (
     <FileButton onChange={setFile} accept={accept}>
       {(props) => (

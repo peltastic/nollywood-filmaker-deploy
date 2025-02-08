@@ -10,6 +10,9 @@ type Props = {
   data: IChatData[];
   orderId?: string | null;
   type?: "consultant" | "admin";
+
+  setIsTimeProps?: (val: boolean) => void;
+  setIsSessionOverProps?: (val: boolean) => void;
   
 };
 
@@ -70,6 +73,8 @@ const CustomerChatLeft = (props: Props) => {
                 key={el.name + el.orderId}
                 orderId={props.orderId}
                 type={props.type}
+                setIsSessionOverProps={props.setIsSessionOverProps}
+                setIsTimeProps={props.setIsTimeProps}
               />
             ))}
           </div>

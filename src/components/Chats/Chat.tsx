@@ -10,6 +10,7 @@ import { chat_socket, joinChatRoom } from "@/lib/socket";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { Socket } from "socket.io-client";
+import { useSetChatAsCompleteMutation } from "@/lib/features/consultants/dashboard/request";
 
 type Props = {
   data: IChatData;
@@ -17,13 +18,25 @@ type Props = {
   selctedIndex: number;
   orderId?: string | null;
   type?: "consultant" | "admin";
+  setIsTimeProps?: (val: boolean) => void;
+  setIsSessionOverProps?: (val: boolean) => void;
 };
 
-const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
+const Chat = ({
+  data,
+  index,
+  selctedIndex,
+  orderId,
+  type,
+  setIsSessionOverProps,
+  setIsTimeProps,
+}: Props) => {
   const [status, setStatus] = useState<
     "ready" | "ongoing" | "completed" | "pending"
   >("pending");
   const [chatTimeStatus, setChatTimeStatus] = useState<string>("");
+
+  const [setAsCompleted, completedRes] = useSetChatAsCompleteMutation();
   const userData = useSelector(
     (state: RootState) => state.persistedState.user.user
   );
@@ -43,61 +56,44 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
       ? "bg-stroke-4 text-black-6"
       : "bg-light-yellow text-dark-yellow";
 
-  // useEffect(() => {
-  //   const now = new Date();
-  //   if (data && orderId) {
-  //     const start_time = data.start_time;
-  //     const end_time = data.end_time;
-  //     const isAfterStartTime = isAfter(now, start_time);
-  //     const isBeforeEndTime = isBefore(now, end_time);
-  //     if (isAfterStartTime && isBeforeEndTime && orderId !== data.orderId) {
-  //       console.log("joined-room", data.name, {
-  //         room: data.orderId,
-  //         name:
-  //           type && type === "consultant"
-  //             ? `${consultantData?.fname} ${consultantData?.lname}`
-  //             : `${userData?.fname} ${userData?.lname}`,
-  //         role: type === "consultant" ? "consultant" : "user",
-  //         userId:
-  //           type && type === "consultant"
-  //             ? `${consultantData?.id}`
-  //             : `${userData?.id}`,
-  //       });
-  //       joinChatRoom({
-  //         room: data.orderId,
-  //         name:
-  //           type && type === "consultant"
-  //             ? `${consultantData?.fname} ${consultantData?.lname}`
-  //             : `${userData?.fname} ${userData?.lname}`,
-  //         role: type === "consultant" ? "consultant" : "user",
-  //         userId:
-  //           type && type === "consultant"
-  //             ? `${consultantData?.id}`
-  //             : `${userData?.id}`,
-  //       });
-  //     }
-  //   }
-  // }, [data, orderId]);
+  useEffect(() => {
+    if (type === "admin") return () => {};
+    let timeout: NodeJS.Timeout | undefined;
+    if (data) {
+      const now = new Date();
+      const startTime = data.start_time;
+      const endTime = new Date(data.end_time);
+      const isBeforeStartTime = isBefore(now, startTime);
+      const isBeforeEndtime = isBefore(now, endTime);
+      const isAfterStartTime = isAfter(now, startTime);
 
-  // useEffect(() => {
-  //   const now = new Date();
-  //   if (data && orderId) {
-  //     const start_time = data.start_time;
-  //     const end_time = data.end_time;
-  //     const isAfterStartTime = isAfter(now, start_time);
-  //     const isBeforeEndTime = isBefore(now, end_time);
+      if (isBeforeStartTime || (isAfterStartTime && isBeforeEndtime)) {
+        const delay = differenceInMilliseconds(endTime, now);
+        timeout = setTimeout(() => {
+          setIsTimeProps && setIsTimeProps(false);
+          setIsSessionOverProps && setIsSessionOverProps(true);
+          if (orderId && type === "consultant") {
+            setAsCompleted(orderId);
+          }
+        }, delay);
+      }
+    }
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
+  }, [data]);
 
-  //     if (isAfterStartTime && isBeforeEndTime && orderId !== data.orderId) {
-  //       chat_socket.on("message", (data) => {
-  //         console.log(data.message);
-  //         setnewMessage(data.message);
-  //       });
-  //       return () => {
-  //         chat_socket.off("message");
-  //       };
-  //     }
-  //   }
-  // }, [orderId, data]);
+  useEffect(() => {
+    const now = new Date();
+    if (data?.end_time && type === "consultant" && orderId) {
+      const isAfterEndtime = isAfter(now, data.end_time);
+      if (isAfterEndtime && data.status === "ongoing") {
+        setAsCompleted(orderId);
+      }
+    }
+  }, [data?.end_time, orderId]);
 
   useEffect(() => {
     if (type === "admin") {
@@ -148,7 +144,9 @@ const Chat = ({ data, index, selctedIndex, orderId, type }: Props) => {
           setnewMessage("");
           router.push(
             type === "consultant"
-              ? `/consultants/dashboard/chats?chat=${data.orderId}` : type === "admin"  ?`/admin/dashboard/chats?chat=${data.orderId}`  
+              ? `/consultants/dashboard/chats?chat=${data.orderId}`
+              : type === "admin"
+              ? `/admin/dashboard/chats?chat=${data.orderId}`
               : `/user/dashboard/chats?chat=${data.orderId}`
           );
         }}

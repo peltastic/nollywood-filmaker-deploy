@@ -50,21 +50,21 @@ const combinedReducer = combineReducers({
   services: servicesReducer,
   user: userReducer,
   auth: authReducer,
-  route: routeReducer,
   logout: logoutReducer,
   consultantAuth: consultantAuthReducer,
   consultant: consultantReducer,
   consultantLogout: consultantLogoutReducer,
-  consultantRoute: consultantRouteReducer,
   adminAuth: adminAuthReducer,
   adminuser: adminReducer,
-  adminRoute: adminRouteReducer,
   adminLogout: adminLogoutReducer,
 });
 const persistedReducer = persistReducer(persistConfig, combinedReducer);
 export const store = configureStore({
   reducer: {
     persistedState: persistedReducer,
+    route: routeReducer,
+    adminRoute: adminRouteReducer,
+    consultantRoute: consultantRouteReducer,
     [authApi.reducerPath]: authApi.reducer,
     [servicesApi.reducerPath]: servicesApi.reducer,
     [profileApi.reducerPath]: profileApi.reducer,

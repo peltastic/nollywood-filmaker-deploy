@@ -3,7 +3,6 @@ import SettingsIconImg from "/public/assets/dashboard/settings-icon.svg";
 import ProfileIconImg from "/public/assets/dashboard/profile-icon.svg";
 import IssuesIcon from "/public/assets/dashboard/issues-icon.svg";
 import LoginIcon from "/public/assets/dashboard/login-icon.svg";
-import TestImage from "/public/assets/test-avatar.png";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -15,11 +14,11 @@ import { nprogress } from "@mantine/nprogress";
 import { successColor } from "@/utils/constants/constants";
 import { removeCookie } from "@/utils/storage";
 import { resetUserInfo, setUserInfo } from "@/lib/slices/userSlice";
-import { useProtectRoute } from "@/hooks/useProtectRoute";
 import { setLogoutType } from "@/lib/slices/logoutSlice";
 import { RootState } from "@/lib/store";
 import { truncateStr } from "@/utils/helperFunction";
 import { AspectRatio } from "@mantine/core";
+import { setFallbackRoute } from "@/lib/slices/routeSlice";
 
 type Props = {};
 
@@ -103,6 +102,7 @@ const UserprofileMenu = (props: Props) => {
           dispatch(setLogoutType("triggered"));
           nprogress.start();
           dispatch(resetUserInfo());
+          dispatch(setFallbackRoute(""))
           notifications.show({
             title: "Logout successful",
             message: "",

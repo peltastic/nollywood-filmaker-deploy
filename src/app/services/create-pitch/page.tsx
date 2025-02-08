@@ -35,13 +35,17 @@ export interface ICreatePitchState {
 
 const CreatePitchPage = (props: Props) => {
   useProtectRoute();
-  const [cost, setCost] = useState<number>(150000)
+  const [cost, setCost] = useState<number>(150000);
   const [createPitch, { data, isLoading, isSuccess, isError, error }] =
     useInitializeCreatePitchMutation();
   const router = useRouter();
   const searchParam = useSearchParams();
   const search = searchParam.get("page");
   const [file, setFile] = useState<File | null>(null);
+
+  const [seriesPrices, setSeriesPrices] = useState<number | null>(null);
+  const [seriesFiles, setSeriesFiles] = useState<File[]>([]);
+  const [filesPageCount, setFilesPageCount] = useState<number[]>([]);
   const userId = useSelector(
     (state: RootState) => state.persistedState.user.user?.id
   );
@@ -55,7 +59,7 @@ const CreatePitchPage = (props: Props) => {
     visual: "",
     platform: "",
     episodes: "",
-    showType: ""
+    showType: "No",
   });
   const { paymentStatus } = useServicePayment(
     isError,
@@ -88,13 +92,16 @@ const CreatePitchPage = (props: Props) => {
           info="Pitch deck Creation  can take between 1-2 weeks. You will be mailed with an editable pitch deck and a calendar to choose a chat date"
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
+          
         />
       ) : null}
       <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft
             title="Create a Movie Schedule"
-            cost={numberWithCommas(cost)}
+            cost={
+              seriesPrices ? numberWithCommas(seriesPrices * 1000) : "150,000"
+            }
             image={<Image src={CreatePitchImg} alt="create-pitch" />}
             body={[
               {
@@ -136,10 +143,7 @@ const CreatePitchPage = (props: Props) => {
               <PaymentWindow successRoute="/success-page/create-pitch" />
             </div>
           ) : (
-            <ServiceRight
-              subtitle=""
-              title="Let’s start with your details"
-            >
+            <ServiceRight subtitle="" title="Let’s start with your details">
               <CreatePitchForm
                 proceed={() => {
                   if (userId) {
@@ -147,17 +151,18 @@ const CreatePitchPage = (props: Props) => {
                       actors: scriptData.actors_in_mind,
                       budgetrange: scriptData.budget,
                       crew: scriptData.crew_in_mind,
-                      files: file,
+                      files: scriptData.showType === "Yes" ? seriesFiles : [file],
                       info: scriptData.information,
                       movie_title: scriptData.movie_title,
                       platform: scriptData.platform,
-                      title: "Create a Pitch based on my Script",
+                      title: "Creating A Movie Schedule",
                       type: "request",
                       userId,
                       showtype: scriptData.showType,
                       episodes: scriptData.episodes,
                       visualStyle: scriptData.visual,
-                      fileName: file?.name || ""
+                      fileName: file?.name || "",
+                      pageCount: filesPageCount
                     });
                     initializeTransactionListener(userId);
                     nprogress.start();
@@ -168,7 +173,7 @@ const CreatePitchPage = (props: Props) => {
                   !scriptData.movie_title ||
                   !scriptData.platform ||
                   !scriptData.visual ||
-                  !file
+                  (scriptData.showType === "No" ? !file : !seriesFiles.length)
                 }
                 isLoading={isLoading}
                 setFileProps={(file) => setFile(file)}
@@ -176,6 +181,15 @@ const CreatePitchPage = (props: Props) => {
                 data={scriptData}
                 fileName={file?.name}
                 setCost={(val) => setCost(val)}
+                files={seriesFiles}
+                seriesPageCount={filesPageCount}
+                setSeriesPrices={(val) => setSeriesPrices(val)}
+                setSeriesFilesData={(files) => {
+                  setSeriesFiles(files);
+                }}
+                setSeriesCount={(counts) => {
+                  setFilesPageCount(counts);
+                }}
               />
             </ServiceRight>
           )}

@@ -11,25 +11,12 @@ export const servicesApi = createApi({
       InitializeReadMyScriptPayload
     >({
       query: (body) => {
-        const formData = new FormData();
-        for (const key in body) {
-          if (key === "files") {
-            console.log(body[key], "sdskj");
-            for (const el of body[key as keyof typeof body] as File[]) {
-              formData.append(key, el);
-            }
-          } else if (key === "pageCount") {
-              formData.append(key, JSON.stringify(body[key as keyof typeof body] as number[]));
-            
-          } else {
-            formData.append(key, body[key as keyof typeof body] as string);
-          }
-        }
+        const payload = formDataHandler(body)
 
         return {
           url: "/api/users/transaction/read",
           method: "POST",
-          body: formData,
+          body: payload,
         };
       },
     }),
@@ -86,11 +73,27 @@ export const servicesApi = createApi({
       InitializeCreatePitchPayload
     >({
       query: (body) => {
-        const payload = formDataHandler(body);
+        const formData = new FormData();
+        for (const key in body) {
+          if (key === "files") {
+            console.log(body[key], "sdskj");
+            for (const el of body[key as keyof typeof body] as File[]) {
+              formData.append(key, el);
+            }
+          } else if (key === "pageCount") {
+            formData.append(
+              key,
+              JSON.stringify(body[key as keyof typeof body] as number[])
+            );
+          } else {
+            formData.append(key, body[key as keyof typeof body] as string);
+          }
+        }
+
         return {
           url: "/api/users/transaction/pitch",
           method: "POST",
-          body: payload,
+          body: formData,
         };
       },
     }),
