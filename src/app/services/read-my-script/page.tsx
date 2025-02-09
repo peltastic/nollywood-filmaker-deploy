@@ -36,7 +36,7 @@ const ReadMyScriptPage = (props: Props) => {
   const userId = useSelector(
     (state: RootState) => state.persistedState.user.user?.id
   );
-  const [seriesPrices, setSeriesPrices] = useState<number | null>(null);
+  const [seriesPrices, setSeriesPrices] = useState<number[]>([]);
   const [seriesFiles, setSeriesFiles] = useState<File[]>([]);
   const [filesPageCount, setFilesPageCount] = useState<number[]>([]);
   const [opened, { close, open }] = useDisclosure();
@@ -80,6 +80,30 @@ const ReadMyScriptPage = (props: Props) => {
     }
   }, [paymentStatus]);
 
+  const setSeriesFilesHandler = (files: File[]) => {
+    setSeriesFiles((prev) => [...prev, ...files]);
+  };
+  const setFilesPageCountHandler = (counts: number[]) => {
+    setFilesPageCount((prev) => [...prev, ...counts]);
+  };
+  const setSeriesPricesHandler = (prices: number[]) => {
+    setSeriesPrices((prev) => [...prev, ...prices]);
+  };
+
+  const removeSeriesFileData = (index: number) => {
+    const filesData = [...seriesFiles];
+    const pricesData = [...seriesPrices];
+    const pageCountData = [...filesPageCount];
+
+    filesData.splice(index, 1);
+    pricesData.splice(index, 1);
+    pageCountData.splice(index, 1);
+
+    setFilesPageCount(pageCountData);
+    setSeriesFiles(filesData);
+    setSeriesPrices(pricesData);
+  };
+
   return (
     <>
       {opened ? (
@@ -93,9 +117,19 @@ const ReadMyScriptPage = (props: Props) => {
       <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft
-            cost={"150,000"}
+            cost={
+              seriesPrices.length > 0
+                ? numberWithCommas(
+                    seriesPrices.reduce((acc, num) => acc + num, 0) * 1000
+                  )
+                : "150,000"
+            }
             title="Read my script"
             image={<Image src={ReadMyScriptImg} alt="read-my-script" />}
+            episodes={scriptData.episodes}
+            files={seriesFiles}
+            seriesPageCount={filesPageCount}
+            series
             body={[
               { title: "Movie title", content: scriptData.movie_title },
               {
@@ -139,7 +173,8 @@ const ReadMyScriptPage = (props: Props) => {
                         title: "Read my Script and advice",
                         concerns: scriptData.concerns,
                         type: "request",
-                        files: file,
+                        files:
+                          scriptData.showType === "Yes" ? seriesFiles : [file],
                         fileName: file?.name || "Series",
                         episodes: scriptData.episodes,
                         showtype: scriptData.showType,
@@ -155,13 +190,20 @@ const ReadMyScriptPage = (props: Props) => {
                     !scriptData.genre ||
                     !scriptData.platform ||
                     !scriptData.logline ||
-                     !file
+                    (scriptData.showType === "No" ? !file : !seriesFiles.length)
+                    
                   }
                   setFileProps={(file) => setFile(file)}
                   setScriptProps={setScriptDataHandler}
                   data={scriptData}
                   fileName={file?.name}
+                  files={seriesFiles}
                   isLoading={isLoading}
+                  seriesPageCount={filesPageCount}
+                  setSeriesPrices={setSeriesPricesHandler}
+                  setSeriesFilesData={setSeriesFilesHandler}
+                  setSeriesCount={setFilesPageCountHandler}
+                  removeFileData={removeSeriesFileData}
                 />
               }
             </ServiceRight>

@@ -7,19 +7,22 @@ import InputComponent from "@/components/Input/Input";
 import SelectComponent from "@/components/Select/SelectComponent";
 import ServiceInfo from "@/components/ServiceInfo/ServiceInfo";
 import TextArea from "@/components/TextArea/TextArea";
-import { seriesExhibitionData, testExhibitionData, testSelectData } from "@/utils/constants/constants";
+import {
+  seriesExhibitionData,
+  testExhibitionData,
+} from "@/utils/constants/constants";
 import { Switch } from "@mantine/core";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BsUpload } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa";
 import { pdfjs } from "react-pdf";
 
 import FileImg from "/public/assets/dashboard/file.svg";
+import SeriesFiles from "../SeriesFiles";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-
 
 type Props = {
   fileName?: string;
@@ -29,12 +32,13 @@ type Props = {
   setFileProps: (value: File | null) => void;
   proceed: () => void;
   isLoading?: boolean;
-  setCost: (value: number) => void
+  setCost: (value: number) => void;
   setSeriesFilesData: (files: File[]) => void;
   setSeriesCount: (counts: number[]) => void;
   files?: File[];
   seriesPageCount: number[];
-  setSeriesPrices: (value: number | null) => void
+  setSeriesPrices: (value: number[]) => void;
+  removeFileData: (index: number) => void;
 };
 
 const CreatePitchForm = ({
@@ -50,13 +54,16 @@ const CreatePitchForm = ({
   setSeriesCount,
   setSeriesFilesData,
   setSeriesPrices,
-  files
+  files,
+  removeFileData,
 }: Props) => {
+  
   const router = useRouter();
   const [checked, setChecked] = useState<boolean>(false);
+  
   const getPdfPageCount = async (file: File): Promise<number> => {
     const reader = new FileReader();
-  
+
     return new Promise<number>((resolve, reject) => {
       reader.onload = async () => {
         try {
@@ -64,14 +71,14 @@ const CreatePitchForm = ({
           if (!(result instanceof ArrayBuffer)) {
             return reject(new Error("Invalid file data"));
           }
-  
+
           const pdf = await pdfjs.getDocument({ data: result }).promise;
           resolve(pdf.numPages);
         } catch (error) {
           reject(error);
         }
       };
-  
+
       reader.onerror = () => reject(new Error("Failed to read file"));
       reader.readAsArrayBuffer(file);
     });
@@ -92,7 +99,7 @@ const CreatePitchForm = ({
           className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
           type=""
         />
-         <div className="mt-10 mb-10 cursor-pointer">
+        <div className="mt-10 mb-10 cursor-pointer">
           <Switch
             label="Series"
             color="#181818"
@@ -101,10 +108,13 @@ const CreatePitchForm = ({
             onChange={(val) => {
               if (val.currentTarget.checked) {
                 setScriptProps("showType", "Yes");
-                setCost(150000)
+                setCost(150000);
               } else {
                 setScriptProps("showType", "No");
-                setCost(300000)
+                setCost(300000);
+                setSeriesCount([]);
+                setSeriesFilesData([]);
+                setSeriesPrices([]);
               }
               setChecked(val.currentTarget.checked);
             }}
@@ -120,7 +130,7 @@ const CreatePitchForm = ({
             type=""
           />
         )}
-       {checked ? (
+        {checked ? (
           <div className="mt-10">
             <div className="mb-2  flex font-medium text-[0.88rem] ">
               <p>Upload scripts (pdf) files for each episodes</p>
@@ -130,24 +140,23 @@ const CreatePitchForm = ({
                 "application/pdf": [".pdf"],
               }}
               setFiles={async (files) => {
-                setSeriesCount([]);
-                setSeriesPrices(null)
+                // setSeriesCount([]);
+                // setSeriesPrices(null)
                 setSeriesFilesData(files);
                 const pageCount = [];
-                const prices = []
+                const prices = [];
 
                 for (const el of files) {
                   const page = await getPdfPageCount(el);
                   if (page <= 50) {
-                    prices.push(50)
+                    prices.push(50);
                   } else {
-                    prices.push(100)
+                    prices.push(100);
                   }
                   pageCount.push(page);
                 }
                 setSeriesCount(pageCount);
-                console.log(prices)
-                setSeriesPrices(prices.reduce((acc, num) => acc + num, 0))
+                setSeriesPrices(prices);
               }}
             >
               <div
@@ -167,34 +176,17 @@ const CreatePitchForm = ({
               <p className="font-bold text-[0.88rem] mt-8">Selected files</p>
             )}
             {files && files.length > 0 ? (
-              <div className="max-h-[25rem] overflow-y-scroll mt-6">
+              <div className="max-h-[25rem]  overflow-y-scroll mt-6">
                 {files.map((el, index) => (
-                  <div
-                    className={`${
-                      seriesPageCount[index] < 20 ? "border border-red-300 bg-gray-bg-1 pb-4 mb-4 rounded-md" : ""
-                    }`}
-                  >
-                    <div
-                      className={`flex mb-4 bg-gray-bg-1 py-4 px-6 rounded-md`}
-                      key={el.name}
-                    >
-                      <div className="bg-gray-bg-3 h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4">
-                        <Image src={FileImg} alt="file-img" />
-                      </div>
-                      <div className="text-sm mr-auto max-w-[23rem]">
-                        <p className="font-medium">{el.name}</p>
-                        <p>{(el.size / 1000000).toFixed(3)}MB</p>
-                      </div>
-                      <div className="text-sm">
-                        <p>
-                          {seriesPageCount[index]
-                            ? seriesPageCount[index] + " " + "page(s)"
-                            : null}
-                        </p>
-                      </div>
-                    </div>
-                    {seriesPageCount && seriesPageCount[index] < 20 ?  <p className="text-red-400 text-sm font-semibold -mt-6 px-6">Document page count must be at least 20</p> : null }
-                  </div>
+                  <SeriesFiles
+                    index={index}
+                    name={el.name}
+                    pageCount={seriesPageCount}
+                    removeFileData={removeFileData}
+                    size={el.size}
+                    key={el.name + index}
+                    id={ `${el.name}${el.size}${index}`}
+                  />
                 ))}
               </div>
             ) : null}
@@ -208,7 +200,6 @@ const CreatePitchForm = ({
               accept=""
               setFile={(file) => {
                 if (file) {
-                  
                   setFileProps(file);
                 }
               }}
@@ -230,7 +221,7 @@ const CreatePitchForm = ({
             value={data.platform}
             setValueProps={(val) => setScriptProps("platform", val!)}
             label="Platform for exhibition"
-            data={checked ? seriesExhibitionData :testExhibitionData}
+            data={checked ? seriesExhibitionData : testExhibitionData}
             placeholder="Select"
           />
         </div>

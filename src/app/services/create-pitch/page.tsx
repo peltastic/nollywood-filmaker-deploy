@@ -43,7 +43,7 @@ const CreatePitchPage = (props: Props) => {
   const search = searchParam.get("page");
   const [file, setFile] = useState<File | null>(null);
 
-  const [seriesPrices, setSeriesPrices] = useState<number | null>(null);
+  const [seriesPrices, setSeriesPrices] = useState<number[]>([]);
   const [seriesFiles, setSeriesFiles] = useState<File[]>([]);
   const [filesPageCount, setFilesPageCount] = useState<number[]>([]);
   const userId = useSelector(
@@ -85,6 +85,30 @@ const CreatePitchPage = (props: Props) => {
       open();
     }
   }, [paymentStatus]);
+
+  const setSeriesFilesHandler = (files: File[]) => {
+    setSeriesFiles((prev) => [...prev, ...files]);
+  };
+  const setFilesPageCountHandler = (counts: number[]) => {
+    setFilesPageCount((prev) => [...prev, ...counts]);
+  };
+  const setSeriesPricesHandler = (prices: number[]) => {
+    setSeriesPrices(prev => [...prev, ...prices])
+  }
+
+  const removeSeriesFileData = (index: number) => {
+     const filesData = [...seriesFiles]
+     const pricesData = [...seriesPrices]
+     const pageCountData = [...filesPageCount]
+
+     filesData.splice(index, 1)
+     pricesData.splice(index, 1)
+     pageCountData.splice(index, 1)
+
+     setFilesPageCount(pageCountData)
+     setSeriesFiles(filesData)
+     setSeriesPrices(pricesData)
+    }
   return (
     <>
       {opened ? (
@@ -92,7 +116,6 @@ const CreatePitchPage = (props: Props) => {
           info="Pitch deck Creation  can take between 1-2 weeks. You will be mailed with an editable pitch deck and a calendar to choose a chat date"
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
-          
         />
       ) : null}
       <ServiceLayout nonDashboard>
@@ -100,9 +123,17 @@ const CreatePitchPage = (props: Props) => {
           <ServiceLeft
             title="Create a Movie Schedule"
             cost={
-              seriesPrices ? numberWithCommas(seriesPrices * 1000) : "150,000"
+              seriesPrices.length > 0
+                ? numberWithCommas(
+                    seriesPrices.reduce((acc, num) => acc + num, 0) * 1000
+                  )
+                : "150,000"
             }
             image={<Image src={CreatePitchImg} alt="create-pitch" />}
+            episodes={scriptData.episodes}
+            files={seriesFiles}
+            seriesPageCount={filesPageCount}
+            series
             body={[
               {
                 title: "Movie title",
@@ -151,7 +182,8 @@ const CreatePitchPage = (props: Props) => {
                       actors: scriptData.actors_in_mind,
                       budgetrange: scriptData.budget,
                       crew: scriptData.crew_in_mind,
-                      files: scriptData.showType === "Yes" ? seriesFiles : [file],
+                      files:
+                        scriptData.showType === "Yes" ? seriesFiles : [file],
                       info: scriptData.information,
                       movie_title: scriptData.movie_title,
                       platform: scriptData.platform,
@@ -162,7 +194,7 @@ const CreatePitchPage = (props: Props) => {
                       episodes: scriptData.episodes,
                       visualStyle: scriptData.visual,
                       fileName: file?.name || "",
-                      pageCount: filesPageCount
+                      pageCount: filesPageCount,
                     });
                     initializeTransactionListener(userId);
                     nprogress.start();
@@ -183,13 +215,10 @@ const CreatePitchPage = (props: Props) => {
                 setCost={(val) => setCost(val)}
                 files={seriesFiles}
                 seriesPageCount={filesPageCount}
-                setSeriesPrices={(val) => setSeriesPrices(val)}
-                setSeriesFilesData={(files) => {
-                  setSeriesFiles(files);
-                }}
-                setSeriesCount={(counts) => {
-                  setFilesPageCount(counts);
-                }}
+                setSeriesPrices={setSeriesPricesHandler}
+                setSeriesFilesData={setSeriesFilesHandler}
+                setSeriesCount={setFilesPageCountHandler}
+                removeFileData={removeSeriesFileData}
               />
             </ServiceRight>
           )}

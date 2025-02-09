@@ -9,6 +9,7 @@ import { AspectRatio, Menu } from "@mantine/core";
 import Lottie from "lottie-react";
 import TypingLottie from "@/components/Lottie/typing.json";
 import Linkify from "../Linkify/Linkify";
+import { motion } from "framer-motion";
 
 type Props = {
   text: string;
@@ -62,6 +63,7 @@ const ChatMessage = ({
 }: Props) => {
   const [temporarySelectedHighlight, setTemporarySelectedHighlight] =
     useState<string>("transparent");
+  const [dragX, setDragX] = useState(0); // Store drag position
   const [isRightClicked, setIsRightClicked] = useState<boolean>(false);
   const [contextMenu, setContextMenu] = useState<{
     visible: boolean;
@@ -136,7 +138,29 @@ const ChatMessage = ({
         transition: "all",
       }}
     >
-      <div
+      <motion.div
+        drag="x"
+        dragConstraints={{ left: 0, right: 100 }}
+        onDrag={(event, info) => {
+          if (info.offset.x < 120) {
+            setDragX(info.offset.x);
+          }
+        }} // Track drag position
+        onDragEnd={(event, info) => {
+          if (info.offset.x > 100) {
+            setReplyDataProps &&
+              id &&
+              setReplyDataProps({
+                reply: text,
+                user,
+                id,
+              });
+            // onReply(text);
+          }
+          setDragX(0); // Reset position after swipe
+        }}
+        animate={{ x: dragX }} // Smoothly animate back
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
         className={`${
           user === "user" ? "flex-row-reverse ml-auto" : ""
         } flex items-start`}
@@ -303,7 +327,7 @@ const ChatMessage = ({
             )}
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
