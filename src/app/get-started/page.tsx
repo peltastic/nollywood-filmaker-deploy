@@ -26,7 +26,7 @@ const GetStartedPage = (props: Props) => {
       <div className="mx-auto mt-[2rem] sm:mt-[5rem] w-auto">
         <div className="text-black-2 w-[90%] sm:w-[80%] lg:w-[55.6rem] mx-auto">
           <h1 className="font-bold text-[1.8rem] xs:text-[2.1rem] sm:text-[2.2rem] mid:text-[2.7rem] mb-[2rem] sm:mb-[4rem]">
-            Welcome to Nollywood Filmaker
+            Welcome to Nollywood Filmmaker
           </h1>
           <h1 className="font-bold text-[1.2rem] mid:text-[1.5rem]">
             Let us help you make successful films

@@ -100,7 +100,7 @@ const FilmakerDatabasePage = (props: Props) => {
       <HomeLayout>
         <div className="px-8 mt-10">
           <h1 className="text-3xl mid:text-4xl font-bold text-center">
-            Nollywood Filmaker Database
+            Nollywood Filmmaker Database
           </h1>
         </div>
         <section className="bg-[#FAFAFA] min-h-screen mt-8 py-8">

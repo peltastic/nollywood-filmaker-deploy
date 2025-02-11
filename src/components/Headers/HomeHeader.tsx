@@ -23,7 +23,7 @@ const HomeHeader = (props: Props) => {
           <div className="sm:ml-6 mt-[5rem] xs:mt-[8rem] sm:mt-[17rem] xl:mt-[4rem] chatbp2:mt-[8rem]">
             <div className=" xl:w-[30rem] xxl:w-[40rem] relative">
               <h2 className="tracking-wider font-thin mb-6 ">
-                Nollywood Filmaker
+                Nollywood Filmmaker
               </h2>
               <div className="absolute right-[1rem] sm:right-[3rem] -top-[1rem]">
                 <Image src={YellowArrow} alt="yellow-arrow" />
