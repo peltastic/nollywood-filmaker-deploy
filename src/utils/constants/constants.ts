@@ -114,8 +114,8 @@ export const consultantTypesData = [
     value: "Director",
   },
   {
-    label: "Composer",
-    value: "Composer",
+    label: "Music / Sound Designer",
+    value: "Music / Sound Designer",
   },
   {
     label: "Cinematographer",
@@ -136,6 +136,10 @@ export const consultantTypesData = [
   {
     label: "Marketing",
     value: "Marketing",
+  },
+  {
+    label: "Lawyer",
+    value: "Lawyer",
   },
 ];
 export const paymentOptions = [

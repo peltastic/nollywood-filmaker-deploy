@@ -10,12 +10,13 @@ type Props = {
 const expertise = [
   "Producer",
   "Director",
-  "Composer",
   "Cinematographer",
   "Editor",
   "Writer",
   "VFX/Animator",
-  "Marketing"
+  "Marketing",
+  "Music / Sound Designer",
+  "Lawyer"
 ];
 const Expertise = ({ data, setExpertise, small, maximum }: Props) => {
   return (

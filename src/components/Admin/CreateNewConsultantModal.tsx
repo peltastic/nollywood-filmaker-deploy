@@ -61,6 +61,7 @@ const CreateNewConsultantModal = (props: Props) => {
         "Consultant created successfully",
         "An email has been sent to the consultant to create their password"
       );
+      props.refresh && props.refresh()
       props.close();
     }
   }, [isError, isSuccess]);

@@ -22,7 +22,7 @@ const AdminConsultantPage = (props: Props) => {
   const [consultantPageData, setConsultantPageData] = useState<
     IAdminConsultantData[]
   >([]);
-  const { data, isFetching } = useFetchAllConsultantQuery(null, {
+  const { data, isFetching, refetch } = useFetchAllConsultantQuery(null, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -50,6 +50,10 @@ const AdminConsultantPage = (props: Props) => {
     }
   }, [data]);
 
+ const refresh  = () => {
+  refetch()
+ }
+
   return (
     <>
       <ModalComponent
@@ -59,7 +63,7 @@ const AdminConsultantPage = (props: Props) => {
         opened={opened}
         centered
       >
-        <CreateNewConsultantModal close={close} />
+        <CreateNewConsultantModal refresh={refresh} close={close} />
       </ModalComponent>
       <ServiceLayout admin>
         <DashboardBodyLayout>
