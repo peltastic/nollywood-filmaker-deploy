@@ -1,0 +1,7 @@
+{
+    "functions": {
+      "node": {
+        "runtime": "nodejs22.x"
+      }
+    }
+  }
