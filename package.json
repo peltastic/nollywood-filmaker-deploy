@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "engines": {
-    "node": "22.13.1"
+    "node": "22.14.0"
   },
   "dependencies": {
     "@mantine/charts": "^7.13.1",
