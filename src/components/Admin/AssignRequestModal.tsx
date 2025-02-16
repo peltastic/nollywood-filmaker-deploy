@@ -167,7 +167,7 @@ const AssignRequestModal = (props: Props) => {
           <p>• Assign the request</p>
         </div>
       </div>
-      <div className=" mt-4">
+      <div className=" mt-4 relative z-50">
         {isFetching || res.isFetching ? (
           <Skeleton height={50} />
         ) : (
