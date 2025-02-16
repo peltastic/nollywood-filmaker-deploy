@@ -7,23 +7,24 @@ import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import { DataTable } from "@/components/Tables/DataTable";
 import { useProtectAdmin } from "@/hooks/useProtectAdminRoute";
-import { useFetchAllCustomersQuery } from "@/lib/features/admin/customers/customers";
+import {
+  useFetchAllCustomersQuery,
+  useLazyFetchAllCustomersQuery,
+} from "@/lib/features/admin/customers/customers";
+import { Pagination } from "@mantine/core";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 
 type Props = {};
 
 const AdminCustomersPage = (props: Props) => {
-  useProtectAdmin()
+  useProtectAdmin();
+  const [activePage, setActivePage] = useState<number>(1);
   const [customerData, setCustomerData] = useState<IAdminCustomersColumnData[]>(
     []
   );
-  const { isFetching, data } = useFetchAllCustomersQuery(
-    null,
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  );
+  const [getAllCustomers, { isFetching, data }] =
+    useLazyFetchAllCustomersQuery();
 
   useEffect(() => {
     if (data) {
@@ -37,13 +38,18 @@ const AdminCustomersPage = (props: Props) => {
             location: "N/A",
             number: el.phone,
             profilePic: el.profilepics,
-            id: el._id
+            id: el._id,
           };
         }
       );
       setCustomerData(customer_data);
     }
   }, [data]);
+  useEffect(() => {
+    getAllCustomers({
+      limit: 10,
+    });
+  }, []);
 
   return (
     <ServiceLayout admin>
@@ -58,6 +64,21 @@ const AdminCustomersPage = (props: Props) => {
             emptyHeader="No customers"
           />
         </div>
+        {data && data.pagination.totalPages > 1 && (
+          <Pagination
+            total={data.pagination.totalPages}
+            value={activePage}
+            color="#333333"
+            onChange={(val) => {
+              getAllCustomers({
+                limit: 10,
+                page: val,
+              });
+              setActivePage(val);
+            }}
+            mt={"xl"}
+          />
+        )}
       </DashboardBodyLayout>
     </ServiceLayout>
   );

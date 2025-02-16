@@ -14,10 +14,12 @@ import Header from "@/components/Dashboard/Header";
 import UpcomingConversations from "@/components/Dashboard/UpcomingConversations";
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
+import DashboardStatsSkeleton from "@/components/Skeletons/DashboardStatsSkeleton";
 import { DataTable } from "@/components/Tables/DataTable";
 import { useProtectRouteConsultantRoute } from "@/hooks/useProtectConsultantRoute";
 import {
   useGetActiveRequestQuery,
+  useLazyFetchDashboardStatsQuery,
   useLazyFetchReqHistoryQuery,
   useLazyGetServiceRequestsQuery,
 } from "@/lib/features/consultants/dashboard/request";
@@ -27,6 +29,14 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 type Props = {};
+
+export interface IOverviewData {
+  change?: "increase" | "decrease";
+  title: string;
+  value: string;
+  percentage: number;
+  id: string;
+}
 
 const dashboard_data: {
   change?: "increase" | "decrease";
@@ -112,6 +122,29 @@ const bar_chart_data = [
 
 const DashboardPage = (props: Props) => {
   useProtectRouteConsultantRoute();
+  const [overviewData, setOverviewData] = useState<IOverviewData[]>([
+    {
+      change: "increase",
+      percentage: 0,
+      title: "Assigned Requests",
+      value: "0",
+      id: "1",
+    },
+    {
+      change: "increase",
+      percentage: 0,
+      title: "Completed Requests",
+      value: "0",
+      id: "3",
+    },
+    {
+      change: "increase",
+      percentage: 0,
+      title: "Conversations held",
+      value: "0",
+      id: "4",
+    },
+  ]);
   const consultantId = useSelector(
     (state: RootState) => state.persistedState.consultant.user?.id
   );
@@ -132,10 +165,8 @@ const DashboardPage = (props: Props) => {
   const [reqHistoryData, setReqHistoryData] = useState<ReqHistoryColumnData[]>(
     []
   );
-  // const { data, isSuccess, isError, isFetching } =
-  //   useFetchCustomerRequestsQuery(consultantId!, {
-  //     refetchOnMountOrArgChange: true,
-  //   });
+
+  const [fetchDashboardStat, res] = useLazyFetchDashboardStatsQuery();
 
   const [getReqHistory, req_history] = useLazyFetchReqHistoryQuery();
 
@@ -144,6 +175,40 @@ const DashboardPage = (props: Props) => {
   useEffect(() => {
     fetchServiceReq(consultantId!);
   }, []);
+
+  useEffect(() => {
+    if (consultantId) {
+      fetchDashboardStat(consultantId);
+    }
+  }, []);
+
+  useEffect(() => {
+ if (res.data) {
+  setOverviewData([
+    {
+      change: "increase",
+      percentage: 0,
+      title: "Assigned Requests",
+      value: res.data.assigned.toString(),
+      id: "1",
+    },
+    {
+      change: "increase",
+      percentage: 0,
+      title: "Completed Requests",
+      value: res.data.completed.toString(),
+      id: "3",
+    },
+    {
+      change: "increase",
+      percentage: 0,
+      title: "Conversations held",
+      value: res.data.conversations.toString(),
+      id: "4",
+    },
+  ])
+ }
+  }, [res])
 
   useEffect(() => {
     if (consultantId) {
@@ -238,15 +303,26 @@ const DashboardPage = (props: Props) => {
             <DashboardPlate title="Overview">
               <section className="flex flex-wrap lg:flex-nowrap gap-x-6 py-8">
                 <div className="w-full lg:w-[50%] mid:grid-cols-2 grid gap-6">
-                  {dashboard_data?.map((el) => (
-                    <DashboardInfoCard
-                      key={el.id}
-                      percentage={el.percentage}
-                      title={el.title}
-                      value={el.value}
-                      change={el.change}
-                    />
-                  ))}
+                {res.isFetching ? (
+                  <>
+                    <DashboardStatsSkeleton />
+                    <DashboardStatsSkeleton />
+                    <DashboardStatsSkeleton />
+                    <DashboardStatsSkeleton />
+                  </>
+                ) : (
+                  <>
+                    {overviewData.map((el) => (
+                      <DashboardInfoCard
+                        key={el.id}
+                        percentage={el.percentage}
+                        title={el.title}
+                        value={el.value}
+                        change={el.change}
+                      />
+                    ))}
+                  </>
+                )}
                 </div>
                 <div className="mt-10 lg:mt-0 w-full lg:w-[50%]">
                   <UpcomingConversations

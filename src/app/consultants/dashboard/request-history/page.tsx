@@ -9,6 +9,7 @@ import { DataTable } from "@/components/Tables/DataTable";
 import { useProtectRouteConsultantRoute } from "@/hooks/useProtectConsultantRoute";
 import { useLazyFetchReqHistoryQuery } from "@/lib/features/consultants/dashboard/request";
 import { RootState } from "@/lib/store";
+import { Pagination } from "@mantine/core";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -16,6 +17,7 @@ import { useSelector } from "react-redux";
 type Props = {};
 
 const RequestHistoryPage = (props: Props) => {
+  const [activePage, setActivePage] = useState<number>(1);
   useProtectRouteConsultantRoute();
   const [reqHistoryData, setReqHistoryData] = useState<ReqHistoryColumnData[]>(
     []
@@ -54,7 +56,7 @@ const RequestHistoryPage = (props: Props) => {
         });
       setReqHistoryData(transformed_data);
     } else {
-      setReqHistoryData([])
+      setReqHistoryData([]);
     }
   }, [data]);
 
@@ -73,6 +75,24 @@ const RequestHistoryPage = (props: Props) => {
             emptyBody="Any requests you made will show up here."
           />
         </div>
+        {data && data.totalPages > 1 && (
+          <Pagination
+            total={data.totalPages}
+            value={activePage}
+            color="#333333"
+            onChange={(val) => {
+              if (consultantId) {
+                fetchReqHistory({
+                  id: consultantId,
+                  limit: 10,
+                  page: val,
+                });
+              }
+              setActivePage(val);
+            }}
+            mt={"xl"}
+          />
+        )}
       </DashboardBodyLayout>
     </ServiceLayout>
   );

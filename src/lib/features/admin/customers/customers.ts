@@ -1,4 +1,9 @@
-import { IAdminCustomersResponse, IFetchActiveUserRequest, IFetchUserOverview, IFetchUserRequestHistory } from "@/interfaces/admin/customers/customers";
+import {
+  IAdminCustomersResponse,
+  IFetchActiveUserRequest,
+  IFetchUserOverview,
+  IFetchUserRequestHistory,
+} from "@/interfaces/admin/customers/customers";
 import { adminBaseQueryWithReauth } from "@/lib/baseQuery";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
@@ -6,8 +11,20 @@ export const adminCustomersApi = createApi({
   reducerPath: "adminCustomersApi",
   baseQuery: adminBaseQueryWithReauth,
   endpoints: (build) => ({
-    fetchAllCustomers: build.query<IAdminCustomersResponse, null>({
-      query: () => `/api/admin/fetch/users`,
+    fetchAllCustomers: build.query<IAdminCustomersResponse, {
+      limit?: number
+      page?: number
+    }>({
+      query: ({limit, page}) => {
+        let query = "";
+        if (limit) {
+          query += `?limit=${limit}`;
+        }
+        if (page) {
+          query += `&page=${page}`;
+        }
+        return { url: `/api/admin/fetch/users${query}` };
+      },
     }),
     fetchUserOverview: build.query<IFetchUserOverview, string>({
       query: (id) => `/api/admin/fetch/users/${id}`,
@@ -23,7 +40,8 @@ export const adminCustomersApi = createApi({
 
 export const {
   useFetchAllCustomersQuery,
+  useLazyFetchAllCustomersQuery,
   useLazyFetchUserOverviewQuery,
   useLazyFetchUserActiveRequestQuery,
-  useLazyFetchUserRequestHistoryQuery
-} = adminCustomersApi; 
+  useLazyFetchUserRequestHistoryQuery,
+} = adminCustomersApi;

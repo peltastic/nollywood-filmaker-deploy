@@ -61,6 +61,10 @@ export const consultantRequestsApi = createApi({
     fetchReqHistory: build.query<
       {
         completedRequests: IRequestHistoryResponse[];
+        totalItems: number;
+        totalPages: number;
+        currentPage: number;
+        itemsPerPage: number;
       },
       { id: string; limit?: number; page?: number }
     >({
@@ -92,6 +96,16 @@ export const consultantRequestsApi = createApi({
       query: ({ date, id }) =>
         `/api/users/consultant/${id}/availability?date=${date}`,
     }),
+    fetchDashboardStats: build.query<
+      {
+        completed: number;
+        conversations: number;
+        assigned: number;
+      },
+      string
+    >({
+      query: (id) => `/api/consultants/completed-counts/${id}`,
+    }),
   }),
 });
 
@@ -106,4 +120,5 @@ export const {
   useSetChatAsCompleteMutation,
   useLazyFetchReqHistoryQuery,
   useLazyGetSingleConsultantAvailabilityQuery,
+  useLazyFetchDashboardStatsQuery
 } = consultantRequestsApi;

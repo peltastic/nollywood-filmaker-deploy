@@ -91,7 +91,7 @@ const AdminConsultantPage = (props: Props) => {
             clicked={open}
             emptyHeader="No consultants"
           />
-          {data && (
+          {data && data.pagination.totalPages > 1  && (
             <Pagination
               total={data.pagination.totalPages}
               value={activePage}

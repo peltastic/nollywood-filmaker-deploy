@@ -367,7 +367,7 @@ const AdminDashboardPage = (props: Props) => {
                     ))}
                   </>
                 )}
-              </div>
+              </div> 
             </DashboardPlate>
           </div>
           <div className="mt-16 flex flex-wrap xl:flex-nowrap gap-x-8">

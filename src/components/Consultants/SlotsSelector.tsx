@@ -17,6 +17,7 @@ const SlotsSelector = ({ slots, updateSlots }: Props) => {
   const [night, setNight] = useState<boolean>(false);
   const [odd, setOdd] = useState<boolean>(false);
   const [even, setEven] = useState<boolean>(false);
+  const [all, setAll] = useState<boolean>(false);
   return (
     <div className="font-normal">
       <p className=" text-sm   mt-8 font-medium mb-2">
@@ -34,12 +35,13 @@ const SlotsSelector = ({ slots, updateSlots }: Props) => {
                 setEven(false);
                 setNight(false);
                 setOdd(false);
+                setAll(false)
                 updateSlots("", "add", ["09:00", "10:00", "11:00"]);
               }}
               checked={morning}
               size="xs"
               color="#181818"
-            />
+              />
           </div>
         </div>
         <div className="flex items-center ml-2 mt-2">
@@ -52,6 +54,7 @@ const SlotsSelector = ({ slots, updateSlots }: Props) => {
                 setEven(false);
                 setNight(false);
                 setOdd(false);
+                setAll(false)
                 updateSlots("", "add", [
                   "13:00",
                   "14:00",
@@ -64,7 +67,7 @@ const SlotsSelector = ({ slots, updateSlots }: Props) => {
               checked={day}
               size="xs"
               color="#181818"
-            />
+              />
           </div>
         </div>
         <div className="flex items-center ml-2 mt-2">
@@ -73,6 +76,7 @@ const SlotsSelector = ({ slots, updateSlots }: Props) => {
             <SwitchComponent
               setChecked={() => {
                 setMorning(false);
+                setAll(false)
                 setDay(false);
                 setEven(false);
                 setNight(true);
@@ -88,7 +92,7 @@ const SlotsSelector = ({ slots, updateSlots }: Props) => {
               checked={night}
               size="xs"
               color="#181818"
-            />
+              />
           </div>
         </div>
         <div className="flex items-center ml-2 mt-2">
@@ -98,6 +102,7 @@ const SlotsSelector = ({ slots, updateSlots }: Props) => {
               setChecked={() => {
                 setMorning(false);
                 setDay(false);
+                setAll(false)
                 setEven(false);
                 setNight(false);
                 setOdd(true);
@@ -115,7 +120,7 @@ const SlotsSelector = ({ slots, updateSlots }: Props) => {
               checked={odd}
               size="xs"
               color="#181818"
-            />
+              />
           </div>
         </div>
         <div className="flex items-center ml-2 mt-2">
@@ -126,6 +131,7 @@ const SlotsSelector = ({ slots, updateSlots }: Props) => {
                 setMorning(false);
                 setDay(false);
                 setEven(true);
+                setAll(false)
                 setNight(false);
                 setOdd(false);
                 updateSlots("", "add", [
@@ -139,6 +145,25 @@ const SlotsSelector = ({ slots, updateSlots }: Props) => {
                 ]);
               }}
               checked={even}
+              size="xs"
+              color="#181818"
+              />
+          </div>
+        </div>
+        <div className="flex items-center ml-2 mt-2">
+          <p className="mr-2">All</p>
+          <div className="cursor-pointer">
+            <SwitchComponent
+              setChecked={() => {
+                setMorning(false);
+                setDay(false);
+                setEven(false);
+                setNight(false);
+                setOdd(false);
+                setAll(true)
+                updateSlots("", "add", time_slots_v2);
+              }}
+              checked={all}
               size="xs"
               color="#181818"
             />
