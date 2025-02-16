@@ -12,6 +12,12 @@ export interface IAdminConsultantResponse {
       country?: string;
     };
   }[];
+  pagination: {
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+    pageSize: number;
+  };
 }
 
 export interface ICreateConsultantPayload {
@@ -29,7 +35,7 @@ export interface IFetchConsultantOverview {
   alltimependingrev: number;
   alltimerev: number;
   consultant: {
-    _id: string
+    _id: string;
     createdAt: string;
     expertise: string[];
     fname: string;
@@ -56,14 +62,14 @@ export interface IFetchActiveConsultantRequest {
       stattusof: "pending" | "ongoing" | "ready" | "completed" | "awaiting";
       createdAt: string;
       nameofservice:
-      | "Chat With A Professional"
-      | "Read my Script and advice"
-      | "Watch the Final cut of my film and advice"
-      | "Look at my Budget and advice"
-      | "Create a Marketing budget"
-      | "Create a Pitch based on my Script"
-      | "Draft Legal documents"
-      | "Create a Production budget";
+        | "Chat With A Professional"
+        | "Read my Script and advice"
+        | "Watch the Final cut of my film and advice"
+        | "Look at my Budget and advice"
+        | "Create a Marketing budget"
+        | "Create a Pitch based on my Script"
+        | "Draft Legal documents"
+        | "Create a Production budget";
     };
     user: {
       email: string;

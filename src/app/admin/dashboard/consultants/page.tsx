@@ -9,7 +9,11 @@ import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import ModalComponent from "@/components/Modal/Modal";
 import { DataTable } from "@/components/Tables/DataTable";
 import { useProtectAdmin } from "@/hooks/useProtectAdminRoute";
-import { useFetchAllConsultantQuery } from "@/lib/features/admin/consultants/consultants";
+import {
+  useFetchAllConsultantQuery,
+  useLazyFetchAllConsultantQuery,
+} from "@/lib/features/admin/consultants/consultants";
+import { Pagination } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
@@ -18,13 +22,13 @@ type Props = {};
 
 const AdminConsultantPage = (props: Props) => {
   useProtectAdmin();
+  const [activePage, setActivePage] = useState<number>(1);
   const [opened, { open, close }] = useDisclosure();
   const [consultantPageData, setConsultantPageData] = useState<
     IAdminConsultantData[]
   >([]);
-  const { data, isFetching, refetch } = useFetchAllConsultantQuery(null, {
-    refetchOnMountOrArgChange: true,
-  });
+  const [getAllConsultants, { data, isFetching }] =
+    useLazyFetchAllConsultantQuery();
 
   useEffect(() => {
     if (data) {
@@ -34,7 +38,7 @@ const AdminConsultantPage = (props: Props) => {
             consultant: `${el.fname} ${el.lname}`,
             date: moment(el.createdAt).format("ll"),
             email: el.email,
-            expertise: el.expertise.slice(0,3),
+            expertise: el.expertise.slice(0, 3),
             location:
               el.location?.country && el.location.state
                 ? `${el.location.state}, ${el.location.country}`
@@ -46,13 +50,23 @@ const AdminConsultantPage = (props: Props) => {
           };
         }
       );
-      setConsultantPageData(refined_data)
+      setConsultantPageData(refined_data);
     }
   }, [data]);
 
- const refresh  = () => {
-  refetch()
- }
+  useEffect(() => {
+    getAllConsultants({
+      limit: 10,
+      page: activePage,
+    });
+  }, []);
+
+  const refresh = () => {
+    getAllConsultants({
+      limit: 10,
+      page: activePage,
+    });
+  };
 
   return (
     <>
@@ -77,6 +91,21 @@ const AdminConsultantPage = (props: Props) => {
             clicked={open}
             emptyHeader="No consultants"
           />
+          {data && (
+            <Pagination
+              total={data.pagination.totalPages}
+              value={activePage}
+              color="#333333"
+              onChange={(val) => {
+                getAllConsultants({
+                  limit: 10,
+                  page: val,
+                });
+                setActivePage(val);
+              }}
+              mt={"xl"}
+            />
+          )}
         </DashboardBodyLayout>
       </ServiceLayout>
     </>

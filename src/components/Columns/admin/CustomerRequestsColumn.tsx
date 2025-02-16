@@ -26,10 +26,10 @@ export interface ICustomerReqData {
   date: string;
   status: "ready" | "ongoing" | "completed" | "pending";
   profilepic: string;
+  orderId: string;
 }
 
 export const customer_req_columns: ColumnDef<ICustomerReqData>[] = [
-
   {
     accessorKey: "customer",
     header: () => <div className="py-4 pl-6">Customer</div>,
@@ -37,7 +37,7 @@ export const customer_req_columns: ColumnDef<ICustomerReqData>[] = [
       return (
         <div className="flex items-center w-[20rem] xl:w-auto pl-6">
           <div className="mr-2 w-[2.5rem] h-[2.5rem]">
-            <AspectRatio ratio={1800/1800}>
+            <AspectRatio ratio={1800 / 1800}>
               <Image
                 src={row.original.profilepic}
                 alt="image"
@@ -123,10 +123,10 @@ export const customer_req_columns: ColumnDef<ICustomerReqData>[] = [
         <UnstyledButton
           clicked={() =>
             router.push(
-              `/consultants/dashboard/order-details?status=${row.original.status}`
+              `/admin/dashboard/order-details/${row.original.orderId}`
             )
           }
-          class="bg-black-3 text-[0.88rem] text-white py-2 px-4 rounded-md"
+          class="bg-black-3 text-[0.88rem] text-white py-2 px-4 rounded-md hover:bg-blue-1 transition-all"
         >
           Open
         </UnstyledButton>

@@ -252,6 +252,7 @@ const AdminDashboardPage = (props: Props) => {
             script: el.chat_title || el.movie_title || "",
             service_type: el.nameofservice,
             status: el.stattusof,
+            orderId: el.orderId
           };
         }
       );

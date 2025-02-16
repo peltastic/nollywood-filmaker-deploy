@@ -12,8 +12,20 @@ export const adminConsultantApi = createApi({
   reducerPath: "adminConsultantApi",
   baseQuery: adminBaseQueryWithReauth,
   endpoints: (build) => ({
-    fetchAllConsultant: build.query<IAdminConsultantResponse, null>({
-      query: () => `/api/admin/pull/consultants`,
+    fetchAllConsultant: build.query<IAdminConsultantResponse, {
+      page?: number
+      limit?: number
+    }>({
+      query: ({limit, page}) => {
+        let query = ""
+        if (limit) {
+          query += `?limit=${10}`
+        }
+        if (page) {
+          query += `&page=${page}`
+        }
+        return { url: `/api/admin/pull/consultants${query}` };
+      },
     }),
     createConsultant: build.mutation<unknown, ICreateConsultantPayload>({
       query: (body) => ({
@@ -58,10 +70,11 @@ export const adminConsultantApi = createApi({
 
 export const {
   useFetchAllConsultantQuery,
+  useLazyFetchAllConsultantQuery,
   useCreateConsultantMutation,
   useLazyFetchConsultantOverviewQuery,
   useLazyFetchConsultantActiveRequestQuery,
   useLazyFetchConsultantRequestHistoryQuery,
   useDeleteConsultantMutation,
-  useEditConsultantMutation
+  useEditConsultantMutation,
 } = adminConsultantApi;
