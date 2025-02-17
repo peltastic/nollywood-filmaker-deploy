@@ -23,7 +23,7 @@ const SelectEmoji = ({ data, title, setEmojiProps }: Props) => {
   return (
     <div className="">
       <h1 className="font-medium text-[0.88rem] text-black-2 my-6">{title}</h1>
-      <div className="grid grid-cols-5 gap-6 ">
+      <div className="grid sm:grid-cols-3 md:grid-cols-5 gap-6 ">
         {data.map((el) => (
           <div
             onClick={() => {

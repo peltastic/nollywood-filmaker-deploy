@@ -90,9 +90,9 @@ const RateYourExperience = (props: Props) => {
   };
 
   return (
-    <section className="px-6">
+    <section className="px-2 sm:px-6">
       <div className="flex">
-        <h1 className="font-semibold text-[2rem]">Rate your experience</h1>
+        <h1 className="font-semibold text-lg sm:text-[2rem]">Rate your experience</h1>
         <div
           onClick={props.close}
           className="cursor-pointer hover:bg-gray-bg-2 py-2 px-2 placeholder:rounded-md transition-all ml-auto"
