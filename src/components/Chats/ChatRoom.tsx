@@ -587,7 +587,7 @@ const ChatRoom = (props: Props) => {
         // Set a timeout to stop typing event
         typingTimeoutRef.current = setTimeout(() => {
           stopTypingEmit(props.orderId, `${props.userData?.id}`, socket);
-        }, 3000);
+        }, 10000);
       }
     },
     [props.orderId, props.userData, socket]
