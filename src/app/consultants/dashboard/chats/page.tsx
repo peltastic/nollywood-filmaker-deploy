@@ -111,7 +111,7 @@ const ConsultantChastPage = (props: Props) => {
     <ServiceLayout consultant>
       <DashboardBodyLayout>
         <div ref={ref} className="flex h-[95vh] max-h-[90rem] bg-white">
-          <section className="mx-auto w-full h-full  chatbp:w-[30%]">
+          <section className="mx-auto w-full h-full  chatbp1:w-[30%]">
             <CustomerChatLeft
               type="consultant"
               data={chatData}
@@ -122,7 +122,7 @@ const ConsultantChastPage = (props: Props) => {
           <section
             className={`${
               closeRight ? "w-[70%]" : "w-[43%]"
-            } transition-all h-full hidden chatbp:block`}
+            } transition-all h-full hidden chatbp1:block`}
           >
             <CustomerChatMiddle
               refetch={() => {
@@ -147,7 +147,7 @@ const ConsultantChastPage = (props: Props) => {
           <section
             className={`transition-all ${
               closeRight ? "w-[0%] invisible " : "w-[27%] visible ml-3  "
-            }  hidden chatbp:block `}
+            }  hidden chatbp1:block `}
           >
             <CustomerChatRight
               type="consultant"

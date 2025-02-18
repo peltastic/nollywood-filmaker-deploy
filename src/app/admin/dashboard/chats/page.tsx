@@ -90,9 +90,9 @@ const AdminChats = (props: Props) => {
       <DashboardBodyLayout>
         <div
           ref={ref}
-          className="flex h-screen chatbp:h-[95vh]  max-h-[90rem] bg-white"
+          className="flex h-screen chatbp1:h-[95vh]  max-h-[90rem] bg-white"
         >
-          <section className="mx-auto w-full  chatbp:w-[30%]">
+          <section className="mx-auto w-full  chatbp1:w-[30%]">
             <CustomerChatLeft
               data={conversationsData}
               isFetching={isFetching}
@@ -103,7 +103,7 @@ const AdminChats = (props: Props) => {
           <section
             className={`${
               closeRight ? "w-[70%]" : "w-[43%]"
-            } transition-all hidden chatbp:block`}
+            } transition-all hidden chatbp1:block`}
           >
             <CustomerChatMiddle
               type="admin"
@@ -124,7 +124,7 @@ const AdminChats = (props: Props) => {
           <section
             className={`transition-all ${
               closeRight ? "w-[0%] invisible " : "w-[27%] visible ml-3  "
-            }  hidden chatbp:block `}
+            }  hidden chatbp1:block `}
           >
             <CustomerChatRight
               type="admin"

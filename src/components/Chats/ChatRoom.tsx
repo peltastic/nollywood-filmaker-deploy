@@ -1,13 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import ChatMessage from "./ChatMessage";
 import AttachIcon from "/public/assets/chats/attach-icon.svg";
 import Image from "next/image";
 import SendImg from "/public/assets/chats/send-icon.svg";
 import { Textarea } from "@mantine/core";
 import { MdCancel } from "react-icons/md";
-import config from "@/config/config";
 import {
-  chat_socket,
   emitTypingEvent,
   IChatMessagePayload,
   IContactMessagePayload,
@@ -63,6 +61,7 @@ export interface IChatMessagesData {
 }
 
 const ChatRoom = (props: Props) => {
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { socket } = useSocket();
   const ref = useRef<HTMLTextAreaElement>(null);
   const [missedPongs, setMissedPongs] = useState(0);
@@ -123,20 +122,6 @@ const ChatRoom = (props: Props) => {
     useState<string>("");
 
   const [opened, { open, close }] = useDisclosure();
-  // useEffect(() => {
-  //   if (!socket) return;
-  //   if (props.type === "admin") return () => {};
-  //   if (props.sessionOver) return () => {};
-  //   socket.on("disconnect", (data) => {
-  //     console.log("i disconnected", console.log(data));
-  //     socket.connect();
-  //   });
-  //   return () => {
-  //     socket.off("disconnect");
-  //   };
-  // }, [props.sessionOver]);
-
-  // useEffect
 
   ////////////////CUSTOM CHAT LISTENERS - CLOSE///////////////////////
 
@@ -510,7 +495,6 @@ const ChatRoom = (props: Props) => {
     if (typeof document === "undefined" || props.type === "admin") return;
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible" && !socket?.connected) {
-        notify("message", "Your connection got lost, refreshing chat");
         if (socket) {
           socket.connect();
         }
@@ -537,7 +521,7 @@ const ChatRoom = (props: Props) => {
           },
           socket
         );
-        props.refreshChat()
+        props.refreshChat();
       }
     });
     return () => {
@@ -587,9 +571,27 @@ const ChatRoom = (props: Props) => {
       ref.current.focus();
     }
   }, [replyData.reply]);
-  // useEffect(() => {
-  //  database.open()
-  // }, [])
+
+  const handleTextAreaInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setInputValue(e.currentTarget.value);
+
+      if (socket) {
+        emitTypingEvent(props.orderId, `${props.userData?.id}`, socket);
+
+        // Clear previous timeout if user is still typing
+        if (typingTimeoutRef.current) {
+          clearTimeout(typingTimeoutRef.current);
+        }
+
+        // Set a timeout to stop typing event
+        typingTimeoutRef.current = setTimeout(() => {
+          stopTypingEmit(props.orderId, `${props.userData?.id}`, socket);
+        }, 3000);
+      }
+    },
+    [props.orderId, props.userData, socket]
+  );
 
   const [databaseOpened, database] = useDisclosure();
 
@@ -917,23 +919,7 @@ const ChatRoom = (props: Props) => {
                           size="md"
                           radius={"md"}
                           value={inputValue}
-                          onChange={(event) => {
-                            if (socket) {
-                              emitTypingEvent(
-                                props.orderId,
-                                `${props.userData?.id}`,
-                                socket
-                              );
-                              setInputValue(event.currentTarget.value);
-                              setTimeout(() => {
-                                stopTypingEmit(
-                                  props.orderId,
-                                  `${props.userData?.id}`,
-                                  socket
-                                );
-                              }, 3000);
-                            }
-                          }}
+                          onChange={(e) => handleTextAreaInputChange(e)}
                           classNames={{
                             input: classes.input,
                           }}
@@ -956,23 +942,7 @@ const ChatRoom = (props: Props) => {
                           size="md"
                           radius={"md"}
                           value={inputValue}
-                          onChange={(event) => {
-                            setInputValue(event.currentTarget.value);
-                            if (socket) {
-                              emitTypingEvent(
-                                props.orderId,
-                                `${props.userData?.id}`,
-                                socket
-                              );
-                              setTimeout(() => {
-                                stopTypingEmit(
-                                  props.orderId,
-                                  `${props.userData?.id}`,
-                                  socket
-                                );
-                              }, 3000);
-                            }
-                          }}
+                          onChange={(e) => handleTextAreaInputChange(e)}
                           classNames={{
                             input: classes.input,
                           }}

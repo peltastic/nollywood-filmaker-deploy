@@ -4,8 +4,8 @@ import UnstyledButton from "@/components/Button/UnstyledButton";
 import { nprogress } from "@mantine/nprogress";
 import { notify } from "@/utils/notification";
 import { downloadCSV } from "@/utils/helperFunction";
-import { useLazyExportConsultantChatQuery } from "@/lib/features/consultants/dashboard/chat/chat";
-import { useLazyExportUserChatQuery } from "@/lib/features/users/dashboard/chat/chat";
+import { useLazyExportChatQuery } from "@/lib/features/export";
+import moment from "moment";
 
 type Props = {
   type: "user" | "consultant" | "admin";
@@ -17,49 +17,35 @@ type Props = {
 };
 
 const UserChatMenu = (props: Props) => {
-  const [
-    exportUserChat,
-    { isError, isFetching, isLoading, isSuccess, error, data },
-  ] = useLazyExportUserChatQuery();
-  const [exportConsultantChat, result] = useLazyExportConsultantChatQuery();
+  const [exportChat, result] = useLazyExportChatQuery();
 
-  const exportChatHandler = () => {
-    if (props.orderId) {
+  const exportChatHandler = async () => {
+    const now = new Date();
+    if (props.orderId && props.chat_title) {
       nprogress.start();
-      if (props.type === "user") {
-        exportUserChat(props.orderId);
-      } else if (props.type === "consultant") {
-        exportConsultantChat(props.orderId);
+      try {
+        const blob = await exportChat(props.orderId).unwrap();
+
+        // Create a download link
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${props.chat_title}-${moment(now).format(
+          "YYYY-MM-DD"
+        )}.pdf`; // Default filename
+        document.body.appendChild(a);
+        a.click();
+        nprogress.complete();
+        document.body.removeChild(a);
+
+        // Clean up
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        nprogress.complete();
+        notify("error", "", "Error exporting chat");
       }
     }
   };
-
-  useEffect(() => {
-    if (isError) {
-      nprogress.complete();
-      notify("error", "", (error as any)?.data?.message || "An Error Occcured");
-    }
-    if (isSuccess) {
-      downloadCSV(data, props.chat_title);
-      nprogress.complete();
-    }
-  }, [isError, isSuccess]);
-
-  useEffect(() => {
-    if (result.isError) {
-      nprogress.complete();
-      notify(
-        "error",
-        "",
-        (result.error as any)?.data?.message || "An Error Occcured"
-      );
-    }
-
-    if (result.isSuccess) {
-      downloadCSV(result.data, props.chat_title);
-      nprogress.complete();
-    }
-  }, [result.isError, result.isSuccess]);
 
   return (
     <>
@@ -73,13 +59,16 @@ const UserChatMenu = (props: Props) => {
               Request an extension
             </li>
           )}
-          {/* {props.chat_title && props.orderId && (
-            <UnstyledButton disabled={isFetching} clicked={exportChatHandler}>
+          {props.chat_title && props.orderId && props.type === "consultant" && (
+            <UnstyledButton
+              disabled={result.isFetching}
+              clicked={exportChatHandler}
+            >
               <li className="py-2 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
                 Export conversation
               </li>
             </UnstyledButton>
-          )} */}
+          )}
           {props.type === "user" && (
             <li
               onClick={props.openReportIssue}

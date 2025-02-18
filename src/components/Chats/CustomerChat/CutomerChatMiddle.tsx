@@ -34,6 +34,7 @@ import { useSetChatAsCompleteMutation } from "@/lib/features/consultants/dashboa
 import { useLazyFetchChatMessagesByAdminQuery } from "@/lib/features/admin/chats/chats";
 import { useSocket } from "@/components/Providers/SocketProviders";
 import { chat_socket, primary_socket } from "@/lib/socket";
+import AdminChatMenu from "../Menu/AdminChatMenu";
 
 export interface ChatPayload {
   text: string;
@@ -530,13 +531,7 @@ const CustomerChatMiddle = ({
                         }
                       >
                         {admin ? (
-                          <div className="">
-                            <ul className="px-1 text-gray-6 text-[0.88rem]">
-                              <li className="py-2 px-4 hover:bg-gray-bg-1 transition-all rounded-md">
-                                Re-open chat
-                              </li>
-                            </ul>
-                          </div>
+                          <AdminChatMenu orderId={orderId} chat_name={data?.chat_title} />
                         ) : (
                           <UserChatMenu
                             isTime={isTime}

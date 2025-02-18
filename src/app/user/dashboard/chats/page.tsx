@@ -3,7 +3,6 @@ import CustomerChatLeft, {
   IChatData,
 } from "@/components/Chats/CustomerChat/CustomerChatLeft";
 import CustomerChatRight from "@/components/Chats/CustomerChat/CustomerChatRight";
-// import CustomerChatMiddle from "@/components/Chats/CustomerChat/CutomerChatMiddle";
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import { useProtectRoute } from "@/hooks/useProtectRoute";
@@ -109,8 +108,8 @@ const ChatsPage = (props: Props) => {
   return (
     <ServiceLayout>
       <DashboardBodyLayout>
-        <div ref={ref} className="flex h-screen chatbp:h-[95vh]  max-h-[90rem]   bg-white">
-          <section className="mx-auto w-full  h-full chatbp:w-[30%]">
+        <div ref={ref} className="flex h-screen chatbp1:h-[95vh]  max-h-[90rem]   bg-white">
+          <section className="mx-auto w-full  h-full chatbp1:w-[30%]">
             <CustomerChatLeft
               data={chatData}
               isFetching={conversationsRes.isFetching}
@@ -120,7 +119,7 @@ const ChatsPage = (props: Props) => {
           <section
             className={`${
               closeRight ? "w-[70%]" : "w-[43%]"
-            } transition-all h-full hidden chatbp:block bg-white`}
+            } transition-all h-full hidden chatbp1:block bg-white`}
           >
             <CustomerChatMiddle
               refetch={() => {
@@ -144,7 +143,7 @@ const ChatsPage = (props: Props) => {
           <section
             className={`transition-all ${
               closeRight ? "w-[0%] invisible " : "w-[27%] visible ml-3  "
-            }  hidden chatbp:block `}
+            }  hidden chatbp1:block `}
           >
             <CustomerChatRight
               type="user"

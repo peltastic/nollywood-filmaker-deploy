@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from "react";
-import HamburgerIcon from "/public/assets/chats/hamburger.svg";
+import CancelImg from "/public/assets/cancel.svg";
 import Image from "next/image";
 import FileImg from "/public/assets/dashboard/file.svg";
 import DownloadImg from "/public/assets/chats/download-icon.svg";
@@ -270,7 +270,7 @@ const CustomerChatRight = ({
             onClick={close}
             className=" hover:bg-stroke-4 transition-all rounded-md cursor-pointer"
           >
-            <Image src={HamburgerIcon} alt="hamburger-icons" />
+            <Image src={CancelImg} alt="hamburger-icons" />
           </div>
         </header>
         <section>

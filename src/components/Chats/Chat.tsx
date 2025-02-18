@@ -98,7 +98,12 @@ const Chat = ({
   useEffect(() => {
     if (type === "admin") {
       setStatus(data.status);
-      setChatTimeStatus(moment(data.end_time).fromNow());
+      const now = new Date();
+      if (isBefore(now, data.start_time)) {
+        setStatus("pending");
+      } else {
+        setChatTimeStatus(moment(data.end_time).fromNow());
+      }
       return () => {};
     }
     let beforeTimeTimeout: NodeJS.Timeout | undefined;
@@ -152,7 +157,7 @@ const Chat = ({
         }}
         className={`${
           orderId === data.orderId ? "bg-[#615EF00F]" : ""
-        } hidden chatbp:flex rounded-md transition-all hover:bg-[#615EF00F] items-start py-4 mb-2 px-4 cursor-pointer `}
+        } hidden chatbp1:flex rounded-md transition-all hover:bg-[#615EF00F] items-start py-4 mb-2 px-4 cursor-pointer `}
       >
         <div className="w-[3rem] mr-3 h-[3rem] rounded-full bg-black flex items-center justify-center">
           <Image src={AdminProfileImg} alt="admin-alt-profile" />
@@ -162,6 +167,10 @@ const Chat = ({
             {truncateStr(data.name, 15)}
           </h1>
           <p className="text-black-3 text-[0.75rem]">{data.service}</p>
+
+          <div className="ml-auto font-semibold text-[#00000056] text-[0.88rem] block chatbp:hidden">
+            <p>{chatTimeStatus}</p>
+          </div>
           {newMessage ? (
             <div className="flex font-bold text-[0.88rem] items-center">
               <p className="mr-1">{truncateStr(newMessage, 25)}</p>
@@ -180,7 +189,7 @@ const Chat = ({
             </div>
           )}
         </div>
-        <div className="ml-auto font-semibold text-[#00000056] text-[0.88rem]">
+        <div className="ml-auto font-semibold text-[#00000056] text-[0.88rem] hidden chatbp:block">
           <p>{chatTimeStatus}</p>
         </div>
       </div>
@@ -194,14 +203,19 @@ const Chat = ({
             }`
           )
         }
-        className={` flex chatbp:hidden rounded-md items-start py-4 mb-2 px-4  `}
+        className={` flex chatbp1:hidden rounded-md items-start py-4 mb-2 px-4 active:bg-[#615EF00F] `}
       >
         <div className="w-[3rem] mr-3 h-[3rem] rounded-full bg-black flex items-center justify-center">
           <Image src={AdminProfileImg} alt="admin-alt-profile" />
         </div>
         <div className="">
-          <h1 className="font-semibold text-[0.88rem]">{data.name}</h1>
+          <h1 className="font-semibold text-[0.88rem]">
+            {truncateStr(data.name, 15)}
+          </h1>
           <p className="text-black-3 text-[0.75rem]">{data.service}</p>
+          <div className="ml-auto font-semibold text-[#00000056] text-[0.88rem] block chatbp:hidden">
+            <p>{chatTimeStatus}</p>
+          </div>
           {newMessage ? (
             <div className="flex text-[0.88rem] items-center">
               <p className="mr-1">{truncateStr(newMessage, 25)}</p>
@@ -220,7 +234,7 @@ const Chat = ({
             </div>
           )}
         </div>
-        <div className="ml-auto font-semibold text-[#00000056] text-[0.88rem]">
+        <div className="ml-auto font-semibold text-[#00000056] text-[0.88rem] hidden xs:block">
           <p>{chatTimeStatus}</p>
         </div>
       </div>

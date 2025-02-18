@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import CustomerChatRight from "@/components/Chats/CustomerChat/CustomerChatRight";
 import CustomerChatMiddle from "@/components/Chats/CustomerChat/CutomerChatMiddle";
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
@@ -8,12 +8,14 @@ import {
   useLazyGetConsultantChatFilesQuery,
 } from "@/lib/features/consultants/dashboard/chat/chat";
 import { useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 type Props = {};
 
 const ConsultantSingleChat = (props: Props) => {
   const [getChatFiles, res] = useLazyGetConsultantChatFilesQuery();
+
+  const ref = useRef<HTMLDivElement>(null);
   const [fetchConversationData, { isFetching, data }] =
     useLazyFetchSingleConversationDataQuery();
 
@@ -28,10 +30,21 @@ const ConsultantSingleChat = (props: Props) => {
       getChatFiles(params.id);
     }
   }, [params.id]);
+
+  useEffect(() => {
+    if (!ref.current) return () => {};
+
+    ref.current.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "center",
+    });
+  }, []);
   return (
     <ServiceLayout noNav>
       <DashboardBodyLayout>
         <div
+          ref={ref}
           className={`h-screen chatbp:h-[95vh] max-h-[90rem] bg-white w-full `}
         >
           <CustomerChatMiddle
@@ -75,7 +88,6 @@ const ConsultantSingleChat = (props: Props) => {
             res={res.data?.files}
             type="consultant"
             userProfilePic={data?.userinfo.profilepics}
-       
           />
         </section>
       </DashboardBodyLayout>

@@ -3,7 +3,7 @@ import type { Config } from "tailwindcss";
 const config: Config = {
   darkMode: ["class"],
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+  "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
@@ -16,6 +16,7 @@ const config: Config = {
         md: "768px",
         lg: "1024px",
         xl: "1200px",
+        chatbp1: "1100px",
         chatbp: "1300px",
         chatbp2: "1400px",
         xxl: "1680px",

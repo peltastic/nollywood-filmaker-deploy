@@ -51,7 +51,7 @@ const ChatForm = (props: Props) => {
               value={props.data.summary}
               labelStyle2
               className="h-[4rem] text-gray-6 text-[0.88rem] py-2 px-3"
-              label="Quick summary"
+              label="Detailed summary"
             />
           </div>
           <div className="mt-8">

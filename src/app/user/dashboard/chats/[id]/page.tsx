@@ -7,12 +7,14 @@ import { useProtectRoute } from "@/hooks/useProtectRoute";
 import { useLazyFetchSingleConversationDataQuery } from "@/lib/features/users/dashboard/chat/chat";
 import { useLazyGetChatFilesQuery } from "@/lib/features/users/services/chat/chat";
 import { useParams, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 type Props = {};
 
 const SingleChatPage = (props: Props) => {
   useProtectRoute();
+
+  const ref = useRef<HTMLDivElement>(null);
   const [getChatFiles, res] = useLazyGetChatFilesQuery();
   const [fetchConversationData, { isFetching, data }] =
     useLazyFetchSingleConversationDataQuery();
@@ -30,10 +32,21 @@ const SingleChatPage = (props: Props) => {
     }
   }, [params.id]);
 
+  useEffect(() => {
+    if (!ref.current) return () => {};
+
+    ref.current.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "center",
+    });
+  }, []);
+
   return (
     <ServiceLayout noNav>
       <DashboardBodyLayout>
         <div
+          ref={ref}
           className={`h-screen chatbp:h-[95vh] max-h-[90rem] bg-white w-full `}
         >
           <CustomerChatMiddle
