@@ -827,54 +827,58 @@ const ChatRoom = (props: Props) => {
                               <FileButtonComponent
                                 accept=""
                                 setFile={(file) => {
-                                  setFileType("file");
-                                  setFileInputValue(file);
                                   if (file) {
-                                    getBase64(file).then((res) => {
-                                      const id = uuidv4();
-                                      if (res) {
-                                        if (res && props.userData) {
-                                          const payload = {
-                                            fileData: res as string,
-                                            fileName: file.name,
-                                            room: props.orderId,
-                                            sender: {
-                                              type: fileType,
-                                              name: `${props.userData.fname} ${props.userData.lname}`,
-                                              role: props.type,
-                                              userid: props.userData.id,
-                                              chatRoomId: searchVal as string,
-                                              mid: id,
-                                              replyto: replyData.reply,
-                                              replytoId: replyData.id,
-                                              replytousertype: replyData.user,
-                                            },
-                                          };
-                                          if (socket) {
-                                            sendFileMessage(payload, socket);
-                                          }
+                                    if (file?.size > 4 * 1024 * 1024) {
+                                      notify("message", "Cannot send files more than 4mb")
+                                    } else {
+                                      setFileType("file");
+                                      setFileInputValue(file);
+                                      getBase64(file).then((res) => {
+                                        const id = uuidv4();
+                                        if (res) {
+                                          if (res && props.userData) {
+                                            const payload = {
+                                              fileData: res as string,
+                                              fileName: file.name,
+                                              room: props.orderId,
+                                              sender: {
+                                                type: fileType,
+                                                name: `${props.userData.fname} ${props.userData.lname}`,
+                                                role: props.type,
+                                                userid: props.userData.id,
+                                                chatRoomId: searchVal as string,
+                                                mid: id,
+                                                replyto: replyData.reply,
+                                                replytoId: replyData.id,
+                                                replytousertype: replyData.user,
+                                              },
+                                            };
+                                            if (socket) {
+                                              sendFileMessage(payload, socket);
+                                            }
 
-                                          props.updateChatHandlerProps({
-                                            text: file.name,
-                                            user: props.type,
-                                            id,
-                                            file: res as string,
-                                            filename: file.name,
-                                            type: fileType,
-                                            replyTo: replyData.reply,
-                                            replyToId: replyData.id,
-                                            replytousertype: replyData.user,
-                                          });
-                                          setFileInputValue(null);
-                                          setReplyData({
-                                            id: "",
-                                            reply: "",
-                                            user: null,
-                                          });
+                                            props.updateChatHandlerProps({
+                                              text: file.name,
+                                              user: props.type,
+                                              id,
+                                              file: res as string,
+                                              filename: file.name,
+                                              type: fileType,
+                                              replyTo: replyData.reply,
+                                              replyToId: replyData.id,
+                                              replytousertype: replyData.user,
+                                            });
+                                            setFileInputValue(null);
+                                            setReplyData({
+                                              id: "",
+                                              reply: "",
+                                              user: null,
+                                            });
+                                          }
+                                          // setBase64File(res as any);
                                         }
-                                        // setBase64File(res as any);
-                                      }
-                                    });
+                                      });
+                                    }
                                   }
                                 }}
                               >

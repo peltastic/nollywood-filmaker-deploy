@@ -45,7 +45,7 @@ const ConsultantSingleChat = (props: Props) => {
       <DashboardBodyLayout>
         <div
           ref={ref}
-          className={`h-[100dvh] chatbp:h-[95vh] max-h-[90rem] bg-white w-full `}
+          className={`h-[94vh] chatbp:h-[95vh] max-h-[90rem] bg-white w-full `}
         >
           <CustomerChatMiddle
             refetch={() => {
@@ -72,7 +72,7 @@ const ConsultantSingleChat = (props: Props) => {
           />
         </div>
         <section
-          className={`transition-all w-full h-full  fixed chatbp1:overflow-y-scroll chatbp1:min-h-screen top-0 left-0 bg-white ${
+          className={`transition-all w-full h-full  fixed chatbp1:overflow-y-scroll min-h-screen top-0 left-0 bg-white ${
             closeRight ? "translate-x-[100%]" : "translate-x-0 "
           } `}
         >
