@@ -210,7 +210,7 @@ const ConsultantChatMessage = ({
               : user === "user"
               ? "bg-admin-chat-bg text-black"
               : "bg-black-3 text-white mr-2"
-          } text-[0.8rem] sm:text-[0.95rem] py-3 px-3 rounded-xl max-w-[20rem] relative`}
+          } text-[0.8rem] sm:text-[0.95rem] py-3 px-3 rounded-xl max-w-[12rem] sm:max-w-[20rem] relative`}
         >
           {contextMenu.visible && activeId === id && (
             <div className="absolute bg-white text-black-3 w-[6rem] top-6 shadow-md z-10 px-1 text-[0.88rem] py-2 rounded-md">
