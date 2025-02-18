@@ -47,7 +47,7 @@ const SingleChatPage = (props: Props) => {
       <DashboardBodyLayout>
         <div
           ref={ref}
-          className={`h-[100svh] chatbp:h-[95vh] max-h-[90rem] bg-white w-full `}
+          className={`h-[100dvh] chatbp:h-[95vh] max-h-[90rem] bg-white w-full `}
         >
           <CustomerChatMiddle
             refetch={() => {
