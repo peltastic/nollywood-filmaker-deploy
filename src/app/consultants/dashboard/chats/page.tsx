@@ -110,7 +110,7 @@ const ConsultantChastPage = (props: Props) => {
   return (
     <ServiceLayout consultant>
       <DashboardBodyLayout>
-        <div ref={ref} className="flex h-[95vh] max-h-[90rem] bg-white">
+        <div ref={ref} className="flex h-screen chatbp1:h-[95vh] max-h-[90rem] bg-white">
           <section className="mx-auto w-full h-full  chatbp1:w-[30%]">
             <CustomerChatLeft
               type="consultant"
