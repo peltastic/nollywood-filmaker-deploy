@@ -28,7 +28,7 @@ export const authApi = createApi({
     }),
     loginAsFilmmaker: builder.mutation<
       {
-        token: string
+        token: string;
         crewCompany: {
           id: string;
         };
@@ -56,6 +56,15 @@ export const authApi = createApi({
         },
       }),
     }),
+    forgotPasswordConsultant: builder.mutation<unknown, string>({
+      query: (email) => ({
+        url: "/api/consultants/forgotpassword",
+        method: "POST",
+        body: {
+          email,
+        },
+      }),
+    }),
     resetPassword: builder.mutation<
       unknown,
       {
@@ -71,6 +80,21 @@ export const authApi = createApi({
         },
       }),
     }),
+    resetConsultantPassword: builder.mutation<
+      unknown,
+      {
+        token: string;
+        newPassword: string;
+      }
+    >({
+      query: ({ newPassword, token }) => ({
+        method: "POST",
+        url: `/api/consultants/resetpassword/${token}`,
+        body: {
+          newPassword
+        }
+      }),
+    }),
   }),
 });
 
@@ -81,4 +105,6 @@ export const {
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useLoginAsFilmmakerMutation,
+  useForgotPasswordConsultantMutation,
+  useResetConsultantPasswordMutation
 } = authApi;

@@ -39,7 +39,7 @@ const UpcomingConversations = ({ data }: Props) => {
         <h1 className="w-full mid:w-auto mr-auto font-bold text-black-8">
           Upcoming Conversations
         </h1>
-        <UnstyledButton clicked={() => router.push("/consultants/dashboard/calendar")} class="mb-8 sm:mb-0 mt-4 mid:mt-0 border border-black-3 text-[0.88rem] font-medium rounded-lg py-2 px-4">
+        <UnstyledButton clicked={() => router.push("/consultants/dashboard/calendar")} class="hover:bg-gray-bg-3 transition-all mb-8 sm:mb-0 mt-4 mid:mt-0 border border-black-3 text-[0.88rem] font-medium rounded-lg py-2 px-4">
           Go to Calendar
         </UnstyledButton>
       </div>

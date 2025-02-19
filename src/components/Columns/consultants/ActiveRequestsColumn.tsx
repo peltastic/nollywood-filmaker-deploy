@@ -12,6 +12,7 @@ import Link from "next/link";
 import { AspectRatio } from "@mantine/core";
 import GenerateDarkServiceLogo from "@/components/Generate/GenerateDarkServiceLogo";
 import { generateColorClass } from "@/utils/helperFunction";
+import { isAfter, isBefore } from "date-fns";
 
 export interface IConsultantActiveRequestColumnData {
   customer: string;
@@ -33,6 +34,8 @@ export interface IConsultantActiveRequestColumnData {
   type: "service" | "Chat";
   creation_date: string;
   admin?: boolean;
+  booktime?: string
+  endTime?: string;
 }
 
 export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequestColumnData>[] =
@@ -115,12 +118,23 @@ export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequ
       accessorKey: "status",
       header: "Status",
       cell: ({ row }) => {
+        const now = new Date();
+        let isBeforeStartime, isAfterEndTime;
+        if (row.original.booktime && row.original.endTime) {
+          isBeforeStartime = isBefore(now, row.original.booktime);
+          isAfterEndTime = isAfter(now, row.original.endTime);
+        }
+        const formatted_status = isBeforeStartime
+          ? "pending"
+          : isAfterEndTime
+          ? "completed"
+          : row.original.status.toLowerCase();
         const className =
-          row.original.status === "ready"
+          formatted_status === "ready"
             ? "bg-light-blue text-dark-blue"
-            : row.original.status === "completed"
+            : formatted_status === "completed"
             ? "bg-light-green text-dark-green"
-            : row.original.status === "pending"
+            : formatted_status === "pending"
             ? "bg-stroke-4 text-black-6"
             : "bg-light-yellow text-dark-yellow";
         return (
@@ -131,7 +145,7 @@ export const consultant_active_requests_columns: ColumnDef<IConsultantActiveRequ
               <span className="block pr-1">
                 <GoDotFill />
               </span>{" "}
-              {row.getValue("status")}
+              {formatted_status}
             </p>
           </div>
         );

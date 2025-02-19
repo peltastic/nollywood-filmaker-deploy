@@ -9,6 +9,7 @@ export interface IActiveRequestData {
   createdAt: string
   cid: string
   booktime?: string
+  endTime?: string
 }
 
 export interface IActiveRequestDataResposne {

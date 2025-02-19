@@ -16,9 +16,6 @@ const LoginPage = (props: Props) => {
           <h1 className="text-[1.75rem] font-bold">Consultant Portal</h1>
           <div className="text-black-2 mt-[6rem] sm:mt-[8rem]">
             <h1 className="font-bold text-[1.75rem]">Welcome Back</h1>
-            {/* <h2 className="text-[1.13rem]">
-              Lorem ipsum dolor sit amet consectetur adipisc.
-            </h2> */}
             <LoginForm loginType="consultant" forgotPasswordLink="/consultants/auth/forgot-password" successRoute="/consultants/dashboard" />
           </div>
         </div>

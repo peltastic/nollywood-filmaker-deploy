@@ -258,6 +258,8 @@ const DashboardPage = (props: Props) => {
               orderId: el.orderId,
               type: "Chat",
               creation_date: el.creationDate,
+              booktime: el.request.booktime,
+              endTime: el.request.endTime
             };
           });
         setActiveReqData(resData);

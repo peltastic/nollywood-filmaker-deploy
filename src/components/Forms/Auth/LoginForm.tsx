@@ -215,7 +215,9 @@ const LoginForm = (props: Props) => {
                 </p>
               </div>
             )}
-            {(props.loginType === "user" || props.loginType === "admin") && (
+            {props.loginType === "user" 
+            || props.loginType === "consultant"
+            && (
               <div className="flex items-center text-black-5 mt-6">
                 {/* <div className="mr-auto">
                   <CheckboxComponent

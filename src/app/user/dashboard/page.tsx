@@ -67,6 +67,7 @@ const DashboardHomePgae = (props: Props) => {
           chat_title: el.chat_title,
           orderId: el.orderId,
           booktime: el.booktime,
+          endTime: el.endTime,
           cid: el.cid,
           progress:
             el.stattusof === "completed"

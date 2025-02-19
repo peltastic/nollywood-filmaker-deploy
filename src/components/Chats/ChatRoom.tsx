@@ -63,7 +63,8 @@ export interface IChatMessagesData {
 const ChatRoom = (props: Props) => {
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { socket } = useSocket();
-  const ref = useRef<HTMLTextAreaElement>(null);
+  const ref = useRef<HTMLTextAreaElement | null>(null);
+  const mobileTextAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const [missedPongs, setMissedPongs] = useState(0);
   const [fileType, setFileType] = useState<"file" | "img">("file");
   const [istyping, setIsTyping] = useState<boolean>(false);
@@ -568,7 +569,14 @@ const ChatRoom = (props: Props) => {
   useEffect(() => {
     if (!ref.current) return () => {};
     if (replyData.reply) {
-      ref.current.focus();
+      ref.current?.focus();
+    }
+  }, [replyData.reply]);
+
+  useEffect(() => {
+    if (!mobileTextAreaRef.current) return () => {};
+    if (replyData.reply) {
+      mobileTextAreaRef.current.focus();
     }
   }, [replyData.reply]);
 
@@ -829,7 +837,10 @@ const ChatRoom = (props: Props) => {
                                 setFile={(file) => {
                                   if (file) {
                                     if (file?.size > 4 * 1024 * 1024) {
-                                      notify("message", "Cannot send files more than 4mb")
+                                      notify(
+                                        "message",
+                                        "Cannot send files more than 4mb"
+                                      );
                                     } else {
                                       setFileType("file");
                                       setFileInputValue(file);
@@ -940,7 +951,7 @@ const ChatRoom = (props: Props) => {
                       </div>
                       <div className="w-full relative block lg:hidden">
                         <Textarea
-                          ref={ref}
+                          ref={mobileTextAreaRef}
                           minRows={0}
                           autosize
                           size="md"

@@ -103,6 +103,8 @@ export interface IConsultantActiveReq {
   date: string;
   creationDate: string;
   request: {
+    booktime?: string
+    endTime?: string
     chat_title?: string;
     movie_title: string;
     nameofservice: "Chat With A Professional";

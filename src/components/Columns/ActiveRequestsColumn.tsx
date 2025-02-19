@@ -1,8 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { GoDotFill } from "react-icons/go";
-import CheckboxComponent from "../Checkbox/Checkbox";
-import Image from "next/image";
-import ReadMyScriptDarkImg from "/public/assets/services/read-my-script-dark.svg";
 import { Progress } from "@mantine/core";
 import MenuComponent from "../Menu/MenuComponent";
 import UnstyledButton from "../Button/UnstyledButton";
@@ -20,6 +17,7 @@ import moment from "moment";
 import SetChatDateByUser from "../ModalPages/SetChatDateByUser";
 import { useLazyFetchActiveRequestsQuery } from "@/lib/features/users/dashboard/requests/requests";
 import GenerateDarkServiceLogo from "../Generate/GenerateDarkServiceLogo";
+import { isAfter, isBefore } from "date-fns";
 
 export interface IActiveRequestColumnData {
   name: string;
@@ -38,6 +36,7 @@ export interface IActiveRequestColumnData {
   status: "ready" | "ongoing" | "completed" | "pending" | "awaiting";
   orderId: string;
   booktime?: string;
+  endTime?: string;
   cid: string;
 }
 
@@ -97,14 +96,25 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
+      const now = new Date();
+      let isBeforeStartime, isAfterEndTime;
+      if (row.original.booktime && row.original.endTime) {
+        isBeforeStartime = isBefore(now, row.original.booktime);
+        isAfterEndTime = isAfter(now, row.original.endTime);
+      }
+      const formatted_status = isBeforeStartime
+        ? "pending"
+        : isAfterEndTime
+        ? "completed"
+        : row.original.status.toLowerCase();
       const className =
-        row.original.status.toLowerCase() === "ready"
+        formatted_status === "ready"
           ? "bg-light-blue text-dark-blue"
-          : row.original.status.toLowerCase() === "completed"
+          : formatted_status === "completed"
           ? "bg-light-green text-dark-green"
-          : row.original.status === "pending"
+          : formatted_status === "pending"
           ? "bg-stroke-4 text-black-6"
-          : row.original.status === "awaiting"
+          : formatted_status === "awaiting"
           ? "bg-light-awaiting text-dark-awaiting"
           : "bg-light-yellow text-dark-yellow";
       return (
@@ -115,7 +125,7 @@ export const active_requests_columns: ColumnDef<IActiveRequestColumnData>[] = [
             <span className="block pr-1">
               <GoDotFill />
             </span>{" "}
-            {row.getValue("status")}
+            {formatted_status}
           </p>
         </div>
       );
