@@ -40,6 +40,18 @@ import { ICompanyFilmmakerDatabaseColumnData } from "../Columns/admin/CompanyFil
 import { notify } from "@/utils/notification";
 import { useSocket } from "../Providers/SocketProviders";
 
+export interface IReplyDataInfo {
+  user: "admin" | "user" | "consultant" | null;
+  reply: string;
+  id: string;
+  type: "text" | "file" | "img" | "typing" | "contacts";
+  contacts?: {
+    photourl?: string;
+    name?: string;
+    type?: string;
+  };
+}
+
 type Props = {
   type: "user" | "consultant" | "admin";
   orderId: string;
@@ -69,49 +81,13 @@ const ChatRoom = (props: Props) => {
   const [fileType, setFileType] = useState<"file" | "img">("file");
   const [istyping, setIsTyping] = useState<boolean>(false);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [replyData, setReplyData] = useState<{
-    user: "admin" | "user" | "consultant" | null;
-    reply: string;
-    id: string;
-  }>({
+  const [replyData, setReplyData] = useState<IReplyDataInfo>({
     user: null,
     reply: "",
     id: "",
+    type: "text",
   });
 
-  const messageQueueRef = useRef<
-    {
-      room: string;
-      message: string;
-      sender: {
-        type: "text";
-        userid: string;
-        name: string;
-        role: "user" | "consultant" | "admin";
-        chatRoomId: string;
-        replyto: string;
-        replytoId: string;
-        mid: string;
-        replytousertype: "user" | "consultant" | "admin" | null;
-      };
-    }[]
-  >([]);
-
-  const fileQueueRef = useRef<
-    {
-      room: string;
-      fileData: string | ArrayBuffer;
-      fileName: string;
-      sender: {
-        type: "img" | "file";
-        userid: string;
-        name: string;
-        role: "user" | "consultant" | "admin";
-        chatRoomId: string;
-        mid: string;
-      };
-    }[]
-  >([]);
   const [fileInputValue, setFileInputValue] = useState<File | null>(null);
   const [base64File, setBase64File] = useState<string | ArrayBuffer | null>(
     null
@@ -179,7 +155,9 @@ const ChatRoom = (props: Props) => {
         message: "contacts",
         room: props.orderId,
         sender: {
-          replyto: replyData.reply,
+          replyto: replyData.contacts
+            ? JSON.stringify(replyData.contacts)
+            : replyData.reply,
           replytoId: replyData.id,
           mid: id,
           replytousertype: replyData.user,
@@ -187,6 +165,7 @@ const ChatRoom = (props: Props) => {
           role: props.type,
           type: "contacts",
           userid: props.userData.id,
+          replytochattype: replyData.type,
           name: `${props.userData.fname} ${props.userData.lname}`,
           recommendations: data.map((el) => {
             return {
@@ -209,9 +188,12 @@ const ChatRoom = (props: Props) => {
           file: "",
           filename: "",
           type: "contacts",
-          replyTo: replyData.reply,
+          replyTo: replyData.contacts
+            ? JSON.stringify(replyData.contacts)
+            : replyData.reply,
           replyToId: replyData.id,
           replytousertype: replyData.user,
+          replytochattype: replyData.type,
           recommendations: {
             name: el.name,
             propic: el.propic,
@@ -220,6 +202,12 @@ const ChatRoom = (props: Props) => {
           },
         });
       }
+      setReplyData({
+        id: "",
+        reply: "",
+        user: null,
+        type: "text",
+      });
     }
   };
   const sendCompanyContactMessage = (
@@ -231,7 +219,9 @@ const ChatRoom = (props: Props) => {
         message: "contacts",
         room: props.orderId,
         sender: {
-          replyto: replyData.reply,
+          replyto: replyData.contacts
+            ? JSON.stringify(replyData.contacts)
+            : replyData.reply,
           replytoId: replyData.id,
           mid: id,
           replytousertype: replyData.user,
@@ -239,6 +229,7 @@ const ChatRoom = (props: Props) => {
           role: props.type,
           type: "contacts",
           userid: props.userData.id,
+          replytochattype: replyData.type,
           name: `${props.userData.fname} ${props.userData.lname}`,
           recommendations: data.map((el) => {
             return {
@@ -261,7 +252,10 @@ const ChatRoom = (props: Props) => {
           file: "",
           filename: "",
           type: "contacts",
-          replyTo: replyData.reply,
+          replyTo: replyData.contacts
+            ? JSON.stringify(replyData.contacts)
+            : replyData.reply,
+          replytochattype: replyData.type,
           replyToId: replyData.id,
           replytousertype: replyData.user,
           recommendations: {
@@ -272,6 +266,12 @@ const ChatRoom = (props: Props) => {
           },
         });
       }
+      setReplyData({
+        id: "",
+        reply: "",
+        user: null,
+        type: "text",
+      });
     }
   };
   const sendMessageHandler = () => {
@@ -289,9 +289,12 @@ const ChatRoom = (props: Props) => {
           role: props.type,
           userid: props.userData.id,
           chatRoomId: props.orderId,
-          replyto: replyData.reply,
+          replyto: replyData.contacts
+            ? JSON.stringify(replyData.contacts)
+            : replyData.reply,
           replytoId: replyData.id,
           mid: id,
+          replytochattype: replyData.type,
           replytousertype: replyData.user,
         },
       };
@@ -310,7 +313,10 @@ const ChatRoom = (props: Props) => {
         file: "",
         filename: "",
         type: "text",
-        replyTo: replyData.reply,
+        replytochattype: replyData.type,
+        replyTo: replyData.contacts
+          ? JSON.stringify(replyData.contacts)
+          : replyData.reply,
         replyToId: replyData.id,
         replytousertype: replyData.user,
       });
@@ -319,6 +325,7 @@ const ChatRoom = (props: Props) => {
         id: "",
         reply: "",
         user: null,
+        type: "text",
       });
     }
   };
@@ -380,6 +387,7 @@ const ChatRoom = (props: Props) => {
           mid: string;
           type: string;
           replytousertype?: "user" | "consultant" | "admin" | null;
+          replytochattype: "text" | "file" | "img" | "typing" | "contacts";
           recommendations: {
             type: "crew" | "company";
             name: string;
@@ -407,6 +415,7 @@ const ChatRoom = (props: Props) => {
                   replyTo: data.sender.replyto,
                   replyToId: data.sender.replytoId,
                   replytousertype: data.sender.replytousertype,
+                  replytochattype: data.sender.replytochattype,
                   recommendations: {
                     name: el.name,
                     propic: el.propic,
@@ -426,6 +435,7 @@ const ChatRoom = (props: Props) => {
                 replyTo: data.sender.replyto,
                 replyToId: data.sender.replytoId,
                 replytousertype: data.sender.replytousertype,
+                replytochattype: data.sender.replytochattype,
               });
             }
           }
@@ -466,8 +476,11 @@ const ChatRoom = (props: Props) => {
           replyto: string;
           replytoId: string;
           replytousertype?: "user" | "consultant" | "admin" | null;
+
+          replytochattype: "text" | "file" | "img" | "typing" | "contacts";
         };
       }) => {
+        console.log(data);
         props.refetch();
         if (props.userData?.id === data.sender.userid) {
         } else {
@@ -482,6 +495,7 @@ const ChatRoom = (props: Props) => {
               replyTo: data.sender.replyto,
               replyToId: data.sender.replytoId,
               replytousertype: data.sender.replytousertype,
+              replytochattype: data.sender.replytochattype,
             });
           }
         }
@@ -649,12 +663,12 @@ const ChatRoom = (props: Props) => {
                       setActiveId={
                         props.isTime ? setActiveIdHandler : undefined
                       }
-                      // setActiveId={setActiveIdHandler}
                       id={el.id}
                       activeId={activeId}
                       setReplyDataProps={(val) => setReplyData(val)}
                       repliedText={el.replyTo}
                       repliedTextId={el.replyToId}
+                      replytochattype={el.replytochattype}
                       selectedRepliedToMessageId={selectedRepliedToMessageId}
                       setSelectedRepliedToMessageId={(val) =>
                         setSelectedRepliedToMessageId(val)
@@ -686,6 +700,7 @@ const ChatRoom = (props: Props) => {
                       repliedText={el.replyTo}
                       repliedTextId={el.replyToId}
                       repliedToUser={el.replytousertype}
+                      replytochattype={el.replytochattype}
                       selectedRepliedToMessageId={selectedRepliedToMessageId}
                       setSelectedRepliedToMessageId={(val) =>
                         setSelectedRepliedToMessageId(val)
@@ -731,6 +746,7 @@ const ChatRoom = (props: Props) => {
                 reply: "",
                 user: null,
                 id: "",
+                type: "text",
               })
             }
             type={props.type}
@@ -778,18 +794,17 @@ const ChatRoom = (props: Props) => {
                                   userid: props.userData.id,
                                   chatRoomId: props.orderId,
                                   mid: id,
-                                  replyto: replyData.reply,
+                                  replyto: replyData.contacts
+                                    ? JSON.stringify(replyData.contacts)
+                                    : replyData.reply,
                                   replytoId: replyData.id,
                                   replytousertype: replyData.user,
+                                  replytochattype: replyData.type,
                                 },
                               };
-                              // if (chat_socket.connected) {
                               if (socket) {
                                 sendFileMessage(payload, socket);
                               }
-                              // } else {
-                              //   fileQueueRef.current.push(payload);
-                              // }
                               props.updateChatHandlerProps({
                                 text: fileInputValue.name,
                                 user: props.type,
@@ -797,7 +812,9 @@ const ChatRoom = (props: Props) => {
                                 file: base64File as string,
                                 filename: fileInputValue.name,
                                 type: fileType,
-                                replyTo: replyData.reply,
+                                replyTo: replyData.contacts
+                                  ? JSON.stringify(replyData.contacts)
+                                  : replyData.reply,
                                 replyToId: replyData.id,
                                 replytousertype: replyData.user,
                               });
@@ -806,6 +823,7 @@ const ChatRoom = (props: Props) => {
                                 id: "",
                                 reply: "",
                                 user: null,
+                                type: "text",
                               });
                             }
                           }}
@@ -859,9 +877,14 @@ const ChatRoom = (props: Props) => {
                                                 userid: props.userData.id,
                                                 chatRoomId: searchVal as string,
                                                 mid: id,
-                                                replyto: replyData.reply,
+                                                replyto: replyData.contacts
+                                                  ? JSON.stringify(
+                                                      replyData.contacts
+                                                    )
+                                                  : replyData.reply,
                                                 replytoId: replyData.id,
                                                 replytousertype: replyData.user,
+                                                replytochattype: replyData.type,
                                               },
                                             };
                                             if (socket) {
@@ -875,15 +898,21 @@ const ChatRoom = (props: Props) => {
                                               file: res as string,
                                               filename: file.name,
                                               type: fileType,
-                                              replyTo: replyData.reply,
+                                              replyTo: replyData.contacts
+                                                ? JSON.stringify(
+                                                    replyData.contacts
+                                                  )
+                                                : replyData.reply,
                                               replyToId: replyData.id,
                                               replytousertype: replyData.user,
+                                              replytochattype: replyData.type,
                                             });
                                             setFileInputValue(null);
                                             setReplyData({
                                               id: "",
                                               reply: "",
                                               user: null,
+                                              type: "text",
                                             });
                                           }
                                           // setBase64File(res as any);
@@ -987,3 +1016,37 @@ const ChatRoom = (props: Props) => {
 };
 
 export default ChatRoom;
+
+// const messageQueueRef = useRef<
+// {
+//   room: string;
+//   message: string;
+//   sender: {
+//     type: "text";
+//     userid: string;
+//     name: string;
+//     role: "user" | "consultant" | "admin";
+//     chatRoomId: string;
+//     replyto: string;
+//     replytoId: string;
+//     mid: string;
+//     replytousertype: "user" | "consultant" | "admin" | null;
+//   };
+// }[]
+// >([]);
+
+// const fileQueueRef = useRef<
+// {
+//   room: string;
+//   fileData: string | ArrayBuffer;
+//   fileName: string;
+//   sender: {
+//     type: "img" | "file";
+//     userid: string;
+//     name: string;
+//     role: "user" | "consultant" | "admin";
+//     chatRoomId: string;
+//     mid: string;
+//   };
+// }[]
+// >([]);

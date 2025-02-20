@@ -9,6 +9,7 @@ import TypingLottie from "@/components/Lottie/typing.json";
 import Linkify from "../Linkify/Linkify";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { IReplyDataInfo } from "./ChatRoom";
 
 type Props = {
   text: string;
@@ -23,11 +24,7 @@ type Props = {
   id?: string;
   setActiveId?: (id?: string) => void;
   activeId?: string | null;
-  setReplyDataProps?: (data: {
-    user: "admin" | "user" | "consultant" | null;
-    reply: string;
-    id: string;
-  }) => void;
+  setReplyDataProps?: (data: IReplyDataInfo) => void;
   recommendations?: {
     type: "crew" | "company";
     name: string;
@@ -37,6 +34,7 @@ type Props = {
   repliedText?: string;
   repliedTextId?: string;
   repliedToUser?: "admin" | "user" | "consultant" | null;
+  replytochattype?: "text" | "file" | "img" | "typing" | "contacts";
   selectedRepliedToMessageId?: string;
   setSelectedRepliedToMessageId?: (val: string) => void;
 };
@@ -61,6 +59,7 @@ const ConsultantChatMessage = ({
   setSelectedRepliedToMessageId,
   repliedToUser,
   recommendations,
+  replytochattype,
 }: Props) => {
   const [temporarySelectedHighlight, setTemporarySelectedHighlight] =
     useState<string>("transparent");
@@ -77,7 +76,11 @@ const ConsultantChatMessage = ({
   });
   const noPfpRow = prevUser === user;
   const ref = useRef<HTMLDivElement>(null);
-
+  // console.log(JSON.parse(repliedText || ""))
+  const contactsReplyData =
+    replytochattype === "contacts" && repliedText !== "contacts" && repliedText
+      ? JSON.parse(repliedText)
+      : null;
   useEffect(() => {
     if (!ref.current) return () => {};
     if (lastmessage) {
@@ -149,6 +152,8 @@ const ConsultantChatMessage = ({
                 reply: text,
                 user,
                 id,
+
+                type: type === "text" || type === "file" ? "text" : type,
               });
             // onReply(text);
           }
@@ -216,15 +221,32 @@ const ConsultantChatMessage = ({
             <div className="absolute bg-white text-black-3 w-[6rem] top-6 shadow-md z-10 px-1 text-[0.88rem] py-2 rounded-md">
               <ul className="">
                 <li
-                  onClick={() =>
-                    setReplyDataProps &&
-                    id &&
-                    setReplyDataProps({
-                      reply: text,
-                      user,
-                      id,
-                    })
-                  }
+                  onClick={() => {
+                    if (id && setReplyDataProps) {
+                      if (type === "contacts") {
+                        setReplyDataProps({
+                          reply: text,
+                          user,
+                          id,
+                          type: "contacts",
+                          contacts: {
+                            name: recommendations?.name,
+                            photourl: recommendations?.propic,
+                            type: recommendations?.type,
+                          },
+                        });
+                      } else {
+                        setReplyDataProps({
+                          reply: text,
+                          user,
+                          id,
+
+                          type:
+                            type === "text" || type === "file" ? "text" : type,
+                        });
+                      }
+                    }
+                  }}
                   className="px-3 py-1 cursor-pointer hover:bg-gray-bg-2"
                 >
                   Reply
@@ -248,7 +270,35 @@ const ConsultantChatMessage = ({
               } border-l-4`}
             >
               <p>{repliedToUser === "consultant" ? "You" : "Customer"}</p>
-              <p>{repliedText}</p>
+              {contactsReplyData ? (
+                <div className="flex items-center mt-2">
+                  <div className="h-[2.5rem] w-[2.5rem] mr-3">
+                    {contactsReplyData.photourl && (
+                      <AspectRatio ratio={1800 / 1800}>
+                        <Image
+                          src={contactsReplyData.photourl}
+                          alt="propic"
+                          width={100}
+                          height={100}
+                          className="rounded-full  h-full w-full"
+                        />
+                      </AspectRatio>
+                    )}
+                  </div>
+                  <div className="">
+                    {contactsReplyData.name && (
+                      <p className="">{contactsReplyData.name}</p>
+                    )}
+                    {contactsReplyData.type && (
+                      <p className="font-semibold">
+                        Film {contactsReplyData.type}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <p>{repliedText}</p>
+              )}
             </div>
           )}
           <div className="break-words">

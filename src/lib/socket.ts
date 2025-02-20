@@ -22,6 +22,7 @@ export interface IContactMessagePayload {
     replyto: string;
     replytoId: string;
     replytousertype: "user" | "consultant" | "admin" | null;
+    replytochattype: "text" | "file" | "img" | "typing" | "contacts";
     recommendations: {
       type: "crew" | "company";
       name: string;
@@ -44,6 +45,7 @@ export interface IChatMessagePayload {
     replyto: string;
     replytoId: string;
     replytousertype: "user" | "consultant" | "admin" | null;
+    replytochattype: "text" | "file" | "img" | "typing" | "contacts";
   };
 }
 
@@ -85,6 +87,7 @@ export function sendFileMessage(
       replyto: string;
       replytoId: string;
       replytousertype: "user" | "consultant" | "admin" | null;
+      replytochattype: "text" | "file" | "img" | "typing" | "contacts";
     };
   },
   socket: Socket

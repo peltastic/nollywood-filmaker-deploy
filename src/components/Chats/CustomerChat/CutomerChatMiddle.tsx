@@ -46,6 +46,7 @@ export interface ChatPayload {
   replyTo?: string;
   replyToId?: string;
   replytousertype?: "user" | "consultant" | "admin" | null;
+  replytochattype?: "text" | "file" | "img" | "typing" | "contacts";
   recommendations?: {
     type: "crew" | "company";
     name: string;
@@ -212,6 +213,7 @@ const CustomerChatMiddle = ({
               replyToId: el.replytoId,
               replytousertype: el.replytousertype,
               recommendations: val,
+              replytochattype: el.replytochattype
             });
           }
         } else {
@@ -225,6 +227,7 @@ const CustomerChatMiddle = ({
             replyTo: el.replyto,
             replyToId: el.replytoId,
             replytousertype: el.replytousertype,
+            replytochattype: el.replytochattype
             // recommendations: [],
           });
         }
@@ -246,8 +249,6 @@ const CustomerChatMiddle = ({
     }
   }, [result.data]);
 
-  useEffect(() => {}, []);
-
   useEffect(() => {
     if (consultantRes.data) {
       const chat_data: ChatPayload[] = [];
@@ -264,6 +265,7 @@ const CustomerChatMiddle = ({
               replyTo: el.replyto,
               replyToId: el.replytoId,
               replytousertype: el.replytousertype,
+              replytochattype: el.replytochattype,
               recommendations: val,
             });
           }
@@ -278,6 +280,7 @@ const CustomerChatMiddle = ({
             replyTo: el.replyto,
             replyToId: el.replytoId,
             replytousertype: el.replytousertype,
+            replytochattype: el.replytochattype
             // recommendations: [],
           });
         }
@@ -314,6 +317,7 @@ const CustomerChatMiddle = ({
               replyTo: el.replyto,
               replyToId: el.replytoId,
               replytousertype: el.replytousertype,
+              replytochattype: el.replytochattype,
               recommendations: val,
             });
           }
@@ -328,6 +332,7 @@ const CustomerChatMiddle = ({
             replyTo: el.replyto,
             replyToId: el.replytoId,
             replytousertype: el.replytousertype,
+            replytochattype: el.replytochattype
             // recommendations: [],
           });
         }
@@ -491,14 +496,14 @@ const CustomerChatMiddle = ({
             </p>
           </div>
         ) : (
-          <div className="h-full">
+          <>
             {isFetching ? (
               <div className="w-[2rem] sm:w-[5rem] absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2">
                 <Spinner dark />
               </div>
             ) : (
               <>
-                <header className="flex items-center py-[1.4rem] px-2 sm:px-6 border-b border-b-stroke-8 h-[13%] max-h-[8rem]">
+                <header className="flex items-center py-[1.4rem] px-2 sm:px-6 border-b border-b-stroke-8 h-[13%] max-h-[8rem]  bg-white">
                   <div
                     className="block chatbp:hidden"
                     onClick={() => router.back()}
@@ -567,7 +572,7 @@ const CustomerChatMiddle = ({
                   </div>
                 </header>
 
-                <div className="h-[87%] bg-white ">
+                <div className="h-[87%] bg-white">
                   {data && (isTime || sessionOver) ? (
                     <ChatRoom
                       refreshChat={() => {
@@ -606,7 +611,7 @@ const CustomerChatMiddle = ({
                 </div>
               </>
             )}
-          </div>
+          </>
         )}
       </div>
     </>

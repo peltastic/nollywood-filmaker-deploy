@@ -48,6 +48,7 @@ export interface IChatMessages {
   replyto?: string;
   replytoId?: string;
   replytousertype?: "user" | "consultant" | "admin" | null;
+  replytochattype?: "text" | "file" | "img" | "typing" | "contacts";
   mid: string;
   recommendations: {
     type: "crew" | "company";
