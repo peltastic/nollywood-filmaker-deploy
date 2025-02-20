@@ -39,6 +39,7 @@ import { ICrewFilmmakerDatabaseColumnData } from "../Columns/admin/CrewFilmmaker
 import { ICompanyFilmmakerDatabaseColumnData } from "../Columns/admin/CompanyFilmmakerDatabaseColumn";
 import { notify } from "@/utils/notification";
 import { useSocket } from "../Providers/SocketProviders";
+import { FaImage } from "react-icons/fa6";
 
 export interface IReplyDataInfo {
   user: "admin" | "user" | "consultant" | null;
@@ -74,6 +75,7 @@ export interface IChatMessagesData {
 
 const ChatRoom = (props: Props) => {
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const spanRef = useRef<HTMLSpanElement | null>(null);
   const { socket } = useSocket();
   const ref = useRef<HTMLTextAreaElement | null>(null);
   const mobileTextAreaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -476,11 +478,10 @@ const ChatRoom = (props: Props) => {
           replyto: string;
           replytoId: string;
           replytousertype?: "user" | "consultant" | "admin" | null;
-
+          type: "text" | "file" | "img" | "typing" | "contacts";
           replytochattype: "text" | "file" | "img" | "typing" | "contacts";
         };
       }) => {
-        console.log(data);
         props.refetch();
         if (props.userData?.id === data.sender.userid) {
         } else {
@@ -489,7 +490,7 @@ const ChatRoom = (props: Props) => {
               text: data.fileName,
               user: data.sender.role,
               id: data.sender.mid,
-              type: "file",
+              type: data.sender.type,
               file: data.fileUrl,
               filename: data.fileName,
               replyTo: data.sender.replyto,
@@ -593,6 +594,16 @@ const ChatRoom = (props: Props) => {
       mobileTextAreaRef.current.focus();
     }
   }, [replyData.reply]);
+  useEffect(() => {
+    if (!spanRef.current) return;
+    if (props.data) {
+      spanRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "end",
+      });
+    }
+  }, props.data);
 
   const handleTextAreaInputChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -616,6 +627,62 @@ const ChatRoom = (props: Props) => {
   );
 
   const [databaseOpened, database] = useDisclosure();
+  const sendFileMessageHandler = (file: File, type: "img" | "file") => {
+    setFileType("file");
+    setFileInputValue(file);
+    getBase64(file).then((res) => {
+      const id = uuidv4();
+      if (res) {
+        if (res && props.userData) {
+          const payload = {
+            fileData: res as string,
+            fileName: file.name,
+            room: props.orderId,
+            sender: {
+              type: type,
+              name: `${props.userData.fname} ${props.userData.lname}`,
+              role: props.type,
+              userid: props.userData.id,
+              chatRoomId: searchVal as string,
+              mid: id,
+              replyto: replyData.contacts
+                ? JSON.stringify(replyData.contacts)
+                : replyData.reply,
+              replytoId: replyData.id,
+              replytousertype: replyData.user,
+              replytochattype: replyData.type,
+            },
+          };
+          if (socket) {
+            sendFileMessage(payload, socket);
+          }
+
+          props.updateChatHandlerProps({
+            text: file.name,
+            user: props.type,
+            id,
+            file: res as string,
+            filename: file.name,
+            type: type,
+            replyTo: replyData.contacts
+              ? JSON.stringify(replyData.contacts)
+              : replyData.reply,
+            replyToId: replyData.id,
+            replytousertype: replyData.user,
+            replytochattype: replyData.type,
+          });
+          setFileInputValue(null);
+          setReplyData({
+            id: "",
+            reply: "",
+            user: null,
+            type: "text",
+          });
+        }
+        // setBase64File(res as any);
+      }
+    });
+  };
 
   return (
     <>
@@ -709,6 +776,7 @@ const ChatRoom = (props: Props) => {
                   )}
                 </div>
               ))}
+              {/* <span ref={spanRef}>dshksh</span> */}
             </>
           )}
           {istyping && (
@@ -754,87 +822,15 @@ const ChatRoom = (props: Props) => {
           />
         )}
         {props.type === "admin" ? null : (
-          <div className="chatbp1:h-[10%] absolute bottom-10 w-full chatbp1:relative ">
+          <div className="h-[10%] relative ">
             {props.sessionOver ? (
               <div className="absolute bottom-0 w-[90%] xs:w-[93%] sm:w-[95%]   flex items-center text-[0.88rem] bg-gray-bg-7 border mx-4 mt-8 py-2 rounded-md px-4 border-border-gray">
                 <MdInfoOutline className="text-gray-4 mr-4 text-xl " />
                 <p className="text-gray-4">This conversation has ended</p>
               </div>
             ) : props.isTime ? (
-              <div className="chatbp1:h-full ">
+              <div className="h-full ">
                 <div className="w-full   px-6  absolute bottom-0 mt-5">
-                  {fileInputValue && (
-                    <div className=" flex items-center mb-6 bg-white shadow-[rgba(0,0,10,0.1)_2px_2px_2px_4px] ml-10 w-fit py-4 px-6 rounded-md">
-                      <div
-                        className=""
-                        onClick={() => {
-                          setFileInputValue(null);
-                          setBase64File(null);
-                        }}
-                      >
-                        <MdCancel className="text-2xl text-red-1 mr-2 cursor-pointer" />
-                      </div>
-                      <div className="max-w-[30rem] flex items-center break-words  border w-fit py-3 px-2 text-white rounded-md bg-black-2 ">
-                        <FaFile className="mr-4" />
-                        <p>{fileInputValue.name}</p>
-                      </div>
-                      <div className="ml-2">
-                        <UnstyledButton
-                          clicked={() => {
-                            const id = uuidv4();
-                            if (base64File && props.userData) {
-                              const payload = {
-                                fileData: base64File,
-                                fileName: fileInputValue.name,
-                                room: props.orderId,
-                                sender: {
-                                  type: fileType,
-                                  name: `${props.userData.fname} ${props.userData.lname}`,
-                                  role: props.type,
-                                  userid: props.userData.id,
-                                  chatRoomId: props.orderId,
-                                  mid: id,
-                                  replyto: replyData.contacts
-                                    ? JSON.stringify(replyData.contacts)
-                                    : replyData.reply,
-                                  replytoId: replyData.id,
-                                  replytousertype: replyData.user,
-                                  replytochattype: replyData.type,
-                                },
-                              };
-                              if (socket) {
-                                sendFileMessage(payload, socket);
-                              }
-                              props.updateChatHandlerProps({
-                                text: fileInputValue.name,
-                                user: props.type,
-                                id,
-                                file: base64File as string,
-                                filename: fileInputValue.name,
-                                type: fileType,
-                                replyTo: replyData.contacts
-                                  ? JSON.stringify(replyData.contacts)
-                                  : replyData.reply,
-                                replyToId: replyData.id,
-                                replytousertype: replyData.user,
-                              });
-                              setFileInputValue(null);
-                              setReplyData({
-                                id: "",
-                                reply: "",
-                                user: null,
-                                type: "text",
-                              });
-                            }
-                          }}
-                          class="flex hover:bg-blue-1 transition-all items-center bg-black-2 text-white py-2 px-4 rounded-md"
-                        >
-                          <p className="mr-2">Send</p>
-                          <RiSendPlane2Line className=" text-xl" />
-                        </UnstyledButton>
-                      </div>
-                    </div>
-                  )}
                   <div className="flex items-center">
                     <MenuComponent
                       position="top-start"
@@ -860,65 +856,8 @@ const ChatRoom = (props: Props) => {
                                         "Cannot send files more than 4mb"
                                       );
                                     } else {
-                                      setFileType("file");
-                                      setFileInputValue(file);
-                                      getBase64(file).then((res) => {
-                                        const id = uuidv4();
-                                        if (res) {
-                                          if (res && props.userData) {
-                                            const payload = {
-                                              fileData: res as string,
-                                              fileName: file.name,
-                                              room: props.orderId,
-                                              sender: {
-                                                type: fileType,
-                                                name: `${props.userData.fname} ${props.userData.lname}`,
-                                                role: props.type,
-                                                userid: props.userData.id,
-                                                chatRoomId: searchVal as string,
-                                                mid: id,
-                                                replyto: replyData.contacts
-                                                  ? JSON.stringify(
-                                                      replyData.contacts
-                                                    )
-                                                  : replyData.reply,
-                                                replytoId: replyData.id,
-                                                replytousertype: replyData.user,
-                                                replytochattype: replyData.type,
-                                              },
-                                            };
-                                            if (socket) {
-                                              sendFileMessage(payload, socket);
-                                            }
-
-                                            props.updateChatHandlerProps({
-                                              text: file.name,
-                                              user: props.type,
-                                              id,
-                                              file: res as string,
-                                              filename: file.name,
-                                              type: fileType,
-                                              replyTo: replyData.contacts
-                                                ? JSON.stringify(
-                                                    replyData.contacts
-                                                  )
-                                                : replyData.reply,
-                                              replyToId: replyData.id,
-                                              replytousertype: replyData.user,
-                                              replytochattype: replyData.type,
-                                            });
-                                            setFileInputValue(null);
-                                            setReplyData({
-                                              id: "",
-                                              reply: "",
-                                              user: null,
-                                              type: "text",
-                                            });
-                                          }
-                                          // setBase64File(res as any);
-                                        }
-                                      });
                                     }
+                                    sendFileMessageHandler(file, "file");
                                   }
                                 }}
                               >
@@ -969,6 +908,25 @@ const ChatRoom = (props: Props) => {
                           }}
                         />
                         <div className=" flex items-center absolute right-6 -translate-y-1/2 top-1/2">
+                          <FileButtonComponent
+                            accept="image/*"
+                            setFile={(file) => {
+                              if (file) {
+                                if (file?.size > 4 * 1024 * 1024) {
+                                  notify(
+                                    "message",
+                                    "Cannot send files more than 4mb"
+                                  );
+                                } else {
+                                }
+                                sendFileMessageHandler(file, "img");
+                              }
+                            }}
+                          >
+                            <button className="mr-4 text-xl">
+                              <FaImage />
+                            </button>
+                          </FileButtonComponent>
                           <button
                             onClick={sendMessageHandler}
                             disabled={!inputValue}
@@ -992,6 +950,25 @@ const ChatRoom = (props: Props) => {
                           }}
                         />
                         <div className=" flex items-center absolute right-6 -translate-y-1/2 top-1/2">
+                          <FileButtonComponent
+                            accept="image/*"
+                            setFile={(file) => {
+                              if (file) {
+                                if (file?.size > 4 * 1024 * 1024) {
+                                  notify(
+                                    "message",
+                                    "Cannot send files more than 4mb"
+                                  );
+                                } else {
+                                }
+                                sendFileMessageHandler(file, "img");
+                              }
+                            }}
+                          >
+                            <button className="mr-4 text-xl mt-1">
+                              <FaImage />
+                            </button>
+                          </FileButtonComponent>
                           <button
                             onClick={sendMessageHandler}
                             disabled={!inputValue}
@@ -1050,3 +1027,76 @@ export default ChatRoom;
 //   };
 // }[]
 // >([]);
+
+// {fileInputValue && (
+//   <div className=" flex items-center mb-6 bg-white shadow-[rgba(0,0,10,0.1)_2px_2px_2px_4px] ml-10 w-fit py-4 px-6 rounded-md">
+//     <div
+//       className=""
+//       onClick={() => {
+//         setFileInputValue(null);
+//         setBase64File(null);
+//       }}
+//     >
+//       <MdCancel className="text-2xl text-red-1 mr-2 cursor-pointer" />
+//     </div>
+//     <div className="max-w-[30rem] flex items-center break-words  border w-fit py-3 px-2 text-white rounded-md bg-black-2 ">
+//       <FaFile className="mr-4" />
+//       <p>{fileInputValue.name}</p>
+//     </div>
+//     <div className="ml-2">
+//       <UnstyledButton
+//         clicked={() => {
+//           const id = uuidv4();
+//           if (base64File && props.userData) {
+//             const payload = {
+//               fileData: base64File,
+//               fileName: fileInputValue.name,
+//               room: props.orderId,
+//               sender: {
+//                 type: fileType,
+//                 name: `${props.userData.fname} ${props.userData.lname}`,
+//                 role: props.type,
+//                 userid: props.userData.id,
+//                 chatRoomId: props.orderId,
+//                 mid: id,
+//                 replyto: replyData.contacts
+//                   ? JSON.stringify(replyData.contacts)
+//                   : replyData.reply,
+//                 replytoId: replyData.id,
+//                 replytousertype: replyData.user,
+//                 replytochattype: replyData.type,
+//               },
+//             };
+//             if (socket) {
+//               sendFileMessage(payload, socket);
+//             }
+//             props.updateChatHandlerProps({
+//               text: fileInputValue.name,
+//               user: props.type,
+//               id,
+//               file: base64File as string,
+//               filename: fileInputValue.name,
+//               type: fileType,
+//               replyTo: replyData.contacts
+//                 ? JSON.stringify(replyData.contacts)
+//                 : replyData.reply,
+//               replyToId: replyData.id,
+//               replytousertype: replyData.user,
+//             });
+//             setFileInputValue(null);
+//             setReplyData({
+//               id: "",
+//               reply: "",
+//               user: null,
+//               type: "text",
+//             });
+//           }
+//         }}
+//         class="flex hover:bg-blue-1 transition-all items-center bg-black-2 text-white py-2 px-4 rounded-md"
+//       >
+//         <p className="mr-2">Send</p>
+//         <RiSendPlane2Line className=" text-xl" />
+//       </UnstyledButton>
+//     </div>
+//   </div>
+// )}

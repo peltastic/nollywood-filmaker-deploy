@@ -31,7 +31,20 @@ const ReplyBox = (props: Props) => {
           <p className=" text-[0.75rem] sm:text-sm font-semibold ">
             {userType}
           </p>
-          {contactsReplyData ? (
+          {props.replyData.type === "img" && props.replyData.reply ? (
+            <div className="w-[4rem] mt-2">
+               <AspectRatio ratio={1800 / 1800}>
+
+              <Image
+                src={props.replyData.reply}
+                alt="file-name"
+                width={100}
+                height={100}
+                className="w-full rounded-md"
+                />
+                </AspectRatio>
+            </div>
+          ) : contactsReplyData ? (
             <div className="flex items-center mt-4">
               <div className="h-[2.5rem] w-[2.5rem] mr-3">
                 {contactsReplyData.photourl && (
@@ -47,8 +60,12 @@ const ReplyBox = (props: Props) => {
                 )}
               </div>
               <div className="">
-                {contactsReplyData.name && <p className="">{contactsReplyData.name}</p>}
-                {contactsReplyData.type && <p className="font-semibold">Film {contactsReplyData.type}</p> }
+                {contactsReplyData.name && (
+                  <p className="">{contactsReplyData.name}</p>
+                )}
+                {contactsReplyData.type && (
+                  <p className="font-semibold">Film {contactsReplyData.type}</p>
+                )}
               </div>
             </div>
           ) : (

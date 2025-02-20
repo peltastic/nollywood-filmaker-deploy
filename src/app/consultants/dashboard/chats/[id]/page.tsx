@@ -45,7 +45,7 @@ const ConsultantSingleChat = (props: Props) => {
       <DashboardBodyLayout>
         <div
           ref={ref}
-          className={`h-[100dvh] max-h-[90rem] bg-white w-full  `}
+          className={`h-screen max-h-[90rem] bg-white w-full  `}
         >
           <CustomerChatMiddle
             refetch={() => {
