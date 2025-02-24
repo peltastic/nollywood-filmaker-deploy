@@ -683,11 +683,6 @@ const ChatRoom = (props: Props) => {
       }
     });
   };
-  useEffect(() => {
-    if (props.data) {
-      console.log(props.data);
-    }
-  }, []);
 
   return (
     <>
@@ -986,7 +981,7 @@ const ChatRoom = (props: Props) => {
                 </div>
               </div>
             ) : (
-              <div className=""></div>
+              <div className="h-[90vh]"></div>
             )}
           </div>
         )}

@@ -80,6 +80,7 @@ const ChatMessage = React.memo(
 
     const noPfpRow = prevUser === user;
     const ref = useRef<HTMLDivElement>(null);
+    const imgRef = useRef<HTMLDivElement>(null);
     const contactsReplyData =
       replytochattype === "contacts" &&
       repliedText &&
@@ -100,11 +101,18 @@ const ChatMessage = React.memo(
           inline: "end",
         });
       }
-    }, [lastmessage]);
+    }, [lastmessage, ref]);
+    // useEffect(() => {
+    //   if (!imgRef.current || selectedRepliedToMessageId) return;
 
-    useEffect(() => {
-      console.log("sjsj");
-    }, []);
+    //   if (lastmessage && type === "img") {
+    //     imgRef.current.scrollIntoView({
+    //       behavior: "smooth",
+    //       block: "nearest",
+    //       inline: "end",
+    //     });
+    //   }
+    // }, [lastmessage, type]);
 
     useEffect(() => {
       let timeout: NodeJS.Timeout;
@@ -159,7 +167,7 @@ const ChatMessage = React.memo(
                 alt="file-name"
                 width={100}
                 height={100}
-                className="mx-auto absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[20rem] rounded-md"
+                className="mx-auto absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[15rem] xs:w-[20rem] rounded-md"
               />
             )}
           </div>
@@ -384,6 +392,7 @@ const ChatMessage = React.memo(
                   </Link>
                 ) : type === "img" ? (
                   <div
+                    // ref={imgRef}
                     className=""
                     onClick={() => {
                       if (file) {
@@ -397,6 +406,15 @@ const ChatMessage = React.memo(
                       alt="file-name"
                       width={200}
                       height={200}
+                      onLoad={() => {
+                        if (lastmessage && ref.current) {
+                          ref.current.scrollIntoView({
+                            behavior: "smooth",
+                            block: "nearest",
+                            inline: "end",
+                          });
+                        }
+                      }}
                       className="w-full"
                     />
                   </div>

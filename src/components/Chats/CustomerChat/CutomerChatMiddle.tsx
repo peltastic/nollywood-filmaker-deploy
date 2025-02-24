@@ -489,8 +489,11 @@ const CustomerChatMiddle = ({
         ) : (
           <>
             {isFetching ? (
+              <div className="h-screen relative">
+
               <div className="w-[2rem] sm:w-[5rem] absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2">
                 <Spinner dark />
+              </div>
               </div>
             ) : (
               <>

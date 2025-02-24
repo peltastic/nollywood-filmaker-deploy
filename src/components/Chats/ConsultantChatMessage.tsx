@@ -146,7 +146,7 @@ const ConsultantChatMessage = ({
               alt="file-name"
               width={100}
               height={100}
-              className="mx-auto absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[20rem] rounded-md"
+              className="mx-auto absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[15rem] xs:w-[20rem] rounded-md"
             />
           )}
         </div>
@@ -371,6 +371,15 @@ const ConsultantChatMessage = ({
                     width={200}
                     height={200}
                     className="w-full"
+                    onLoad={() => {
+                      if (lastmessage && ref.current) {
+                        ref.current.scrollIntoView({
+                          behavior: "smooth",
+                          block: "nearest",
+                          inline: "end",
+                        });
+                      }
+                    }}
                   />
                 </div>
               ) : type === "typing" ? (

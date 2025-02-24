@@ -72,7 +72,7 @@ const ConsultantSingleChat = (props: Props) => {
           />
         </div>
         <section
-          className={`transition-all w-full h-full  fixed chatbp1:overflow-y-scroll min-h-screen top-0 left-0 bg-white ${
+          className={`transition-all w-full h-full  fixed chatbp1:z-0 chatbp1:overflow-y-scroll min-h-screen top-0 left-0 bg-white ${
             closeRight ? "translate-x-[100%]" : "translate-x-0 "
           } `}
         >

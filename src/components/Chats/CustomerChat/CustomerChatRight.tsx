@@ -227,7 +227,7 @@ const CustomerChatRight = ({
       <div
         className={`border-l ${
           closeRight ? "hidden" : null
-        }  border-l-stroke-8 h-full relative z-20  chatbp1:z-0`}
+        }  border-l-stroke-8 h-full relative `}
       >
         <header className="w-full font-semibold flex items-center px-6 py-8  border-b border-b-stroke-8">
           <h1 className=" text-[1.25rem] mr-auto">Directory</h1>
