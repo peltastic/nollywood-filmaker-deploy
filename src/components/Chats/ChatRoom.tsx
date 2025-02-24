@@ -683,6 +683,11 @@ const ChatRoom = (props: Props) => {
       }
     });
   };
+  useEffect(() => {
+    if (props.data) {
+      console.log(props.data);
+    }
+  }, []);
 
   return (
     <>
@@ -713,7 +718,7 @@ const ChatRoom = (props: Props) => {
           {props.data && (
             <>
               {props.data.map((el, index) => (
-                <div key={el.id + uuidv4()}>
+                <div key={el.id + index.toString()}>
                   {props.type === "user" ? (
                     <ChatMessage
                       file={el.file}
@@ -724,9 +729,7 @@ const ChatRoom = (props: Props) => {
                       user={el.user}
                       prevUser={index ? props.data[index - 1].user : null}
                       index={index}
-                      lastmessage={
-                        props.data[props.data.length - 1].id === el.id
-                      }
+                      lastmessage={index === props.data.length - 1}
                       setActiveId={
                         props.isTime ? setActiveIdHandler : undefined
                       }

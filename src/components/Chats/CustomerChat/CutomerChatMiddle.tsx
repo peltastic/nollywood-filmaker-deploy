@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import AdminProfileImg from "/public/assets/dashboard/admin-profile-img.svg";
 import Image from "next/image";
@@ -198,11 +198,9 @@ const CustomerChatMiddle = ({
 
   useEffect(() => {
     if (result.data) {
-      const chat_data: ChatPayload[] = [];
-      for (const el of result.data.messages) {
-        if (el.recommendations.length > 0) {
-          for (const val of el.recommendations) {
-            chat_data.push({
+      const chat_data: ChatPayload[] = result.data.messages.flatMap((el) =>
+        el.recommendations.length > 0
+          ? el.recommendations.map((val) => ({
               text: el.message,
               user: el.role,
               id: el._id,
@@ -213,25 +211,23 @@ const CustomerChatMiddle = ({
               replyToId: el.replytoId,
               replytousertype: el.replytousertype,
               recommendations: val,
-              replytochattype: el.replytochattype
-            });
-          }
-        } else {
-          chat_data.push({
-            text: el.message,
-            user: el.role,
-            id: el._id,
-            file: el.type === "file" || el.type === "img" ? el.message : "",
-            filename: el.type === "file" ? el.filename : "",
-            type: el.type,
-            replyTo: el.replyto,
-            replyToId: el.replytoId,
-            replytousertype: el.replytousertype,
-            replytochattype: el.replytochattype
-            // recommendations: [],
-          });
-        }
-      }
+              replytochattype: el.replytochattype,
+            }))
+          : [
+              {
+                text: el.message,
+                user: el.role,
+                id: el._id,
+                file: el.type === "file" || el.type === "img" ? el.message : "",
+                filename: el.type === "file" ? el.filename : "",
+                type: el.type,
+                replyTo: el.replyto,
+                replyToId: el.replytoId,
+                replytousertype: el.replytousertype,
+                replytochattype: el.replytochattype,
+              },
+            ]
+      );
 
       setChatData([
         {
@@ -251,40 +247,38 @@ const CustomerChatMiddle = ({
 
   useEffect(() => {
     if (consultantRes.data) {
-      const chat_data: ChatPayload[] = [];
-      for (const el of consultantRes.data.messages) {
-        if (el.recommendations.length > 0) {
-          for (const val of el.recommendations) {
-            chat_data.push({
-              text: el.message,
-              user: el.role,
-              id: el._id,
-              file: el.type === "file" || el.type === "img" ? el.message : "",
-              filename: el.type === "file" ? el.filename : "",
-              type: el.type,
-              replyTo: el.replyto,
-              replyToId: el.replytoId,
-              replytousertype: el.replytousertype,
-              replytochattype: el.replytochattype,
-              recommendations: val,
-            });
-          }
-        } else {
-          chat_data.push({
-            text: el.message,
-            user: el.role,
-            id: el._id,
-            file: el.type === "file" || el.type === "img" ? el.message : "",
-            filename: el.type === "file" ? el.filename : "",
-            type: el.type,
-            replyTo: el.replyto,
-            replyToId: el.replytoId,
-            replytousertype: el.replytousertype,
-            replytochattype: el.replytochattype
-            // recommendations: [],
-          });
-        }
-      }
+      const chat_data: ChatPayload[] = consultantRes.data.messages.flatMap(
+        (el) =>
+          el.recommendations.length > 0
+            ? el.recommendations.map((val) => ({
+                text: el.message,
+                user: el.role,
+                id: el._id,
+                file: el.type === "file" || el.type === "img" ? el.message : "",
+                filename: el.type === "file" ? el.filename : "",
+                type: el.type,
+                replyTo: el.replyto,
+                replyToId: el.replytoId,
+                replytousertype: el.replytousertype,
+                replytochattype: el.replytochattype,
+                recommendations: val,
+              }))
+            : [
+                {
+                  text: el.message,
+                  user: el.role,
+                  id: el._id,
+                  file:
+                    el.type === "file" || el.type === "img" ? el.message : "",
+                  filename: el.type === "file" ? el.filename : "",
+                  type: el.type,
+                  replyTo: el.replyto,
+                  replyToId: el.replytoId,
+                  replytousertype: el.replytousertype,
+                  replytochattype: el.replytochattype,
+                },
+              ]
+      );
       setChatData([
         {
           text: `Welcome to Nollywood Filmmaker!  🎥\nHow can we make your experience amazing today?\n\nQuick Tips for an Easy Chat:\n\n✨ Replying Made Simple: Just right-click on any message and hit “Reply.”\n\n✨ Keep the Conversation Flowing: You can export chats or flag any issues for review.\n\n✨ File Access: Need to check out shared files? You’ll find them conveniently on the right-hand side.\n\n⏳ Time Reminder: We’ll remind you when you’re 10 minutes away from the end of your session, and a timer will pop up to help ...`,
@@ -303,11 +297,9 @@ const CustomerChatMiddle = ({
 
   useEffect(() => {
     if (byAdminRes.data) {
-      const chat_data: ChatPayload[] = [];
-      for (const el of byAdminRes.data.messages) {
-        if (el.recommendations.length > 0) {
-          for (const val of el.recommendations) {
-            chat_data.push({
+      const chat_data: ChatPayload[] = byAdminRes.data.messages.flatMap((el) =>
+        el.recommendations.length > 0
+          ? el.recommendations.map((val) => ({
               text: el.message,
               user: el.role,
               id: el._id,
@@ -319,24 +311,23 @@ const CustomerChatMiddle = ({
               replytousertype: el.replytousertype,
               replytochattype: el.replytochattype,
               recommendations: val,
-            });
-          }
-        } else {
-          chat_data.push({
-            text: el.message,
-            user: el.role,
-            id: el._id,
-            file: el.type === "file" || el.type === "img" ? el.message : "",
-            filename: el.type === "file" ? el.filename : "",
-            type: el.type,
-            replyTo: el.replyto,
-            replyToId: el.replytoId,
-            replytousertype: el.replytousertype,
-            replytochattype: el.replytochattype
-            // recommendations: [],
-          });
-        }
-      }
+            }))
+          : [
+              {
+                text: el.message,
+                user: el.role,
+                id: el._id,
+                file: el.type === "file" || el.type === "img" ? el.message : "",
+                filename: el.type === "file" ? el.filename : "",
+                type: el.type,
+                replyTo: el.replyto,
+                replyToId: el.replytoId,
+                replytousertype: el.replytousertype,
+                replytochattype: el.replytochattype,
+              },
+            ]
+      );
+
       setChatData([
         {
           text: `Welcome to Nollywood Filmmaker!  🎥\nHow can we make your experience amazing today?\n\nQuick Tips for an Easy Chat:\n\n✨ Replying Made Simple: Just right-click on any message and hit “Reply.”\n\n✨ Keep the Conversation Flowing: You can export chats or flag any issues for review.\n\n✨ File Access: Need to check out shared files? You’ll find them conveniently on the right-hand side.\n\n⏳ Time Reminder: We’ll remind you when you’re 10 minutes away from the end of your session, and a timer will pop up to help ...`,
@@ -503,7 +494,7 @@ const CustomerChatMiddle = ({
               </div>
             ) : (
               <>
-                <header className="flex items-center py-[1.4rem] px-2 sm:px-6 border-b border-b-stroke-8 h-[13%] max-h-[8rem]  bg-white">
+                <header className="top-0 left-0 fixed chatbp1:relative flex items-center py-[1.4rem] px-2 sm:px-6 border-b border-b-stroke-8 h-[100px] chatbp1:h-[13%] max-h-[8rem]  bg-white z-10 chatbp1:z-0 w-full">
                   <div
                     className="block chatbp:hidden"
                     onClick={() => router.back()}
@@ -536,7 +527,10 @@ const CustomerChatMiddle = ({
                         }
                       >
                         {admin ? (
-                          <AdminChatMenu orderId={orderId} chat_name={data?.chat_title} />
+                          <AdminChatMenu
+                            orderId={orderId}
+                            chat_name={data?.chat_title}
+                          />
                         ) : (
                           <UserChatMenu
                             isTime={isTime}
@@ -572,28 +566,32 @@ const CustomerChatMiddle = ({
                   </div>
                 </header>
 
-                <div className="h-[87%] bg-white">
+                <div className="h-[100%] chatbp1:h-[87%] bg-white pt-[100px] chatbp1:pt-0">
                   {data && (isTime || sessionOver) ? (
-                    <ChatRoom
-                      refreshChat={() => {
-                        if (type === "user") {
-                          fetchUserChatMessages(data.orderId);
-                        } else {
-                          fetchConsultantChatMessages(data.orderId);
-                        }
-                      }}
-                      refetch={refetch}
-                      userData={type === "user" ? userData : consultantData}
-                      orderId={data.orderId}
-                      updateChatHandlerProps={updateChatDataHandler}
-                      type={type}
-                      data={chatData}
-                      isTime={isTime}
-                      endTime={data.endTime}
-                      sessionOver={sessionOver}
-                      status={data.stattusof}
-                      profilepics={profilepic}
-                    />
+                    <>
+                      {chatData.length > 0 && (
+                        <ChatRoom
+                          refreshChat={() => {
+                            if (type === "user") {
+                              fetchUserChatMessages(data.orderId);
+                            } else {
+                              fetchConsultantChatMessages(data.orderId);
+                            }
+                          }}
+                          refetch={refetch}
+                          userData={type === "user" ? userData : consultantData}
+                          orderId={data.orderId}
+                          updateChatHandlerProps={updateChatDataHandler}
+                          type={type}
+                          data={chatData}
+                          isTime={isTime}
+                          endTime={data.endTime}
+                          sessionOver={sessionOver}
+                          status={data.stattusof}
+                          profilepics={profilepic}
+                        />
+                      )}
+                    </>
                   ) : (
                     <div className="h-[90vh] max-h-[120rem] w-full">
                       <div className="absolute left-[50%] top-[50%]  -translate-x-1/2 z-10 -translate-y-1/2">
