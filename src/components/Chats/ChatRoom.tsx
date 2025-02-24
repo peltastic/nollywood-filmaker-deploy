@@ -825,7 +825,7 @@ const ChatRoom = (props: Props) => {
           />
         )}
         {props.type === "admin" ? null : (
-          <div className="h-[10%] relative ">
+          <div className="h-[10%] fixed left-0 bottom-0 bg-white w-full chatbp1:relative ">
             {props.sessionOver ? (
               <div className="absolute bottom-0 w-[90%] xs:w-[93%] sm:w-[95%]   flex items-center text-[0.88rem] bg-gray-bg-7 border mx-4 mt-8 py-2 rounded-md px-4 border-border-gray">
                 <MdInfoOutline className="text-gray-4 mr-4 text-xl " />
@@ -833,7 +833,7 @@ const ChatRoom = (props: Props) => {
               </div>
             ) : props.isTime ? (
               <div className="h-full ">
-                <div className="w-full   px-6  absolute bottom-0 mt-5">
+                <div className="w-full   px-6  absolute bottom-4 chatbp1:bottom-0 mt-5">
                   <div className="flex items-center">
                     <MenuComponent
                       position="top-start"

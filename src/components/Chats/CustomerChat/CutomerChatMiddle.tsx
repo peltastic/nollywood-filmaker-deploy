@@ -566,7 +566,7 @@ const CustomerChatMiddle = ({
                   </div>
                 </header>
 
-                <div className="h-[100%] chatbp1:h-[87%] bg-white pt-[100px] chatbp1:pt-0">
+                <div className="h-[100%] chatbp1:h-[87%] bg-white pt-[100px] chatbp1:pt-0 pb-10 chatbp1:pb-0">
                   {data && (isTime || sessionOver) ? (
                     <>
                       {chatData.length > 0 && (
