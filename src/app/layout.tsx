@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     title: "Make Successful Films | Nollywood Filmmaker",
     images: [
       {
-        url: "https://nollywood-filmaker-deploy.vercel.app/filmmaker-thumbnail.jpeg",
+        url: "https://nollywoodfilmmaker.com/filmmaker-thumbnail.jpeg",
         width: 1200,
         height: 630,
         alt: "Nollywood Filmmaker Thumbnail",
