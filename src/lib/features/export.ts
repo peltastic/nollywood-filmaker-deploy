@@ -14,7 +14,6 @@ export const exportChatApi = createApi({
         const blob = await response.blob()
         return blob
      }
-
       }),
     }),
   }),

@@ -1,5 +1,5 @@
 import Spinner from "@/app/Spinner/Spinner";
-import { ICreatePitchState } from "@/app/services/create-pitch/page";
+import { ICreatePitchState } from "@/app/services/create-movie-schedule/page";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import DropZoneComponent from "@/components/DropZone/DropZone";
 import FileInput from "@/components/FileInput/FileInput";

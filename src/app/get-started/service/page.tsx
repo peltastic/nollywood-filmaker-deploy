@@ -38,11 +38,11 @@ const ServicePage = (props: Props) => {
       label: "Watch the Final cut of my film and advice",
       caption: "Requires chat after upload",
     },
-    {
-      value: "budget-and-advice",
-      label: "Look at my Budget and advice",
-      caption: "Requires chat after upload",
-    },
+    // {
+    //   value: "create-pitch-deck",
+    //   label: "Create a pitch deck",
+    //   caption: "Requires chat after upload",
+    // },
     {
       value: "production-budget",
       label: "Create a Production budget",
@@ -50,11 +50,11 @@ const ServicePage = (props: Props) => {
     },
     {
       value: "marketing-budget",
-      label: "Create a Marketing budget",
+      label: "Create a Marketing plan and budget",
       caption: "sent via email as download link",
     },
     {
-      value: "create-pitch",
+      value: "create-movie-schedule",
       label: "Create a Movie Schedule",
       caption: "sent via email as download link",
     },

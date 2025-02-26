@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import Logo from "/public/assets/logo22.png";
+import Logo from "/public/assets/nf-logo-black.png";
 import Image from "next/image";
 import Link from "next/link";
 import UnstyledButton from "../Button/UnstyledButton";
@@ -40,16 +40,16 @@ const Navbar = (props: Props) => {
   return (
     <>
       <Advert />
-      <nav className="  flex items-center pt-2 pb-2 md:pb-0 text-black-1 border-b border-b-border-gray px-0 md:px-8">
+      <nav className="  py-8 lg:py-2 flex items-center  text-black-1 border-b border-b-border-gray px-0 md:px-8">
         <Link href={"/"}>
           <div className=" ml-6 md:ml-auto ">
-            <Image src={Logo} alt="logo" className="w-[3rem]" />
+            <Image src={Logo} alt="logo" className="w-[10rem]" />
           </div>
         </Link>
-        <div className="md:hidden ml-auto mr-4 md:mr-0 relative z-50">
+        <div className="lg:hidden ml-auto mr-4 md:mr-0 relative z-50">
           <NavMobile links={homeLink} />
         </div>
-        <ul className="hidden md:flex mx-6 gap-2 text-[1rem]  mr-auto ">
+        <ul className="hidden lg:flex mx-6 gap-2 text-[1rem]  mr-auto ">
           {homeLink.map((el) => (
             <li
               key={el.name}
@@ -63,7 +63,7 @@ const Navbar = (props: Props) => {
             </li>
           ))}
         </ul>
-       {props.hideLogin ? null : <ul className="hidden md:flex items-center text-[0.9rem]">
+       {props.hideLogin ? null : <ul className="hidden lg:flex items-center text-[0.9rem]">
           <li className="hover:bg-gray-bg-3 py-1 px-3 transition-all rounded-md mr-4">
             <Link href="/auth/register">
               <UnstyledButton class="">Sign up</UnstyledButton>

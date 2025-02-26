@@ -51,7 +51,7 @@ const NavMobile = (props: Props) => {
           </ul>
         )}
       </div>
-      <div className="block md:hidden">
+      <div className="block lg:hidden">
         <Burger lineSize={3} color="#181818" onClick={toggle} opened={opened} />
       </div>
     </>

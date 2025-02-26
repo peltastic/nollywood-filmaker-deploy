@@ -15,7 +15,7 @@ import {
   useLazyExtentTimeQuery,
   useLazyFetchChatMessagesQuery,
 } from "@/lib/features/users/dashboard/chat/chat";
-import Logo from "/public/assets/nav/logo.svg";
+import Logo from "/public/assets/chats/logo-grey.png";
 import Spinner from "@/app/Spinner/Spinner";
 import { IGetUserConversations } from "@/interfaces/dashboard/chat";
 import { useSelector } from "react-redux";
@@ -480,7 +480,7 @@ const CustomerChatMiddle = ({
             <Image
               src={Logo}
               alt="logo image"
-              className="w-[10rem] opacity-50"
+              className="w-[10rem] opacity-50 mx-auto mb-6"
             />
             <p className="text-center font-semibold text-gray-4">
               Please select a conversation
@@ -601,7 +601,7 @@ const CustomerChatMiddle = ({
                         <Image
                           src={Logo}
                           alt="logo image"
-                          className="w-[10rem] opacity-50 mx-auto"
+                          className="w-[10rem] opacity-50 mx-auto mb-6"
                         />
                         <p className="text-center font-semibold text-gray-4">
                           Session with consultant hasn't started yet

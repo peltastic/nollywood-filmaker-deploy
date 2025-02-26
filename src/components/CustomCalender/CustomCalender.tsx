@@ -18,7 +18,7 @@ import ArrowLeft from "/public/assets/calender/arrow-left.svg";
 import Image from "next/image";
 import ArrowImg from "/public/assets/calender/arrow.svg";
 import { useEffect, useState } from "react";
-import { months_data } from "@/utils/helperFunction";
+import { convertToISO8601, months_data } from "@/utils/helperFunction";
 
 const weeks = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
@@ -118,22 +118,30 @@ const Calendar: React.FC<Props> = ({ value, onChange }) => {
           {Array.from({ length: numDays }).map((_, index) => {
             const date = index + 1;
             const isCurrentDate = date === value.getDate();
-            const cellDate = new Date(
+
+            const formattedDateStr = convertToISO8601(
               `${format(calendarPrivateDateState, "yyyy")}-${
                 Number(getMonth(calendarPrivateDateState)) + 1
               }-${date}`
             );
-            const currentDate = new Date(
+
+            const cellDate = new Date(formattedDateStr);
+
+            const formattedCurrDateStr = convertToISO8601(
               `${format(value, "yyyy")}-${
                 Number(getMonth(value)) + 1
               }-${getDate(value)}`
             );
+
+            const currentDate = new Date(formattedCurrDateStr);
             const difference = differenceInCalendarDays(
               cellDate,
               new Date(
-                `${format(new Date(), "yyyy")}-${
-                  Number(getMonth(new Date())) + 1
-                }-${getDate(new Date())}`
+                convertToISO8601(
+                  `${format(new Date(), "yyyy")}-${
+                    Number(getMonth(new Date())) + 1
+                  }-${getDate(new Date())}`
+                )
               )
             );
             return (

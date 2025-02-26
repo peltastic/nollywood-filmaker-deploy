@@ -8,16 +8,21 @@ import UnstyledButton from "../Button/UnstyledButton";
 import Link from "next/link";
 import { useDisclosure } from "@mantine/hooks";
 import ModalComponent from "../Modal/Modal";
-import { TwitterShareButton, WhatsappIcon, WhatsappShareButton, XIcon } from "react-share";
+import {
+  TwitterShareButton,
+  WhatsappIcon,
+  WhatsappShareButton,
+  XIcon,
+} from "react-share";
 import { notify } from "@/utils/notification";
 import { IoMdClipboard } from "react-icons/io";
 import CancelImg from "/public/assets/cancel.svg";
 
 type Props = {
+  admin?: boolean;
   data: ICompanyOrCrewData;
 };
-const tabs_list = ["About", "Jobs", "Rate"];
-
+const tabs_list = ["About", "Jobs", "Rate", "Documents"];
 
 const FilmmakerDatabaseProfileDrawer = (props: Props) => {
   const [opened, { open, close }] = useDisclosure();
@@ -97,7 +102,23 @@ const FilmmakerDatabaseProfileDrawer = (props: Props) => {
                   <div className="flex  items-center mt-3">
                     <IoBriefcaseOutline className="text-xl mr-3" />
                     <div className="flex items-center">
-                      <p className="text-md">{props.data.department}</p>
+                      {props.data ? (
+                        <div className="flex items-center flex-wrap">
+                          {props.data.department.map((el, index) => {
+                            return (
+                              <p key={el}>
+                                {el}
+                                <span>
+                                  {index === props.data.department.length - 1
+                                    ? ""
+                                    : ","}
+                                  &nbsp;
+                                </span>
+                              </p>
+                            );
+                          })}
+                        </div>
+                      ) : null}
                     </div>
                   </div>
                   <div className="flex items-center mt-3">
@@ -142,12 +163,14 @@ const FilmmakerDatabaseProfileDrawer = (props: Props) => {
                     </div>
                     <div className="mt-8 ">
                       <p className="text-[#A5A5A5]">Roles</p>
-                      <div className="flex items-center">
+
+                      <div className="flex flex-wrap items-center">
                         {props.data.role.map((el, index) => {
                           const islast = index === props.data.role.length - 1;
                           return (
                             <p className="mt-2 text-[#4B5563]" key={el}>
-                              {el} <span>{islast ? "." : ","}</span>
+                              {el}
+                              <span>{islast ? "." : ","}</span>&nbsp;
                             </p>
                           );
                         })}
@@ -200,6 +223,41 @@ const FilmmakerDatabaseProfileDrawer = (props: Props) => {
                     )}
                   </section>
                 </Tabs.Panel>
+                {props.admin && (
+                  <Tabs.Panel value="documents">
+                    <section>
+                      <div className="mt-8">
+                        <p className="text-[#A5A5A5]">ID number</p>
+                        <p className="mt-2 text-[#4B5563]">
+                          {props.data.idNumber}
+                        </p>
+                      </div>
+                      {props.data.cacNumber && (
+                        <div className="mt-8">
+                          <p className="text-[#A5A5A5]">CAC number</p>
+                          <p className="mt-2 text-[#4B5563]">
+                            {props.data.cacNumber}
+                          </p>
+                        </div>
+                      )}
+
+                      <div className="mt-8">
+                        <p className="text-[#A5A5A5]">ID type</p>
+                        <p className="mt-2 text-[#4B5563]">
+                          {props.data.verificationDocType}
+                        </p>
+                      </div>
+                      <div className="mt-8">
+                        <p className="text-[#A5A5A5]">ID document</p>
+                        <Link href={props.data.document} target="_blank">
+                          <UnstyledButton class="bg-black-2 text-white py-2 px-4 rounded-md mt-3 text-[0.88rem]">
+                            Download
+                          </UnstyledButton>
+                        </Link>
+                      </div>
+                    </section>
+                  </Tabs.Panel>
+                )}
               </Tabs>
             </section>
           </>

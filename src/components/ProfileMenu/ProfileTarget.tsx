@@ -12,14 +12,14 @@ const ProfileTarget = (props: Props) => {
   return (
     <div>
       {props.ppicture ? (
-        <div className="md:mr-4">
+        <div className="md:mr-4 w-[2.4rem] md:w-[2rem] h-[2.4rem] md:h-[2rem]">
           <AspectRatio ratio={1800 / 1800}>
             <Image
               src={props.ppicture}
               width={100}
               height={100}
               alt="test-image"
-              className=" rounded-full w-[2.4rem] md:w-[2rem] h-[2.4rem] md:h-[2rem]"
+              className=" rounded-full w-full h-full "
             />
           </AspectRatio>
         </div>

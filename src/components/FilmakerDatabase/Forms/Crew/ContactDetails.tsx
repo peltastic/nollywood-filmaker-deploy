@@ -58,6 +58,7 @@ const ContactDetails = ({
 
   useEffect(() => {
     if (departmentVal) {
+      console.log("i ran")
       const list = film_crew_values.filter((el) => el.key === departmentVal);
       if (rolesList) {
         setPersistedRolesList([
@@ -85,6 +86,9 @@ const ContactDetails = ({
         );
         setRolesList(stateData);
       }
+      if (stateData.length < 1) {
+        setRolesList(stateData)
+      } 
     }
   }, [department, active]);
 
@@ -141,7 +145,7 @@ const ContactDetails = ({
           onChange={(val) => {
             if (val) {
               if (department.includes(val)) {
-                return
+                return;
               }
               setDepartmentVal(val);
               setDepartment([...department, val]);
@@ -171,6 +175,7 @@ const ContactDetails = ({
                 const newRoles = [...department];
                 newRoles.splice(index, 1);
                 setDepartment(newRoles);
+            
                 if (departmentListState) {
                   setDepartmentListState((prev) => prev && [...prev, el]);
                 }

@@ -13,7 +13,7 @@ import classes from "@/app/styles/SuccessNotification.module.css";
 import { nprogress } from "@mantine/nprogress";
 import { successColor } from "@/utils/constants/constants";
 import { removeCookie } from "@/utils/storage";
-import { resetUserInfo, setUserInfo } from "@/lib/slices/userSlice";
+import { resetUserInfo } from "@/lib/slices/userSlice";
 import { setLogoutType } from "@/lib/slices/logoutSlice";
 import { RootState } from "@/lib/store";
 import { truncateStr } from "@/utils/helperFunction";
@@ -32,14 +32,14 @@ const UserprofileMenu = (props: Props) => {
     <div className="bg-white w-[15rem]   py-3 text-gray-3">
       <div className="flex items-center px-3">
         {userData?.profilepics ? (
-          <div className="mr-4">
+          <div className="mr-4  w-[3rem] h-[3rem]">
             <AspectRatio ratio={1800 / 1800}>
               <Image
                 src={userData.profilepics}
                 width={100}
                 height={100}
                 alt="test-image"
-                className=" rounded-full w-[3rem] h-[3rem]"
+                className=" rounded-full w-full h-full"
               />
             </AspectRatio>
           </div>
@@ -80,7 +80,7 @@ const UserprofileMenu = (props: Props) => {
           </Link>
         </li>
       </ul>
-      <ul className="block md:hidden text-[0.88rem]  py-3  border-b border-profile-menu-border">
+      <ul className="block lg:hidden text-[0.88rem]  py-3  border-b border-profile-menu-border">
         <li className=" px-3 active:bg-gray-bg-9 cursor-pointer hover:bg-gray-bg-9 py-2 rounded-md transition-all">
           <Link href={"/user/dashboard"}>
             <p>Dashboard</p>

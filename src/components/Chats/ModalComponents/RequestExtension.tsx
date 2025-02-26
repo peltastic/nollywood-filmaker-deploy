@@ -4,8 +4,6 @@ import Image from "next/image";
 import { MdInfoOutline } from "react-icons/md";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import CaptionSelect from "@/components/Select/CaptionSelect";
-import PaymentWindow from "@/components/PaymentWindow/PaymentWindow";
-import { useServicePayment } from "@/hooks/useServicePayment";
 import { useRequestExtensionMutation } from "@/lib/features/users/dashboard/chat/chat";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";

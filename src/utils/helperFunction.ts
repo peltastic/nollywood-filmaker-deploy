@@ -263,7 +263,7 @@ export function appendToFormData(
 }
 
 export function sortTimeSlots(value: string[]): string[] {
-  const timeSlots = value
+  const timeSlots = value;
   timeSlots.sort((a, b) => {
     const [hoursA, minutesA] = a.split(":").map(Number);
     const [hoursB, minutesB] = b.split(":").map(Number);
@@ -273,15 +273,21 @@ export function sortTimeSlots(value: string[]): string[] {
 
     return totalMinutesA - totalMinutesB;
   });
-  return timeSlots
+  return timeSlots;
 }
 
-
-export function maskNumber (input: string) {
+export function maskNumber(input: string) {
   const str = input.toString();
-  
+
   // Replace the first characters with asterisks, leaving the last four
-  const masked = str.slice(0, -4).replace(/./g, '*') + str.slice(-4);
-  
-  return masked
+  const masked = str.slice(0, -4).replace(/./g, "*") + str.slice(-4);
+
+  return masked;
+}
+
+export function convertToISO8601(value: string): string {
+  return value
+    .split("-")
+    .map((part) => part.padStart(2, "0"))
+    .join("-");
 }

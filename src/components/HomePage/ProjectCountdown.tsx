@@ -1,0 +1,95 @@
+import React, { useEffect } from "react";
+import CountdownTimer from "../Timer/CountdownTimer";
+import { Form, Formik } from "formik";
+import Field from "../Field/Field";
+import UnstyledButton from "../Button/UnstyledButton";
+import { joinWaitlistSchema } from "@/utils/validation/join";
+import { useJoinWaitRoomMutation } from "@/lib/features/join";
+import { nprogress } from "@mantine/nprogress";
+import { notify } from "@/utils/notification";
+import Spinner from "@/app/Spinner/Spinner";
+
+type Props = {};
+
+const ProjectCountdown = (props: Props) => {
+  const [joinWaitRoom, { isLoading, isError, isSuccess, data, error }] =
+    useJoinWaitRoomMutation();
+
+  useEffect(() => {
+    if (isError) {
+      nprogress.complete();
+
+      notify("error", (error as any).data?.message || "An Error Occured");
+    }
+    if (isSuccess) {
+      notify("success", "You're in! We'll keep you posted on updates", "");
+    }
+  }, [isError, isSuccess]);
+
+  return (
+    <div className="bg-[#000000cf] w-full h-screen fixed text-black-2 left-0 top-0 z-[100] backdrop:blur-md">
+      <div className="w-[95%] md:w-auto mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 text-center -translate-y-1/2 py-10 px-10  rounded-xl bg-white">
+        <h1 className="font-bold text-xl md:text-3xl ">You too can make a Successful Film</h1>
+        <h2 className="mt-8 text-sm sm:text-base">Drop your email so you don’t miss this</h2>
+        <div className="w-fit mx-auto mt-10">
+          <CountdownTimer endTime={"2025-03-31T23:59:00+01:00"} label />
+          <h1 className="mt-10 text-left font-medium mb-6 text-sm sm:text-base">
+            Get Notified when Nollywood filmaker launches!
+          </h1>
+          <div className="text-left">
+            <Formik
+              initialValues={{
+                email: "",
+                name: "",
+              }}
+              onSubmit={({ email, name }, { resetForm }) => {
+                joinWaitRoom({
+                  email,
+                  name,
+                }).then(() => {
+                  resetForm();
+                });
+              }}
+              validationSchema={joinWaitlistSchema}
+            >
+              {({ dirty, isValid }) => (
+                <Form>
+                  <Field
+                    name="email"
+                    classname="w-full"
+                    label="Email"
+                    placeholder=""
+                  />
+                  <div className="mt-6">
+                    <Field
+                      name="name"
+                      classname="w-full"
+                      label="Full name"
+                      placeholder=""
+                    />
+                  </div>
+                  <div className="flex mt-8">
+                    <UnstyledButton
+                      disabled={!isValid || isLoading}
+                      class="disabled:cursor-not-allowed ml-auto flex py-2 px-4 w-full xs:w-[7rem] transition-all rounded-md  justify-center items-center text-white border border-black-3  bg-black-3 disabled:opacity-50 text-[0.88rem]"
+                    >
+                      {isLoading ? (
+                        <div className="w-[1rem] py-1">
+                          <Spinner />
+                        </div>
+                      ) : (
+                        <p>Join</p>
+                      )}
+                    </UnstyledButton>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProjectCountdown;

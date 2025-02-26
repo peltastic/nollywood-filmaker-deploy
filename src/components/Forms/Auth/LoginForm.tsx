@@ -34,7 +34,6 @@ import { setAdminAuthStatus } from "@/lib/slices/admin/authSlice";
 import { setAdminInfo } from "@/lib/slices/admin/adminSlice";
 import { setConsultantLogoutType } from "@/lib/slices/consultants/logoutSlice";
 import { setAdminLogoutType } from "@/lib/slices/admin/logoutSlice";
-import { notify } from "@/utils/notification";
 
 type Props = {
   successRoute: string;

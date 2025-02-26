@@ -71,12 +71,12 @@ const SchedulerSlots = (props: Props) => {
                   {slotData?.chat_title && truncateStr(slotData.chat_title, 25)}
                 </p>
                 {slotData && (
-                  <div className="flex absolute bottom-1">
+                  <div className="flex absolute bottom-1 w-[1.5rem] h-[1.5rem]">
                     <AspectRatio ratio={1800/1800}>
                       <Image
                         src={slotData.user.profilepics}
                         alt="test-image"
-                        className="w-[1.5rem] h-[1.5rem] rounded-full"
+                        className=" rounded-full w-full h-full"
                         width={50}
                         height={50}
                       />

@@ -2,7 +2,7 @@
 import Image from "next/image";
 import React from "react";
 
-import Logo from "/public/assets/logo22.png";
+import Logo from "/public/assets/nf-logo-black.png";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { HiBell } from "react-icons/hi";
@@ -98,6 +98,10 @@ export const adminLinks = [
     name: "Database",
     link: "/admin/dashboard/filmmaker-database",
   },
+  {
+    name: "Waitlist",
+    link: "/admin/dashboard/waitlist"
+  }
 ];
 
 const navLinkMobile = [
@@ -131,7 +135,7 @@ const ServiceNavbar = (props: Props) => {
       <Advert />
       <nav
         className={`${
-          props.admin ? "py-6 xl:py-0" : "pt-4 md:pt-2 pb-4 md:pb-0"
+          props.admin ? "py-6 xl:py-0" : " py-6 lg:py-2"
         } flex items-center  text-black-1 border-b border-b-border-gray px-3 md:px-8`}
       >
         <Link
@@ -147,7 +151,7 @@ const ServiceNavbar = (props: Props) => {
             <Image
               src={Logo}
               alt="logo"
-              className={`w-[3rem] ${
+              className={`w-[10rem] ${
                 props.removeOptions ? "mb-0 md:mb-4  mt-1" : ""
               } `}
             />
@@ -159,7 +163,7 @@ const ServiceNavbar = (props: Props) => {
               className={`${
                 props.admin
                   ? "text-[0.88rem] hidden xl:flex "
-                  : "text-[1rem] hidden md:flex"
+                  : "text-[1rem] hidden lg:flex"
               }  mx-6 gap-2   mr-auto`}
             >
               {data.map((el) => (
@@ -181,7 +185,7 @@ const ServiceNavbar = (props: Props) => {
             </ul>
 
             <div className="flex text-gray-5 gap-4 text-[1.6rem] ml-auto items-center">
-              <div className="gap-4 hidden md:flex items-center">
+              <div className="gap-4 hidden lg:flex items-center">
                 <HiBell />
                 <Link href={"/faq"}>
                   <BsFillQuestionCircleFill className="text-[1.4rem]" />
