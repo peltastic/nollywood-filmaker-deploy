@@ -1,7 +1,7 @@
 import { ICompanyOrCrewData } from "@/interfaces/admin/filmmaker-database/filmmaker-database";
 import { AspectRatio, Tabs } from "@mantine/core";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ProfileBanner from "/public/assets/filmmaker-database/filmmaker-profile-banner.png";
 import { IoBriefcaseOutline, IoLocationOutline } from "react-icons/io5";
 import UnstyledButton from "../Button/UnstyledButton";
@@ -17,18 +17,52 @@ import {
 import { notify } from "@/utils/notification";
 import { IoMdClipboard } from "react-icons/io";
 import CancelImg from "/public/assets/cancel.svg";
+import { CiStar } from "react-icons/ci";
+import VerifyFMDatabaseModal from "./VerifyFMDatabaseModal";
 
 type Props = {
-  admin?: boolean;
   data: ICompanyOrCrewData;
+  refetch: () => void;
+  admin?: boolean;
+  verfied?: boolean;
 };
-const tabs_list = ["About", "Jobs", "Rate", "Documents"];
 
 const FilmmakerDatabaseProfileDrawer = (props: Props) => {
+  const [tabs_list, setTabList] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (props.admin) {
+      setTabList(["About", "Jobs", "Rate", "Documents"]);
+    } else {
+      setTabList(["About", "Jobs", "Rate"]);
+    }
+  }, [props.admin]);
   const [opened, { open, close }] = useDisclosure();
+  const [verificationOpened, verfiecation] = useDisclosure();
   const origin = window.location.href;
   return (
     <>
+      <ModalComponent
+        centered
+        onClose={close}
+        opened={verificationOpened}
+        withCloseButton={false}
+        size="xl"
+      >
+        <VerifyFMDatabaseModal
+          title={
+            props.data.apiVetting
+              ? "Complete verification"
+              : " Verify Crew Documents"
+          }
+          refetch={props.refetch}
+          close={verfiecation.close}
+          type="crew"
+          id={props.data.userId}
+          final={props.data.apiVetting ? true : false}
+          info="By completing this verification process, this profile will be added to  nollywood filmmaker database"
+        />
+      </ModalComponent>
       <ModalComponent
         centered
         onClose={close}
@@ -136,7 +170,32 @@ const FilmmakerDatabaseProfileDrawer = (props: Props) => {
                 Share profile
               </UnstyledButton>
             </div>
-            <section className="mt-16 mb-20">
+            {!props.verfied && (
+              <>
+                {props.data.apiVetting ? (
+                  <div className="mt-8">
+                    <UnstyledButton
+                      clicked={verfiecation.open}
+                      class="text-[0.88rem] border py-3 px-4 bg-black-2 transition-all hover:bg-black-9 text-white rounded-md flex items-center"
+                    >
+                      <p className="mr-2">Complete verification</p>
+                      <CiStar className="text-green-500 text-2xl" />
+                    </UnstyledButton>
+                  </div>
+                ) : (
+                  <div className="mt-8">
+                    <UnstyledButton
+                      clicked={verfiecation.open}
+                      class="text-[0.88rem] border py-3 px-4 bg-black-2 transition-all hover:bg-black-9 text-white rounded-md flex items-center"
+                    >
+                      <p className="mr-2">Verify documents</p>
+                      <CiStar className="text-green-500 text-2xl" />
+                    </UnstyledButton>
+                  </div>
+                )}
+              </>
+            )}
+            <section className="mt-10 mb-20">
               <Tabs color="#181818" defaultValue={"about"}>
                 <Tabs.List>
                   {tabs_list.map((el) => (

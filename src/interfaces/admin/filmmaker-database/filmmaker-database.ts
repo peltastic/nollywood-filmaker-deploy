@@ -38,6 +38,8 @@ export interface ICompanyOrCrewData {
   document: string;
   idNumber: string;
   cacNumber: string
+  apiVetting: boolean
+  verified: boolean
 }
 
 export interface ICompanyOrCrewDataResponse {

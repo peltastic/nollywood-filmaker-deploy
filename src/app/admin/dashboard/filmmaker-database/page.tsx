@@ -34,6 +34,8 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
   >([]);
 
   const [companyType, setCompanyType] = useState<string>("");
+  const [verificationType, setVerificationType] =
+    useState<string>("unverified");
 
   const [companyDepartmentVal, setCompanyDepartmentVal] = useState<
     string | null
@@ -52,6 +54,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
   useEffect(() => {
     fetchCompanyOrCrew({
       type,
+      verified: verificationType === "verified" ? true : false,
     });
   }, []);
   useEffect(() => {
@@ -79,6 +82,8 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
               fee: el.fee || "N/A",
               fulldata: el,
               type,
+              verificationType,
+              admin: true,
             };
           });
         setDatabaseData(transformedData);
@@ -96,6 +101,8 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
               fee: el.fee || "N/A",
               fulldata: el,
               type,
+              verificationType,
+              admin: true,
             };
           });
         setCompanyDatabase(transformedData);
@@ -114,7 +121,10 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                   setType("crew");
                   setCompanyType("");
                   setLocation("");
-                  fetchCompanyOrCrew({ type: "crew" });
+                  fetchCompanyOrCrew({
+                    type: "crew",
+                    verified: verificationType === "verified" ? true : false,
+                  });
                 }}
                 className={`${
                   type === "crew" ? "border border-black-2" : "border"
@@ -127,7 +137,10 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                   setRefresh(false);
                   setType("company");
                   setLocation("");
-                  fetchCompanyOrCrew({ type: "company" });
+                  fetchCompanyOrCrew({
+                    type: "company",
+                    verified: verificationType === "verified" ? true : false,
+                  });
                   setCompanyDepartmentVal("");
                   setRoleVal(null);
                 }}
@@ -139,6 +152,36 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
               </div>
             </div>
             <div className="ml-auto flex flex-wrap items-center w-full lg:w-auto mt-8 lg:mt-0">
+              <div className="mr-4">
+                <SelectComponent
+                  defaultValue={verificationType}
+                  value={verificationType}
+                  label=""
+                  placeholder=""
+                  setValueProps={(val) => {
+                    if (val) {
+                      fetchCompanyOrCrew({
+                        type,
+                        companyType,
+                        location,
+                        verified: val === "verified" ? true : false,
+                      });
+                      setVerificationType(val);
+                    }
+                  }}
+                  size="md"
+                  data={[
+                    {
+                      label: "Unverifed",
+                      value: "unverified",
+                    },
+                    {
+                      label: "Verified",
+                      value: "verified",
+                    },
+                  ]}
+                />
+              </div>
               {type === "company" ? (
                 <div className="mid:mr-2 w-full mid:w-auto mb-6 mid:mb-auto">
                   <SelectComponent
@@ -154,6 +197,8 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                           type,
                           companyType: val,
                           location,
+                          verified:
+                            verificationType === "verified" ? true : false,
                         });
                       }
                     }}
@@ -184,6 +229,8 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                           fetchCompanyOrCrew({
                             type,
                             location,
+                            verified:
+                              verificationType === "verified" ? true : false,
                           });
                         } else if (val) {
                           setCompanyDepartmentVal(val);
@@ -193,6 +240,8 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                             type,
                             department: val,
                             location,
+                            verified:
+                              verificationType === "verified" ? true : false,
                           });
                         }
                       }}
@@ -225,9 +274,11 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                             fetchCompanyOrCrew({
                               type,
                               department: companyDepartmentVal
-                              ? companyDepartmentVal
-                              : "",
+                                ? companyDepartmentVal
+                                : "",
                               location,
+                              verified:
+                                verificationType === "verified" ? true : false,
                             });
                           } else if (val) {
                             setRoleVal(val);
@@ -239,6 +290,8 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                                 ? companyDepartmentVal
                                 : "",
                               location,
+                              verified:
+                                verificationType === "verified" ? true : false,
                             });
                           }
                         }}
@@ -258,11 +311,13 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                     fetchCompanyOrCrew({
                       type,
                       location,
+                      verified: verificationType === "verified" ? true : false,
                     });
                   } else {
                     setLocation(e.target.value);
                     fetchCompanyOrCrew({
                       type,
+                      verified: verificationType === "verified" ? true : false,
                     });
                   }
                 }}
@@ -274,6 +329,8 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                       onClick={() => {
                         fetchCompanyOrCrew({
                           type,
+                          verified:
+                            verificationType === "verified" ? true : false,
                         });
                         setCompanyDepartmentVal(null);
                         setCompanyType("");
@@ -304,7 +361,9 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                 emptyHeader={
                   location
                     ? "No results found for your search"
-                    : "No crew profiles registered yet"
+                    : verificationType === "verified"
+                    ? "No verified crew profiles registerd yet"
+                    : "No unverified crew profiles"
                 }
               />
             ) : (
@@ -317,7 +376,9 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                 emptyHeader={
                   companyType || location
                     ? "No results found for your search"
-                    : "No company profiles registered yet"
+                    : verificationType === "verified"
+                    ? "No verified company profiles registerd yet"
+                    : "No unverified company profiles"
                 }
               />
             )}

@@ -14,8 +14,7 @@ interface InitializeReadMyScriptPayload extends GeneralType {
   concerns?: string;
   type: "request";
   fileName: string;
-  pageCount?: number[]
-
+  pageCount?: number[];
 }
 interface IServiceResponse {
   result: {
@@ -89,7 +88,7 @@ interface InitializeCreatePitchPayload extends GeneralType {
   info: string;
   budgetrange: string;
   fileName: string;
-  pageCount?: number[]
+  pageCount?: number[];
 }
 
 interface InitializaeDraftLegalDocument extends GeneralType {
@@ -97,4 +96,22 @@ interface InitializaeDraftLegalDocument extends GeneralType {
   title: "Draft Legal documents";
   productionCompany: string;
   contacts: string;
+}
+
+interface InitializeCreateAPitchDeck {
+  title: "Create A Pitch Deck";
+  userId: string;
+  type: "request";
+  movie_title: string;
+  platform: string;
+  loglines: string;
+  genre: string;
+  // info: string;
+  estimatedBudget: string;
+  keycharacters: { character: string; actor: string }[];
+  keycrew: { crew: string; role: string }[];
+  teamMenber: { name: string; bio: string }[];
+  putinfestivals: boolean;
+  revprojection: string;
+  file: File | null
 }

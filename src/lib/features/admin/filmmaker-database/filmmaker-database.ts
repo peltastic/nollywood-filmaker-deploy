@@ -14,10 +14,11 @@ export const adminFilmakerDatabaseApi = createApi({
         location?: string;
         companyType?: string;
         department?: string;
+        verified: boolean;
       }
     >({
-      query: ({ type, location, roles, companyType, department }) => {
-        let query = "";
+      query: ({ type, location, roles, companyType, department, verified }) => {
+        let query = ``;
         if (roles) {
           query += `&roles=${roles}`;
         }
@@ -27,11 +28,15 @@ export const adminFilmakerDatabaseApi = createApi({
         if (location) {
           query += `&location=${location}`;
         }
+        if (type) {
+          query += `&type=${type}`;
+        }
+
         if (companyType) {
           query += `&typeFilter=${companyType}`;
         }
         return {
-          url: `/api/admin/join/fetchdata?type=${type}${query}`,
+          url: `/api/admin/join/fetchdata?verified=${verified}${query}`,
         };
       },
     }),
@@ -43,8 +48,76 @@ export const adminFilmakerDatabaseApi = createApi({
         };
       },
     }),
+    documentVerificationCrew: build.mutation<
+      unknown,
+      { id: string; apiVetting: boolean }
+    >({
+      query: ({ id, apiVetting }) => {
+        return {
+          url: `/api/admin/crew/apiVetting/${id}`,
+          method: "PATCH",
+          body: {
+            apiVetting,
+          },
+        };
+      },
+    }),
+    finalCrewVerificationCrew: build.mutation<
+      unknown,
+      {
+        id: string;
+        verified: boolean;
+      }
+    >({
+      query: ({ id, verified }) => {
+        return {
+          url: `/api/admin/crew/verify/${id}`,
+          method: "PATCH",
+          body: {
+            verified,
+          },
+        };
+      },
+    }),
+    documentVerificationCompany: build.mutation<
+      unknown,
+      { id: string; apiVetting: boolean }
+    >({
+      query: ({ id, apiVetting }) => {
+        return {
+          url: `/api/admin/company/apiVetting/${id}`,
+          method: "PATCH",
+          body: {
+            apiVetting,
+          },
+        };
+      },
+    }),
+    finalCrewVerificationCompany: build.mutation<
+      unknown,
+      {
+        id: string;
+        verified: boolean;
+      }
+    >({
+      query: ({ id, verified }) => {
+        return {
+          url: `/api/admin/company/verify/${id}`,
+          method: "PATCH",
+          body: {
+            verified,
+          },
+        };
+      },
+    }),
   }),
 });
 
-export const { useLazyFetchCompanyorCrewQuery, useDeleteCrewCompanyMutation } =
-  adminFilmakerDatabaseApi;
+export const {
+    useLazyFetchCompanyorCrewQuery,
+  useDeleteCrewCompanyMutation,
+  useDocumentVerificationCompanyMutation,
+  useDocumentVerificationCrewMutation,
+  useFinalCrewVerificationCompanyMutation,
+  useFinalCrewVerificationCrewMutation,
+} = adminFilmakerDatabaseApi;

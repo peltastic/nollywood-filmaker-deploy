@@ -105,7 +105,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
       // notify("success", "Information uploaded successfully!")
       nprogress.complete();
       router.push(
-        `/success-page/filmaker-database?id=${idData}&type=company`
+        `/success-page/filmaker-database`
       );
     }
   }, [result.isError, result.isSuccess]);

@@ -31,6 +31,7 @@ export const authApi = createApi({
         token: string;
         crewCompany: {
           id: string;
+          verified: boolean
         };
       },
       {

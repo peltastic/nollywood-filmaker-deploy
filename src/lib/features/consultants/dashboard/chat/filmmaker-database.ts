@@ -31,7 +31,7 @@ export const filmmakerDatabaseConsultantApi = createApi({
           query += `&typeFilter=${companyType}`;
         }
 
-        return { url: `/api/consultants/fetch-data?type=${type}${query}` };
+        return { url: `/api/consultants/fetch-data?type=${type}${query}&verified=true` };
       },
     }),
   }),

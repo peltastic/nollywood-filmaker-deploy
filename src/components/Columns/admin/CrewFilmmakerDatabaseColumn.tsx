@@ -28,6 +28,8 @@ export interface ICrewFilmmakerDatabaseColumnData {
   department: string[];
   fulldata: ICompanyOrCrewData;
   type?: "crew" | "company";
+  verificationType: string;
+  admin?: boolean;
 }
 
 export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[] =
@@ -173,7 +175,11 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
             notify("success", "Bank details saved successfully");
             nprogress.complete();
             if (row.original.type) {
-              fetchCompanyOrCrew({ type: row.original.type });
+              fetchCompanyOrCrew({
+                type: row.original.type,
+                verified:
+                  row.original.verificationType === "verified" ? true : false,
+              });
             }
             deleteFunc.close();
           }
@@ -188,7 +194,24 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
               withCloseButton={false}
               size={"lg"}
             >
-              <FilmmakerDatabaseProfileDrawer data={row.original.fulldata} />
+              <FilmmakerDatabaseProfileDrawer
+                refetch={() => {
+                  if (row.original.type) {
+                    fetchCompanyOrCrew({
+                      type: row.original.type,
+                      verified:
+                        row.original.verificationType === "verified"
+                          ? true
+                          : false,
+                    });
+                  }
+                }}
+                admin={row.original.admin}
+                data={row.original.fulldata}
+                verfied={
+                  row.original.verificationType === "verified" ? true : false
+                }
+              />
             </Drawer>
             <ModalComponent
               opened={deleteOpened}

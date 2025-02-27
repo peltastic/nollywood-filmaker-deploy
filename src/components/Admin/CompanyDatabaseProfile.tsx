@@ -1,5 +1,5 @@
 import { ICompanyOrCrewData } from "@/interfaces/admin/filmmaker-database/filmmaker-database";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ProfileBanner from "/public/assets/filmmaker-database/filmmaker-profile-banner.png";
 import { AspectRatio, Tabs } from "@mantine/core";
 import Image from "next/image";
@@ -18,18 +18,53 @@ import {
 } from "react-share";
 import { notify } from "@/utils/notification";
 import { IoMdClipboard } from "react-icons/io";
+import { CiStar } from "react-icons/ci";
+import VerifyFMDatabaseModal from "./VerifyFMDatabaseModal";
 
 type Props = {
   data: ICompanyOrCrewData;
+  refetch: () => void;
+  admin?: boolean;
+  verfied?: boolean;
 };
 
 const tabs_list = ["About", "Clientele", "Rate"];
 
-const CompanyDatabaseProfile = ({ data }: Props) => {
+const CompanyDatabaseProfile = ({ data, refetch, admin, verfied }: Props) => {
+  const [tabs_list, setTabList] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (admin) {
+      setTabList(["About", "Clientele", "Rate", "Documents"]);
+    } else {
+      setTabList(["About", "Clientele", "Rate"]);
+    }
+  }, [admin]);
+
   const [opened, { open, close }] = useDisclosure();
+  const [verificationOpened, verfiecation] = useDisclosure();
   const origin = window.location.href;
   return (
     <>
+      <ModalComponent
+        centered
+        onClose={close}
+        opened={verificationOpened}
+        withCloseButton={false}
+        size="xl"
+      >
+        <VerifyFMDatabaseModal
+          title={
+            data.apiVetting ? "Complete verification" : " Verify Company Documents"
+          }
+          refetch={refetch}
+          close={verfiecation.close}
+          type="company"
+          id={data.userId}
+          final={data.apiVetting ? true : false}
+          info="By completing this verification process, this profile will be added to  nollywood filmmaker database"
+        />
+      </ModalComponent>
       <ModalComponent
         centered
         onClose={close}
@@ -116,6 +151,31 @@ const CompanyDatabaseProfile = ({ data }: Props) => {
               Share profile
             </UnstyledButton>
           </div>
+          {!verfied && (
+            <>
+              {data.apiVetting ? (
+                <div className="mt-8">
+                  <UnstyledButton
+                    clicked={verfiecation.open}
+                    class="text-[0.88rem] border py-3 px-4 bg-black-2 transition-all hover:bg-black-9 text-white rounded-md flex items-center"
+                  >
+                    <p className="mr-2">Complete verification</p>
+                    <CiStar className="text-green-500 text-2xl" />
+                  </UnstyledButton>
+                </div>
+              ) : (
+                <div className="mt-8">
+                  <UnstyledButton
+                    clicked={verfiecation.open}
+                    class="text-[0.88rem] border py-3 px-4 bg-black-2 transition-all hover:bg-black-9 text-white rounded-md flex items-center"
+                  >
+                    <p className="mr-2">Verify documents</p>
+                    <CiStar className="text-green-500 text-2xl" />
+                  </UnstyledButton>
+                </div>
+              )}
+            </>
+          )}
           <section className="mt-16 mb-20">
             <Tabs color="#181818" defaultValue={"about"}>
               <Tabs.List>
@@ -204,6 +264,37 @@ const CompanyDatabaseProfile = ({ data }: Props) => {
                   )}
                 </section>
               </Tabs.Panel>
+              {admin && (
+                <Tabs.Panel value="documents">
+                  <section>
+                    <div className="mt-8">
+                      <p className="text-[#A5A5A5]">ID number</p>
+                      <p className="mt-2 text-[#4B5563]">{data.idNumber}</p>
+                    </div>
+                    {data.cacNumber && (
+                      <div className="mt-8">
+                        <p className="text-[#A5A5A5]">CAC number</p>
+                        <p className="mt-2 text-[#4B5563]">{data.cacNumber}</p>
+                      </div>
+                    )}
+
+                    <div className="mt-8">
+                      <p className="text-[#A5A5A5]">ID type</p>
+                      <p className="mt-2 text-[#4B5563]">
+                        {data.verificationDocType}
+                      </p>
+                    </div>
+                    <div className="mt-8">
+                      <p className="text-[#A5A5A5]">ID document</p>
+                      <Link href={data.document} target="_blank">
+                        <UnstyledButton class="bg-black-2 text-white py-2 px-4 rounded-md mt-3 text-[0.88rem]">
+                          Download
+                        </UnstyledButton>
+                      </Link>
+                    </div>
+                  </section>
+                </Tabs.Panel>
+              )}
             </Tabs>
           </section>
         </section>

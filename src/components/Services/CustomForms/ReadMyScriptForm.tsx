@@ -21,7 +21,6 @@ import { pdfjs } from "react-pdf";
 import { BsUpload } from "react-icons/bs";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
-
 type Props = {
   fileName?: string;
   disabled?: boolean;
@@ -36,7 +35,6 @@ type Props = {
   removeFileData: (index: number) => void;
   setSeriesFilesData: (files: File[]) => void;
   setSeriesCount: (counts: number[]) => void;
-
 };
 
 const ReadMyScriptForm = ({
@@ -52,7 +50,7 @@ const ReadMyScriptForm = ({
   seriesPageCount,
   setSeriesCount,
   setSeriesFilesData,
-  setSeriesPrices
+  setSeriesPrices,
 }: Props) => {
   const router = useRouter();
   const [checked, setChecked] = useState<boolean>(false);
@@ -187,7 +185,7 @@ const ReadMyScriptForm = ({
                     removeFileData={removeFileData}
                     size={el.size}
                     key={el.name + index}
-                    id={ `${el.name}${el.size}${index}`}
+                    id={`${el.name}${el.size}${index}`}
                   />
                 ))}
               </div>

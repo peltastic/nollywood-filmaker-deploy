@@ -98,6 +98,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
               fee: el.fee || "N/A",
               fulldata: el,
               consultant: true,
+              verificationType: "verified"
             };
           });
         setDatabaseData(transformedData);
@@ -115,6 +116,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
               fee: el.fee || "N/A",
               fulldata: el,
               consultant: true,
+              verificationType: "verified"
             };
           });
         setCompanyDatabase(transformedData);

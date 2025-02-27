@@ -34,17 +34,21 @@ const LoginAsFilmmakerForm = (props: Props) => {
       setErrorMessage((error as any).data?.message || "An Error Occured");
     }
     if (isSuccess) {
-      notifications.show({
-        title: "Login successful",
-        message: "",
-        color: successColor,
-        classNames: classes,
-        position: "top-right",
-      });
       nprogress.complete();
-      console.log(data);
-      sessionStorage.setItem("filmmaker_token", data.token)
+      if (data.crewCompany.verified) {
+        notifications.show({
+          title: "Login successful",
+          message: "",
+          color: successColor,
+          classNames: classes,
+          position: "top-right",
+        });
+        console.log(data);
+        sessionStorage.setItem("filmmaker_token", data.token);
         router.push(`/filmmaker-database/user/${data.crewCompany.id}`);
+      } else {
+        router.push(`/filmmaker-database/pending`);
+      }
     }
   }, [isSuccess, isError]);
 
@@ -93,13 +97,14 @@ const LoginAsFilmmakerForm = (props: Props) => {
               />
             </div>
 
-<div className="text-sm mt-2">
-  <p>Want to join or know more about fillmaker database? <span className="underline hover:text-blue-1 cursor-pointer">
-    <Link href={"/get-started"}>
-    click here
-    </Link>
-    </span> </p>
-</div>
+            <div className="text-sm mt-2">
+              <p>
+                Want to join or know more about fillmaker database?{" "}
+                <span className="underline hover:text-blue-1 cursor-pointer">
+                  <Link href={"/get-started"}>click here</Link>
+                </span>{" "}
+              </p>
+            </div>
             <UnstyledButton
               // clicked={() => router.push("/")}
               disabled={!(dirty && isValid) || isLoading}

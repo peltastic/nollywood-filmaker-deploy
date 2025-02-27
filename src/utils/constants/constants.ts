@@ -468,10 +468,19 @@ export const film_crew_values = [
       "Production Assistant (PA)",
       "Unit Production Manager (UPM)",
       "Location Manager",
-      "Location Assistant",
-      "Location Assistant (1st AD)",
-      "Location Assistant (2nd AD)",
-      "Location Assistant (2nd 2nd AD)",
+      "1st Assistant Director",
+      "2nd Assistant Director",
+      "Second 2nd Assistant Director",
+      "Cast chaperone",
+      "Production accountant",
+      "Production lawyer",
+      "Stunt Man",
+      "Talent manager",
+      "Production Driver",
+      // "Location Assistant",
+      // "Location Assistant (1st AD)",
+      // "Location Assistant (2nd AD)",
+      // "Location Assistant (2nd 2nd AD)",
       "Stunt Coordinator",
       "Intimacy Coordinator",
       "Casting Director",
@@ -488,7 +497,7 @@ export const film_crew_values = [
       "Steadicam Operator",
       "Drone Operator",
       "Digital Imaging Technician (DIT)",
-      "Video Assist Operator",
+      "Camera assistant",
     ],
   },
   {
@@ -501,6 +510,8 @@ export const film_crew_values = [
       "Best Boy Grip",
       "Dolly Grip",
       "Rigging Grip",
+      "Light assistant",
+      "Grip assistant",
     ],
   },
   {
@@ -513,6 +524,10 @@ export const film_crew_values = [
       "Props Assistant",
       "Set Dresser",
       "Construction Coordinator",
+      "Set assistant",
+      "Animal wrangler",
+      "Carpenter",
+      "Set painter",
     ],
   },
   {
@@ -522,12 +537,13 @@ export const film_crew_values = [
       "Wardrobe Supervisor",
       "Costume Assistants",
       "Costume Standby",
+      "Tailor",
     ],
   },
   {
     key: "Hair and Makeup Department",
     value: [
-      "Makeup and Hair Personnel",
+      "Head of Makeup",
       "Makeup Personnel",
       "Makeup Assistant",
       "Hair Stylist",
@@ -542,9 +558,60 @@ export const film_crew_values = [
       "Production Sound Mixer",
       "Boom Operator",
       "Utility Sound Technician",
+      "Production Sound Mixer/Recordist",
     ],
   },
   { key: "Music Department", value: ["Composer", "Music Supervisor"] },
+  {
+    key: "Video Postproduction",
+    value: [
+      "Postproduction supervisor",
+      "Editor",
+      "Assistant editor",
+      "Colorist",
+      "Conform editor",
+      "Vfx supervisor",
+      "Vfx artist",
+      "Compositor",
+      "Animator",
+      "Matte painter",
+      "Subtitle specialist",
+    ],
+  },
+  {
+    key: "Audio Postproduction",
+    value: [
+      "Music supervisor",
+      "Music editor",
+      "Composer",
+      "Dialogue editor",
+      "Sound designer",
+      "Foley artist",
+      "ADR supervisor",
+    ],
+  },
+  {
+    key: "Sales and Marketing department",
+    value: [
+      "Graphic designer",
+      "BTS producer",
+      "Trailer editor",
+      "Marketing director",
+      "Content creator",
+      "Premiere and events manager",
+      "Distribution Executive",
+      "Sales Agent",
+    ],
+  },
+  {
+    key: "Health and welfare department",
+    value: [
+      "On-set medic",
+      "Medical assistant",
+      "Craft services",
+      "Craft assistant",
+    ],
+  },
 ];
 
 export const departmentList = [
@@ -580,6 +647,22 @@ export const departmentList = [
     label: "Music Department",
     value: "Music Department",
   },
+  {
+    label: "Video Postproduction",
+    value: "Video Postproduction",
+  },
+  {
+    label: "Audio Postproduction",
+    value: "Audio Postproduction",
+  },
+  {
+    label: "Sales and Marketing department",
+    value: "Sales and Marketing department",
+  },
+  {
+    label: "Health and welfare department",
+    value: "Health and welfare department",
+  },
 ];
 
 export const companyTypeList = [
@@ -592,4 +675,17 @@ export const companyTypeList = [
   { label: "Animation Studio", value: "Animation Studio" },
   { label: "Music Studio", value: "Music Studio" },
   { label: "Craft Services", value: "Craft Services" },
+  { label: "Production company", value: "Production company" },
+  {
+    label: "Distribution/Exhibition company",
+    value: "Distribution/Exhibition company",
+  },
+  { label: "Production design company", value: "Production design company" },
+  { label: "Stunt company", value: "Stunt company" },
+  { label: "Legal services", value: "Legal services" },
+  {
+    label: "Sales and marketing company",
+    value: "Sales and marketing company",
+  },
+  { label: "Talent Agency", value: "Talent Agency" },
 ];

@@ -99,9 +99,9 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
     }
 
     if (result.isSuccess) {
-      // notify("success", "Information uploaded successfully!")
+      // notify("success", "Your information uploaded successfully!")
       nprogress.complete();
-      router.push(`/success-page/filmaker-database?id=${idData}&type=crew`);
+      router.push(`/success-page/filmaker-database`);
     }
   }, [result.isError, result.isSuccess]);
   return (

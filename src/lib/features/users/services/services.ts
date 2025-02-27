@@ -27,7 +27,6 @@ export const servicesApi = createApi({
           }
         }
 
-
         return {
           url: "/api/users/transaction/read",
           method: "POST",
@@ -121,6 +120,16 @@ export const servicesApi = createApi({
         body,
       }),
     }),
+    initializeCreateAPitchDeck: build.mutation<
+      IServiceResponse,
+      InitializeCreateAPitchDeck
+    >({
+      query: (body) => ({
+        url: "/api/users/transaction/deck",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -132,4 +141,5 @@ export const {
   useInitializeCreateMarketingBudgetMutation,
   useInitializeCreatePitchMutation,
   useInitializeDraftLegalDocumentMutation,
+  useInitializeCreateAPitchDeckMutation
 } = servicesApi;

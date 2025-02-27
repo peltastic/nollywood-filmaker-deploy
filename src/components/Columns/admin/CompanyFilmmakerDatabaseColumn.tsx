@@ -27,6 +27,8 @@ export interface ICompanyFilmmakerDatabaseColumnData {
   consultant?: boolean;
   fulldata: ICompanyOrCrewData;
   type?: "crew" | "company";
+  verificationType: string;
+  admin?: boolean;
 }
 
 export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnData>[] =
@@ -76,7 +78,9 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
     },
     {
       accessorKey: "company_type",
-      header: () => <div className=" py-4 w-[20rem] xl:w-auto">Company Type</div>,
+      header: () => (
+        <div className=" py-4 w-[20rem] xl:w-auto">Company Type</div>
+      ),
       cell: ({ row }) => {
         return (
           <div className="">
@@ -141,7 +145,11 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
             notify("success", "Bank details saved successfully");
             nprogress.complete();
             if (row.original.type) {
-              fetchCompanyOrCrew({ type: row.original.type });
+              fetchCompanyOrCrew({
+                type: row.original.type,
+                verified:
+                  row.original.verificationType === "verified" ? true : false,
+              });
             }
             deleteFunc.close();
           }
@@ -155,7 +163,24 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
               withCloseButton={false}
               size={"lg"}
             >
-              <CompanyDatabaseProfile data={row.original.fulldata} />
+              <CompanyDatabaseProfile
+                data={row.original.fulldata}
+                admin={row.original.admin}
+                verfied={
+                  row.original.verificationType === "verified" ? true : false
+                }
+                refetch={() => {
+                  if (row.original.type) {
+                    fetchCompanyOrCrew({
+                      type: row.original.type,
+                      verified:
+                        row.original.verificationType === "verified"
+                          ? true
+                          : false,
+                    });
+                  }
+                }}
+              />
             </Drawer>
             <ModalComponent
               opened={deleteOpened}
