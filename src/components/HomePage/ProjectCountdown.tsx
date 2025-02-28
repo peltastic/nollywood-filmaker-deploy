@@ -47,7 +47,7 @@ const ProjectCountdown = (props: Props) => {
             </div>
             <p className="block lg:hidden ml-6 font-medium">DAYS <br /> TO GO</p>
           </div>
-          <h1 className="mt-4 lg:mt-10 text-left font-medium mb-2 lg:mb-6 text-sm sm:text-base">
+          <h1 className="mt-4 lg:mt-10 text-left font-semibold mb-2 lg:mb-6 text-sm sm:text-base">
             Get Notified when Nollywood filmaker launches!
           </h1>
           <div className="text-left">
@@ -82,7 +82,7 @@ const ProjectCountdown = (props: Props) => {
                       placeholder=""
                     />
                   </div>
-                  <div className="flex mt-8">
+                  <div className="flex mt-4 lg:mt-8">
                     <UnstyledButton
                       disabled={!isValid || isLoading}
                       class="disabled:cursor-not-allowed ml-auto flex py-3 px-4 w-full xs:w-[7rem] transition-all rounded-md  justify-center items-center text-white border border-black-3  bg-black-3 disabled:opacity-50 text-[0.88rem]"
