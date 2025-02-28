@@ -36,16 +36,16 @@ const ProjectCountdown = (props: Props) => {
     <div className="bg-[#000000cf] w-full h-[100dvh] fixed text-black-2 left-0 top-0 z-[100] backdrop:blur-md">
       <div className="w-full lg:w-auto mx-auto fixed bottom-0 lg:bottom-auto top-auto lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 text-center lg:-translate-y-1/2 py-4 lg:py-10 lg:px-10  rounded-xl bg-white">
         <div className="w-[90%] lg:w-fit mx-auto ">
-          <div className="flex items-center justify-center  lg:block">
+          <div className="flex items-center sm:justify-center  lg:block">
             <Image
-              className="w-[10rem] lg:mx-auto lg:mb-10"
+              className="w-[12rem] sm:w-[10rem] lg:mx-auto lg:mb-10 mr-auto"
               src={Logo}
               alt="logo"
             />
             <div className="ml-8 lg:ml-0">
               <CountdownTimer endTime={"2025-03-31T23:59:00+01:00"} label />
             </div>
-            <p className="block lg:hidden ml-6 font-medium">DAYS <br /> TO GO</p>
+            <p className="block lg:hidden ml-2 font-medium">DAYS <br /> TO GO</p>
           </div>
           <h1 className="mt-4 lg:mt-10 text-left font-semibold mb-2 lg:mb-6 text-sm sm:text-base">
             Get Notified when Nollywood filmaker launches!

@@ -19,6 +19,7 @@ type Props = {
   darkBorder?: boolean
   defaultValue?: string | null
   disabled?: boolean
+  searchable?: boolean  
 };
 
 const SelectComponent = (props: Props) => {
@@ -40,6 +41,7 @@ const SelectComponent = (props: Props) => {
         }}
         className={`border rounded-md ${props.darkBorder ? "border-black-3" : "border-stroke-9"} border-black`}
         size={props.size}
+        searchable={props.searchable}
         onChange={props.setValueProps}
         radius={props.rounded}
         rightSection={props.noIcon ? null : icon}

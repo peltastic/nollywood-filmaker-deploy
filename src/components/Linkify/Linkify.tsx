@@ -13,7 +13,7 @@ const Linkify = ({children}: Props) => {
 
     const addMarkup = (word: string)=> {
         return isUrl(word) ? 
-            `<a href="${word}">${word}</a>`:  
+            `<a href="${word}" target="_blank" rel="noopener noreferrer">${word}</a>`:  
             word
     }
 

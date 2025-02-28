@@ -84,7 +84,6 @@ const CompanyInfo = ({
             </div>
             <div className="mt-10">
               <Field
-                required
                 label="Company website"
                 labelColor="text-[#A5A5A5]"
                 classname="w-full"

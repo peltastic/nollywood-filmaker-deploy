@@ -16,6 +16,8 @@ import { notify } from "@/utils/notification";
 import { useRouter } from "next/navigation";
 import Spinner from "@/app/Spinner/Spinner";
 import { companyVerificationSchema } from "@/utils/validation/fimmaker";
+import { Country, State, IState, ICountry } from "country-state-city";
+import CheckboxComponent from "@/components/Checkbox/Checkbox";
 type Props = {
   prevStep: () => void;
   data: IJoinCompany;
@@ -23,10 +25,25 @@ type Props = {
 };
 
 const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
-  const [idData, setIdData] = useState<string>("")
+  const [countriesData, setCountriesData] = useState<
+    {
+      label: string;
+      value: string;
+    }[]
+  >([]);
+  const [statesData, setStatesData] = useState<
+    {
+      label: string;
+      value: string;
+    }[]
+  >([]);
+  const [countriesVal, setCountriesVal] = useState<string>("");
+  const [idData, setIdData] = useState<string>("");
+  const [checked, setChecked] = useState<boolean>(false);
   const router = useRouter();
   const [joinCompany, result] = useJoinCompanyMutation();
   const [file, setFile] = useState<File | null>(data.doc || null);
+  const [cacDoc, setCacDoc] = useState<File | null>(data.cacdoc || null);
   const [createCompany, companyRes] = useCreateCrewOrCompanyMutation();
   const [documentType, setDocumentType] = useState<string>(
     data.verificationDocType || ""
@@ -52,6 +69,30 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
     confirmPassword: data.confirmPassword || "",
     username: data.username || "",
   });
+
+  useEffect(() => {
+    const countriesData: { label: string; value: string }[] =
+      Country.getAllCountries().map((el) => {
+        return {
+          label: el.name,
+          value: `${el.isoCode} ${el.name}`,
+        };
+      });
+    setCountriesData(countriesData);
+  }, []);
+
+  useEffect(() => {
+    if (countriesVal) {
+      const stateData: { label: string; value: string }[] =
+        State.getStatesOfCountry(countriesVal.split(" ")[0]).map((el) => {
+          return {
+            label: el.name,
+            value: el.name,
+          };
+        });
+      setStatesData(stateData);
+    }
+  }, [countriesVal]);
 
   useEffect(() => {
     if (companyRes.isError) {
@@ -86,8 +127,9 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
         verificationDocType: documentType,
         website: data.website,
         userId: companyRes.data.crewCompany.id,
+        cacdoc: cacDoc,
       };
-      setIdData(companyRes.data.crewCompany.id)
+      setIdData(companyRes.data.crewCompany.id);
       joinCompany(payload);
     }
   }, [companyRes.isSuccess, companyRes.isError]);
@@ -104,9 +146,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
     if (result.isSuccess) {
       // notify("success", "Information uploaded successfully!")
       nprogress.complete();
-      router.push(
-        `/success-page/filmaker-database`
-      );
+      router.push(`/success-page/filmaker-database`);
     }
   }, [result.isError, result.isSuccess]);
   return (
@@ -139,7 +179,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
       >
         {({ isValid }) => (
           <Form>
-            <div className="grid md:grid-cols-2 gap-8">
+            {/* <div className="grid md:grid-cols-2 gap-8">
               <Field
                 label="Address"
                 labelColor="text-[#A5A5A5]"
@@ -184,7 +224,47 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
                   setFormData((prev) => ({ ...prev, country: e.target.value }))
                 }
               />
+            </div> */}
+            <p className="mb-2 font-medium mt-8 text-[#A5A5A5]">
+              Search country
+            </p>
+            <div className="">
+              <SelectComponent
+                data={countriesData}
+                placeholder="Search for country"
+                label=""
+                setValueProps={(val) => {
+                  if (val) {
+                    const country_name = val.split(" ")[1];
+                    setFormData((prev) => ({ ...prev, country: country_name }));
+                    setCountriesVal(val);
+                  }
+                }}
+                size="lg"
+                searchable
+              />
             </div>
+            {countriesVal && (
+              <div className="">
+                <p className="mb-2 font-medium mt-8 text-[#A5A5A5]">
+                  Search state
+                </p>
+                <div className="">
+                  <SelectComponent
+                    data={statesData}
+                    placeholder="Search for state"
+                    label=""
+                    setValueProps={(val) => {
+                      if (val) {
+                        setFormData((prev) => ({ ...prev, state: val }));
+                      }
+                    }}
+                    searchable
+                    size="lg"
+                  />
+                </div>
+              </div>
+            )}
             <div className="mt-8">
               <p className="mb-6 font-medium">Documents</p>
               <div className="mt-8">
@@ -287,6 +367,43 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
                     }
                   />
                 </div>
+
+                <div className="mt-10">
+                  <div className="mb-2  flex font-medium text-[0.88rem] text-[#A5A5A5]">
+                    <p>
+                      Upload your CAC registration documents (Certificate and
+                      Status report)
+                    </p>
+                    <p>*</p>
+                  </div>
+                  <DropZoneComponent
+                    setFiles={(files) => {}}
+                    setSingleFile={(file) => {
+                      if (file) {
+                        setCacDoc(file);
+                      }
+                    }}
+                    single
+                  >
+                    <div
+                      className={` text-center text-[#4B5563]  mt-6 rounded-2xl border-black-2 w-full py-10`}
+                    >
+                      {cacDoc ? (
+                        <div className="">{cacDoc.name}</div>
+                      ) : (
+                        <>
+                          <BsUpload className="text-center mx-auto mb-6" />
+                          <p className="">Drag and Drop here to upload</p>
+
+                          <p className="text-[0.88rem] mt-6">
+                            Or click to browse file
+                          </p>
+                        </>
+                      )}
+                    </div>
+                  </DropZoneComponent>
+                </div>
+
                 <div className=" mt-8">
                   <p className="mb-2 font-medium">Create Account</p>
                   <div className="mb-2  flex font-medium text-[0.88rem] text-[#A5A5A5]">
@@ -344,6 +461,26 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
                   />
                 </div>
               </div>
+              <div className="mt-4 w-full">
+                <CheckboxComponent
+                  setCheckedProps={(val) => setChecked(val)}
+                  checked={checked}
+                  label={
+                    <p className="max-w-[40rem] text-gray-3">
+                      By proceeding with this upload, I confirm that I have
+                      read, understood, and agree to the{" "}
+                      <span className="font-semibold">
+                        Terms and Conditions
+                      </span>{" "}
+                      and <span className="font-semibold">privacy policy</span>{" "}
+                      of the service. I voluntarily consent to the collection,
+                      storage, and use of my data in accordance with the stated
+                      terms, including its inclusion in the database and any
+                      permitted uses by the data collector.
+                    </p>
+                  }
+                />
+              </div>
             </div>
             <div className="flex items-center justify-between mt-[4rem]">
               <UnstyledButton
@@ -363,6 +500,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
                     confirmPassword: formData.confirmPassword,
                     password: formData.password,
                     username: formData.username,
+                    cacdoc: cacDoc,
                   };
                   updateCompany(payload);
                   prevStep();
@@ -377,7 +515,11 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
                 disabled={
                   !isValid ||
                   !file ||
+                  !cacDoc ||
+                  !formData.country ||
+                  !formData.state ||
                   !documentType ||
+                  !checked ||
                   result.isLoading ||
                   companyRes.isLoading
                 }

@@ -61,6 +61,7 @@ export interface IJoinCompany {
   confirmPassword?: string;
   username?: string;
   userId?: string;
+  cacdoc?: File | null
 }
 
 export interface ICompanyDataResponse {

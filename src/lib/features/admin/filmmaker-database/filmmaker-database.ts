@@ -14,10 +14,11 @@ export const adminFilmakerDatabaseApi = createApi({
         location?: string;
         companyType?: string;
         department?: string;
+        fee?: string
         verified: boolean;
       }
     >({
-      query: ({ type, location, roles, companyType, department, verified }) => {
+      query: ({ type, location, roles, companyType, department, verified, fee }) => {
         let query = ``;
         if (roles) {
           query += `&roles=${roles}`;
@@ -27,6 +28,9 @@ export const adminFilmakerDatabaseApi = createApi({
         }
         if (location) {
           query += `&location=${location}`;
+        }
+        if (fee) {
+          query += `&fee=${fee}`
         }
         if (type) {
           query += `&type=${type}`;

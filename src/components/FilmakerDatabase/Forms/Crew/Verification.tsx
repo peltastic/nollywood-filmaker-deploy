@@ -15,6 +15,8 @@ import Spinner from "@/app/Spinner/Spinner";
 import { nprogress } from "@mantine/nprogress";
 import { notify } from "@/utils/notification";
 import { useRouter } from "next/navigation";
+import { Country, State, IState, ICountry } from "country-state-city";
+import CheckboxComponent from "@/components/Checkbox/Checkbox";
 
 type Props = {
   prevStep: () => void;
@@ -23,10 +25,24 @@ type Props = {
 };
 
 const Verification = ({ prevStep, data, updateCrew }: Props) => {
+  const [countriesData, setCountriesData] = useState<
+    {
+      label: string;
+      value: string;
+    }[]
+  >([]);
+  const [statesData, setStatesData] = useState<
+    {
+      label: string;
+      value: string;
+    }[]
+  >([]);
+  const [countriesVal, setCountriesVal] = useState<string>("");
   const [idData, setIdData] = useState<string>("");
   const router = useRouter();
   const [joinCrew, result] = useJoinCrewMutation();
   const [createCrew, crewRes] = useCreateCrewOrCompanyMutation();
+  const [checked, setChecked] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(data.doc || null);
   const [documentType, setDocumentType] = useState<string>(
     data.verificationDocType || ""
@@ -50,6 +66,29 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
     confirmPassword: data.confirmPassword || "",
     username: data.username || "",
   });
+
+  useEffect(() => {
+    const countriesData: { label: string; value: string }[] =
+      Country.getAllCountries().map((el) => {
+        return {
+          label: el.name,
+          value: `${el.isoCode} ${el.name}`,
+        };
+      });
+    setCountriesData(countriesData);
+  }, []);
+  useEffect(() => {
+    if (countriesVal) {
+      const stateData: { label: string; value: string }[] =
+        State.getStatesOfCountry(countriesVal.split(" ")[0]).map((el) => {
+          return {
+            label: el.name,
+            value: el.name,
+          };
+        });
+      setStatesData(stateData);
+    }
+  }, [countriesVal]);
 
   useEffect(() => {
     if (crewRes.isError) {
@@ -108,8 +147,6 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
     <div>
       <Formik
         initialValues={{
-          address: data.location?.address || "",
-          city: data.location?.city || "",
           state: data.location?.state || "",
           country: data.location?.country || "",
           identification: data.idNumber || "",
@@ -131,52 +168,46 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
       >
         {({ isValid }) => (
           <Form>
-            <div className="grid md:grid-cols-2 gap-8">
-              <Field
-                label="Address"
-                labelColor="text-[#A5A5A5]"
-                classname="w-full"
-                name="address"
-                placeholder="Enter address"
-                required
-                changed={(e) =>
-                  setFormData((prev) => ({ ...prev, address: e.target.value }))
-                }
-              />
-              <Field
-                required
-                label="City"
-                labelColor="text-[#A5A5A5]"
-                classname="w-full"
-                name="city"
-                placeholder="Enter your city"
-                changed={(e) =>
-                  setFormData((prev) => ({ ...prev, city: e.target.value }))
-                }
-              />
-              <Field
-                required
-                label="State"
-                labelColor="text-[#A5A5A5]"
-                classname="w-full"
-                name="state"
-                placeholder="Enter your state"
-                changed={(e) =>
-                  setFormData((prev) => ({ ...prev, state: e.target.value }))
-                }
-              />
-              <Field
-                required
-                label="Country"
-                labelColor="text-[#A5A5A5]"
-                classname="w-full"
-                name="country"
-                placeholder="Enter your country"
-                changed={(e) =>
-                  setFormData((prev) => ({ ...prev, country: e.target.value }))
-                }
+            <p className="mb-2 font-medium mt-8 text-[#A5A5A5]">
+              Search country
+            </p>
+            <div className="">
+              <SelectComponent
+                data={countriesData}
+                placeholder="Search for country"
+                label=""
+                setValueProps={(val) => {
+                  if (val) {
+                    const country_name = val.split(" ")[1];
+                    setFormData((prev) => ({ ...prev, country: country_name }));
+                    setCountriesVal(val);
+                  }
+                }}
+                size="lg"
+                searchable
               />
             </div>
+            {countriesVal && (
+              <div className="">
+                <p className="mb-2 font-medium mt-8 text-[#A5A5A5]">
+                  Search state
+                </p>
+                <div className="">
+                  <SelectComponent
+                    data={statesData}
+                    placeholder="Search for state"
+                    label=""
+                    setValueProps={(val) => {
+                      if (val) {
+                        setFormData((prev) => ({ ...prev, state: val }));
+                      }
+                    }}
+                    searchable
+                    size="lg"
+                  />
+                </div>
+              </div>
+            )}
             <div className="mt-8">
               <p className="mb-6 font-medium">Documents</p>
               <div className="mt-8">
@@ -315,6 +346,25 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
                 }
               />
             </div>
+            <div className="mt-4 w-full">
+              <CheckboxComponent
+                setCheckedProps={(val) => setChecked(val)}
+                checked={checked}
+                label={
+                  <p className="max-w-[40rem] text-gray-3">
+                    By proceeding with this upload, I confirm that I have read,
+                    understood, and agree to the{" "}
+                    <span className="font-semibold">Terms and Conditions</span>{" "}
+                    and <span className="font-semibold">privacy policy</span> of
+                    the service. I voluntarily consent to the collection,
+                    storage, and use of my data in accordance with the stated
+                    terms, including its inclusion in the database and any
+                    permitted uses by the data collector.
+                  </p>
+                }
+              />
+            </div>
+
             <div className="flex items-center justify-between mt-[4rem]">
               <UnstyledButton
                 type="button"
@@ -346,7 +396,10 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
                 disabled={
                   !isValid ||
                   !file ||
+                  !formData.country ||
+                  !formData.state ||
                   !documentType ||
+                  !checked ||
                   result.isLoading ||
                   crewRes.isLoading
                 }

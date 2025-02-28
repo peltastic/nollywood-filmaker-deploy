@@ -58,25 +58,45 @@ const CountdownTimer = (props: Props) => {
 
     return (
       <div
-        className={`flex items-center  ${props.label ? "text-[1.6] md:text-[2rem]" : "text-[2rem]"} ${
-          isFinalMinutes ? "text-dark-red" : "text-black-3"
-        } font-semibold`}
+        className={`flex items-center  ${
+          props.label ? "text-[1.6] md:text-[2rem]" : "text-[2rem]"
+        } ${isFinalMinutes ? "text-dark-red" : "text-black-3"} font-semibold`}
       >
         {props.label && (
           <>
-            <div >
+            <div>
               <div
                 className={`${
                   isFinalMinutes
                     ? " bg-light-red border border-border-red"
-                    : "bg-admin-chat-bg"
-                }  ${props.label ? "w-[2.7rem] md:w-[4.2rem] h-[3.5rem] md:h-[4rem] " : "w-[4.2rem] h-[4rem] "}  rounded-lg flex items-center justify-center `}
+                    : `${props.label ? "bg-yellow-1" : "bg-admin-chat-bg"}`
+                }  ${
+                  props.label
+                    ? "w-[2.7rem] md:w-[4.2rem] h-[3.5rem] md:h-[4rem] "
+                    : "w-[4.2rem] h-[4rem] "
+                }  rounded-lg flex items-center justify-center `}
               >
                 {days.toString().padStart(2, "0")}
               </div>
-              {props.label && <p className={`${props.label ? " text-xs sm:text-sm hidden lg:block" : "text-sm"}  mt-3`}>DAYS</p>}
+              {props.label && (
+                <p
+                  className={`${
+                    props.label
+                      ? " text-xs sm:text-sm hidden lg:block"
+                      : "text-sm"
+                  }  mt-3`}
+                >
+                  DAYS
+                </p>
+              )}
             </div>
-            <p className={`${props.label ? "mx-2 sm:mx-6 hidden lg:block" : "mx-6"} `}>:</p>
+            <p
+              className={`${
+                props.label ? "mx-2 sm:mx-6 hidden lg:block" : "mx-6"
+              } `}
+            >
+              :
+            </p>
           </>
         )}
         <div className={`${props.label ? "hidden lg:block" : ""}`}>
@@ -85,37 +105,85 @@ const CountdownTimer = (props: Props) => {
               isFinalMinutes
                 ? " bg-light-red border border-border-red"
                 : "bg-admin-chat-bg"
-            } ${props.label ? "w-[2.7rem] md:w-[4.2rem] h-[3.5rem] md:h-[4rem] " : "w-[4.2rem] h-[4rem] "}  rounded-lg flex items-center justify-center `}
+            } ${
+              props.label
+                ? "w-[2.7rem] md:w-[4.2rem] h-[3.5rem] md:h-[4rem] "
+                : "w-[4.2rem] h-[4rem] "
+            }  rounded-lg flex items-center justify-center `}
           >
             {hours.toString().padStart(2, "0")}
           </div>
-          {props.label && <p className={`${props.label ? " text-xs sm:text-sm" : "text-sm"}  mt-3`}>HOURS</p>}
+          {props.label && (
+            <p
+              className={`${
+                props.label ? " text-xs sm:text-sm" : "text-sm"
+              }  mt-3`}
+            >
+              HOURS
+            </p>
+          )}
         </div>
-        <p className={`${props.label ? "mx-2 sm:mx-6 hidden lg:block" : "mx-6"} `}>:</p>
+        <p
+          className={`${
+            props.label ? "mx-2 sm:mx-6 hidden lg:block" : "mx-6"
+          } `}
+        >
+          :
+        </p>
         <div className={`${props.label ? "hidden lg:block" : ""}`}>
           <div
             className={`${
               isFinalMinutes
                 ? "bg-light-red border border-border-red"
                 : "bg-admin-chat-bg"
-            } ${props.label ? "w-[2.7rem] md:w-[4.2rem] h-[3.5rem] md:h-[4rem] " : "w-[4.2rem] h-[4rem] "} rounded-lg flex items-center justify-center font-semibold`}
+            } ${
+              props.label
+                ? "w-[2.7rem] md:w-[4.2rem] h-[3.5rem] md:h-[4rem] "
+                : "w-[4.2rem] h-[4rem] "
+            } rounded-lg flex items-center justify-center font-semibold`}
           >
             {minutes.toString().padStart(2, "0")}
           </div>
-          {props.label && <p className={`${props.label ? " text-xs sm:text-sm" : "text-sm"}  mt-3`}>MINUTES</p>}
+          {props.label && (
+            <p
+              className={`${
+                props.label ? " text-xs sm:text-sm" : "text-sm"
+              }  mt-3`}
+            >
+              MINUTES
+            </p>
+          )}
         </div>
-        <p className={`${props.label ? "mx-2 sm:mx-6 hidden lg:block" : "mx-6"} `}>:</p>
+        <p
+          className={`${
+            props.label ? "mx-2 sm:mx-6 hidden lg:block" : "mx-6"
+          } `}
+        >
+          :
+        </p>
         <div className={`${props.label ? "hidden lg:block" : ""}`}>
           <div
             className={`${
               isFinalMinutes
                 ? "bg-light-red border border-border-red"
                 : "bg-admin-chat-bg"
-            } ${props.label ? "w-[2.7rem] md:w-[4.2rem] h-[3.5rem] md:h-[4rem] " : "w-[4.2rem] h-[4rem] "}  rounded-lg flex items-center justify-center font-semibold`}
+            } ${
+              props.label
+                ? "w-[2.7rem] md:w-[4.2rem] h-[3.5rem] md:h-[4rem] "
+                : "w-[4.2rem] h-[4rem] "
+            }  rounded-lg flex items-center justify-center font-semibold`}
           >
             {seconds.toString().padStart(2, "0")}
           </div>
-          {props.label && <p className={`${props.label ? " text-xs sm:text-sm" : "text-sm"}  mt-3`}>SECONDS</p> }
+          {props.label && (
+            <p
+              className={`${
+                props.label ? " text-xs sm:text-sm" : "text-sm"
+              }  mt-3`}
+            >
+              SECONDS
+            </p>
+          )}
         </div>
       </div>
     );

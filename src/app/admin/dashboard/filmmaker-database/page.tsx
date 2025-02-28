@@ -21,11 +21,51 @@ import {
 } from "@/utils/constants/constants";
 import React, { useEffect, useState } from "react";
 import { MdRefresh } from "react-icons/md";
+import { Country, State, IState, ICountry } from "country-state-city";
 
 type Props = {};
 
 const AdminFilmmakerDatabasePage = (props: Props) => {
+  const [countriesVal, setCountriesVal] = useState<string>("");
   useProtectAdmin();
+  const [countriesData, setCountriesData] = useState<
+    {
+      label: string;
+      value: string;
+    }[]
+  >([]);
+  const [statesData, setStatesData] = useState<
+    {
+      label: string;
+      value: string;
+    }[]
+  >([]);
+
+  const [feeVal, setFeeVal] = useState<string>("");
+
+  useEffect(() => {
+    const countriesData: { label: string; value: string }[] =
+      Country.getAllCountries().map((el) => {
+        return {
+          label: el.name,
+          value: `${el.isoCode} ${el.name}`,
+        };
+      });
+    setCountriesData([{ label: "All", value: "All" }, ...countriesData]);
+  }, []);
+  useEffect(() => {
+    if (countriesVal) {
+      const stateData: { label: string; value: string }[] =
+        State.getStatesOfCountry(countriesVal.split(" ")[0]).map((el) => {
+          return {
+            label: el.name,
+            value: el.name,
+          };
+        });
+      setStatesData([{ label: "All", value: "All" }, ...stateData]);
+    }
+  }, [countriesVal]);
+
   const [databaseData, setDatabaseData] = useState<
     ICrewFilmmakerDatabaseColumnData[]
   >([]);
@@ -152,7 +192,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
               </div>
             </div>
             <div className="ml-auto flex flex-wrap items-center w-full lg:w-auto mt-8 lg:mt-0">
-              <div className="mr-4">
+              <div className="mr-4 mb-6 mid:mb-auto">
                 <SelectComponent
                   defaultValue={verificationType}
                   value={verificationType}
@@ -300,7 +340,115 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                   )}
                 </div>
               )}
-              <input
+              <div className="mb-6 mid:mb-auto">
+                <div className="">
+                  <SelectComponent
+                    data={countriesData}
+                    placeholder="Search for country"
+                    label=""
+                    setValueProps={(val) => {
+                      if (val) {
+                        const country_name = val.split(" ")[1];
+                        if (val === "All") {
+                          setCountriesVal("");
+                          fetchCompanyOrCrew({
+                            type,
+                            verified:
+                              verificationType === "verified" ? true : false,
+                          });
+                        } else {
+                          fetchCompanyOrCrew({
+                            type,
+                            location: country_name,
+                            verified:
+                              verificationType === "verified" ? true : false,
+                          });
+                          // setFormData((prev) => ({ ...prev, country: country_name }));
+                        }
+                        setCountriesVal(val);
+                      }
+                    }}
+                    size="md"
+                    searchable
+                  />
+                </div>
+              </div>
+              {countriesVal && (
+                <div className="ml-4 mb-6 mid:mb-auto">
+                  <div className="">
+                    <SelectComponent
+                      data={statesData}
+                      placeholder="Search for state"
+                      label=""
+                      setValueProps={(val) => {
+                        if (val) {
+                          const country_name = countriesVal.split(" ")[1];
+                          fetchCompanyOrCrew({
+                            type,
+                            location: `${country_name},${val}`,
+                            verified:
+                              verificationType === "verified" ? true : false,
+                          });
+
+                          // setFormData((prev) => ({ ...prev, state: val }));
+                        }
+                      }}
+                      searchable
+                      size="md"
+                    />
+                  </div>
+                </div>
+              )}
+              <div className="ml-4">
+                <SelectComponent
+                  data={[
+                    {
+                      label: "All",
+                      value: "All",
+                    },
+                    {
+                      label: "0 - 500k",
+                      value: "0 - 500k",
+                    },
+                    {
+                      label: "500k - 2m",
+                      value: "500k - 2m",
+                    },
+                    {
+                      label: "2m - 5m",
+                      value: "2m - 5m",
+                    },
+                    {
+                      label: "5m+",
+                      value: "5m+",
+                    },
+                  ]}
+                  label=""
+                  placeholder="Select fee"
+                  setValueProps={(val) => {
+                    if (val) {
+                      if (val === "All") {
+                        fetchCompanyOrCrew({
+                          type,
+                          verified:
+                            verificationType === "verified" ? true : false,
+                        });
+                      } else {
+                        fetchCompanyOrCrew({
+                          type,
+                          fee: val,
+                          verified:
+                            verificationType === "verified" ? true : false,
+                        });
+                      }
+                      setFeeVal(val);
+                    }
+                  }}
+                  value={feeVal || null}
+                  size="md"
+                />
+              </div>
+              {/* <input
                 type="text"
                 placeholder="Search by Location"
                 value={location}
@@ -321,7 +469,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                     });
                   }
                 }}
-              />
+              /> */}
               {refresh && (
                 <HoverCardComponent
                   target={

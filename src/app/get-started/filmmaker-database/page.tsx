@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import SingleStepper from "@/components/Stepper/SingleStepper";
 import GeneralInfo from "@/components/FilmakerDatabase/Forms/Crew/GeneralInfo";
@@ -76,6 +76,7 @@ const FilmakerDatabasePage = (props: Props) => {
     useRateCard: null,
     verificationDocType: "",
     website: "",
+    cacdoc: null,
   });
   const [pfpUrl, setPfpUrl] = useState<string>("");
   const [companyPfpUrl, setCompanyPfpUrl] = useState<string>("");

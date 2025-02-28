@@ -262,7 +262,7 @@ const ContactDetails = ({
                 roles={persistedRolesList}
                 addJob={addJobDoneHandler}
               />
-              <div className="mt-8">
+              <div className="mt-8 ">
                 <div className="mb-2  flex font-medium text-[0.88rem] text-[#A5A5A5]">
                   <p>Fee range</p>
                 </div>
