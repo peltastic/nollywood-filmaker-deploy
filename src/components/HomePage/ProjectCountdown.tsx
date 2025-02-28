@@ -85,7 +85,7 @@ const ProjectCountdown = (props: Props) => {
                   <div className="flex mt-8">
                     <UnstyledButton
                       disabled={!isValid || isLoading}
-                      class="disabled:cursor-not-allowed ml-auto flex py-2 px-4 w-full xs:w-[7rem] transition-all rounded-md  justify-center items-center text-white border border-black-3  bg-black-3 disabled:opacity-50 text-[0.88rem]"
+                      class="disabled:cursor-not-allowed ml-auto flex py-3 px-4 w-full xs:w-[7rem] transition-all rounded-md  justify-center items-center text-white border border-black-3  bg-black-3 disabled:opacity-50 text-[0.88rem]"
                     >
                       {isLoading ? (
                         <div className="w-[1rem] py-1">
