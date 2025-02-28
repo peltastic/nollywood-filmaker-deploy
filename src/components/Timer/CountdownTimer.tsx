@@ -69,7 +69,7 @@ const CountdownTimer = (props: Props) => {
                 className={`${
                   isFinalMinutes
                     ? " bg-light-red border border-border-red"
-                    : `${props.label ? "bg-yellow-1" : "bg-admin-chat-bg"}`
+                    : `${props.label ? "bg-yellow-1 lg:bg-admin-chat-bg" : "bg-admin-chat-bg"}`
                 }  ${
                   props.label
                     ? "w-[2.7rem] md:w-[4.2rem] h-[3.5rem] md:h-[4rem] "

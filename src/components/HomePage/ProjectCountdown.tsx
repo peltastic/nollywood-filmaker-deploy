@@ -45,7 +45,7 @@ const ProjectCountdown = (props: Props) => {
             <div className="ml-8 lg:ml-0">
               <CountdownTimer endTime={"2025-03-31T23:59:00+01:00"} label />
             </div>
-            <p className="block lg:hidden ml-2 font-medium">DAYS <br /> TO GO</p>
+            <p className="block lg:hidden ml-2 font-medium text-left">DAYS <br /> TO GO</p>
           </div>
           <h1 className="mt-4 lg:mt-10 text-left font-semibold mb-2 lg:mb-6 text-sm sm:text-base">
             Get Notified when Nollywood filmaker launches!
