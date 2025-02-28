@@ -101,7 +101,7 @@ const LoginAsFilmmakerForm = (props: Props) => {
               <p>
                 Want to join or know more about fillmaker database?{" "}
                 <span className="underline hover:text-blue-1 cursor-pointer">
-                  <Link href={"/get-started"}>click here</Link>
+                  <Link href={"/get-started/filmmaker-database"}>click here</Link>
                 </span>{" "}
               </p>
             </div>
