@@ -64,7 +64,7 @@ const CountdownTimer = (props: Props) => {
       >
         {props.label && (
           <>
-            <div className="">
+            <div >
               <div
                 className={`${
                   isFinalMinutes
@@ -74,12 +74,12 @@ const CountdownTimer = (props: Props) => {
               >
                 {days.toString().padStart(2, "0")}
               </div>
-              {props.label && <p className={`${props.label ? " text-xs sm:text-sm" : "text-sm"}  mt-3`}>DAYS</p>}
+              {props.label && <p className={`${props.label ? " text-xs sm:text-sm hidden lg:block" : "text-sm"}  mt-3`}>DAYS</p>}
             </div>
-            <p className={`${props.label ? "mx-2 sm:mx-6" : "mx-6"} `}>:</p>
+            <p className={`${props.label ? "mx-2 sm:mx-6 hidden lg:block" : "mx-6"} `}>:</p>
           </>
         )}
-        <div className="">
+        <div className={`${props.label ? "hidden lg:block" : ""}`}>
           <div
             className={`${
               isFinalMinutes
@@ -91,8 +91,8 @@ const CountdownTimer = (props: Props) => {
           </div>
           {props.label && <p className={`${props.label ? " text-xs sm:text-sm" : "text-sm"}  mt-3`}>HOURS</p>}
         </div>
-        <p className={`${props.label ? "mx-2 sm:mx-6" : "mx-6"} `}>:</p>
-        <div className="">
+        <p className={`${props.label ? "mx-2 sm:mx-6 hidden lg:block" : "mx-6"} `}>:</p>
+        <div className={`${props.label ? "hidden lg:block" : ""}`}>
           <div
             className={`${
               isFinalMinutes
@@ -104,8 +104,8 @@ const CountdownTimer = (props: Props) => {
           </div>
           {props.label && <p className={`${props.label ? " text-xs sm:text-sm" : "text-sm"}  mt-3`}>MINUTES</p>}
         </div>
-        <p className={`${props.label ? "mx-2 sm:mx-6" : "mx-6"} `}>:</p>
-        <div className="">
+        <p className={`${props.label ? "mx-2 sm:mx-6 hidden lg:block" : "mx-6"} `}>:</p>
+        <div className={`${props.label ? "hidden lg:block" : ""}`}>
           <div
             className={`${
               isFinalMinutes

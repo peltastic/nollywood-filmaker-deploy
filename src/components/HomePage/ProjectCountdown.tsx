@@ -8,6 +8,8 @@ import { useJoinWaitRoomMutation } from "@/lib/features/join";
 import { nprogress } from "@mantine/nprogress";
 import { notify } from "@/utils/notification";
 import Spinner from "@/app/Spinner/Spinner";
+import Image from "next/image";
+import Logo from "/public/assets/nf-logo-black.png";
 
 type Props = {};
 
@@ -25,14 +27,26 @@ const ProjectCountdown = (props: Props) => {
       notify("success", "You're in! We'll keep you posted on updates", "");
     }
   }, [isError, isSuccess]);
+  {
+    /* <h1 className="font-bold text-xl md:text-3xl ">You too can make a Successful Film</h1>
+  <h2 className="mt-8 text-sm sm:text-base">Drop your email so you don’t miss this</h2> */
+  }
 
   return (
     <div className="bg-[#000000cf] w-full h-screen fixed text-black-2 left-0 top-0 z-[100] backdrop:blur-md">
-      <div className="w-[95%] md:w-auto mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 text-center -translate-y-1/2 py-10 px-10  rounded-xl bg-white">
-        <h1 className="font-bold text-xl md:text-3xl ">You too can make a Successful Film</h1>
-        <h2 className="mt-8 text-sm sm:text-base">Drop your email so you don’t miss this</h2>
-        <div className="w-fit mx-auto mt-10">
-          <CountdownTimer endTime={"2025-03-31T23:59:00+01:00"} label />
+      <div className="w-full lg:w-auto mx-auto absolute bottom-0 lg:bottom-auto top-auto lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 text-center lg:-translate-y-1/2 py-10 lg:px-10  rounded-xl bg-white">
+        <div className="w-[90%] lg:w-fit mx-auto ">
+          <div className="flex items-center justify-center  lg:block">
+            <Image
+              className="w-[10rem] lg:mx-auto lg:mb-10"
+              src={Logo}
+              alt="logo"
+            />
+            <div className="ml-8 lg:ml-0">
+              <CountdownTimer endTime={"2025-03-31T23:59:00+01:00"} label />
+            </div>
+            <p className="block lg:hidden ml-6 font-medium">DAYS <br /> TO GO</p>
+          </div>
           <h1 className="mt-10 text-left font-medium mb-6 text-sm sm:text-base">
             Get Notified when Nollywood filmaker launches!
           </h1>
@@ -63,7 +77,7 @@ const ProjectCountdown = (props: Props) => {
                   <div className="mt-6">
                     <Field
                       name="name"
-                      classname="w-full"
+                      classname="w-full py-0"
                       label="Full name"
                       placeholder=""
                     />
