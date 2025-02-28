@@ -33,8 +33,8 @@ const ProjectCountdown = (props: Props) => {
   }
 
   return (
-    <div className="bg-[#000000cf] w-full h-screen fixed text-black-2 left-0 top-0 z-[100] backdrop:blur-md">
-      <div className="w-full lg:w-auto mx-auto absolute bottom-0 lg:bottom-auto top-auto lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 text-center lg:-translate-y-1/2 py-10 lg:px-10  rounded-xl bg-white">
+    <div className="bg-[#000000cf] w-full h-[100dvh] fixed text-black-2 left-0 top-0 z-[100] backdrop:blur-md">
+      <div className="w-full lg:w-auto mx-auto fixed bottom-0 lg:bottom-auto top-auto lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 text-center lg:-translate-y-1/2 py-10 lg:px-10  rounded-xl bg-white">
         <div className="w-[90%] lg:w-fit mx-auto ">
           <div className="flex items-center justify-center  lg:block">
             <Image
