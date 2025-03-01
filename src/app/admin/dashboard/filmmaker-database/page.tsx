@@ -351,6 +351,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                         const country_name = val.split(" ")[1];
                         if (val === "All") {
                           setCountriesVal("");
+                          setLocation("");
                           fetchCompanyOrCrew({
                             type,
                             verified:
@@ -363,9 +364,10 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                             verified:
                               verificationType === "verified" ? true : false,
                           });
+                          setLocation(country_name);
+                          setCountriesVal(val);
                           // setFormData((prev) => ({ ...prev, country: country_name }));
                         }
-                        setCountriesVal(val);
                       }
                     }}
                     size="md"
@@ -373,7 +375,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                   />
                 </div>
               </div>
-              {countriesVal && (
+              {countriesVal ? (
                 <div className="ml-4 mb-6 mid:mb-auto">
                   <div className="">
                     <SelectComponent
@@ -389,6 +391,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                             verified:
                               verificationType === "verified" ? true : false,
                           });
+                          setLocation(`${country_name},${val}`);
 
                           // setFormData((prev) => ({ ...prev, state: val }));
                         }
@@ -398,7 +401,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                     />
                   </div>
                 </div>
-              )}
+              ) : null}
               <div className="ml-4">
                 <SelectComponent
                   data={[

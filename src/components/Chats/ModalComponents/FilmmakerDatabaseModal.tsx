@@ -15,6 +15,7 @@ import SelectComponent from "@/components/Select/SelectComponent";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import HoverCardComponent from "@/components/HoverCard/HoverCardComponent";
 import { MdRefresh } from "react-icons/md";
+import { Country, State, IState, ICountry } from "country-state-city";
 import {
   companyTypeList,
   departmentList,
@@ -55,6 +56,44 @@ const FilmmakerDatabaseModal = (props: Props) => {
   const [rolesList, setRolesList] = useState<string[]>([]);
   const [roleVal, setRoleVal] = useState<string>("");
   const [location, setLocation] = useState<string>("");
+  const [countriesVal, setCountriesVal] = useState<string>("");
+  const [countriesData, setCountriesData] = useState<
+    {
+      label: string;
+      value: string;
+    }[]
+  >([]);
+  const [statesData, setStatesData] = useState<
+    {
+      label: string;
+      value: string;
+    }[]
+  >([]);
+
+  const [feeVal, setFeeVal] = useState<string>("");
+
+  useEffect(() => {
+    const countriesData: { label: string; value: string }[] =
+      Country.getAllCountries().map((el) => {
+        return {
+          label: el.name,
+          value: `${el.isoCode} ${el.name}`,
+        };
+      });
+    setCountriesData([{ label: "All", value: "All" }, ...countriesData]);
+  }, []);
+  useEffect(() => {
+    if (countriesVal) {
+      const stateData: { label: string; value: string }[] =
+        State.getStatesOfCountry(countriesVal.split(" ")[0]).map((el) => {
+          return {
+            label: el.name,
+            value: el.name,
+          };
+        });
+      setStatesData([{ label: "All", value: "All" }, ...stateData]);
+    }
+  }, [countriesVal]);
 
   const [fetchCompanyOrCrew, { data, isFetching }] =
     useLazyGetCompanyOrCrewDataQuery();
@@ -98,7 +137,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
               fee: el.fee || "N/A",
               fulldata: el,
               consultant: true,
-              verificationType: "verified"
+              verificationType: "verified",
             };
           });
         setDatabaseData(transformedData);
@@ -116,7 +155,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
               fee: el.fee || "N/A",
               fulldata: el,
               consultant: true,
-              verificationType: "verified"
+              verificationType: "verified",
             };
           });
         setCompanyDatabase(transformedData);
@@ -138,7 +177,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
         </div>
       </div>
       <div className="bg-white py-6 flex items-center flex-wrap ">
-        <div className="flex items-center text-sm font-medium">
+        <div className="flex items-center gap-6 text-sm font-medium">
           <div
             onClick={() => {
               setRefresh(false);
@@ -149,7 +188,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
             }}
             className={`${
               type === "crew" ? "border border-black-2" : "border"
-            }  py-2 px-6 rounded-md mr-2 cursor-pointer`}
+            }  py-2 px-6 rounded-md  cursor-pointer`}
           >
             <p>Crew</p>
           </div>
@@ -169,7 +208,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
             <p>Company</p>
           </div>
         </div>
-        <div className="ml-auto flex flex-wrap items-center w-full lg:w-auto mt-8 lg:mt-0">
+        <div className="ml-auto flex flex-wrap gap-6 items-center w-full lg:w-auto mt-8 lg:mt-0">
           {type === "company" ? (
             <div className="mid:mr-2 w-full mid:w-auto mb-6 mid:mb-auto">
               <SelectComponent
@@ -216,7 +255,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
                 />
               </div>
               {rolesList.length > 0 && (
-                <div className="mid:ml-4 w-full mid:w-auto mb-6 mid:mb-auto">
+                <div className=" w-full mid:w-auto mb-6 mid:mb-auto">
                   <SelectComponent
                     data={rolesList.map((el) => {
                       return {
@@ -246,7 +285,105 @@ const FilmmakerDatabaseModal = (props: Props) => {
               )}
             </div>
           )}
-          <input
+          <div className="mb-6 mid:mb-auto w-full mid:w-auto">
+            <div className=" w-full mid:w-auto">
+              <SelectComponent
+                data={countriesData}
+                placeholder="Search for country"
+                label=""
+                setValueProps={(val) => {
+                  if (val) {
+                    const country_name = val.split(" ")[1];
+                    if (val === "All") {
+                      setCountriesVal("");
+                      fetchCompanyOrCrew({
+                        type,
+                      });
+                    } else {
+                      fetchCompanyOrCrew({
+                        type,
+                        location: country_name,
+                      });
+                      // setFormData((prev) => ({ ...prev, country: country_name }));
+                      setCountriesVal(val);
+                    }
+                  }
+                }}
+                size="md"
+                searchable
+              />
+            </div>
+          </div>
+          {countriesVal && (
+            <div className=" mb-6 mid:mb-auto w-full mid:w-auto">
+              <div className="w-full mid:w-auto">
+                <SelectComponent
+                  data={statesData}
+                  placeholder="Search for state"
+                  label=""
+                  setValueProps={(val) => {
+                    if (val) {
+                      const country_name = countriesVal.split(" ")[1];
+                      fetchCompanyOrCrew({
+                        type,
+                        location: `${country_name},${val}`,
+                      });
+
+                      // setFormData((prev) => ({ ...prev, state: val }));
+                    }
+                  }}
+                  searchable
+                  size="md"
+                />
+              </div>
+            </div>
+          )}
+          <div className=" w-full mid:w-auto">
+            <SelectComponent
+              data={[
+                {
+                  label: "All",
+                  value: "All",
+                },
+                {
+                  label: "0 - 500k",
+                  value: "0 - 500k",
+                },
+                {
+                  label: "500k - 2m",
+                  value: "500k - 2m",
+                },
+                {
+                  label: "2m - 5m",
+                  value: "2m - 5m",
+                },
+                {
+                  label: "5m+",
+                  value: "5m+",
+                },
+              ]}
+              label=""
+              placeholder="Select fee"
+              setValueProps={(val) => {
+                if (val) {
+                  if (val === "All") {
+                    fetchCompanyOrCrew({
+                      type,
+                    });
+                  } else {
+                    fetchCompanyOrCrew({
+                      type,
+                      fee: val,
+                    });
+                  }
+                  setFeeVal(val);
+                }
+              }}
+              value={feeVal || null}
+              size="md"
+            />
+          </div>
+          {/* <input
             type="text"
             placeholder="Search by Location"
             value={location}
@@ -265,7 +402,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
                 });
               }
             }}
-          />
+          /> */}
           {refresh && (
             <HoverCardComponent
               target={
@@ -298,7 +435,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
               if (type === "crew") {
                 props.sendCrewContact(selectedCrewDataArray);
               } else {
-                console.log(selectedCompanyDataArray)
+                console.log(selectedCompanyDataArray);
                 props.sendCompanyContact(selectedCompanyDataArray);
               }
               props.close();

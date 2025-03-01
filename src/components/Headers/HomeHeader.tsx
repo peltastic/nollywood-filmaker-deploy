@@ -36,13 +36,10 @@ const HomeHeader = (props: Props) => {
             </div>
             <div className="mt-8 flex items-center ">
               <Image src={Profiles} alt="profiles" className="w-[6rem]" />
-              <div className="w-[18rem] ml-4 pr-4">
+              <div className="w-[25rem] ml-4 pr-4">
                 <p className="tracking wider">
-                  Join with{" "}
-                  <span className="font-semibold">
-                    4600+ Producers and directors
-                  </span>{" "}
-                  getting help right now
+                  Consult with renowned film industry experts and gain valuable
+                  insights to ensure your next film achieves success
                 </p>
               </div>
             </div>

@@ -14,9 +14,10 @@ export const filmmakerDatabaseConsultantApi = createApi({
         location?: string;
         companyType?: string;
         department?: string;
+        fee?: string;
       }
     >({
-      query: ({ type, location, roles, companyType, department }) => {
+      query: ({ type, location, roles, companyType, department, fee }) => {
         let query = "";
         if (roles) {
           query += `&roles=${roles}`;
@@ -27,11 +28,17 @@ export const filmmakerDatabaseConsultantApi = createApi({
         if (location) {
           query += `&location=${location}`;
         }
+        if (fee) {
+          query += `&fee=${fee}`;
+        }
+
         if (companyType) {
           query += `&typeFilter=${companyType}`;
         }
 
-        return { url: `/api/consultants/fetch-data?type=${type}${query}&verified=true` };
+        return {
+          url: `/api/consultants/fetch-data?type=${type}${query}&verified=true`,
+        };
       },
     }),
   }),

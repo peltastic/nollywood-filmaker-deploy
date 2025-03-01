@@ -470,7 +470,7 @@ export const film_crew_values = [
       "Location Manager",
       "1st Assistant Director",
       "2nd Assistant Director",
-      "Second 2nd Assistant Director",
+      "Second Second Assistant Director",
       "Cast chaperone",
       "Production accountant",
       "Production lawyer",
@@ -561,7 +561,7 @@ export const film_crew_values = [
       "Production Sound Mixer/Recordist",
     ],
   },
-  { key: "Music Department", value: ["Composer", "Music Supervisor"] },
+  // { key: "Music Department", value: ["Composer", "Music Supervisor"] },
   {
     key: "Video Postproduction",
     value: [
@@ -570,8 +570,8 @@ export const film_crew_values = [
       "Assistant editor",
       "Colorist",
       "Conform editor",
-      "Vfx supervisor",
-      "Vfx artist",
+      "VFX supervisor",
+      "VFX artist",
       "Compositor",
       "Animator",
       "Matte painter",
@@ -643,10 +643,10 @@ export const departmentList = [
     label: "Sound Department",
     value: "Sound Department",
   },
-  {
-    label: "Music Department",
-    value: "Music Department",
-  },
+  // {
+  //   label: "Music Department",
+  //   value: "Music Department",
+  // },
   {
     label: "Video Postproduction",
     value: "Video Postproduction",

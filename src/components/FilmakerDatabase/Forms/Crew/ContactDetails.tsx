@@ -235,7 +235,7 @@ const ContactDetails = ({
                     const newRoles = [...roles];
                     newRoles.splice(index, 1);
                     setRoles(newRoles);
-                    if (rolesList) {
+                    if (rolesList.length > 0) {
                       setRolesList((prev) => prev && [...prev, el]);
                     }
                   }}
