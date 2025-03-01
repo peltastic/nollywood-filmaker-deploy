@@ -13,7 +13,7 @@ export interface JobsDoneList {
   title: string;
   role?: string;
   link: string;
-  date: Date;
+  date?: Date | null;
 }
 type Props = {
   val: JobsDoneList;
@@ -21,10 +21,17 @@ type Props = {
   deleteJob: (index: number) => void;
   index: number;
   roles?: string[];
-  company?: boolean
+  company?: boolean;
 };
 
-const JobsDone = ({ val, deleteJob, editJob, index, roles, company }: Props) => {
+const JobsDone = ({
+  val,
+  deleteJob,
+  editJob,
+  index,
+  roles,
+  company,
+}: Props) => {
   const [edit, setEdit] = useState<boolean>(false);
   return (
     <>
@@ -42,14 +49,20 @@ const JobsDone = ({ val, deleteJob, editJob, index, roles, company }: Props) => 
           <div className="text-[0.88rem]">
             <h1 className="font-medium">{val.title}</h1>
             {val.role && <p className="text-[#4B5563]">{val.role}</p>}
-            <p className="text-[#A5A5A5]">{moment(val.date).format("YYYY")}</p>
-            <Link
-              target="_blank"
-              className="text-[#4B5563] border-b"
-              href={val.link}
-            >
-              View project
-            </Link>
+            {val.date && (
+              <p className="text-[#A5A5A5]">
+                {moment(val.date).format("YYYY")}
+              </p>
+            )}
+            {val.link && (
+              <Link
+                target="_blank"
+                className="text-[#4B5563] border-b"
+                href={val.link}
+              >
+                View project
+              </Link>
+            )}
           </div>
           <div className="flex items-center ml-auto text-[#4b556398] text-xl cursor-pointer">
             <div className="" onClick={() => deleteJob(index)}>

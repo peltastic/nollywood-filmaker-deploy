@@ -5,6 +5,7 @@ import { DateInput, YearPickerInput } from "@mantine/dates";
 import SelectComponent from "../Select/SelectComponent";
 import { JobsDoneList } from "./JobsDone";
 import { MdAdd } from "react-icons/md";
+import { jobsDoneSchema } from "@/utils/validation/fimmaker";
 
 type Props = {
   roles?: string[];
@@ -12,7 +13,7 @@ type Props = {
   defaultVal?: JobsDoneList;
   edit?: boolean;
   removeEdit?: (val: boolean) => void;
-  company?: boolean
+  company?: boolean;
 };
 
 const JobsDoneInput = ({
@@ -35,7 +36,7 @@ const JobsDoneInput = ({
         link: (defaultVal && defaultVal?.link) || "",
       }}
       onSubmit={({ link, title }, { resetForm }) => {
-        if (!dateInput) return;
+        // if (!dateInput) return;
         addJob({
           date: dateInput,
           link,
@@ -47,6 +48,7 @@ const JobsDoneInput = ({
         setDateInput(null);
         setRole("");
       }}
+      validationSchema={jobsDoneSchema}
     >
       {({ isValid }) => (
         <Form>
@@ -104,10 +106,8 @@ const JobsDoneInput = ({
             </div>
           </div>
           <button
-          // type={notSubmit? "button": "submit"}
-            disabled={
-              company ? !isValid || !dateInput : !isValid || !dateInput || !role
-            }
+            // type={notSubmit? "button": "submit"}
+            disabled={company ? !isValid : !isValid || !role}
             className={`px-3 py-1 rounded-md flex items-center text-[0.88rem] mt-6 disabled:cursor-not-allowed disabled:opacity-50 bg-black-3 text-white`}
           >
             {!edit && <MdAdd />}

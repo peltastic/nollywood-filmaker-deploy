@@ -17,6 +17,7 @@ import { notify } from "@/utils/notification";
 import { useRouter } from "next/navigation";
 import { Country, State, IState, ICountry } from "country-state-city";
 import CheckboxComponent from "@/components/Checkbox/Checkbox";
+import Link from "next/link";
 
 type Props = {
   prevStep: () => void;
@@ -354,8 +355,16 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
                   <p className="max-w-[40rem] text-gray-3">
                     By proceeding with this upload, I confirm that I have read,
                     understood, and agree to the{" "}
-                    <span className="font-semibold">Terms and Conditions</span>{" "}
-                    and <span className="font-semibold">privacy policy</span> of
+                    <span className="font-semibold underline">
+                      <Link href={"/terms-and-conditions"}>
+                        Terms and Conditions
+                      </Link>
+                    </span>{" "}
+                    and <span className="font-semibold underline">
+                      <Link href={"/privacy-policy"}>
+                      privacy policy
+                      </Link>
+                      </span> of
                     the service. I voluntarily consent to the collection,
                     storage, and use of my data in accordance with the stated
                     terms, including its inclusion in the database and any

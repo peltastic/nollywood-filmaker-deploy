@@ -48,7 +48,7 @@ const ProjectCountdown = (props: Props) => {
             <p className="block lg:hidden ml-2 font-medium text-left">DAYS <br /> TO GO</p>
           </div>
           <h1 className="mt-4 lg:mt-10 text-left font-semibold mb-2 lg:mb-6 text-sm sm:text-base">
-            Get Notified when Nollywood filmaker launches!
+            Get Notified when Nollywood filmmaker launches!
           </h1>
           <div className="text-left">
             <Formik

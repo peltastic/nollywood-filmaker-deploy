@@ -247,16 +247,20 @@ const FilmmakerDatabaseProfileDrawer = (props: Props) => {
                       <div className="">
                         {props.data.works.map((el) => (
                           <div className="mt-6" key={el._id}>
-                            <p className="text-[#A5A5A5] mb-1">{el.year}</p>
+                            {el.year && (
+                              <p className="text-[#A5A5A5] mb-1">{el.year}</p>
+                            )}
                             <p className="mb-1">{el.title}</p>
                             <p className="mb-1">{el.role}</p>
-                            <Link
-                              target="_blank"
-                              className="text-[#4B5563] border-b"
-                              href={el.link}
-                            >
-                              View project
-                            </Link>
+                            {el.link && (
+                              <Link
+                                target="_blank"
+                                className="text-[#4B5563] border-b"
+                                href={el.link}
+                              >
+                                View project
+                              </Link>
+                            )}
                           </div>
                         ))}
                       </div>

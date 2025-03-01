@@ -99,7 +99,7 @@ const LoginAsFilmmakerForm = (props: Props) => {
 
             <div className="text-sm mt-2">
               <p>
-                Want to join or know more about fillmaker database?{" "}
+                Want to join or know more about filmmaker database?{" "}
                 <span className="underline hover:text-blue-1 cursor-pointer">
                   <Link href={"/get-started/filmmaker-database"}>click here</Link>
                 </span>{" "}

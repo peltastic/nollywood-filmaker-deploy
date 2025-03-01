@@ -55,7 +55,9 @@ const CompanyDatabaseProfile = ({ data, refetch, admin, verfied }: Props) => {
       >
         <VerifyFMDatabaseModal
           title={
-            data.apiVetting ? "Complete verification" : " Verify Company Documents"
+            data.apiVetting
+              ? "Complete verification"
+              : " Verify Company Documents"
           }
           refetch={refetch}
           close={verfiecation.close}
@@ -217,15 +219,19 @@ const CompanyDatabaseProfile = ({ data, refetch, admin, verfied }: Props) => {
                     <div className="">
                       {data.clientele.map((el) => (
                         <div className="mt-6" key={el._id}>
-                          <p className="text-[#A5A5A5]">{el.year}</p>
+                          {el.year && (
+                            <p className="text-[#A5A5A5]">{el.year}</p>
+                          )}
                           <p>{el.title}</p>
-                          <Link
-                            target="_blank"
-                            className="text-[#4B5563] border-b"
-                            href={el.link}
-                          >
-                            View project
-                          </Link>
+                          {el.link && (
+                            <Link
+                              target="_blank"
+                              className="text-[#4B5563] border-b"
+                              href={el.link}
+                            >
+                              View project
+                            </Link>
+                          )}
                         </div>
                       ))}
                     </div>

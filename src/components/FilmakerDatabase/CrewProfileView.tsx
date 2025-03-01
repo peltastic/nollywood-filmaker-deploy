@@ -209,7 +209,8 @@ const CrewProfileView = (props: Props) => {
                             const islast = index === data.crew.role.length - 1;
                             return (
                               <p className="mt-2 text-[#4B5563]" key={el}>
-                                {el}<span>{islast ? "." : ", "}</span>&nbsp;
+                                {el}
+                                <span>{islast ? "." : ", "}</span>&nbsp;
                               </p>
                             );
                           })}
@@ -227,16 +228,20 @@ const CrewProfileView = (props: Props) => {
                         <div className="">
                           {data?.crew.works.map((el) => (
                             <div className="mt-6" key={el._id}>
-                              <p className="text-[#A5A5A5] mb-1">{el.year}</p>
+                              {el.year && (
+                                <p className="text-[#A5A5A5] mb-1">{el.year}</p>
+                              )}
                               <p className="mb-1">{el.title}</p>
                               <p className="mb-1">{el.role}</p>
-                              <Link
-                                target="_blank"
-                                className="text-[#4B5563] border-b"
-                                href={el.link || "/"}
-                              >
-                                View project
-                              </Link>
+                              {el.link && (
+                                <Link
+                                  target="_blank"
+                                  className="text-[#4B5563] border-b"
+                                  href={el.link || "/"}
+                                >
+                                  View project
+                                </Link>
+                              )}
                             </div>
                           ))}
                         </div>

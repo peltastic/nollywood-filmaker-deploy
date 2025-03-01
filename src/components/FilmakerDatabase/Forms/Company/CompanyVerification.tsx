@@ -54,7 +54,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
     state: string;
     country: string;
     identification: string;
-    cac: string;
+    // cac: string;
     password: string;
     confirmPassword: string;
     username: string;
@@ -64,11 +64,11 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
     state: data.location?.state || "",
     country: data.location?.country || "",
     identification: data.idNumber || "",
-    cac: data.cacNumber || "",
     password: data.password || "",
     confirmPassword: data.confirmPassword || "",
     username: data.username || "",
   });
+  // cac: data.cacNumber || "", 
 
   useEffect(() => {
     const countriesData: { label: string; value: string }[] =
@@ -111,7 +111,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
           country: formData.country,
           state: formData.state,
         },
-        cacNumber: formData.cac,
+        // cacNumber: formData.cac,
         idNumber: formData.identification,
         bio: data.bio,
         clientele: data.clientele,
@@ -158,7 +158,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
           state: data.location?.state || "",
           country: data.location?.country || "",
           identification: data.idNumber || "",
-          cac: data.cacNumber || "",
+          // cac: data.cacNumber || "",
           password: data.password || "",
           confirmPassword: data.confirmPassword || "",
           username: data.username || "",
@@ -354,7 +354,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
                     }
                   />
                 </div>
-                <div className="mt-10">
+                {/* <div className="mt-10">
                   <Field
                     required
                     label="CAC number"
@@ -366,7 +366,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
                       setFormData((prev) => ({ ...prev, cac: e.target.value }))
                     }
                   />
-                </div>
+                </div> */}
 
                 <div className="mt-10">
                   <div className="mb-2  flex font-medium text-[0.88rem] text-[#A5A5A5]">
@@ -496,7 +496,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
                     doc: file,
                     verificationDocType: documentType,
                     idNumber: formData.identification,
-                    cacNumber: formData.cac,
+                    // cacNumber: formData.cac,
                     confirmPassword: formData.confirmPassword,
                     password: formData.password,
                     username: formData.username,

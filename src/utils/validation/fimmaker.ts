@@ -13,6 +13,10 @@ export const companyInfoSchema = Yup.object({
   phone: Yup.string().required("Phone is required")
 });
 
+export const jobsDoneSchema = Yup.object({
+  title: Yup.string().trim().required("Title is required")
+})
+
 export const crewVerificationSchema = Yup.object({
   // address: Yup.string().required("Address is required"),
   // city: Yup.string().required("City is required"),
@@ -34,7 +38,7 @@ export const companyVerificationSchema = Yup.object({
   // state: Yup.string().required("State is required"),
   // country: Yup.string().required("Country is required"),
   identification: Yup.string().required("Identification is required"),
-  cac: Yup.string().required("CAC number is required"),
+  // cac: Yup.string().required("CAC number is required"),
   username: Yup.string().required("Username is required"),
   password: Yup.string()
     .required("Password is required")

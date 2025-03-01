@@ -101,7 +101,7 @@ const CompanyInfo = ({
               className="outline-none  px-4 py-4 h-[10rem]"
             />
             <div className="mb-2 mt-6 flex font-medium text-[0.88rem] text-[#A5A5A5]">
-              <p>Profile photo</p>
+              <p>Company logo</p>
               <p>*</p>
             </div>
             <div className="flex items-center mt-10">

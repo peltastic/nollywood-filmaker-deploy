@@ -13,7 +13,7 @@ import { Drawer } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { nprogress } from "@mantine/nprogress";
 import { ColumnDef } from "@tanstack/react-table";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
 export interface ICrewFilmmakerDatabaseColumnData {
@@ -155,6 +155,7 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
     {
       id: "actions",
       cell: ({ row }) => {
+        const [openedMenu, setOpened] = useState(false);
         const [opened, { open, close }] = useDisclosure();
         const [deleteOpened, deleteFunc] = useDisclosure();
         const [deleteProfile, { data, isLoading, isError, isSuccess, error }] =
@@ -172,7 +173,7 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
           }
 
           if (isSuccess) {
-            notify("success", "Bank details saved successfully");
+            notify("success", "Profile deleted successfully");
             nprogress.complete();
             if (row.original.type) {
               fetchCompanyOrCrew({
@@ -229,21 +230,32 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
               />
             </ModalComponent>
             <MenuComponent
+              opened={openedMenu}
+              setOpened={setOpened}
               target={
-                <div className="cursor-pointer">
+                <button className="cursor-pointer">
                   <BsThreeDotsVertical />
-                </div>
+                </button>
               }
             >
               <div className="bg-white">
                 <ul className="px-1 text-gray-6 text-[0.88rem]">
-                  <li className="cursor-pointer px-2 py-2" onClick={open}>
+                  <li
+                    className="cursor-pointer px-2 py-2"
+                    onClick={() => {
+                      open();
+                      setOpened(false)
+                    }}
+                  >
                     <p>View Profile</p>
                   </li>
                   {row.original.consultant ? null : (
                     <li
                       className="cursor-pointer px-2 py-2"
-                      onClick={deleteFunc.open}
+                      onClick={() => {
+                        setOpened(false);
+                        deleteFunc.open();
+                      }}
                     >
                       <p>Delete</p>
                     </li>

@@ -34,12 +34,13 @@ const CrewProfile = (props: Props) => {
       fetchCrewData(params.id);
     }
   }, [params.id]);
-  const origin =  window.origin +
-  "/filmmaker-database" +
-  "/profile" +
-  "/crew" +
-  "/" +
-  params.id;
+  const origin =
+    window.origin +
+    "/filmmaker-database" +
+    "/profile" +
+    "/crew" +
+    "/" +
+    params.id;
   const [opened, { open, close }] = useDisclosure();
   return (
     <>
@@ -50,7 +51,7 @@ const CrewProfile = (props: Props) => {
         withCloseButton={false}
         size="xl"
       >
-            <div className=" my-4 px-4">
+        <div className=" my-4 px-4">
           <div className="flex items-center">
             <h1 className="font-semibold text-[1.6rem] sm:text-[2rem]">
               Share Profile
@@ -197,7 +198,8 @@ const CrewProfile = (props: Props) => {
                                 index === data.crew.role.length - 1;
                               return (
                                 <p className="mt-2 text-[#4B5563]" key={el}>
-                                  {el}<span>{islast ? "." : ","}</span> &nbsp;
+                                  {el}
+                                  <span>{islast ? "." : ","}</span> &nbsp;
                                 </p>
                               );
                             })}
@@ -215,16 +217,22 @@ const CrewProfile = (props: Props) => {
                           <div className="">
                             {data?.crew.works.map((el) => (
                               <div className="mt-6" key={el._id}>
-                                <p className="text-[#A5A5A5] mb-1">{el.year}</p>
+                                {el.year && (
+                                  <p className="text-[#A5A5A5] mb-1">
+                                    {el.year}
+                                  </p>
+                                )}
                                 <p className="mb-1">{el.title}</p>
                                 <p className="mb-1">{el.role}</p>
-                                <Link
-                                  target="_blank"
-                                  className="text-[#4B5563] border-b"
-                                  href={el.link}
-                                >
-                                  View project
-                                </Link>
+                                {el.link && (
+                                  <Link
+                                    target="_blank"
+                                    className="text-[#4B5563] border-b"
+                                    href={el.link}
+                                  >
+                                    View project
+                                  </Link>
+                                )}
                               </div>
                             ))}
                           </div>

@@ -26,7 +26,7 @@ import { Country, State, IState, ICountry } from "country-state-city";
 type Props = {};
 
 const AdminFilmmakerDatabasePage = (props: Props) => {
-  const [countriesVal, setCountriesVal] = useState<string>("");
+  const [countriesVal, setCountriesVal] = useState<string>("NG Nigeria");
   useProtectAdmin();
   const [countriesData, setCountriesData] = useState<
     {
@@ -346,6 +346,8 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                     data={countriesData}
                     placeholder="Search for country"
                     label=""
+                    value={countriesVal}
+                    defaultValue={countriesVal}
                     setValueProps={(val) => {
                       if (val) {
                         const country_name = val.split(" ")[1];

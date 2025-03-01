@@ -56,7 +56,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
   const [rolesList, setRolesList] = useState<string[]>([]);
   const [roleVal, setRoleVal] = useState<string>("");
   const [location, setLocation] = useState<string>("");
-  const [countriesVal, setCountriesVal] = useState<string>("");
+  const [countriesVal, setCountriesVal] = useState<string>("NG Nigeria");
   const [countriesData, setCountriesData] = useState<
     {
       label: string;
@@ -291,6 +291,8 @@ const FilmmakerDatabaseModal = (props: Props) => {
                 data={countriesData}
                 placeholder="Search for country"
                 label=""
+                value={countriesVal}
+                defaultValue={countriesVal}
                 setValueProps={(val) => {
                   if (val) {
                     const country_name = val.split(" ")[1];

@@ -54,7 +54,7 @@ export interface IJoinCompany {
   };
   verificationDocType?: string;
   idNumber?: string;
-  cacNumber?: string;
+  // cacNumber?: string;
   file?: File | null;
   doc?: File | null;
   password?: string;
