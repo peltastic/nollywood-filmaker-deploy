@@ -57,7 +57,6 @@ const FilmakerDatabasePage = (props: Props) => {
   const [companyData, setCompanyData] = useState<IJoinCompany>({
     doc: null,
     bio: "",
-    cacNumber: "",
     clientele: [],
     email: "",
     fee: "",
