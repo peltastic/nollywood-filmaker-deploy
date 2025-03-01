@@ -23,7 +23,7 @@ type Props = {
 
 
 const options = {
-  maxSizeMB: 1, // Target max size (adjust as needed)
+  maxSizeMB: 0.5, // Target max size (adjust as needed)
   maxWidthOrHeight: 1024, // Resize image to max width/height
   useWebWorker: true, // Use web worker for better performance
 };
