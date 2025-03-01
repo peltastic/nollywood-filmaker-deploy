@@ -1,3 +1,4 @@
+import imageCompression from 'browser-image-compression';
 import Field from "@/components/Field/Field";
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
@@ -17,6 +18,13 @@ type Props = {
   pfp: string;
   nextStep: () => void;
 };
+
+const options = {
+  maxSizeMB: 1, // Target max size (adjust as needed)
+  maxWidthOrHeight: 1024, // Resize image to max width/height
+  useWebWorker: true, // Use web worker for better performance
+};
+
 
 const CompanyInfo = ({
   data,
@@ -118,10 +126,12 @@ const CompanyInfo = ({
               </div>
               <FileButtonComponent
                 accept="image/*"
-                setFile={(file) => {
+                setFile={ async (file) => {
                   setFile(file);
                   if (file) {
-                    const objectUrl = URL.createObjectURL(file);
+
+                    const compressedFile = await imageCompression(file, options);
+                    const objectUrl = URL.createObjectURL(compressedFile);
                     updatePfp(objectUrl);
                   }
                 }}

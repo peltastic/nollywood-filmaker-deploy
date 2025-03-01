@@ -1,6 +1,6 @@
+import imageCompression from 'browser-image-compression';
 import Field from "@/components/Field/Field";
 import { Form, Formik } from "formik";
-import PhoneInput from "react-phone-number-input";
 import React, { useState } from "react";
 import { DateInput } from "@mantine/dates";
 import TextArea from "@/components/TextArea/TextArea";
@@ -21,6 +21,14 @@ type Props = {
   nextStep: () => void;
 };
 
+
+const options = {
+  maxSizeMB: 1, // Target max size (adjust as needed)
+  maxWidthOrHeight: 1024, // Resize image to max width/height
+  useWebWorker: true, // Use web worker for better performance
+};
+
+
 const GeneralInfo = ({ nextStep, updateCrew, updatePfp, data, pfp }: Props) => {
   const [dateInput, setDateInput] = useState<Date | null>(
     data.dob ? new Date(data.dob) : null
@@ -35,7 +43,7 @@ const GeneralInfo = ({ nextStep, updateCrew, updatePfp, data, pfp }: Props) => {
           fname: data.firstName || "",
           lname: data.lastName || "",
           email: data.email || "",
-          phone: data.mobile || ""
+          phone: data.mobile || "",
         }}
         validationSchema={crewInfoSchema}
         onSubmit={({ fname, lname, email, phone }) => {
@@ -87,22 +95,6 @@ const GeneralInfo = ({ nextStep, updateCrew, updatePfp, data, pfp }: Props) => {
                 name="phone"
                 placeholder="+234 819 2727 973"
               />
-              {/* <div className="">
-                <div className="mb-2 flex font-medium text-[0.88rem] text-[#A5A5A5]">
-                  <p>Mobile number</p>
-                  <p>*</p>
-                </div>
-                <PhoneInput
-                  className="border outline-none"
-                  style={{}}
-                  value={phoneInputVal}
-                  onChange={(val) => {
-                    if (val) {
-                      setPhoneInputVal(val.toString());
-                    }
-                  }}
-                />
-              </div> */}
             </div>
             <div className="mb-2 mt-8 flex font-medium text-[0.88rem] text-[#A5A5A5]">
               <p>Date of birth</p>
@@ -141,10 +133,11 @@ const GeneralInfo = ({ nextStep, updateCrew, updatePfp, data, pfp }: Props) => {
               </div>
               <FileButtonComponent
                 accept="image/*"
-                setFile={(file) => {
+                setFile={ async (file) => {
                   setFile(file);
                   if (file) {
-                    const objectUrl = URL.createObjectURL(file);
+                    const compressedFile = await imageCompression(file, options);
+                    const objectUrl = URL.createObjectURL(compressedFile);
                     updatePfp(objectUrl);
                   }
                 }}
