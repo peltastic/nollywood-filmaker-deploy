@@ -21,6 +21,7 @@ import {
   departmentList,
   film_crew_values,
 } from "@/utils/constants/constants";
+import { Pagination } from "@mantine/core";
 
 type Props = {
   close: () => void;
@@ -29,6 +30,7 @@ type Props = {
 };
 
 const FilmmakerDatabaseModal = (props: Props) => {
+  const [activePages, setActivePages] = useState<number>(1);
   const [crewSelectedData, setCrewSelectedData] = useState<any>({});
   const [companySelectedData, setCompanySelectedData] = useState<any>({});
 
@@ -125,7 +127,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
     if (data) {
       if (type == "crew") {
         const transformedData: ICrewFilmmakerDatabaseColumnData[] =
-          data.data.map((el) => {
+          data.data.map((el, index) => {
             return {
               category: "Film crew",
               department: el.department,
@@ -138,13 +140,15 @@ const FilmmakerDatabaseModal = (props: Props) => {
               fulldata: el,
               consultant: true,
               verificationType: "verified",
+              index,
+              page: activePages,
             };
           });
         setDatabaseData(transformedData);
       }
       if (type === "company") {
         const transformedData: ICompanyFilmmakerDatabaseColumnData[] =
-          data.data.map((el) => {
+          data.data.map((el, index) => {
             return {
               category: "Film company",
               company_type: el.type,
@@ -156,6 +160,8 @@ const FilmmakerDatabaseModal = (props: Props) => {
               fulldata: el,
               consultant: true,
               verificationType: "verified",
+              index,
+              page: activePages,
             };
           });
         setCompanyDatabase(transformedData);
@@ -184,6 +190,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
               setType("crew");
               setCompanyType("");
               setLocation("");
+              setActivePages(1);
               fetchCompanyOrCrew({ type: "crew" });
             }}
             className={`${
@@ -196,6 +203,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
             onClick={() => {
               setRefresh(false);
               setType("company");
+              setActivePages(1);
               setLocation("");
               fetchCompanyOrCrew({ type: "company" });
               setCompanyDepartmentVal("");
@@ -470,6 +478,27 @@ const FilmmakerDatabaseModal = (props: Props) => {
             columns={company_database_column}
             emptyHeader="No company profiles registered yet"
             setRowSelectData={(val) => setCompanySelectedData(val)}
+          />
+        )}
+        {data && data.pagination.totalPages > 1 && (
+          <Pagination
+            total={data.pagination.totalPages}
+            value={activePages}
+            color="#333333"
+            onChange={(val) => {
+              fetchCompanyOrCrew({
+                type,
+                page: val,
+                limit: 10,
+                location,
+                companyType,
+                department: companyDepartmentVal || undefined,
+                fee: feeVal,
+                roles: roleVal || undefined,
+              });
+              setActivePages(val);
+            }}
+            mt={"xl"}
           />
         )}
       </div>

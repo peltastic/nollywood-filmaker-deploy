@@ -29,9 +29,11 @@ export interface ICompanyFilmmakerDatabaseColumnData {
   type?: "crew" | "company";
   verificationType: string;
   admin?: boolean;
+  index: number;
+  page: number;
 }
 
-export const  company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnData>[] =
+export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnData>[] =
   [
     {
       id: "select",
@@ -53,6 +55,12 @@ export const  company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumn
           </>
         );
       },
+    },
+    {
+      id: "s/n",
+      cell: ({ row }) => (
+        <p>{(row.original.page - 1) * 10 + 1 + row.original.index}</p>
+      ),
     },
     {
       accessorKey: "name",
@@ -215,13 +223,13 @@ export const  company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumn
                       open();
                       setOpened(false);
                     }}
-                    >
+                  >
                     <p>View Profile</p>
                   </li>
                   {row.original.consultant ? null : (
                     <li
-                    className="cursor-pointer px-2 py-2"
-                    onClick={() => {
+                      className="cursor-pointer px-2 py-2"
+                      onClick={() => {
                         setOpened(false);
                         deleteFunc.open();
                       }}

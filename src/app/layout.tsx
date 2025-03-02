@@ -16,7 +16,7 @@ import "@mantine/dates/styles.css";
 export const metadata: Metadata = {
   title: "Make successful films | Nollywood Filmaker",
   icons: {
-    icon: "/assets/icon-logo.svg",
+    icon: "/assets/icon-logo.png",
   },
   openGraph: {
     title: "Make Successful Films | Nollywood Filmmaker",

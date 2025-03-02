@@ -683,10 +683,10 @@ const ChatRoom = (props: Props) => {
       }
     });
   };
-
-//   useEffect(() => {
-// database.open()
-//   }, [])
+ 
+  // useEffect(() => {
+  //   database.open();
+  // }, []);
 
   return (
     <>

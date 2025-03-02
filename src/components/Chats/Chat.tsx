@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { IChatData } from "./CustomerChat/CustomerChatLeft";
-import AdminProfileImg from "/public/assets/dashboard/admin-profile-img.svg";
+import AdminProfileImg from "/public/assets/icon-logo.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import moment from "moment";
 import { differenceInMilliseconds, isAfter, isBefore } from "date-fns";
 import { truncateStr } from "@/utils/helperFunction";
-import { chat_socket, joinChatRoom } from "@/lib/socket";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
-import { Socket } from "socket.io-client";
 import { useSetChatAsCompleteMutation } from "@/lib/features/consultants/dashboard/request";
 
 type Props = {

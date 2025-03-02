@@ -22,12 +22,15 @@ import {
 import React, { useEffect, useState } from "react";
 import { MdRefresh } from "react-icons/md";
 import { Country, State, IState, ICountry } from "country-state-city";
+import { Pagination } from "@mantine/core";
 
 type Props = {};
 
 const AdminFilmmakerDatabasePage = (props: Props) => {
-  const [countriesVal, setCountriesVal] = useState<string>("NG Nigeria");
   useProtectAdmin();
+
+  const [activePages, setActivePages] = useState<number>(1);
+  const [countriesVal, setCountriesVal] = useState<string>("NG Nigeria");
   const [countriesData, setCountriesData] = useState<
     {
       label: string;
@@ -110,7 +113,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
     if (data) {
       if (type == "crew") {
         const transformedData: ICrewFilmmakerDatabaseColumnData[] =
-          data.data.map((el) => {
+          data.data.map((el, index) => {
             return {
               category: "Film crew",
               department: el.department,
@@ -124,13 +127,15 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
               type,
               verificationType,
               admin: true,
+              index,
+              page: activePages,
             };
           });
         setDatabaseData(transformedData);
       }
       if (type === "company") {
         const transformedData: ICompanyFilmmakerDatabaseColumnData[] =
-          data.data.map((el) => {
+          data.data.map((el, index) => {
             return {
               category: "Film company",
               company_type: el.type,
@@ -143,6 +148,8 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
               type,
               verificationType,
               admin: true,
+              index,
+              page: activePages,
             };
           });
         setCompanyDatabase(transformedData);
@@ -161,6 +168,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                   setType("crew");
                   setCompanyType("");
                   setLocation("");
+                  setActivePages(1);
                   fetchCompanyOrCrew({
                     type: "crew",
                     verified: verificationType === "verified" ? true : false,
@@ -177,6 +185,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                   setRefresh(false);
                   setType("company");
                   setLocation("");
+                  setActivePages(1);
                   fetchCompanyOrCrew({
                     type: "company",
                     verified: verificationType === "verified" ? true : false,
@@ -453,28 +462,6 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                   size="md"
                 />
               </div>
-              {/* <input
-                type="text"
-                placeholder="Search by Location"
-                value={location}
-                className="outline-none border focus:border py-2 px-6 rounded-md text-md w-full mid:w-auto"
-                onChange={(e) => {
-                  if (e.target.value) {
-                    setLocation(e.target.value);
-                    fetchCompanyOrCrew({
-                      type,
-                      location,
-                      verified: verificationType === "verified" ? true : false,
-                    });
-                  } else {
-                    setLocation(e.target.value);
-                    fetchCompanyOrCrew({
-                      type,
-                      verified: verificationType === "verified" ? true : false,
-                    });
-                  }
-                }}
-              /> */}
               {refresh && (
                 <HoverCardComponent
                   target={
@@ -536,6 +523,28 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
               />
             )}
           </div>
+          {data && data.pagination.totalPages > 1 && (
+            <Pagination
+              total={data.pagination.totalPages}
+              value={activePages}
+              color="#333333"
+              onChange={(val) => {
+                fetchCompanyOrCrew({
+                  type,
+                  verified: verificationType === "verified" ? true : false,
+                  page: val,
+                  limit: 10,
+                  location,
+                  companyType,
+                  department: companyDepartmentVal || undefined,
+                  fee: feeVal,
+                  roles: roleVal || undefined,
+                });
+                setActivePages(val);
+              }}
+              mt={"xl"}
+            />
+          )}
         </section>
       </DashboardBodyLayout>
     </ServiceLayout>

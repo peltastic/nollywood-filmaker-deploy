@@ -5,7 +5,8 @@ const nextConfig = {
     images: {
         domains: [
             "ideaafricabucket.s3.eu-north-1.amazonaws.com",
-            "nwfm-api.onrender.com"
+            "nwfm-api.onrender.com",
+            "api.nollywoodfilmmaker.com"
         ]
     }
 };

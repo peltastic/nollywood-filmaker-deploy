@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import AdminProfileImg from "/public/assets/dashboard/admin-profile-img.svg";
+import AdminProfileImg from "/public/assets/icon-logo.png";
 import Image from "next/image";
 import Link from "next/link";
 import { FaDownload } from "react-icons/fa";

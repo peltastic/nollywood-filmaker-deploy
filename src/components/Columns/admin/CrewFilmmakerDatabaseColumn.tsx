@@ -30,6 +30,8 @@ export interface ICrewFilmmakerDatabaseColumnData {
   type?: "crew" | "company";
   verificationType: string;
   admin?: boolean;
+  index: number;
+  page: number;
 }
 
 export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[] =
@@ -48,6 +50,12 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
             </div>
           ) : null}
         </>
+      ),
+    },
+    {
+      id: "s/n",
+      cell: ({ row }) => (
+        <p>{(row.original.page - 1) * 10 + 1 + row.original.index}</p>
       ),
     },
     {
@@ -244,7 +252,7 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
                     className="cursor-pointer px-2 py-2"
                     onClick={() => {
                       open();
-                      setOpened(false)
+                      setOpened(false);
                     }}
                   >
                     <p>View Profile</p>

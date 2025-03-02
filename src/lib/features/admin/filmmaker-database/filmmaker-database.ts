@@ -14,11 +14,23 @@ export const adminFilmakerDatabaseApi = createApi({
         location?: string;
         companyType?: string;
         department?: string;
-        fee?: string
+        fee?: string;
+        limit?: number;
+        page?: number;
         verified: boolean;
       }
     >({
-      query: ({ type, location, roles, companyType, department, verified, fee }) => {
+      query: ({
+        type,
+        location,
+        roles,
+        companyType,
+        department,
+        verified,
+        fee,
+        limit,
+        page,
+      }) => {
         let query = ``;
         if (roles) {
           query += `&roles=${roles}`;
@@ -30,10 +42,17 @@ export const adminFilmakerDatabaseApi = createApi({
           query += `&location=${location}`;
         }
         if (fee) {
-          query += `&fee=${fee}`
+          query += `&fee=${fee}`;
         }
         if (type) {
           query += `&type=${type}`;
+        }
+
+        if (limit) {
+          query += `&limit=${limit}`;
+        }
+        if (page) {
+          query += `&page=${page}`;
         }
 
         if (companyType) {
@@ -118,7 +137,7 @@ export const adminFilmakerDatabaseApi = createApi({
 });
 
 export const {
-    useLazyFetchCompanyorCrewQuery,
+  useLazyFetchCompanyorCrewQuery,
   useDeleteCrewCompanyMutation,
   useDocumentVerificationCompanyMutation,
   useDocumentVerificationCrewMutation,

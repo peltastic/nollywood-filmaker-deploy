@@ -12,7 +12,7 @@ const ChatSuccessPage = (props: Props) => {
         darkBtnLink="/user/dashboard"
         darkButtonContent="View on Dashboard"
         lightBtnLink="/"
-        subTitle="When a killer shark unleashes chaos on a beach community off Cape Cod, it’s up to a local sheriff, a marine biologist."
+        subTitle=""
         lightButtonContent="Take me home"
         titleLight="Order Confirmed"
         titleBold="Chat with a professional"
