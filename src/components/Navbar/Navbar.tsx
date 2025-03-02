@@ -17,18 +17,18 @@ const homeLink = [
     name: "Home",
     link: "/",
   },
-  {
-    name: "FAQs",
-    link: "/faq",
-  },
-  {
-    name: "Testimonials",
-    link: "/testimonials",
-  },
-  {
-    name: "Contact us",
-    link: "/contact-us",
-  },
+  // {
+  //   name: "FAQs",
+  //   link: "/faq",
+  // },
+  // {
+  //   name: "Testimonials",
+  //   link: "/testimonials",
+  // },
+  // {
+  //   name: "Contact us",
+  //   link: "/contact-us",
+  // },
   {
     name: "Filmmaker database",
     link: "/auth/login-filmmaker-database"

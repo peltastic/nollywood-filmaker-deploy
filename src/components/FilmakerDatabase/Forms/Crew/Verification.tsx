@@ -42,7 +42,7 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
   const [idData, setIdData] = useState<string>("");
   const router = useRouter();
   const [joinCrew, result] = useJoinCrewMutation();
-  const [createCrew, crewRes] = useCreateCrewOrCompanyMutation();
+  // const [createCrew, crewRes] = useCreateCrewOrCompanyMutation();
   const [checked, setChecked] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(data.doc || null);
   const [documentType, setDocumentType] = useState<string>(
@@ -91,43 +91,21 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
     }
   }, [countriesVal]);
 
-  useEffect(() => {
-    if (crewRes.isError) {
-      nprogress.complete();
-      notify(
-        "error",
-        "",
-        (crewRes.error as any).data?.message || "An Error Occured"
-      );
-    }
-    if (crewRes.isSuccess) {
-      const payload: IJoinCrew = {
-        location: {
-          address: formData.address,
-          city: formData.city,
-          country: formData.country,
-          state: formData.state,
-        },
-        doc: file,
-        verificationDocType: documentType,
-        idNumber: formData.identification,
-        bio: data.bio,
-        department: data.department,
-        dob: data.dob,
-        email: data.email?.trim().toLowerCase(),
-        fee: data.fee,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        mobile: data.mobile,
-        file: data.file,
-        role: data.role,
-        works: data.works,
-        userId: crewRes.data.crewCompany.id,
-      };
-      setIdData(crewRes.data.crewCompany.id);
-      joinCrew(payload);
-    }
-  }, [crewRes.isSuccess, crewRes.isError]);
+  // useEffect(() => {
+  //   if (crewRes.isError) {
+  //     nprogress.complete();
+  //     notify(
+  //       "error",
+  //       "",
+  //       (crewRes.error as any).data?.message || "An Error Occured"
+  //     );
+  //   }
+  //   if (crewRes.isSuccess) {
+
+  //     setIdData(crewRes.data.crewCompany.id);
+  //     joinCrew(payload);
+  //   }
+  // }, [crewRes.isSuccess, crewRes.isError]);
   useEffect(() => {
     if (result.isError) {
       nprogress.complete();
@@ -159,11 +137,32 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
         onSubmit={({ password, username }) => {
           if (data.email) {
             nprogress.start();
-            createCrew({
-              email: data.email,
-              password,
+            const payload: IJoinCrew = {
+              location: {
+                address: formData.address,
+                city: formData.city,
+                country: formData.country,
+                state: formData.state,
+              },
+              doc: file,
+              verificationDocType: documentType,
+              idNumber: formData.identification,
+              bio: data.bio,
+              department: data.department,
+              dob: data.dob,
+              email: data.email?.trim().toLowerCase(),
+              fee: data.fee,
+              firstName: data.firstName,
+              lastName: data.lastName,
+              mobile: data.mobile,
+              file: data.file,
+              role: data.role,
+              works: data.works,
               username,
-            });
+              password,
+              // userId: crewRes.data.crewCompany.id,
+            };
+            joinCrew(payload);
           }
         }}
       >
@@ -360,12 +359,11 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
                         Terms and Conditions
                       </Link>
                     </span>{" "}
-                    and <span className="font-semibold underline">
-                      <Link href={"/privacy-policy"}>
-                      privacy policy
-                      </Link>
-                      </span> of
-                    the service. I voluntarily consent to the collection,
+                    and{" "}
+                    <span className="font-semibold underline">
+                      <Link href={"/privacy-policy"}>privacy policy</Link>
+                    </span>{" "}
+                    of the service. I voluntarily consent to the collection,
                     storage, and use of my data in accordance with the stated
                     terms, including its inclusion in the database and any
                     permitted uses by the data collector.
@@ -409,12 +407,11 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
                   !formData.state ||
                   !documentType ||
                   !checked ||
-                  result.isLoading ||
-                  crewRes.isLoading
+                  result.isLoading 
                 }
                 class="ml-auto w-[7rem] flex hover:bg-blue-1 py-2 px-4 disabled:opacity-50 transition-all rounded-lg justify-center items-center text-white border border-black-3  bg-black-3 "
               >
-                {result.isLoading || crewRes.isLoading ? (
+                {result.isLoading ? (
                   <div className="py-1 w-[1rem]">
                     <Spinner />
                   </div>

@@ -44,7 +44,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
   const [joinCompany, result] = useJoinCompanyMutation();
   const [file, setFile] = useState<File | null>(data.doc || null);
   const [cacDoc, setCacDoc] = useState<File | null>(data.cacdoc || null);
-  const [createCompany, companyRes] = useCreateCrewOrCompanyMutation();
+  // const [createCompany, companyRes] = useCreateCrewOrCompanyMutation();
   const [documentType, setDocumentType] = useState<string>(
     data.verificationDocType || ""
   );
@@ -68,7 +68,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
     confirmPassword: data.confirmPassword || "",
     username: data.username || "",
   });
-  // cac: data.cacNumber || "", 
+  // cac: data.cacNumber || "",
 
   useEffect(() => {
     const countriesData: { label: string; value: string }[] =
@@ -94,45 +94,45 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
     }
   }, [countriesVal]);
 
-  useEffect(() => {
-    if (companyRes.isError) {
-      nprogress.complete();
-      notify(
-        "error",
-        "",
-        (companyRes.error as any).data?.message || "An Error Occured"
-      );
-    }
-    if (companyRes.isSuccess) {
-      const payload: IJoinCompany = {
-        location: {
-          address: formData.address,
-          city: formData.city,
-          country: formData.country,
-          state: formData.state,
-        },
-        // cacNumber: formData.cac,
-        idNumber: formData.identification,
-        bio: data.bio,
-        clientele: data.clientele,
-        doc: file,
-        email: data.email?.trim().toLowerCase(),
-        fee: data.fee,
-        file: data.file,
-        mobile: data.mobile,
-        name: data.name,
-        rateCard: data.rateCard,
-        useRateCard: data.useRateCard,
-        type: data.type,
-        verificationDocType: documentType,
-        website: data.website,
-        userId: companyRes.data.crewCompany.id,
-        cacdoc: cacDoc,
-      };
-      setIdData(companyRes.data.crewCompany.id);
-      joinCompany(payload);
-    }
-  }, [companyRes.isSuccess, companyRes.isError]);
+  // useEffect(() => {
+  //   if (companyRes.isError) {
+  //     nprogress.complete();
+  //     notify(
+  //       "error",
+  //       "",
+  //       (companyRes.error as any).data?.message || "An Error Occured"
+  //     );
+  //   }
+  //   if (companyRes.isSuccess) {
+  //     const payload: IJoinCompany = {
+  //       location: {
+  //         address: formData.address,
+  //         city: formData.city,
+  //         country: formData.country,
+  //         state: formData.state,
+  //       },
+  //       // cacNumber: formData.cac,
+  //       idNumber: formData.identification,
+  //       bio: data.bio,
+  //       clientele: data.clientele,
+  //       doc: file,
+  //       email: data.email?.trim().toLowerCase(),
+  //       fee: data.fee,
+  //       file: data.file,
+  //       mobile: data.mobile,
+  //       name: data.name,
+  //       rateCard: data.rateCard,
+  //       useRateCard: data.useRateCard,
+  //       type: data.type,
+  //       verificationDocType: documentType,
+  //       website: data.website,
+  //       userId: companyRes.data.crewCompany.id,
+  //       cacdoc: cacDoc,
+  //     };
+  //     setIdData(companyRes.data.crewCompany.id);
+  //     joinCompany(payload);
+  //   }
+  // }, [companyRes.isSuccess, companyRes.isError]);
   useEffect(() => {
     if (result.isError) {
       nprogress.complete();
@@ -167,11 +167,39 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
           if (data.email) {
             nprogress.start();
             if (data.email) {
-              createCompany({
-                email: data.email,
-                password,
+              const payload: IJoinCompany = {
+                location: {
+                  address: formData.address,
+                  city: formData.city,
+                  country: formData.country,
+                  state: formData.state,
+                },
+                // cacNumber: formData.cac,
+                idNumber: formData.identification,
+                bio: data.bio,
+                clientele: data.clientele,
+                doc: file,
+                email: data.email?.trim().toLowerCase(),
+                fee: data.fee,
+                file: data.file,
+                mobile: data.mobile,
+                name: data.name,
+                rateCard: data.rateCard,
+                useRateCard: data.useRateCard,
+                type: data.type,
+                verificationDocType: documentType,
+                website: data.website,
+                cacdoc: cacDoc,
                 username,
-              });
+                password,
+              };
+              joinCompany(payload);
+
+              // createCompany({
+              //   email: data.email,
+              //   password,
+              //   username,
+              // });
             }
           }
         }}
@@ -520,12 +548,11 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
                   !formData.state ||
                   !documentType ||
                   !checked ||
-                  result.isLoading ||
-                  companyRes.isLoading
+                  result.isLoading
                 }
                 class="ml-auto w-[7rem] flex hover:bg-blue-1 py-2 px-4 disabled:opacity-50 transition-all rounded-lg justify-center items-center text-white border border-black-3  bg-black-3 "
               >
-                {result.isLoading || companyRes.isLoading ? (
+                {result.isLoading ? (
                   <div className="py-1 w-[1rem]">
                     <Spinner />
                   </div>

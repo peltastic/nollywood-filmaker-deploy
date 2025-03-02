@@ -31,7 +31,8 @@ export interface IJoinCrew {
   password?: string;
   confirmPassword?: string;
   username?: string;
-  userId?: string;
+  
+  // userId?: string;
 }
 
 export interface IJoinCompany {
@@ -60,7 +61,7 @@ export interface IJoinCompany {
   password?: string;
   confirmPassword?: string;
   username?: string;
-  userId?: string;
+  // userId?: string;
   cacdoc?: File | null
 }
 

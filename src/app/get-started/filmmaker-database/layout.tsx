@@ -1,3 +1,4 @@
+import { MantineProvider } from "@mantine/core";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -21,7 +22,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <MantineProvider
+          theme={{
+            headings: {
+              fontFamily: "Instrument Sans, sans-serif",
+            },
+            cursorType: "pointer",
+          }}
+        >
+          .
+          {children}
+        </MantineProvider>
+      </body>
     </html>
   );
 }
