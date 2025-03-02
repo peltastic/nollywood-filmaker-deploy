@@ -31,7 +31,6 @@ export default function RootLayout({
             cursorType: "pointer",
           }}
         >
-          .
           {children}
         </MantineProvider>
       </body>
