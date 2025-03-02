@@ -117,7 +117,7 @@ const GeneralInfo = ({ nextStep, updateCrew, updatePfp, data, pfp }: Props) => {
             />
             <div className="mb-2 mt-8 flex font-medium text-[0.88rem] text-[#A5A5A5]">
               <p>Profile photo</p>
-              {/* <p>*</p> */}
+              <p>*</p>
             </div>
             <div className="flex items-center mt-10">
               <div className="w-[10rem] h-[10rem]">
