@@ -108,7 +108,7 @@ const FilmakerDatabasePage = (props: Props) => {
           <div className="w-[90%] lg:w-fit mx-auto max-w-[100rem]">
             <div className="">
               <h2 className="text-black-2 text-[1.57rem] font-semibold">
-                Let us capture your information
+                Tell us about yourself and your work
               </h2>
               <p>A fully filled form makes it easier to find you</p>
             </div>
