@@ -64,7 +64,7 @@ const Navbar = (props: Props) => {
           ))}
         </ul>
        {props.hideLogin ? null : <ul className="hidden lg:flex items-center text-[0.9rem]">
-          <li className="hover:bg-gray-bg-3 py-1 px-3 transition-all rounded-md mr-4">
+          {/* <li className="hover:bg-gray-bg-3 py-1 px-3 transition-all rounded-md mr-4">
             <Link href="/auth/register">
               <UnstyledButton class="">Sign up</UnstyledButton>
             </Link>
@@ -75,7 +75,7 @@ const Navbar = (props: Props) => {
                 Login
               </UnstyledButton>
             </Link>
-          </li>
+          </li> */}
         </ul>}
       </nav>
     </>

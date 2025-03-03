@@ -36,7 +36,7 @@ const NavMobile = (props: Props) => {
         </ul>
         {props.dashboard ? null : (
           <ul className="font-medium text-[1.2rem] mx-6 mt-8">
-            <li className="mb-4">
+            {/* <li className="mb-4">
               <Link href="/auth/register">
                 <UnstyledButton class="">Sign up</UnstyledButton>
               </Link>
@@ -47,7 +47,7 @@ const NavMobile = (props: Props) => {
                   Login
                 </UnstyledButton>
               </Link>
-            </li>
+            </li> */}
           </ul>
         )}
       </div>
