@@ -231,7 +231,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
                     fetchCompanyOrCrew({
                       type,
                       companyType: val,
-                      location,
+                      location: location.toLowerCase() === "all" ? "" : location,
                     });
                   }
                 }}
@@ -254,9 +254,12 @@ const FilmmakerDatabaseModal = (props: Props) => {
                       setRefresh(true);
                       fetchCompanyOrCrew({
                         type,
-                        roles: roleVal,
+                        roles: 
+                        roleVal?.toLowerCase() === "all"
+                          ? ""
+                          : roleVal || undefined,
                         department: val,
-                        location,
+                        location: location.toLowerCase() === "all" ? "" : location,
                       });
                     }
                   }}
@@ -283,8 +286,11 @@ const FilmmakerDatabaseModal = (props: Props) => {
                         fetchCompanyOrCrew({
                           type,
                           roles: val,
-                          department: companyDepartmentVal,
-                          location,
+                          department:
+                          companyDepartmentVal?.toLowerCase() === "all"
+                            ? ""
+                            : companyDepartmentVal || undefined,
+                          location: location.toLowerCase() === "all" ? "" : location,
                         });
                       }
                     }}
@@ -490,11 +496,16 @@ const FilmmakerDatabaseModal = (props: Props) => {
                 type,
                 page: val,
                 limit: 10,
-                location,
-                companyType,
-                department: companyDepartmentVal || undefined,
-                fee: feeVal,
-                roles: roleVal || undefined,
+                location: location.toLowerCase() === "all" ? "" : location,
+                companyType:
+                  companyType.toLowerCase() === "all" ? "" : companyType,
+                department:
+                  companyDepartmentVal?.toLowerCase() === "all"
+                    ? ""
+                    : companyDepartmentVal || undefined,
+                fee: feeVal.toLowerCase() === "all" ? "" : feeVal,
+                roles:
+                  roleVal?.toLowerCase() === "all" ? "" : roleVal || undefined,
               });
               setActivePages(val);
             }}
