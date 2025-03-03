@@ -217,6 +217,8 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                           location.toLowerCase() === "all" ? "" : location,
                         verified: val === "verified" ? true : false,
                       });
+
+                      setActivePages(1);
                       setVerificationType(val);
                     }
                   }}
@@ -244,6 +246,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                       if (val) {
                         setRefresh(true);
                         setCompanyType(val);
+                        setActivePages(1);
                         fetchCompanyOrCrew({
                           type,
                           companyType: val,
@@ -274,6 +277,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                       value={companyDepartmentVal}
                       defaultValue={companyDepartmentVal}
                       setValueProps={(val) => {
+                        setActivePages(1);
                         if (val === "all") {
                           setCompanyDepartmentVal("");
                           setRoleVal(null);
@@ -325,6 +329,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                         value={roleVal}
                         defaultValue={roleVal}
                         setValueProps={(val) => {
+                          setActivePages(1);
                           if (val === "all") {
                             setRoleVal(null);
                             setRefresh(true);
@@ -370,6 +375,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                     value={countriesVal}
                     defaultValue={countriesVal}
                     setValueProps={(val) => {
+                      setActivePages(1);
                       if (val) {
                         const country_name = val.split(" ")[1];
                         if (val === "All") {
@@ -406,6 +412,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                       placeholder="Search for state"
                       label=""
                       setValueProps={(val) => {
+                        setActivePages(1);
                         if (val) {
                           const country_name = countriesVal.split(" ")[1];
                           fetchCompanyOrCrew({
@@ -459,6 +466,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                   placeholder="Select fee"
                   setValueProps={(val) => {
                     if (val) {
+                      setActivePages(1);
                       if (val === "All") {
                         fetchCompanyOrCrew({
                           type,
@@ -491,6 +499,8 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                             verificationType === "verified" ? true : false,
                         });
                         setCompanyDepartmentVal("");
+
+                        setActivePages(1)
                         setCompanyType("");
                         setRoleVal(null);
                         setRolesList([]);
