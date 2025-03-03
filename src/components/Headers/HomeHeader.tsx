@@ -38,8 +38,8 @@ const HomeHeader = (props: Props) => {
               <Image src={Profiles} alt="profiles" className="w-[6rem]" />
               <div className="w-[25rem] ml-4 pr-4">
                 <p className="tracking wider">
-                  Consult with renowned film industry experts and gain valuable
-                  insights to ensure your next film achieves success
+                  Consult with verified experts and access their film-related
+                  services to ensure the success of your next film
                 </p>
               </div>
             </div>
