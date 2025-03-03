@@ -387,6 +387,8 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                               verificationType === "verified" ? true : false,
                           });
                         } else {
+
+                        setRefresh(true);
                           fetchCompanyOrCrew({
                             type,
                             location: country_name,
@@ -414,6 +416,8 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                       setValueProps={(val) => {
                         setActivePages(1);
                         if (val) {
+
+                        setRefresh(true);
                           const country_name = countriesVal.split(" ")[1];
                           fetchCompanyOrCrew({
                             type,
@@ -474,6 +478,8 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                             verificationType === "verified" ? true : false,
                         });
                       } else {
+
+                        setRefresh(true);
                         fetchCompanyOrCrew({
                           type,
                           fee: val,
@@ -505,6 +511,8 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                         setRoleVal(null);
                         setRolesList([]);
                         setLocation("");
+                        setFeeVal("")
+                        
                         setRefresh(false);
                       }}
                       className=" mt-8 mid:mt-auto text-2xl mid:ml-6 cursor-pointer transition-all hover:bg-gray-bg-9 rounded-full py-1 px-1"
