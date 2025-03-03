@@ -8,6 +8,14 @@ export interface IWaitlistColumnData {
 
 export const waitlist_column: ColumnDef<IWaitlistColumnData>[] = [
     {
+        id: "s/n",
+        cell: ({row}) => (
+            <div className="">
+                <p>{row.index + 1}</p>
+            </div>
+        )
+    },
+    {
         accessorKey: "name",
         header: () => <div className="pl-6">Full name</div>,
         cell: ({row}) => (
