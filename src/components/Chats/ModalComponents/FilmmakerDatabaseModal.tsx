@@ -231,7 +231,8 @@ const FilmmakerDatabaseModal = (props: Props) => {
                     fetchCompanyOrCrew({
                       type,
                       companyType: val,
-                      location: location.toLowerCase() === "all" ? "" : location,
+                      location:
+                        location.toLowerCase() === "all" ? "" : location,
                     });
                   }
                 }}
@@ -254,12 +255,13 @@ const FilmmakerDatabaseModal = (props: Props) => {
                       setRefresh(true);
                       fetchCompanyOrCrew({
                         type,
-                        roles: 
-                        roleVal?.toLowerCase() === "all"
-                          ? ""
-                          : roleVal || undefined,
+                        roles:
+                          roleVal?.toLowerCase() === "all"
+                            ? ""
+                            : roleVal || undefined,
                         department: val,
-                        location: location.toLowerCase() === "all" ? "" : location,
+                        location:
+                          location.toLowerCase() === "all" ? "" : location,
                       });
                     }
                   }}
@@ -287,10 +289,11 @@ const FilmmakerDatabaseModal = (props: Props) => {
                           type,
                           roles: val,
                           department:
-                          companyDepartmentVal?.toLowerCase() === "all"
-                            ? ""
-                            : companyDepartmentVal || undefined,
-                          location: location.toLowerCase() === "all" ? "" : location,
+                            companyDepartmentVal?.toLowerCase() === "all"
+                              ? ""
+                              : companyDepartmentVal || undefined,
+                          location:
+                            location.toLowerCase() === "all" ? "" : location,
                         });
                       }
                     }}
@@ -342,9 +345,15 @@ const FilmmakerDatabaseModal = (props: Props) => {
                       const country_name = countriesVal.split(" ")[1];
                       fetchCompanyOrCrew({
                         type,
-                        location: `${country_name},${val}`,
+                        location: `${country_name}${
+                          val.toLowerCase() === "all" ? "" : ","
+                        }${val.toLowerCase() === "all" ? "" : val}`,
                       });
-
+                      setLocation(
+                        `${country_name}${
+                          val.toLowerCase() === "all" ? "" : ","
+                        }${val.toLowerCase() === "all" ? "" : val}`
+                      );
                       // setFormData((prev) => ({ ...prev, state: val }));
                     }
                   }}

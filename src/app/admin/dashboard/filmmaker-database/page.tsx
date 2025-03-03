@@ -280,7 +280,8 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                           setRefresh(true);
                           fetchCompanyOrCrew({
                             type,
-                            location: location.toLowerCase() === "all" ? "" : location,
+                            location:
+                              location.toLowerCase() === "all" ? "" : location,
                             verified:
                               verificationType === "verified" ? true : false,
                           });
@@ -409,11 +410,17 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                           const country_name = countriesVal.split(" ")[1];
                           fetchCompanyOrCrew({
                             type,
-                            location: `${country_name},${val}`,
+                            location: `${country_name}${
+                              val.toLowerCase() === "all" ? "" : ","
+                            }${val.toLowerCase() === "all" ? "" : val}`,
                             verified:
                               verificationType === "verified" ? true : false,
                           });
-                          setLocation(`${country_name},${val}`);
+                          setLocation(
+                            `${country_name}${
+                              val.toLowerCase() === "all" ? "" : ","
+                            }${val.toLowerCase() === "all" ? "" : val}`
+                          );
 
                           // setFormData((prev) => ({ ...prev, state: val }));
                         }
