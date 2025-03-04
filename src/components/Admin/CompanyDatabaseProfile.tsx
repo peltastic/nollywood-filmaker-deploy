@@ -43,7 +43,13 @@ const CompanyDatabaseProfile = ({ data, refetch, admin, verfied }: Props) => {
 
   const [opened, { open, close }] = useDisclosure();
   const [verificationOpened, verfiecation] = useDisclosure();
-  const origin = window.location.href;
+  const origin = 
+  window.origin +
+  "/filmmaker-database" +
+  "/profile" +
+  "/company" +
+  "/" +
+  data.userId;
   return (
     <>
       <ModalComponent

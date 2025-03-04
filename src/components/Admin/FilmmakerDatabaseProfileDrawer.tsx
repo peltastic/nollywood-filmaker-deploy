@@ -39,7 +39,13 @@ const FilmmakerDatabaseProfileDrawer = (props: Props) => {
   }, [props.admin]);
   const [opened, { open, close }] = useDisclosure();
   const [verificationOpened, verfiecation] = useDisclosure();
-  const origin = window.location.href;
+  const origin =
+    window.origin +
+    "/filmmaker-database" +
+    "/profile" +
+    "/crew" +
+    "/" +
+    props.data.userId;
   return (
     <>
       <ModalComponent

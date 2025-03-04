@@ -46,6 +46,7 @@ const GetStartedPage = (props: Props) => {
                   "Login Required",
                   "You need to log in to use a service"
                 );
+                router.push("/auth/login");
               } else {
                 router.push("/get-started/service");
               }
