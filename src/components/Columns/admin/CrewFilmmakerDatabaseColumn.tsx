@@ -143,7 +143,7 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
       header: () => <div className="">Email</div>,
       cell: ({ row }) => {
         return (
-          <div className="w-[10rem] xl:w-auto">
+          <div className="w-[20rem] xl:w-auto">
             <p>{row.getValue("email")}</p>
           </div>
         );
@@ -154,7 +154,7 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
       header: () => <div className="">Phone number</div>,
       cell: ({ row }) => {
         return (
-          <div className="w-[10rem] xl:w-auto">
+          <div className="w-[15rem] xl:w-auto">
             <p>{row.getValue("phone")}</p>
           </div>
         );
