@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import AdminProfileImg from "/public/assets/icon-logo.png";
+import AdminProfileImg from "/public/assets/admin/logo-black.png";
 import Image from "next/image";
 import Link from "next/link";
 import { FaDownload } from "react-icons/fa";
@@ -198,7 +198,7 @@ const ConsultantChatMessage = ({
           {prevUser === user && index + 1 !== 1 ? null : (
             <>
               {user === "admin" || user === "consultant" ? (
-                <div className="w-[2.5rem]  h-[2.5rem] rounded-full bg-black flex items-center justify-center">
+                <div className="w-[2.5rem]  h-[2.5rem] rounded-full bg-white flex items-center justify-center">
                   {<Image src={AdminProfileImg} alt="admin-alt-profile" />}
                 </div>
               ) : (

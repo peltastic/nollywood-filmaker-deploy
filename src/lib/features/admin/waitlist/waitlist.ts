@@ -12,14 +12,25 @@ export const waitlistApi = createApi({
           name: string;
           createAt: string;
         }[];
+        pagination: {
+          totalRecords: number;
+          currentPage: number;
+          totalPages: number;
+        };
       },
-      null
+      { page?: number }
     >({
-      query: () => ({
-        url: "/api/admin/email-list",
-      }),
+      query: ({ page }) => {
+        let query = "";
+        if (page) {
+          query += `?page=${page}`;
+        }
+        return {
+          url: `/api/admin/email-list${query}`,
+        };
+      },
     }),
   }),
 });
 
-export const { useFetchWaitListQuery } = waitlistApi;
+export const { useLazyFetchWaitListQuery } = waitlistApi;

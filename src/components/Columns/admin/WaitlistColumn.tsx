@@ -4,6 +4,7 @@ export interface IWaitlistColumnData {
     name: string
     email: string
     date: string
+    page: number
 }
 
 export const waitlist_column: ColumnDef<IWaitlistColumnData>[] = [
@@ -11,7 +12,7 @@ export const waitlist_column: ColumnDef<IWaitlistColumnData>[] = [
         id: "s/n",
         cell: ({row}) => (
             <div className="">
-                <p>{row.index + 1}</p>
+                <p>{(row.original.page - 1) * 50 + 1 + row.index}</p>
             </div>
         )
     },

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { IChatData } from "./CustomerChat/CustomerChatLeft";
-import AdminProfileImg from "/public/assets/icon-logo.png";
+import AdminProfileImg from "/public/assets/admin/logo-black.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import moment from "moment";
@@ -157,7 +157,7 @@ const Chat = ({
           orderId === data.orderId ? "bg-[#615EF00F]" : ""
         } hidden chatbp1:flex rounded-md transition-all hover:bg-[#615EF00F] items-start py-4 mb-2 px-4 cursor-pointer `}
       >
-        <div className="w-[3rem] mr-3 h-[3rem] rounded-full bg-black flex items-center justify-center">
+        <div className="w-[3rem] mr-3 h-[3rem] rounded-full bg-white flex items-center justify-center">
           <Image src={AdminProfileImg} alt="admin-alt-profile" />
         </div>
         <div className="">
@@ -203,7 +203,7 @@ const Chat = ({
         }
         className={` flex chatbp1:hidden rounded-md items-start py-4 mb-2 px-4 active:bg-[#615EF00F] `}
       >
-        <div className="w-[3rem] mr-3 h-[3rem] rounded-full bg-black flex items-center justify-center">
+        <div className="w-[3rem] mr-3 h-[3rem] rounded-full bg-white flex items-center justify-center">
           <Image src={AdminProfileImg} alt="admin-alt-profile" />
         </div>
         <div className="">

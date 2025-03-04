@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import AdminProfileImg from "/public/assets/icon-logo.png";
+import AdminProfileImg from "/public/assets/admin/logo-black.png";
 import Image from "next/image";
 import MenuComponent from "@/components/Menu/MenuComponent";
 import UnstyledButton from "@/components/Button/UnstyledButton";
@@ -503,7 +503,7 @@ const CustomerChatMiddle = ({
                   >
                     <IoIosArrowBack className="text-2xl mr-2" />
                   </div>
-                  <div className="w-[2.5rem] mr-3 h-[2.5rem] rounded-full bg-black flex items-center justify-center">
+                  <div className="w-[2.5rem] mr-3 h-[2.5rem] rounded-full bg-white flex items-center justify-center">
                     <Image src={AdminProfileImg} alt="admin-alt-profile" />
                   </div>
                   <div className="">

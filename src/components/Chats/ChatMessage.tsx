@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import AdminProfileImg from "/public/assets/icon-logo.png";
+import AdminProfileImg from "/public/assets/admin/logo-black.png";
 import Image from "next/image";
 import { FaDownload, FaExternalLinkAlt } from "react-icons/fa";
 import Link from "next/link";
@@ -222,7 +222,7 @@ const ChatMessage = React.memo(
             {prevUser === user && index + 1 !== 1 ? null : (
               <>
                 {user === "admin" || user === "consultant" ? (
-                  <div className="w-[1.8rem] sm:w-[2.5rem] mr-2 sm:mr-3 h-[1.8rem] sm:h-[2.5rem] rounded-full bg-black flex items-center justify-center">
+                  <div className="w-[1.8rem] sm:w-[2.5rem] mr-2 sm:mr-3 h-[1.8rem] sm:h-[2.5rem] rounded-full bg-white flex items-center justify-center">
                     {
                       <Image
                         src={AdminProfileImg}
