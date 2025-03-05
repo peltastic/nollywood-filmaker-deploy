@@ -21,7 +21,7 @@ import {
 } from "@/utils/constants/constants";
 import React, { useEffect, useState } from "react";
 import { MdRefresh } from "react-icons/md";
-import { Country, State, IState, ICountry } from "country-state-city";
+import { Country, State } from "country-state-city";
 import { Pagination } from "@mantine/core";
 
 type Props = {};

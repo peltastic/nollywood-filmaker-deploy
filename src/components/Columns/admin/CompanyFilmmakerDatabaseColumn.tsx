@@ -131,6 +131,17 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
       },
     },
     {
+      accessorKey: "location",
+      header: () => <div className="">Location</div>,
+      cell: ({ row }) => {
+        return (
+          <div className="w-[20rem] xl:w-auto">
+            <p>{row.getValue("location")}</p>
+          </div>
+        );
+      },
+    },
+    {
       id: "actions",
       cell: ({ row }) => {
         const [openedMenu, setOpened] = useState(false);
