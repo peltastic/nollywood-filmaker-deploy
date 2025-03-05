@@ -4,6 +4,11 @@ import { useSelector } from "react-redux";
 import RenderTextAreaInput from "../RenderTextAreaInput/RenderTextAreaInput";
 import FileImg from "/public/assets/dashboard/file.svg";
 import Image from "next/image";
+import {
+  IKeyCharacterPayload,
+  IKeyCrewPayload,
+  ITeamMember,
+} from "@/app/services/create-pitch-deck/page";
 
 type Props = {
   body: {
@@ -18,6 +23,9 @@ type Props = {
   episodes?: string;
   files?: File[];
   seriesPageCount?: number[];
+  members?: ITeamMember[];
+  crew?: IKeyCrewPayload[];
+  characters?: IKeyCharacterPayload[];
 };
 
 const ServiceLeft = ({
@@ -29,12 +37,15 @@ const ServiceLeft = ({
   episodes,
   files,
   seriesPageCount,
+  characters,
+  crew,
+  members,
 }: Props) => {
   const userData = useSelector(
     (state: RootState) => state.persistedState.user.user
   );
   return (
-    <section className="bg-gray-bg-3 w-full lg:w-[45%] py-[5rem] lg:min-h-screen relative ">
+    <section className="bg-gray-bg-3 w-full lg:w-[45%] py-[5rem] relative ">
       {userData?.fname && userData.lname && (
         <div className="bg-black-3 h-[3.8rem] flex justify-center items-center mx-auto w-[3.8rem] rounded-full">
           <p className="text-[1.5rem] font-bold text-white">
@@ -71,13 +82,97 @@ const ServiceLeft = ({
             </div>
           )}
         </div>
+        {crew && (
+          <>
+            <div className="text-[0.88rem] border-t border-t-stroke-4 py-4">
+              <h1 className="text-black-2 font-bold">Key Crew suggestions</h1>
+            </div>
+            {crew.length > 0 ? (
+              <div className="">
+                {crew.map((el, index) => (
+                  <div key={el.id}>
+                    <h1 className="text-[0.88rem] mt-4 font-semibold">
+                      Crew {index + 1}
+                    </h1>
+                    <p className="text-[0.88rem] ">{el.crew}</p>
+                    <h1 className="text-[0.88rem] mt-4 font-semibold">
+                      Suggestion
+                    </h1>
+                    <p className="text-[0.88rem] ">{el.suggestion}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>...</p>
+            )}
+          </>
+        )}
+        {characters && (
+          <>
+            <div className="text-[0.88rem] border-t border-t-stroke-4 py-4">
+              <h1 className="text-black-2 font-bold">
+                Key Character suggestions
+              </h1>
+            </div>
+            {characters.length > 0 ? (
+              <div className="">
+                {characters.map((el, index) => (
+                  <div key={el.id}>
+                    <h1 className="text-[0.88rem] font-semibold mt-4">
+                      Character {index + 1}
+                    </h1>
+                    <p>{el.character}</p>
+                    <h1 className="text-[0.88rem] font-semibold mt-4">
+                      Actor {index + 1}
+                    </h1>
+                    <p>{el.actor}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>...</p>
+            )}
+          </>
+        )}
+        {members && (
+          <>
+            <div className="text-[0.88rem] border-t border-t-stroke-4 py-4">
+              <h1 className="text-black-2 font-bold">Team members</h1>
+            </div>
+            {members.length > 0 ? (
+              <div className="">
+                {members.map((el, index) => (
+                  <div key={el.id}>
+                    <h1 className="text-[0.88rem] font-semibold mt-4">
+                      Name {index + 1}
+                    </h1>
+                    <p>{el.name}</p>
+                    <h1 className="text-[0.88rem] font-semibold mt-4">
+                      Bio {index + 1}
+                    </h1>
+                    <p>
+                      <RenderTextAreaInput text={el.bio || ""} />
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>...</p>
+            )}
+          </>
+        )}
         {series ? (
           <div className="border-t mt-2">
-            <p className="text-black-2 font-bold mb-2 mt-6">Series episodes' scripts</p>
+            <p className="text-black-2 font-bold mb-2 mt-6">
+              Series episodes' scripts
+            </p>
             {files && files.length > 0 ? (
               <div className="max-h-[25rem] overflow-y-scroll mt-10 nolly-film-hide-scrollbar">
                 {files.map((el, index) => (
-                  <div className=" flex items-center mb-4  py-4 rounded-md" key={el.name}>
+                  <div
+                    className=" flex items-center mb-4  py-4 rounded-md"
+                    key={el.name}
+                  >
                     <div className="bg-gray-bg-3 h-[2.55rem] w-[2.55rem] rounded-full flex items-center justify-center mr-4">
                       <Image src={FileImg} alt="file-img" />
                     </div>

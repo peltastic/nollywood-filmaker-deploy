@@ -89,7 +89,7 @@ const ReadMyScriptForm = ({
       >
         <InputComponent
           value={data.movie_title}
-          label="Movie title"
+          label="Working title"
           placeholder="Text"
           changed={(val) => setScriptProps("movie_title", val)}
           className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
@@ -215,28 +215,6 @@ const ReadMyScriptForm = ({
             </FileInput>
           </div>
         )}
-
-        {/* <div className="mt-10">
-          <label className="block mb-2 text-black-2 font-medium text-[0.88rem]">
-            Upload your script
-          </label>
-          <FileInput
-            accept=""
-          
-            setFile={(file) => {
-              setFileProps(file);
-            }}
-          >
-            <div className="border rounded-md border-stroke-2 py-[0.35rem] px-[0.4rem] flex items-center">
-              <div className=" cursor-pointer py-2 px-3 rounded-[0.25rem] text-white font-medium text-[0.6rem] bg-black-2">
-                Browse
-              </div>
-              <p className="text-gray-6 text-[0.88rem] ml-4">
-                {fileName || "No file chosen"}
-              </p>
-            </div>
-          </FileInput>
-        </div> */}
 
         <div className="grid md:grid-cols-2 gap-x-4 mt-10">
           <SelectComponent

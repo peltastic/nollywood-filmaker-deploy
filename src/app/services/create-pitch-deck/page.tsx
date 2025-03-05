@@ -12,6 +12,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import BudgetAndAdviceImg from "/public/assets/services/budget-and-advice.svg";
+import ServiceRight from "@/components/Services/ServiceRight";
+import PitchDeckForm from "@/components/Services/CustomForms/PitchDeckForm";
 type Props = {};
 
 export interface IPitchDeckState {
@@ -19,6 +21,29 @@ export interface IPitchDeckState {
   logline: string;
   genre: string;
   platform: string;
+  info: string;
+  revprojection: string;
+  fundingtype: string;
+  putinfestivals: boolean;
+  estimatedBudget: string;
+}
+
+export interface IKeyCharacterPayload {
+  actor: string;
+  character: string;
+  id: string;
+}
+
+export interface IKeyCrewPayload {
+  crew: string;
+  id: string;
+  suggestion: string;
+}
+
+export interface ITeamMember {
+  id: string;
+  name: string;
+  bio: string;
 }
 
 const CreatePitchDeck = (props: Props) => {
@@ -32,13 +57,102 @@ const CreatePitchDeck = (props: Props) => {
   const searchParam = useSearchParams();
   const search = searchParam.get("page");
   const [opened, { close, open }] = useDisclosure();
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[] | null>(null);
   const [scriptData, setScriptData] = useState<IPitchDeckState>({
     genre: "",
     logline: "",
     movie_title: "",
     platform: "",
+    info: "",
+    revprojection: "",
+    fundingtype: "",
+    putinfestivals: false,
+    estimatedBudget: "",
   });
+  const [keyCharacter, setKeyCharater] = useState<IKeyCharacterPayload[]>([]);
+  const [keyCrew, setKeyCrew] = useState<IKeyCrewPayload[]>([]);
+
+  const [members, setMembers] = useState<ITeamMember[]>([]);
+
+  const setKeyCharacterHandler = (
+    value: IKeyCharacterPayload,
+    index: number,
+    type: "delete" | "update",
+    id?: string
+  ) => {
+    if (type === "delete") {
+      const copiedVal = [...keyCharacter];
+      copiedVal.splice(index, 1);
+      setKeyCharater(copiedVal);
+    } else {
+      if (id) {
+        const copiedVal = [...keyCharacter];
+        copiedVal.splice(index, 1, value);
+        setKeyCharater(copiedVal);
+      } else {
+        setKeyCharater((prev) => [...prev, value]);
+      }
+    }
+  };
+
+  const setFilesHandler = (
+    file: File,
+    index: number,
+    type: "update" | "delete" | "add"
+  ) => {
+    if (files) {
+      if (type === "update") {
+        const copiedVal = [...files];
+        copiedVal.splice(index, 1, file);
+        setFiles(copiedVal)
+      } else if (type === "delete") {
+        const copiedVal = [...files];
+        // cp
+      }
+    }
+  };
+
+  const setKeyCrewHandler = (
+    value: IKeyCrewPayload,
+    index: number,
+    type: "delete" | "update",
+    id?: string
+  ) => {
+    if (type === "delete") {
+      const copiedVal = [...keyCrew];
+      copiedVal.splice(index, 1);
+      setKeyCrew(copiedVal);
+    } else {
+      if (id) {
+        const copiedVal = [...keyCrew];
+        copiedVal.splice(index, 1, value);
+        setKeyCrew(copiedVal);
+      } else {
+        setKeyCrew((prev) => [...prev, value]);
+      }
+    }
+  };
+
+  const setTeamMemberHandler = (
+    value: ITeamMember,
+    index: number,
+    type: "delete" | "update",
+    id?: string
+  ) => {
+    if (type === "delete") {
+      const copiedVal = [...members];
+      copiedVal.splice(index, 1, value);
+      setMembers(copiedVal);
+    }
+    if (id) {
+      const copiedVal = [...members];
+      copiedVal.splice(index, 1, value);
+      setMembers(copiedVal);
+    } else {
+      setMembers((prev) => [...prev, value]);
+    }
+  };
+
   const setScriptDataHandler = (key: string, value: string) => {
     setScriptData({
       ...scriptData,
@@ -70,18 +184,21 @@ const CreatePitchDeck = (props: Props) => {
         />
       ) : null}
       <ServiceLayout>
-        <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
+        <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap ">
           <ServiceLeft
             cost="500,000"
             title="Create a pitch deck"
             image={<Image src={BudgetAndAdviceImg} alt="budget-and-advice" />}
+            crew={keyCrew}
+            members={members}
+            characters={keyCharacter}
             body={[
               {
                 title: "Working title",
                 content: scriptData.movie_title,
               },
               {
-                content: "",
+                content: scriptData.platform,
                 title: "Platform for Exhibition",
               },
               {
@@ -92,8 +209,39 @@ const CreatePitchDeck = (props: Props) => {
                 title: "Logline / Synopsis",
                 content: scriptData.logline,
               },
+              {
+                title: "Funding types",
+                content: scriptData.fundingtype,
+              },
+              {
+                title: "Estimated Budget",
+                content: scriptData.estimatedBudget,
+              },
+              {
+                title: "More Information",
+                content: scriptData.info,
+              },
             ]}
           />
+          <ServiceRight title="Let's start with details" subtitle="">
+            <PitchDeckForm
+              setCharacters={setKeyCharacterHandler}
+              data={scriptData}
+              crews={keyCrew}
+              members={members}
+              setMembers={setTeamMemberHandler}
+              setKeyCrew={setKeyCrewHandler}
+              proceed={() => {}}
+              characters={keyCharacter}
+              setScriptProps={setScriptDataHandler}
+              disabled={
+                !scriptData.movie_title ||
+                !scriptData.genre ||
+                !scriptData.logline ||
+                !scriptData.platform
+              }
+            />
+          </ServiceRight>
         </div>
       </ServiceLayout>
     </>

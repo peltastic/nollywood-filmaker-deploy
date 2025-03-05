@@ -688,4 +688,7 @@ export const companyTypeList = [
     value: "Sales and marketing company",
   },
   { label: "Talent Agency", value: "Talent Agency" },
+  { label: "Makeup Studio", value: "Makeup Studio" },
+  { label: "Costume Studio", value: "Costume Studio" },
+
 ];

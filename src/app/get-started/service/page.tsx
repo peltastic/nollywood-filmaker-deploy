@@ -8,7 +8,6 @@ import { setFallbackRoute } from "@/lib/slices/routeSlice";
 import { updateService } from "@/lib/slices/servicesSlice";
 import { RootState } from "@/lib/store";
 import { notify } from "@/utils/notification";
-import { nprogress } from "@mantine/nprogress";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
