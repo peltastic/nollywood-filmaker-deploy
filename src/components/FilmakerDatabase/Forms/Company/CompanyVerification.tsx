@@ -37,7 +37,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
       value: string;
     }[]
   >([]);
-  const [countriesVal, setCountriesVal] = useState<string>("");
+  const [countriesVal, setCountriesVal] = useState<string>("NG Nigeria");
   const [idData, setIdData] = useState<string>("");
   const [checked, setChecked] = useState<boolean>(false);
   const router = useRouter();

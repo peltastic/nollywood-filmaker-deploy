@@ -129,9 +129,9 @@ export interface ICrewDataResponse {
 
 export interface IEditCrewPayload {
   userId: string;
-  firstName?: string;
-  lastName?: string;
-  mobile?: string;
+  // firstName?: string;
+  // lastName?: string;
+  // mobile?: string;
   bio?: string;
   role?: string[];
   department?: string[];

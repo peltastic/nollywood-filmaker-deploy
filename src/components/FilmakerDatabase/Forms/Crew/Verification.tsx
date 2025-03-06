@@ -15,7 +15,7 @@ import Spinner from "@/app/Spinner/Spinner";
 import { nprogress } from "@mantine/nprogress";
 import { notify } from "@/utils/notification";
 import { useRouter } from "next/navigation";
-import { Country, State, IState, ICountry } from "country-state-city";
+import { Country, State, } from "country-state-city";
 import CheckboxComponent from "@/components/Checkbox/Checkbox";
 import Link from "next/link";
 
@@ -38,7 +38,7 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
       value: string;
     }[]
   >([]);
-  const [countriesVal, setCountriesVal] = useState<string>("");
+  const [countriesVal, setCountriesVal] = useState<string>("NG Nigeria");
   const [idData, setIdData] = useState<string>("");
   const router = useRouter();
   const [joinCrew, result] = useJoinCrewMutation();
