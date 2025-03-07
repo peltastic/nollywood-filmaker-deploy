@@ -95,6 +95,31 @@ export function sendFileMessage(
   socket.emit("sendFile", data);
 }
 
+export function sendFileAsChunk(
+  data: {
+    uploadId: string;
+    fileName: string;
+    chunkIndex: number;
+    totalChunks: number;
+    fileData: string | Buffer;
+    sender: {
+      type: "img" | "file";
+      userid: string;
+      name: string;
+      role: "user" | "consultant" | "admin";
+      chatRoomId: string;
+      mid: string;
+      replyto: string;
+      replytoId: string;
+      replytousertype: "user" | "consultant" | "admin" | null;
+      replytochattype: "text" | "file" | "img" | "typing" | "contacts";
+    };
+  },
+  socket: Socket
+) {
+  socket.emit(`sendFileChunk`, data);
+}
+
 export function emitTypingEvent(room: string, userId: string, socket: Socket) {
   socket.emit("typing", {
     room,

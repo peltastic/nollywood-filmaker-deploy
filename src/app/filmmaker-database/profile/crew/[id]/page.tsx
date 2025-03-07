@@ -23,6 +23,7 @@ import {
 } from "react-share";
 import { notify } from "@/utils/notification";
 import HomeLayout from "@/components/Layouts/HomeLayout";
+import RenderTextAreaInput from "@/components/RenderTextAreaInput/RenderTextAreaInput";
 
 type Props = {};
 const tabs_list = ["About", "Jobs", "Rate"];
@@ -173,9 +174,9 @@ const CrewProfile = (props: Props) => {
                         {data?.crew.bio && (
                           <div className="mt-8">
                             <p className="text-[#A5A5A5]">Bio</p>
-                            <p className="mt-2 text-[#4B5563]">
-                              {data.crew.bio}
-                            </p>
+                            <div className="mt-2 text-[#4B5563]">
+                              <RenderTextAreaInput text={data?.crew.bio} />
+                            </div>
                           </div>
                         )}
                         <div className="mt-8">

@@ -4,7 +4,6 @@ import AttachIcon from "/public/assets/chats/attach-icon.svg";
 import Image from "next/image";
 import SendImg from "/public/assets/chats/send-icon.svg";
 import { Textarea } from "@mantine/core";
-import { MdCancel } from "react-icons/md";
 import {
   emitTypingEvent,
   IChatMessagePayload,
@@ -12,6 +11,7 @@ import {
   joinChatRoom,
   sendChatMessageEvent,
   sendContactData,
+  sendFileAsChunk,
   sendFileMessage,
   stopTypingEmit,
 } from "@/lib/socket";
@@ -23,7 +23,6 @@ import { MdInfoOutline } from "react-icons/md";
 import FileButtonComponent from "../FileButton/FileButtonComponent";
 import UnstyledButton from "../Button/UnstyledButton";
 import { FaFile } from "react-icons/fa";
-import { RiSendPlane2Line } from "react-icons/ri";
 import { useDisclosure } from "@mantine/hooks";
 import RateYourExperience from "./ModalComponents/RateYourExperience";
 import ModalComponent from "../Modal/Modal";
@@ -31,7 +30,6 @@ import { differenceInMilliseconds, isAfter } from "date-fns";
 import classes from "@/app/styles/Input.module.css";
 import ReplyBox from "./ReplyBox";
 import { v4 as uuidv4 } from "uuid";
-import moment from "moment";
 import MenuComponent from "../Menu/MenuComponent";
 import { IoMdContact } from "react-icons/io";
 import FilmmakerDatabaseModal from "./ModalComponents/FilmmakerDatabaseModal";
@@ -683,7 +681,68 @@ const ChatRoom = (props: Props) => {
       }
     });
   };
- 
+
+  const sendFileAsChunkMessage = (file: File, type: "img" | "file") => {
+    const CHUNK_SIZE = 1024 * 1024; // 1MB chunks
+    const SIZE_THRESHOLD = 1024 * 1024; // 1MB threshold
+
+    const fileSize = file.size;
+    const fileName = file.name;
+    const uploadId = uuidv4(); // Generate unique uploadId
+    const totalChunks = Math.ceil(fileSize / CHUNK_SIZE);
+
+    const reader = new FileReader();
+    let chunkIndex = 0;
+
+    const readNextChunk = () => {
+      if (chunkIndex >= totalChunks) {
+        return; // Backend will handle the "end" signal when all chunks are received
+      }
+
+      const start = chunkIndex * CHUNK_SIZE;
+      const end = Math.min(start + CHUNK_SIZE, fileSize);
+      const chunk = file.slice(start, end);
+
+      reader.onload = (event) => {
+        if (event.target?.result instanceof ArrayBuffer && props.userData) {
+          const chunkData = {
+            uploadId,
+            fileName,
+            chunkIndex,
+            totalChunks,
+            fileData: event.target.result, // Send as ArrayBuffer
+            sender: {
+              type: type,
+              name: `${props.userData.fname} ${props.userData.lname}`,
+              role: props.type,
+              userid: props.userData.id,
+              chatRoomId: searchVal as string,
+              mid: uploadId,
+              replyto: replyData.contacts
+                ? JSON.stringify(replyData.contacts)
+                : replyData.reply,
+              replytoId: replyData.id,
+              replytousertype: replyData.user,
+              replytochattype: replyData.type,
+            },
+            room: props.orderId,
+          };
+          if (socket) {
+            // sendFileAsChunk(chunkData, socket);
+          }
+          // socket.emit("sendFileChunk", chunkData); // Emit chunk
+          // console.log(`Sent chunk ${chunkIndex}/${totalChunks} for ${uploadId}`);
+          chunkIndex++;
+          readNextChunk(); // Send next chunk
+        }
+      };
+      reader.onerror = (error) => console.error("Error reading chunk:", error);
+      reader.readAsArrayBuffer(chunk);
+    };
+
+    readNextChunk();
+  };
+
   // useEffect(() => {
   //   database.open();
   // }, []);
@@ -962,8 +1021,8 @@ const ChatRoom = (props: Props) => {
                                     "Cannot send files more than 4mb"
                                   );
                                 } else {
+                                  sendFileMessageHandler(file, "img");
                                 }
-                                sendFileMessageHandler(file, "img");
                               }
                             }}
                           >

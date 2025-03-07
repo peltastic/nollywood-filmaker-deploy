@@ -20,6 +20,7 @@ import { notify } from "@/utils/notification";
 import { IoMdClipboard } from "react-icons/io";
 import { CiStar } from "react-icons/ci";
 import VerifyFMDatabaseModal from "./VerifyFMDatabaseModal";
+import RenderTextAreaInput from "../RenderTextAreaInput/RenderTextAreaInput";
 
 type Props = {
   data: ICompanyOrCrewData;
@@ -198,7 +199,9 @@ const CompanyDatabaseProfile = ({ data, refetch, admin, verfied }: Props) => {
                   {data.bio && (
                     <div className="mt-8">
                       <p className="text-[#A5A5A5]">Bio</p>
-                      <p className="mt-2 text-[#4B5563]">{data.bio}</p>
+                      <div className="mt-2 text-[#4B5563]">
+                        <RenderTextAreaInput text={data.bio} />
+                      </div>
                     </div>
                   )}
                   <div className="mt-8">
@@ -299,6 +302,14 @@ const CompanyDatabaseProfile = ({ data, refetch, admin, verfied }: Props) => {
                     <div className="mt-8">
                       <p className="text-[#A5A5A5]">ID document</p>
                       <Link href={data.document} target="_blank">
+                        <UnstyledButton class="bg-black-2 text-white py-2 px-4 rounded-md mt-3 text-[0.88rem]">
+                          Download
+                        </UnstyledButton>
+                      </Link>
+                    </div>
+                    <div className="mt-8">
+                      <p className="text-[#A5A5A5]">CAC document</p>
+                      <Link href={data.cacdoc} target="_blank">
                         <UnstyledButton class="bg-black-2 text-white py-2 px-4 rounded-md mt-3 text-[0.88rem]">
                           Download
                         </UnstyledButton>

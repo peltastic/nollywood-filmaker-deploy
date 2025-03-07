@@ -40,6 +40,7 @@ export interface ICompanyOrCrewData {
   cacNumber: string
   apiVetting: boolean
   verified: boolean
+  cacdoc: string
 }
 
 export interface ICompanyOrCrewDataResponse {

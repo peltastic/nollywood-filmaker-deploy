@@ -1,4 +1,4 @@
-import imageCompression from 'browser-image-compression';
+import imageCompression from "browser-image-compression";
 import Field from "@/components/Field/Field";
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
@@ -12,6 +12,7 @@ import { AspectRatio } from "@mantine/core";
 import { IJoinCrew } from "@/lib/features/users/filmmaker-database/filmmaker-database";
 import { crewInfoSchema } from "@/utils/validation/fimmaker";
 import moment from "moment";
+import { notify } from "@/utils/notification";
 
 type Props = {
   updateCrew: (val: IJoinCrew) => void;
@@ -21,13 +22,11 @@ type Props = {
   nextStep: () => void;
 };
 
-
 const options = {
   maxSizeMB: 0.5, // Target max size (adjust as needed)
   maxWidthOrHeight: 1024, // Resize image to max width/height
   useWebWorker: true, // Use web worker for better performance
 };
-
 
 const GeneralInfo = ({ nextStep, updateCrew, updatePfp, data, pfp }: Props) => {
   const [dateInput, setDateInput] = useState<Date | null>(
@@ -133,12 +132,22 @@ const GeneralInfo = ({ nextStep, updateCrew, updatePfp, data, pfp }: Props) => {
               </div>
               <FileButtonComponent
                 accept="image/jpeg,image/png,.jpg,.jpeg,.png"
-                setFile={ async (file) => {
-                  setFile(file);
+                setFile={async (file) => {
                   if (file) {
-                    const compressedFile = await imageCompression(file, options);
-                    const objectUrl = URL.createObjectURL(compressedFile);
-                    updatePfp(objectUrl);
+                    if (file.size > 10 * 1024 * 1024) {
+                      notify(
+                        "message",
+                        "Cannot upload image file more than 10mb"
+                      );
+                    } else {
+                      setFile(file);
+                      const compressedFile = await imageCompression(
+                        file,
+                        options
+                      );
+                      const objectUrl = URL.createObjectURL(compressedFile);
+                      updatePfp(objectUrl);
+                    }
                   }
                 }}
               >

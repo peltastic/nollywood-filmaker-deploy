@@ -22,6 +22,7 @@ import { RiAttachment2 } from "react-icons/ri";
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
 import { TbEdit } from "react-icons/tb";
+import RenderTextAreaInput from "../RenderTextAreaInput/RenderTextAreaInput";
 
 type Props = {};
 
@@ -174,9 +175,9 @@ const CompanyProfileView = (props: Props) => {
                       {data?.company.bio && (
                         <div className="mt-8">
                           <p className="text-[#A5A5A5]">Bio</p>
-                          <p className="mt-2 text-[#4B5563]">
-                            {data.company.bio}
-                          </p>
+                          <div className="mt-2 text-[#4B5563]">
+                            <RenderTextAreaInput text={data?.company.bio} />
+                          </div>
                         </div>
                       )}
                       <div className="mt-8">

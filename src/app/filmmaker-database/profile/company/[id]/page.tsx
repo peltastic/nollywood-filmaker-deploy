@@ -25,6 +25,7 @@ import { IoMdClipboard } from "react-icons/io";
 import { useDisclosure } from "@mantine/hooks";
 import CancelImg from "/public/assets/cancel.svg";
 import HomeLayout from "@/components/Layouts/HomeLayout";
+import RenderTextAreaInput from "@/components/RenderTextAreaInput/RenderTextAreaInput";
 
 type Props = {};
 
@@ -162,9 +163,9 @@ const CompanyProfile = (props: Props) => {
                         {data?.company.bio && (
                           <div className="mt-8">
                             <p className="text-[#A5A5A5]">Bio</p>
-                            <p className="mt-2 text-[#4B5563]">
-                              {data.company.bio}
-                            </p>
+                            <div className="mt-2 text-[#4B5563]">
+                              <RenderTextAreaInput text={data?.company.bio} />
+                            </div>
                           </div>
                         )}
                         <div className="mt-8">
