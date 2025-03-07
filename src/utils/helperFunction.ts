@@ -145,6 +145,7 @@ export function isResolveFile(
     | "Create a Pitch based on my Script"
     | "Draft Legal documents"
     | "Create a Production budget"
+    | "Create A Pitch Deck"
 ): boolean {
   const isTrue = resolve_file_services.find((el) => el === val);
 

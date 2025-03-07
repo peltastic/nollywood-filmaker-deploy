@@ -10,11 +10,10 @@ interface InitializeReadMyScriptPayload extends GeneralType {
   synopsis: string;
   genre: string;
   platforms: string;
-  files?: (File | null)[] | File[][];
+  files?: File []
   concerns?: string;
   type: "request";
   fileName: string;
-  pageCount?: number[];
 }
 interface IServiceResponse {
   result: {
@@ -106,12 +105,12 @@ interface InitializeCreateAPitchDeck {
   platform: string;
   loglines: string;
   genre: string;
-  // info: string;
+  info: string;
   estimatedBudget: string;
   keycharacters: { character: string; actor: string }[];
   keycrew: { crew: string; role: string }[];
   teamMenber: { name: string; bio: string }[];
   putinfestivals: boolean;
   revprojection: string;
-  file: File | null
+  files: File[]
 }

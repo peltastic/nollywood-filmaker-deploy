@@ -79,7 +79,7 @@ const EditKeyCharacters = (props: Props) => {
             <h1 className="font-semibold">{props.value.character}</h1>
             <h2>{props.value.actor}</h2>
           </div>
-          <div className="flex ">
+          <div className="flex items-center">
             <div className="cursor-pointer" onClick={() => setEdit(true)}>
               <FaPen className="text-xl mr-2" />
             </div>

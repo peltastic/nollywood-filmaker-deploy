@@ -22,7 +22,7 @@ const EditFilmmakerCompanyPage = (props: Props) => {
     <HomeLayout hideLogin>
       <section className="px-4 sm:px-10 text-start sm:text-center w-full sm:w-[95%] md:w-[90%] lg:w-[60%] mx-auto">
         <h1 className="text-2xl md:text-3xl mt-10 font-medium">
-          Edit Filmmaker Database Company Profile
+          Edit Your Filmmaker Database Company Profile
         </h1>
         <div className="mt-10">
           {isFetching ? (

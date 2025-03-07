@@ -75,6 +75,7 @@ const page = (props: Props) => {
       {opened ? (
         <InitializingTransactionModal
           paymentUrl={data?.result.authorization_url}
+          close={close}
           status={paymentStatus}
           info="Budget Review  can take between 3-5 days. You will be mailed with calendar dates to choose a chat"
         />

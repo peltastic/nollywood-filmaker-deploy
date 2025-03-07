@@ -462,6 +462,7 @@ export const film_crew_values = [
       "Screenwriter",
       "Producer",
       "Executive Producer",
+      "Associate Producer",
       "Line Producer",
       "Production Manager",
       "Production Coordinator",
@@ -690,5 +691,4 @@ export const companyTypeList = [
   { label: "Talent Agency", value: "Talent Agency" },
   { label: "Makeup Studio", value: "Makeup Studio" },
   { label: "Costume Studio", value: "Costume Studio" },
-
 ];

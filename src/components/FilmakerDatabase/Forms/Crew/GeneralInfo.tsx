@@ -132,7 +132,7 @@ const GeneralInfo = ({ nextStep, updateCrew, updatePfp, data, pfp }: Props) => {
                 </AspectRatio>
               </div>
               <FileButtonComponent
-                accept="image/*"
+                accept="image/jpeg,image/png,.jpg,.jpeg,.png"
                 setFile={ async (file) => {
                   setFile(file);
                   if (file) {

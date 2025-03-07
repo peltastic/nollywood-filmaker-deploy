@@ -5,7 +5,6 @@ import DropZoneComponent from "@/components/DropZone/DropZone";
 import FileInput from "@/components/FileInput/FileInput";
 import InputComponent from "@/components/Input/Input";
 import SelectComponent from "@/components/Select/SelectComponent";
-import ServiceInfo from "@/components/ServiceInfo/ServiceInfo";
 import TextArea from "@/components/TextArea/TextArea";
 import {
   seriesExhibitionData,
@@ -16,25 +15,26 @@ import { Switch } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
-import SeriesFiles from "../SeriesFiles";
 import { pdfjs } from "react-pdf";
 import { BsUpload } from "react-icons/bs";
+import EditFiles from "../Edits/EditFiles";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 type Props = {
   fileName?: string;
   disabled?: boolean;
   data: IReadMyScriptState;
+  noOfEpisodes: number;
   setScriptProps: (key: string, value: string) => void;
-  setFileProps: (value: File | null) => void;
+  setFileProps: (
+    file: File[],
+    index: number,
+    type: "update" | "delete" | "add"
+  ) => void;
   proceed: () => void;
   isLoading?: boolean;
-  files?: File[];
-  seriesPageCount: number[];
-  setSeriesPrices: (value: number[]) => void;
-  removeFileData: (index: number) => void;
-  setSeriesFilesData: (files: File[]) => void;
-  setSeriesCount: (counts: number[]) => void;
+  files: File[];
+  setNoOfEpisodes: (val: number) => void;
 };
 
 const ReadMyScriptForm = ({
@@ -46,11 +46,8 @@ const ReadMyScriptForm = ({
   proceed,
   isLoading,
   files,
-  removeFileData,
-  seriesPageCount,
-  setSeriesCount,
-  setSeriesFilesData,
-  setSeriesPrices,
+  noOfEpisodes,
+  setNoOfEpisodes,
 }: Props) => {
   const router = useRouter();
   const [checked, setChecked] = useState<boolean>(false);
@@ -116,9 +113,12 @@ const ReadMyScriptForm = ({
             value={data.episodes}
             label="No. of episodes"
             placeholder="Text"
-            changed={(val) => setScriptProps("episodes", val)}
+            changed={(val) => {
+              setNoOfEpisodes(Number(val));
+              setScriptProps("episodes", val);
+            }}
             className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
-            type=""
+            type="number"
           />
         )}
         <div className="mt-10">
@@ -133,30 +133,11 @@ const ReadMyScriptForm = ({
         {checked ? (
           <div className="mt-10">
             <div className="mb-2  flex font-medium text-[0.88rem] ">
-              <p>Upload scripts (pdf) files for each episodes</p>
+              <p>Upload scripts for your {noOfEpisodes} episodes</p>
             </div>
             <DropZoneComponent
-              accept={{
-                "application/pdf": [".pdf"],
-              }}
-              setFiles={async (files) => {
-                // setSeriesCount([]);
-                // setSeriesPrices(null)
-                setSeriesFilesData(files);
-                const pageCount = [];
-                const prices = [];
-
-                for (const el of files) {
-                  const page = await getPdfPageCount(el);
-                  if (page <= 50) {
-                    prices.push(50);
-                  } else {
-                    prices.push(100);
-                  }
-                  pageCount.push(page);
-                }
-                setSeriesCount(pageCount);
-                setSeriesPrices(prices);
+              setFiles={(files) => {
+                setFileProps(files, 1, "add");
               }}
             >
               <div
@@ -168,24 +149,15 @@ const ReadMyScriptForm = ({
                 <p className="text-[0.88rem] mt-6">Or click to browse file</p>
               </div>
             </DropZoneComponent>
-            <ServiceInfo
-              activeColor
-              content="Billing is based on the page count of each documents, documents uploaded must be at least 20 pages."
-            />
-            {files && files.length > 0 && (
-              <p className="font-bold text-[0.88rem] mt-8">Selected files</p>
-            )}
-            {files && files.length > 0 ? (
+
+            {files.length > 0 ? (
               <div className="max-h-[25rem]  overflow-y-scroll mt-6">
                 {files.map((el, index) => (
-                  <SeriesFiles
+                  <EditFiles
+                    file={el}
                     index={index}
-                    name={el.name}
-                    pageCount={seriesPageCount}
-                    removeFileData={removeFileData}
-                    size={el.size}
-                    key={el.name + index}
-                    id={`${el.name}${el.size}${index}`}
+                    updateFile={setFileProps}
+                    key={el.name + el.size + index}
                   />
                 ))}
               </div>
@@ -200,7 +172,7 @@ const ReadMyScriptForm = ({
               accept=""
               setFile={(file) => {
                 if (file) {
-                  setFileProps(file);
+                  setFileProps([file], 1, "add");
                 }
               }}
             >

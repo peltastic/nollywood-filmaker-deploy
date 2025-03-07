@@ -42,7 +42,11 @@ const CustomerOrderDetailsPage = (props: Props) => {
   }, [params]);
 
   useEffect(() => {
-    if (data && (data.request.stattusof === "ready" || data.request.stattusof === "completed")) {
+    if (
+      data &&
+      (data.request.stattusof === "ready" ||
+        data.request.stattusof === "completed")
+    ) {
       if (params.id) {
         getResolvedFiles(params.id);
       }
@@ -157,6 +161,12 @@ const CustomerOrderDetailsPage = (props: Props) => {
                     company={data?.request.productionCompany}
                     booktime={data?.request.booktime}
                     contact_info={data?.request.contactInfo}
+                    keycrew={data?.request.keycrew}
+                    teamMenber={data?.request.teamMenber}
+                    keycharaters={data?.request.keycharacters}
+                    estimatedBudget={data?.request.estimatedBudget}
+                    putinfestivals={data?.request.putinfestivals}
+                    revprojection={data?.request.revprojection}
                   />
                   {isResolvedFiles && (
                     <div className="mt-14">

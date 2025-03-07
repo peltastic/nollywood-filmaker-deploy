@@ -47,7 +47,8 @@ type Props = {
       | "Create a Marketing budget"
       | "Create a Pitch based on my Script"
       | "Draft Legal documents"
-      | "Create a Production budget";
+      | "Create a Production budget"
+      | "Create A Pitch Deck";
   };
   nameofservice?:
     | "Chat With A Professional"
@@ -57,7 +58,8 @@ type Props = {
     | "Create a Marketing budget"
     | "Create a Pitch based on my Script"
     | "Draft Legal documents"
-    | "Create a Production budget";
+    | "Create a Production budget"
+    | "Create A Pitch Deck";
 };
 
 const OrderDetailsHeader = ({
@@ -161,12 +163,16 @@ const OrderDetailsHeader = ({
     case "completed":
       adminMenuContent = adminMenuContent = (
         <MenuContent
-          data={isChat ? [
-            {
-              name: "Go To Chat",
-              link: "/admin/dashboard/customers/1/chat/1",
-            },
-          ] : []}
+          data={
+            isChat
+              ? [
+                  {
+                    name: "Go To Chat",
+                    link: "/admin/dashboard/customers/1/chat/1",
+                  },
+                ]
+              : []
+          }
         />
       );
       break;

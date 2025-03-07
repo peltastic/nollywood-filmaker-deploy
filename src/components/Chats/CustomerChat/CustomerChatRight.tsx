@@ -187,6 +187,7 @@ const CustomerChatRight = ({
         <InitializingTransactionModal
           paymentUrl={extensionAuthUrl}
           status={paymentStatus}
+          close={transFunc.close}
         />
       ) : null}
 

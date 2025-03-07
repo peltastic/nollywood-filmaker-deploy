@@ -19,8 +19,20 @@ import EditKeyCharacters from "../Edits/EditKeyCharacters";
 import EditKeyCrew from "../Edits/EditKeyCrew";
 import EditMember from "../Edits/EditMember";
 import SwitchComponent from "@/components/Switch/SwitchComponent";
+import DropZoneComponent from "@/components/DropZone/DropZone";
+import { BsUpload } from "react-icons/bs";
+import EditFiles from "../Edits/EditFiles";
+import UnstyledButton from "@/components/Button/UnstyledButton";
+import { useRouter } from "next/navigation";
+import Spinner from "@/app/Spinner/Spinner";
+import { FaArrowRight } from "react-icons/fa";
 
 type Props = {
+  setFilesProps: (
+    file: File[],
+    index: number,
+    type: "update" | "delete" | "add"
+  ) => void;
   disabled?: boolean;
   proceed: () => void;
   isLoading?: boolean;
@@ -47,10 +59,13 @@ type Props = {
     id?: string
   ) => void;
   crews: IKeyCrewPayload[];
+  files: File[];
 };
 
 const PitchDeckForm = (props: Props) => {
+  const router = useRouter();
   const [hasBudget, setHasBudget] = useState<boolean>(false);
+  const [hasKeyArt, setHasKeyArt] = useState<boolean>(false);
   const [characters, setCharacters] = useState<IKeyCharacterPayload[]>(
     props.characters
   );
@@ -108,7 +123,7 @@ const PitchDeckForm = (props: Props) => {
               value={props.data.platform}
               setValueProps={(val) => props.setScriptProps("platform", val!)}
               label="Platform for exhibition"
-              data={checked ? seriesExhibitionData : testExhibitionData}
+              data={testExhibitionData}
               placeholder="Select"
             />
           </div>
@@ -142,7 +157,48 @@ const PitchDeckForm = (props: Props) => {
           />
         </div>
 
-        <h3 className="font-semibold mt-8">Key Characters</h3>
+        <div className="mt-10">
+          <SwitchComponent
+            checked={hasKeyArt}
+            color="#181818"
+            label={<p className="ml-2 ">Do you have any key art created?</p>}
+            setChecked={(val) => setHasKeyArt(val)}
+          />
+        </div>
+        {hasKeyArt && (
+          <div className="mt-10">
+            <div className="mb-2  flex font-medium text-[0.88rem] text-[#A5A5A5]">
+              <p>Upload a copy of your selected ID</p>
+              <p>*</p>
+            </div>
+            <DropZoneComponent
+              setFiles={(files) => {
+                props.setFilesProps(files, 1, "add");
+              }}
+            >
+              <div
+                className={` text-center text-[#4B5563]  mt-6 rounded-2xl border-black-2 w-full py-10`}
+              >
+                <BsUpload className="text-center mx-auto mb-6" />
+                <p className="">Drag and Drop here to upload</p>
+
+                <p className="text-[0.88rem] mt-6">Or click to browse file</p>
+              </div>
+            </DropZoneComponent>
+            <div className="mt-8">
+              {props.files.map((el, index) => (
+                <EditFiles
+                  file={el}
+                  key={el.name + el.size + index}
+                  index={index}
+                  updateFile={props.setFilesProps}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        <h3 className="font-semibold mt-10">Key Characters</h3>
 
         {characters.map((el, index) => (
           <EditKeyCharacters
@@ -255,7 +311,7 @@ const PitchDeckForm = (props: Props) => {
           <p className="ml-1">Save</p>
         </button>
 
-        <h3 className="font-semibold mt-8 mb-8">Team members</h3>
+        <h3 className="font-semibold mt-8">Team members</h3>
         {members.map((el, index) => (
           <EditMember
             index={index}
@@ -264,16 +320,18 @@ const PitchDeckForm = (props: Props) => {
             key={el.id}
           />
         ))}
-        <InputComponent
-          value={name}
-          label="Name"
-          placeholder="Text"
-          type=""
-          changed={(val) => {
-            setName(val);
-          }}
-          className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
-        />
+        <div className="mt-8">
+          <InputComponent
+            value={name}
+            label="Name"
+            placeholder="Text"
+            type=""
+            changed={(val) => {
+              setName(val);
+            }}
+            className="w-full   text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
+          />
+        </div>
 
         <div className="mt-10">
           <TextArea
@@ -354,6 +412,52 @@ const PitchDeckForm = (props: Props) => {
             />
           </div>
         )}
+        <div className="mt-10 ">
+          <SelectComponent
+            size="md"
+            value={props.data.putinfestivals}
+            setValueProps={(val) =>
+              props.setScriptProps("putinfestivals", val!)
+            }
+            label="Do you wish to put the films in festivals"
+            data={[
+              {
+                label: "Yes",
+                value: "Yes",
+              },
+              {
+                label: "No",
+                value: "No",
+              },
+            ]}
+            placeholder="Select"
+          />
+        </div>
+        <div className="w-full flex mt-14">
+          <UnstyledButton
+            type="button"
+            clicked={() => router.back()}
+            class="rounded-md px-4 transition-all hover:bg-gray-bg-1 border-stroke-2 border"
+          >
+            Back
+          </UnstyledButton>
+          <UnstyledButton
+            type="submit"
+            disabled={props.disabled || props.isLoading}
+            class=" justify-center w-[12rem] flex py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
+          >
+            {props.isLoading ? (
+              <div className="w-[1rem] py-1">
+                <Spinner />
+              </div>
+            ) : (
+              <>
+                <p className="mr-2">Procced to payment</p>
+                <FaArrowRight className="text-[0.7rem]" />
+              </>
+            )}
+          </UnstyledButton>
+        </div>
       </form>
     </div>
   );

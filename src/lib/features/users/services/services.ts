@@ -17,11 +17,6 @@ export const servicesApi = createApi({
             for (const el of body[key as keyof typeof body] as File[]) {
               formData.append(key, el);
             }
-          } else if (key === "pageCount") {
-            formData.append(
-              key,
-              JSON.stringify(body[key as keyof typeof body] as number[])
-            );
           } else {
             formData.append(key, body[key as keyof typeof body] as string);
           }
@@ -124,11 +119,31 @@ export const servicesApi = createApi({
       IServiceResponse,
       InitializeCreateAPitchDeck
     >({
-      query: (body) => ({
-        url: "/api/users/transaction/deck",
-        method: "POST",
-        body,
-      }),
+      query: (data) => {
+        const formData = new FormData();
+
+        for (const [key, value] of Object.entries(data)) {
+          if (Array.isArray(value)) {
+            if (key === "files") {
+              // Append files under the same key "file" without stringifying
+              value.forEach((file: File) => {
+                formData.append("files", file);
+              });
+            } else {
+              // Stringify other arrays (keycharacters, keycrew, teamMenber)
+              formData.append(key, JSON.stringify(value));
+            }
+          } else {
+            // Handle simple fields (strings or boolean)
+            formData.append(key, String(value)); // Convert boolean or string to string
+          }
+        }
+        return {
+          url: "/api/users/transaction/deck",
+          method: "POST",
+          body: formData,
+        };
+      },
     }),
   }),
 });
@@ -141,5 +156,5 @@ export const {
   useInitializeCreateMarketingBudgetMutation,
   useInitializeCreatePitchMutation,
   useInitializeDraftLegalDocumentMutation,
-  useInitializeCreateAPitchDeckMutation
+  useInitializeCreateAPitchDeckMutation,
 } = servicesApi;

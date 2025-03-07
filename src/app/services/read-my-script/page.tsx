@@ -36,9 +36,7 @@ const ReadMyScriptPage = (props: Props) => {
   const userId = useSelector(
     (state: RootState) => state.persistedState.user.user?.id
   );
-  const [seriesPrices, setSeriesPrices] = useState<number[]>([]);
-  const [seriesFiles, setSeriesFiles] = useState<File[]>([]);
-  const [filesPageCount, setFilesPageCount] = useState<number[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
   const [opened, { close, open }] = useDisclosure();
 
   const { paymentStatus } = useServicePayment(
@@ -52,7 +50,6 @@ const ReadMyScriptPage = (props: Props) => {
   const router = useRouter();
   const searchParam = useSearchParams();
   const search = searchParam.get("page");
-  const [file, setFile] = useState<File | null>(null);
   const [scriptData, setScriptData] = useState<IReadMyScriptState>({
     movie_title: "",
     concerns: "",
@@ -62,6 +59,8 @@ const ReadMyScriptPage = (props: Props) => {
     showType: "No",
     episodes: "",
   });
+
+  const [noOfEpisodes, setNoOfEpisodes] = useState<number>(0);
   const setScriptDataHandler = (key: string, value: string) => {
     setScriptData({
       ...scriptData,
@@ -80,28 +79,24 @@ const ReadMyScriptPage = (props: Props) => {
     }
   }, [paymentStatus]);
 
-  const setSeriesFilesHandler = (files: File[]) => {
-    setSeriesFiles((prev) => [...prev, ...files]);
-  };
-  const setFilesPageCountHandler = (counts: number[]) => {
-    setFilesPageCount((prev) => [...prev, ...counts]);
-  };
-  const setSeriesPricesHandler = (prices: number[]) => {
-    setSeriesPrices((prev) => [...prev, ...prices]);
-  };
-
-  const removeSeriesFileData = (index: number) => {
-    const filesData = [...seriesFiles];
-    const pricesData = [...seriesPrices];
-    const pageCountData = [...filesPageCount];
-
-    filesData.splice(index, 1);
-    pricesData.splice(index, 1);
-    pageCountData.splice(index, 1);
-
-    setFilesPageCount(pageCountData);
-    setSeriesFiles(filesData);
-    setSeriesPrices(pricesData);
+  const setFilesHandler = (
+    file: File[],
+    index: number,
+    type: "update" | "delete" | "add"
+  ) => {
+    if (files) {
+      if (type === "update") {
+        const copiedVal = [...files];
+        copiedVal.splice(index, 1, file[0]);
+        setFiles(copiedVal);
+      } else if (type === "delete") {
+        const copiedVal = [...files];
+        copiedVal.splice(index, 1);
+        setFiles(copiedVal);
+      } else {
+        setFiles((prev) => [...prev, ...file]);
+      }
+    }
   };
 
   return (
@@ -110,6 +105,7 @@ const ReadMyScriptPage = (props: Props) => {
         <InitializingTransactionModal
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
+          close={close}
           info="Script reading can take between 1-2 weeks. You will be mailed with
           calendar dates to choose a chat"
         />
@@ -118,17 +114,13 @@ const ReadMyScriptPage = (props: Props) => {
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft
             cost={
-              seriesPrices.length > 0
-                ? numberWithCommas(
-                    seriesPrices.reduce((acc, num) => acc + num, 0) * 1000
-                  )
+              scriptData.showType === "Yes"
+                ? numberWithCommas(noOfEpisodes * 50000)
                 : "150,000"
             }
             title="Read my script"
             image={<Image src={ReadMyScriptImg} alt="read-my-script" />}
             episodes={scriptData.episodes}
-            files={seriesFiles}
-            seriesPageCount={filesPageCount}
             series
             body={[
               { title: "Movie title", content: scriptData.movie_title },
@@ -144,10 +136,10 @@ const ReadMyScriptPage = (props: Props) => {
                 title: "Platform for Exhibition",
                 content: scriptData.platform,
               },
-              {
-                title: "Script",
-                content: file?.name || "",
-              },
+              // {
+              //   title: "Script",
+              //   content: file?.name || "",
+              // },
               {
                 title: "Concerns",
                 content: scriptData.concerns,
@@ -173,37 +165,36 @@ const ReadMyScriptPage = (props: Props) => {
                         title: "Read my Script and advice",
                         concerns: scriptData.concerns,
                         type: "request",
-                        files:
-                          scriptData.showType === "Yes" ? seriesFiles : [file],
-                        fileName: file?.name || "Series",
+                        files,
+                        fileName:
+                          scriptData.showType === "No"
+                            ? files[0].name
+                            : "Series",
                         episodes: scriptData.episodes,
                         showtype: scriptData.showType,
-                        pageCount: filesPageCount,
                       });
                       initializeTransactionListener(userId);
                       nprogress.start();
                       open();
                     }
                   }}
+                  noOfEpisodes={noOfEpisodes}
+                  files={files}
+                  setNoOfEpisodes={(val) => setNoOfEpisodes(val)}
                   disabled={
                     !scriptData.movie_title ||
                     !scriptData.genre ||
                     !scriptData.platform ||
                     !scriptData.logline ||
-                    (scriptData.showType === "No" ? !file : !seriesFiles.length)
-                    
+                    !(files.length > 0)
                   }
-                  setFileProps={(file) => setFile(file)}
+                  setFileProps={setFilesHandler}
                   setScriptProps={setScriptDataHandler}
                   data={scriptData}
-                  fileName={file?.name}
-                  files={seriesFiles}
+                  fileName={
+                    scriptData.showType === "No" ? files[0]?.name : "Series"
+                  }
                   isLoading={isLoading}
-                  seriesPageCount={filesPageCount}
-                  setSeriesPrices={setSeriesPricesHandler}
-                  setSeriesFilesData={setSeriesFilesHandler}
-                  setSeriesCount={setFilesPageCountHandler}
-                  removeFileData={removeSeriesFileData}
                 />
               }
             </ServiceRight>

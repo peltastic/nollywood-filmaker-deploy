@@ -83,6 +83,7 @@ const page = (props: Props) => {
     <>
       {opened ? (
         <InitializingTransactionModal
+          close={close}
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
           info="Final Cut watch can take between 3-5 days. You will be mailed with calendar dates to choose a chat"
@@ -91,7 +92,11 @@ const page = (props: Props) => {
       <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft
-            cost={scriptData.showType === "Yes" ? numberWithCommas(Number(scriptData.episodes) * 50000) :"150,000"}
+            cost={
+              scriptData.showType === "Yes"
+                ? numberWithCommas(Number(scriptData.episodes) * 50000)
+                : "150,000"
+            }
             title="Watch the final cut of my film"
             image={<Image src={WatchFinalCutImage} alt="watch-final-cut" />}
             body={[

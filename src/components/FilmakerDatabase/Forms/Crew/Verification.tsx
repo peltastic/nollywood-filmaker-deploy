@@ -91,21 +91,6 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
     }
   }, [countriesVal]);
 
-  // useEffect(() => {
-  //   if (crewRes.isError) {
-  //     nprogress.complete();
-  //     notify(
-  //       "error",
-  //       "",
-  //       (crewRes.error as any).data?.message || "An Error Occured"
-  //     );
-  //   }
-  //   if (crewRes.isSuccess) {
-
-  //     setIdData(crewRes.data.crewCompany.id);
-  //     joinCrew(payload);
-  //   }
-  // }, [crewRes.isSuccess, crewRes.isError]);
   useEffect(() => {
     if (result.isError) {
       nprogress.complete();

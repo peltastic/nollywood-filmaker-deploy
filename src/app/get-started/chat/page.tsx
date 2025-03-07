@@ -93,6 +93,7 @@ const GetStartedChatPage = (props: Props) => {
         <InitializingTransactionModal
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
+          close={close}
         />
       ) : null}
       <ServiceLayout nonDashboard>

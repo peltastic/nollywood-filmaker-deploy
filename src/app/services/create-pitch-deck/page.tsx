@@ -24,7 +24,7 @@ export interface IPitchDeckState {
   info: string;
   revprojection: string;
   fundingtype: string;
-  putinfestivals: boolean;
+  putinfestivals: string;
   estimatedBudget: string;
 }
 
@@ -48,7 +48,7 @@ export interface ITeamMember {
 
 const CreatePitchDeck = (props: Props) => {
   useProtectRoute();
-  const [createPitchDeck, { isError, isSuccess, data, error }] =
+  const [createPitchDeck, { isError, isSuccess, data, error, isLoading }] =
     useInitializeCreateAPitchDeckMutation();
   const userId = useSelector(
     (state: RootState) => state.persistedState.user.user?.id
@@ -57,7 +57,7 @@ const CreatePitchDeck = (props: Props) => {
   const searchParam = useSearchParams();
   const search = searchParam.get("page");
   const [opened, { close, open }] = useDisclosure();
-  const [files, setFiles] = useState<File[] | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [scriptData, setScriptData] = useState<IPitchDeckState>({
     genre: "",
     logline: "",
@@ -66,7 +66,7 @@ const CreatePitchDeck = (props: Props) => {
     info: "",
     revprojection: "",
     fundingtype: "",
-    putinfestivals: false,
+    putinfestivals: "No",
     estimatedBudget: "",
   });
   const [keyCharacter, setKeyCharater] = useState<IKeyCharacterPayload[]>([]);
@@ -96,18 +96,21 @@ const CreatePitchDeck = (props: Props) => {
   };
 
   const setFilesHandler = (
-    file: File,
+    file: File[],
     index: number,
     type: "update" | "delete" | "add"
   ) => {
     if (files) {
       if (type === "update") {
         const copiedVal = [...files];
-        copiedVal.splice(index, 1, file);
-        setFiles(copiedVal)
+        copiedVal.splice(index, 1, file[0]);
+        setFiles(copiedVal);
       } else if (type === "delete") {
         const copiedVal = [...files];
-        // cp
+        copiedVal.splice(index, 1);
+        setFiles(copiedVal);
+      } else {
+        setFiles((prev) => [...prev, ...file]);
       }
     }
   };
@@ -180,6 +183,7 @@ const CreatePitchDeck = (props: Props) => {
         <InitializingTransactionModal
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
+          close={close}
           //   info=""
         />
       ) : null}
@@ -221,19 +225,62 @@ const CreatePitchDeck = (props: Props) => {
                 title: "More Information",
                 content: scriptData.info,
               },
+              {
+                title: "Put in festivals",
+                content: scriptData.putinfestivals,
+              },
             ]}
           />
           <ServiceRight title="Let's start with details" subtitle="">
             <PitchDeckForm
+              setFilesProps={setFilesHandler}
               setCharacters={setKeyCharacterHandler}
               data={scriptData}
+              isLoading={isLoading}
               crews={keyCrew}
               members={members}
               setMembers={setTeamMemberHandler}
               setKeyCrew={setKeyCrewHandler}
-              proceed={() => {}}
+              proceed={() => {
+                if (userId) {
+                  createPitchDeck({
+                    estimatedBudget: scriptData.estimatedBudget,
+                     files,
+                    genre: scriptData.genre,
+                    info: scriptData.info,
+                    keycharacters: keyCharacter.map((el) => {
+                      return {
+                        actor: el.actor,
+                        character: el.character,
+                      };
+                    }),
+                    keycrew: keyCrew.map((el) => {
+                      return {
+                        crew: el.crew,
+                        role: el.suggestion,
+                      };
+                    }),
+                    loglines: scriptData.logline,
+                    movie_title: scriptData.movie_title,
+                    platform: scriptData.platform,
+                    putinfestivals:
+                      scriptData.putinfestivals === "Yes" ? true : false,
+                    revprojection: scriptData.revprojection,
+                    teamMenber: members.map((el) => {
+                      return {
+                        bio: el.bio,
+                        name: el.name,
+                      };
+                    }),
+                    title: "Create A Pitch Deck",
+                    type: "request",
+                    userId,
+                  });
+                }
+              }}
               characters={keyCharacter}
               setScriptProps={setScriptDataHandler}
+              files={files}
               disabled={
                 !scriptData.movie_title ||
                 !scriptData.genre ||

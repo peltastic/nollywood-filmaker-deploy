@@ -30,7 +30,8 @@ export interface ICustomerReqDetails {
       | "Create a Marketing budget"
       | "Create a Pitch based on my Script"
       | "Draft Legal documents"
-      | "Create a Production budget";
+      | "Create a Production budget"
+      | "Create A Pitch Deck";
     stattusof: "pending" | "ongoing" | "ready" | "completed";
     orderId: string;
     synopsis: string;
@@ -63,8 +64,26 @@ export interface ICustomerReqDetails {
     socialTarget: string;
     oohTarget: string;
     visualStyle: string;
-    episodes: string
-    showtype: string
+    episodes: string;
+    showtype: string;
+    estimatedBudget: string;
+    putinfestivals: string;
+    revprojection: string;
+    keycharacters: {
+      _id: string;
+      character: string;
+      actor: string;
+    }[];
+    keycrew: {
+      _id: string;
+      crew: string;
+      role: string;
+    }[];
+    teamMenber: {
+      name: string;
+      bio: string;
+      _id: string;
+    }[];
   };
   user: {
     fullName: string;
@@ -103,8 +122,8 @@ export interface IConsultantActiveReq {
   date: string;
   creationDate: string;
   request: {
-    booktime?: string
-    endTime?: string
+    booktime?: string;
+    endTime?: string;
     chat_title?: string;
     movie_title: string;
     nameofservice: "Chat With A Professional";
@@ -165,25 +184,25 @@ export interface IRequestHistoryResponse {
     createdAt: string;
     chat_title: string;
     movie_title: string;
-    orderId: string
+    orderId: string;
   };
   userInfo: {
     _id: string;
     fname: string;
     lname: string;
-    email: string
+    email: string;
     profilepics: string;
   };
 }
 
 export interface IAdminResolvedFiles {
   resolves: {
-    _id: string
-    orderId: string
-    filename: string
-    filepath: string
-    size: number
-    createdAt: string
-    updatedAt: string
-  }[]
+    _id: string;
+    orderId: string;
+    filename: string;
+    filepath: string;
+    size: number;
+    createdAt: string;
+    updatedAt: string;
+  }[];
 }

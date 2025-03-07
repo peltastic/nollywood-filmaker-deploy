@@ -5,10 +5,14 @@ import Spinner from "@/app/Spinner/Spinner";
 import Link from "next/link";
 import ServiceInfo from "../ServiceInfo/ServiceInfo";
 
+import CancelImg from "/public/assets/cancel.svg";
+import Image from "next/image";
+
 type Props = {
   status: "initialized" | "pending" | "completed";
   paymentUrl?: string;
   info?: string;
+  close: () => void;
 };
 
 const InitializingTransactionModal = (props: Props) => {
@@ -26,6 +30,9 @@ const InitializingTransactionModal = (props: Props) => {
         }}
         className="w-full md:w-[80%] px-10 xl:w-[50%] h-[100%] md:h-auto z-20 py-[5rem] rounded-md fixed left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2 bg-white"
       >
+        <div className="absolute right-6 top-6 cursor-pointer" onClick={props.close}>
+          <Image src={CancelImg} alt="cancel-img" />
+        </div>
         {props.info && <ServiceInfo activeColor content={props.info} />}
 
         <div className="flex mt-10 items-center">

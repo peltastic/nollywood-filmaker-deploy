@@ -32,10 +32,31 @@ type Props = {
   episodes?: string;
   showType?: string;
   series_files?: string[];
+  keycharaters?: {
+    _id: string;
+    character: string;
+    actor: string;
+  }[];
+  keycrew?: {
+    _id: string;
+    crew: string;
+    role: string;
+  }[];
+  teamMenber?: {
+    name: string;
+    bio: string;
+    _id: string;
+  }[];
+  estimatedBudget?: string;
+  putinfestivals?: string;
+  revprojection?: string;
 };
 
 const OrderDetailsBody = ({
   title,
+  estimatedBudget,
+  putinfestivals,
+  revprojection,
   script,
   genre,
   platform,
@@ -61,6 +82,9 @@ const OrderDetailsBody = ({
   episodes,
   showType,
   series_files,
+  keycharaters,
+  keycrew,
+  teamMenber,
 }: Props) => {
   return (
     <div className="text-black-2 bg-white px-6 py-6 mt-8 rounded-2xl border border-stroke-5 shadow-md shadow-[#1018280F] mb-20">
@@ -151,7 +175,7 @@ const OrderDetailsBody = ({
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">No. of episodes</h1>
           <div className="text-[0.88rem]">
-          <p>{episodes}</p>
+            <p>{episodes}</p>
           </div>
         </div>
       )}
@@ -239,6 +263,27 @@ const OrderDetailsBody = ({
           <p className="text-[0.88rem]">{genre}</p>
         </div>
       )}
+      {revprojection && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-1">Revenue Projection</h1>
+
+          <p className="text-[0.88rem]">{revprojection}</p>
+        </div>
+      )}
+      {estimatedBudget && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-1">Estimated budget</h1>
+
+          <p className="text-[0.88rem]">{estimatedBudget}</p>
+        </div>
+      )}
+      {putinfestivals && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-1">Put films in festival</h1>
+
+          <p className="text-[0.88rem]">{putinfestivals}</p>
+        </div>
+      )}
 
       {consultant_type && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
@@ -253,6 +298,48 @@ const OrderDetailsBody = ({
           <div className="text-[0.88rem]">
             <RenderTextAreaInput text={concerns} />
           </div>
+        </div>
+      )}
+      {keycharaters && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-1">Key Characters</h1>
+          {keycharaters.map((el) => (
+            <div className="" key={el._id}>
+              <div className="text-[0.88rem] mb-2 flex">
+                <p>{el.character}</p>
+                <p className="mx-5">-</p>
+                <p>{el.actor}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {keycrew && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-1">Key Characters</h1>
+          {keycrew.map((el) => (
+            <div className="" key={el._id}>
+              <div className="text-[0.88rem] mb-2 flex">
+                <p>{el.crew}</p>
+                <p className="mx-5">-</p>
+                <p>{el.role}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      {teamMenber && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-1">Key Characters</h1>
+          {teamMenber.map((el) => (
+            <div className="" key={el._id}>
+              <div className="text-[0.88rem] mb-4">
+                <p className="mb-2">{el.name}</p>
+                <RenderTextAreaInput text={el.bio} />
+              </div>
+            </div>
+          ))}
         </div>
       )}
 

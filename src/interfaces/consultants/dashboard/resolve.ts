@@ -7,7 +7,8 @@ export interface IServiceToChatPayload {
     | "Create a Marketing budget"
     | "Create a Pitch based on my Script"
     | "Draft Legal documents"
-    | "Create a Production budget";
+    | "Create a Production budget"
+    | "Create A Pitch Deck";
   userId: string;
   type: "Chat";
   chat_title: string;

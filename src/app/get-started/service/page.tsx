@@ -37,11 +37,11 @@ const ServicePage = (props: Props) => {
       label: "Watch the Final cut of my film and advice",
       caption: "Requires chat after upload",
     },
-    // {
-    //   value: "create-pitch-deck",
-    //   label: "Create a pitch deck",
-    //   caption: "Requires chat after upload",
-    // },
+    {
+      value: "create-pitch-deck",
+      label: "Create a pitch deck",
+      caption: "Requires chat after upload",
+    },
     {
       value: "production-budget",
       label: "Create a Production budget",
