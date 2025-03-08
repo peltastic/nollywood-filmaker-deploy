@@ -23,6 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${info.data.crew.firstName} ${info.data.crew.lastName}`,
       images: [{ url: info.data.crew.badgelink }],
+      type: "website"
     },
   };
 }
