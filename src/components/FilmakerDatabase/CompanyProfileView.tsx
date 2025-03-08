@@ -95,7 +95,7 @@ const CompanyProfileView = (props: Props) => {
       <div className="">
         <section className="mt-10">
           {isFetching ? (
-            <div className="w-full sm:w-[90%] lg:w-[70%] mx-auto">
+            <div className="w-full sm:w-[90%] lg:w-[70%] mx-auto max-w-[1200px]">
               <FilmmakerSkeletonProfile />
             </div>
           ) : data?.company ? (

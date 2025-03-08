@@ -85,6 +85,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
   const [roleVal, setRoleVal] = useState<string | null>(null);
 
   const [location, setLocation] = useState<string>("");
+  const [name, setName] = useState<string>("");
 
   const [type, setType] = useState<"crew" | "company">("crew");
 
@@ -158,14 +159,15 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
     <ServiceLayout admin>
       <DashboardBodyLayout>
         <section>
-          <div className="bg-white py-6 px-4 flex items-center flex-wrap">
-            <div className="flex items-center text-sm font-medium">
+          <div className="bg-white py-6 px-4 ">
+            <div className="flex items-center text-sm font-medium mb-10">
               <div
                 onClick={() => {
                   setRefresh(false);
                   setType("crew");
                   setCompanyType("");
                   setLocation("");
+                  setName("")
                   setActivePages(1);
                   fetchCompanyOrCrew({
                     type: "crew",
@@ -175,13 +177,14 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                 className={`${
                   type === "crew" ? "border border-black-2" : "border"
                 }  py-2 px-6 rounded-md mr-2 cursor-pointer`}
-              >
+                >
                 <p>Crew</p>
               </div>
               <div
                 onClick={() => {
                   setRefresh(false);
                   setType("company");
+                  setName("")
                   setLocation("");
                   setActivePages(1);
                   fetchCompanyOrCrew({
@@ -387,8 +390,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                               verificationType === "verified" ? true : false,
                           });
                         } else {
-
-                        setRefresh(true);
+                          setRefresh(true);
                           fetchCompanyOrCrew({
                             type,
                             location: country_name,
@@ -416,8 +418,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                       setValueProps={(val) => {
                         setActivePages(1);
                         if (val) {
-
-                        setRefresh(true);
+                          setRefresh(true);
                           const country_name = countriesVal.split(" ")[1];
                           fetchCompanyOrCrew({
                             type,
@@ -478,7 +479,6 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                             verificationType === "verified" ? true : false,
                         });
                       } else {
-
                         setRefresh(true);
                         fetchCompanyOrCrew({
                           type,
@@ -494,6 +494,28 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                   size="md"
                 />
               </div>
+              <input
+                type="text"
+                placeholder="Search by name"
+                value={name}
+                className="outline-none border focus:border py-2 px-6 rounded-md text-md w-full sm:w-auto md:ml-4"
+                onChange={(e) => {
+                  if (e.target.value) {
+                    setName(e.target.value);
+                    fetchCompanyOrCrew({
+                      type,
+                      name,
+                      verified: verificationType === "verified" ? true : false,
+                    });
+                  } else {
+                    setName(e.target.value);
+                    fetchCompanyOrCrew({
+                      type,
+                      verified: verificationType === "verified" ? true : false,
+                    });
+                  }
+                }}
+              />
               {refresh && (
                 <HoverCardComponent
                   target={
@@ -506,13 +528,14 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                         });
                         setCompanyDepartmentVal("");
 
-                        setActivePages(1)
+                        setActivePages(1);
                         setCompanyType("");
                         setRoleVal(null);
+                        setName("")
                         setRolesList([]);
                         setLocation("");
-                        setFeeVal("")
-                        
+                        setFeeVal("");
+
                         setRefresh(false);
                       }}
                       className=" mt-8 mid:mt-auto text-2xl mid:ml-6 cursor-pointer transition-all hover:bg-gray-bg-9 rounded-full py-1 px-1"

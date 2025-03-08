@@ -79,6 +79,7 @@ const ChatRoom = (props: Props) => {
   const mobileTextAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const [missedPongs, setMissedPongs] = useState(0);
   const [fileType, setFileType] = useState<"file" | "img">("file");
+  const [uploadProgress, setUploadProgress] = useState<number>(20);
   const [istyping, setIsTyping] = useState<boolean>(false);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [replyData, setReplyData] = useState<IReplyDataInfo>({
@@ -601,7 +602,7 @@ const ChatRoom = (props: Props) => {
         inline: "end",
       });
     }
-  }, props.data);
+  }, [props.data]);
 
   const handleTextAreaInputChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -682,65 +683,96 @@ const ChatRoom = (props: Props) => {
     });
   };
 
-  const sendFileAsChunkMessage = (file: File, type: "img" | "file") => {
-    const CHUNK_SIZE = 1024 * 1024; // 1MB chunks
-    const SIZE_THRESHOLD = 1024 * 1024; // 1MB threshold
+  const sendFileAsChunkMessage = async (file: File, type: "img" | "file") => {
+    setUploadProgress(0);
+    const id = uuidv4();
+    getBase64(file).then((res) => {
+      props.updateChatHandlerProps({
+        text: file.name,
+        user: props.type,
+        id,
+        file: res as string,
+        filename: file.name,
+        type: type,
+        replyTo: replyData.contacts
+          ? JSON.stringify(replyData.contacts)
+          : replyData.reply,
+        replyToId: replyData.id,
+        replytousertype: replyData.user,
+        replytochattype: replyData.type,
+      });
+    });
+    const CHUNK_SIZE = 300 * 1024; // 300KB chunks
+    const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+    const uploadId = uuidv4();
 
-    const fileSize = file.size;
-    const fileName = file.name;
-    const uploadId = uuidv4(); // Generate unique uploadId
-    const totalChunks = Math.ceil(fileSize / CHUNK_SIZE);
-
-    const reader = new FileReader();
-    let chunkIndex = 0;
-
-    const readNextChunk = () => {
+    const sendChunk = async (chunkIndex: number): Promise<void> => {
       if (chunkIndex >= totalChunks) {
-        return; // Backend will handle the "end" signal when all chunks are received
+        return; // All chunks sent
       }
 
-      const start = chunkIndex * CHUNK_SIZE;
-      const end = Math.min(start + CHUNK_SIZE, fileSize);
-      const chunk = file.slice(start, end);
+      const offset = chunkIndex * CHUNK_SIZE;
+      const chunk = file.slice(offset, offset + CHUNK_SIZE);
 
-      reader.onload = (event) => {
-        if (event.target?.result instanceof ArrayBuffer && props.userData) {
-          const chunkData = {
-            uploadId,
-            fileName,
-            chunkIndex,
-            totalChunks,
-            fileData: event.target.result, // Send as ArrayBuffer
-            sender: {
-              type: type,
-              name: `${props.userData.fname} ${props.userData.lname}`,
-              role: props.type,
-              userid: props.userData.id,
-              chatRoomId: searchVal as string,
-              mid: uploadId,
-              replyto: replyData.contacts
-                ? JSON.stringify(replyData.contacts)
-                : replyData.reply,
-              replytoId: replyData.id,
-              replytousertype: replyData.user,
-              replytochattype: replyData.type,
-            },
-            room: props.orderId,
-          };
-          if (socket) {
-            // sendFileAsChunk(chunkData, socket);
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+          if (!e.target?.result) {
+            reject(new Error("Failed to read chunk"));
+            return;
           }
-          // socket.emit("sendFileChunk", chunkData); // Emit chunk
-          // console.log(`Sent chunk ${chunkIndex}/${totalChunks} for ${uploadId}`);
-          chunkIndex++;
-          readNextChunk(); // Send next chunk
-        }
-      };
-      reader.onerror = (error) => console.error("Error reading chunk:", error);
-      reader.readAsArrayBuffer(chunk);
+
+          const fileData = (e.target.result as string).split(",")[1];
+
+          if (props.userData && socket) {
+            const chunkData = {
+              uploadId,
+              fileName: file.name,
+              totalChunks,
+              chunkIndex,
+              fileData,
+              sender: {
+                type,
+                name: `${props.userData.fname} ${props.userData.lname}`,
+                role: props.type,
+                userid: props.userData.id,
+                chatRoomId: props.orderId,
+                mid: uploadId,
+                replyto: replyData.contacts
+                  ? JSON.stringify(replyData.contacts)
+                  : replyData.reply,
+                replytoId: replyData.id,
+                replytousertype: replyData.user,
+                replytochattype: replyData.type,
+              },
+              room: props.orderId,
+            };
+
+            sendFileAsChunk(chunkData, socket);
+            setUploadProgress(
+              Math.ceil(((chunkIndex + 1) / totalChunks) * 100)
+            );
+          }
+          resolve();
+        };
+
+        reader.onerror = () => reject(new Error("Error reading file chunk"));
+        reader.readAsDataURL(chunk);
+      });
     };
 
-    readNextChunk();
+    try {
+      // Sequentially send each chunk
+      for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
+        await sendChunk(chunkIndex);
+        // Optional: Add small delay between chunks to prevent overwhelming the socket
+        await new Promise((resolve) => setTimeout(resolve, 50));
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      throw error; // Handle this in your component
+    }
   };
 
   // useEffect(() => {
@@ -779,6 +811,7 @@ const ChatRoom = (props: Props) => {
                 <div key={el.id + index.toString()}>
                   {props.type === "user" ? (
                     <ChatMessage
+                      uploadProgress={uploadProgress}
                       file={el.file}
                       filename={el.filename}
                       type={el.type}
@@ -806,6 +839,7 @@ const ChatRoom = (props: Props) => {
                     />
                   ) : (
                     <ConsultantChatMessage
+                      uploadProgress={uploadProgress}
                       recommendations={el.recommendations}
                       file={el.file}
                       filename={el.filename}
@@ -844,6 +878,7 @@ const ChatRoom = (props: Props) => {
             <>
               {props.type === "user" ? (
                 <ChatMessage
+                  uploadProgress={uploadProgress}
                   file=""
                   filename=""
                   index={props.data.length}
@@ -860,6 +895,7 @@ const ChatRoom = (props: Props) => {
                   index={props.data.length}
                   prevUser={"user"}
                   text=""
+                  uploadProgress={uploadProgress}
                   type="typing"
                   user={props.type === "consultant" ? "user" : "consultant"}
                   lastmessage={true}
@@ -911,14 +947,18 @@ const ChatRoom = (props: Props) => {
                                 accept=""
                                 setFile={(file) => {
                                   if (file) {
-                                    if (file?.size > 4 * 1024 * 1024) {
+                                    if (file?.size > 25 * 1024 * 1024) {
                                       notify(
                                         "message",
-                                        "Cannot send files more than 4mb"
+                                        "Cannot send files more than 25mb"
                                       );
                                     } else {
+                                      if (file.size > 1 * 1024 * 1024) {
+                                        sendFileAsChunkMessage(file, "file");
+                                      } else {
+                                        sendFileMessageHandler(file, "file");
+                                      }
                                     }
-                                    sendFileMessageHandler(file, "file");
                                   }
                                 }}
                               >
@@ -973,14 +1013,19 @@ const ChatRoom = (props: Props) => {
                             accept="image/*"
                             setFile={(file) => {
                               if (file) {
-                                if (file?.size > 4 * 1024 * 1024) {
+                                if (file?.size > 25 * 1024 * 1024) {
                                   notify(
                                     "message",
-                                    "Cannot send files more than 4mb"
+                                    "Cannot send files more than 25mb"
                                   );
                                 } else {
+                                  if (file.size > 1 * 1024 * 1024) {
+                                    console.log("yeahh");
+                                    sendFileAsChunkMessage(file, "img");
+                                  } else {
+                                    sendFileMessageHandler(file, "img");
+                                  }
                                 }
-                                sendFileMessageHandler(file, "img");
                               }
                             }}
                           >
@@ -1015,13 +1060,17 @@ const ChatRoom = (props: Props) => {
                             accept="image/*"
                             setFile={(file) => {
                               if (file) {
-                                if (file?.size > 4 * 1024 * 1024) {
+                                if (file?.size > 25 * 1024 * 1024) {
                                   notify(
                                     "message",
-                                    "Cannot send files more than 4mb"
+                                    "Cannot send files more than 25mb"
                                   );
                                 } else {
-                                  sendFileMessageHandler(file, "img");
+                                  if (file.size > 1 * 1024 * 1024) {
+                                    sendFileAsChunkMessage(file, "img");
+                                  } else {
+                                    sendFileMessageHandler(file, "img");
+                                  }
                                 }
                               }
                             }}

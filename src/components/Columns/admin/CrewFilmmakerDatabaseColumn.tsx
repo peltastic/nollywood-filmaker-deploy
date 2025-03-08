@@ -1,6 +1,7 @@
 import FilmmakerDatabaseProfileDrawer from "@/components/Admin/FilmmakerDatabaseProfileDrawer";
 import CheckboxComponent from "@/components/Checkbox/Checkbox";
 import DeleteModal from "@/components/DeleteModal/DeleteModal";
+import HoverCardComponent from "@/components/HoverCard/HoverCardComponent";
 import MenuComponent from "@/components/Menu/MenuComponent";
 import ModalComponent from "@/components/Modal/Modal";
 import { ICompanyOrCrewData } from "@/interfaces/admin/filmmaker-database/filmmaker-database";
@@ -8,11 +9,13 @@ import {
   useDeleteCrewCompanyMutation,
   useLazyFetchCompanyorCrewQuery,
 } from "@/lib/features/admin/filmmaker-database/filmmaker-database";
+import { truncateStr } from "@/utils/helperFunction";
 import { notify } from "@/utils/notification";
 import { Drawer } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { nprogress } from "@mantine/nprogress";
 import { ColumnDef } from "@tanstack/react-table";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
@@ -32,6 +35,7 @@ export interface ICrewFilmmakerDatabaseColumnData {
   admin?: boolean;
   index: number;
   page: number;
+  works?: { name: string; link: string; id: string }[];
 }
 
 export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[] =
@@ -71,12 +75,21 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
     },
     {
       accessorKey: "category",
-      header: () => <div className="py-4">Category</div>,
+      header: ({ table }) => {
+        const hasAdmin = table
+          .getRowModel()
+          .rows.some((row) => row.original.admin);
+        return <>{hasAdmin && <div className="">Category</div>}</>;
+      },
       cell: ({ row }) => {
         return (
-          <div className="py-4 w-[10rem] xl:w-auto">
-            <p>{row.getValue("category")}</p>
-          </div>
+          <>
+            {row.original.admin && (
+              <div className="py-4 w-[10rem] xl:w-auto">
+                <p>{row.getValue("category")}</p>
+              </div>
+            )}
+          </>
         );
       },
     },
@@ -128,6 +141,56 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
       },
     },
     {
+      accessorKey: "works",
+      header: ({ table }) => {
+        const hasAdmin = table
+          .getRowModel()
+          .rows.some((row) => row.original.works);
+        return <>{hasAdmin && <div className="">Works</div>}</>;
+      },
+      cell: ({ row }) => {
+        return (
+          <div className="">
+            {row.original.works && (
+              <div className="">
+                {row.original.works.length > 0 ? (
+                  <>
+                    {row.original.works.map((el) => (
+                      <HoverCardComponent
+                        target={
+                          <div>
+                            {el.link ? (
+                              <Link
+                                href={el.link}
+                                key={el.id}
+                                target="_blank"
+                                className="underline"
+                              >
+                                <p className="mb-2">
+                                  {truncateStr(el.name, 20)}
+                                </p>
+                              </Link>
+                            ) : (
+                              null
+                              // <p className="mb-2">{truncateStr(el.name, 20)}</p>
+                            )}
+                          </div>
+                        }
+                      >
+                        <p className="text-xs">{el.name}</p>
+                      </HoverCardComponent>
+                    ))}
+                  </>
+                ) : (
+                  <p>N/A</p>
+                )}
+              </div>
+            )}
+          </div>
+        );
+      },
+    },
+    {
       accessorKey: "fee",
       header: () => <div className="">Fee range</div>,
       cell: ({ row }) => {
@@ -140,12 +203,21 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
     },
     {
       accessorKey: "email",
-      header: () => <div className="">Email</div>,
+      header: ({ table }) => {
+        const hasAdmin = table
+          .getRowModel()
+          .rows.some((row) => row.original.admin);
+        return <>{hasAdmin && <div className="">Email</div>}</>;
+      },
       cell: ({ row }) => {
         return (
-          <div className="w-[20rem] xl:w-auto">
-            <p>{row.getValue("email")}</p>
-          </div>
+          <>
+            {row.original.admin && (
+              <div className="w-[20rem] xl:w-auto">
+                <p>{row.getValue("email")}</p>
+              </div>
+            )}
+          </>
         );
       },
     },

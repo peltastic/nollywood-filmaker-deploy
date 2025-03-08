@@ -55,6 +55,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
   const [companyType, setCompanyType] = useState<string>("");
 
   const [companyDepartmentVal, setCompanyDepartmentVal] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const [rolesList, setRolesList] = useState<string[]>([]);
   const [roleVal, setRoleVal] = useState<string>("");
   const [location, setLocation] = useState<string>("");
@@ -142,6 +143,13 @@ const FilmmakerDatabaseModal = (props: Props) => {
               verificationType: "verified",
               index,
               page: activePages,
+              works: el.works.map((el) => {
+                return {
+                  name: el.title,
+                  link: el.link,
+                  id: el._id,
+                };
+              }),
             };
           });
         setDatabaseData(transformedData);
@@ -162,6 +170,13 @@ const FilmmakerDatabaseModal = (props: Props) => {
               verificationType: "verified",
               index,
               page: activePages,
+              clientele: el.clientele.map((el) => {
+                return {
+                  name: el.title,
+                  link: el.link || "",
+                  id: el._id,
+                };
+              }),
             };
           });
         setCompanyDatabase(transformedData);
@@ -225,8 +240,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
                 placeholder="Select company type"
                 value={companyType}
                 setValueProps={(val) => {
-
-                  setActivePages(1)
+                  setActivePages(1);
                   if (val) {
                     setRefresh(true);
                     setCompanyType(val);
@@ -252,8 +266,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
                   value={companyDepartmentVal}
                   defaultValue={companyDepartmentVal}
                   setValueProps={(val) => {
-
-                    setActivePages(1)
+                    setActivePages(1);
                     if (val) {
                       setCompanyDepartmentVal(val);
                       setRefresh(true);
@@ -286,8 +299,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
                     value={roleVal}
                     defaultValue={roleVal}
                     setValueProps={(val) => {
-
-                      setActivePages(1)
+                      setActivePages(1);
                       if (val) {
                         setRoleVal(val);
                         setRefresh(true);
@@ -317,8 +329,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
                 value={countriesVal}
                 defaultValue={countriesVal}
                 setValueProps={(val) => {
-
-                  setActivePages(1)
+                  setActivePages(1);
                   if (val) {
                     const country_name = val.split(" ")[1];
                     if (val === "All") {
@@ -327,7 +338,6 @@ const FilmmakerDatabaseModal = (props: Props) => {
                         type,
                       });
                     } else {
-
                       setRefresh(true);
                       fetchCompanyOrCrew({
                         type,
@@ -351,10 +361,8 @@ const FilmmakerDatabaseModal = (props: Props) => {
                   placeholder="Search for state"
                   label=""
                   setValueProps={(val) => {
-
-                    setActivePages(1)
+                    setActivePages(1);
                     if (val) {
-
                       setRefresh(true);
                       const country_name = countriesVal.split(" ")[1];
                       fetchCompanyOrCrew({
@@ -404,15 +412,13 @@ const FilmmakerDatabaseModal = (props: Props) => {
               label=""
               placeholder="Select fee"
               setValueProps={(val) => {
-
-                setActivePages(1)
+                setActivePages(1);
                 if (val) {
                   if (val === "All") {
                     fetchCompanyOrCrew({
                       type,
                     });
                   } else {
-
                     setRefresh(true);
                     fetchCompanyOrCrew({
                       type,
@@ -426,6 +432,26 @@ const FilmmakerDatabaseModal = (props: Props) => {
               size="md"
             />
           </div>
+          <input
+            type="text"
+            placeholder="Search by name"
+            value={name}
+            className="outline-none border focus:border py-2 px-6 rounded-md text-md ml-4"
+            onChange={(e) => {
+              if (e.target.value) {
+                setName(e.target.value);
+                fetchCompanyOrCrew({
+                  type,
+                  name,
+                });
+              } else {
+                setName(e.target.value);
+                fetchCompanyOrCrew({
+                  type,
+                });
+              }
+            }}
+          />
           {/* <input
             type="text"
             placeholder="Search by Location"
@@ -456,13 +482,13 @@ const FilmmakerDatabaseModal = (props: Props) => {
                     });
                     setCompanyDepartmentVal("");
 
-                    setActivePages(1)
+                    setActivePages(1);
                     setCompanyType("");
                     setRoleVal("");
                     setRolesList([]);
                     setLocation("");
                     setRefresh(false);
-                    setFeeVal("")
+                    setFeeVal("");
                   }}
                   className=" mt-8 mid:mt-auto text-2xl mid:ml-6 cursor-pointer transition-all hover:bg-gray-bg-9 rounded-full py-1 px-1"
                 >

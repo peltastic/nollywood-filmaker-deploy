@@ -3,7 +3,7 @@ import AdminProfileImg from "/public/assets/admin/logo-black.png";
 import Image from "next/image";
 import Link from "next/link";
 import { FaDownload } from "react-icons/fa";
-import { AspectRatio } from "@mantine/core";
+import { AspectRatio, Text } from "@mantine/core";
 import Lottie from "lottie-react";
 import TypingLottie from "@/components/Lottie/typing.json";
 import Linkify from "../Linkify/Linkify";
@@ -13,6 +13,7 @@ import { IReplyDataInfo } from "./ChatRoom";
 import ModalComponent from "../Modal/Modal";
 import { useDisclosure } from "@mantine/hooks";
 import Spinner from "@/app/Spinner/Spinner";
+import { RingProgress } from "@mantine/core";
 
 type Props = {
   text: string;
@@ -40,6 +41,7 @@ type Props = {
   replytochattype?: "text" | "file" | "img" | "typing" | "contacts";
   selectedRepliedToMessageId?: string;
   setSelectedRepliedToMessageId?: (val: string) => void;
+  uploadProgress: number;
 };
 
 const ConsultantChatMessage = ({
@@ -63,7 +65,11 @@ const ConsultantChatMessage = ({
   repliedToUser,
   recommendations,
   replytochattype,
+  uploadProgress,
 }: Props) => {
+  useEffect(() => {
+console.log(uploadProgress)
+  }, [uploadProgress])
   const [temporarySelectedHighlight, setTemporarySelectedHighlight] =
     useState<string>("transparent");
 
@@ -152,7 +158,11 @@ const ConsultantChatMessage = ({
         </div>
         <div className="flex ">
           {imgUrl && (
-            <Link href={imgUrl} target="_blank" className="text-white bg-black-2 ml-auto text-[0.88rem] py-2 px-4 rounded-md">
+            <Link
+              href={imgUrl}
+              target="_blank"
+              className="text-white bg-black-2 ml-auto text-[0.88rem] py-2 px-4 rounded-md"
+            >
               <p>Download image</p>
             </Link>
           )}
@@ -347,7 +357,22 @@ const ConsultantChatMessage = ({
             <div className="break-words">
               {type === "file" ? (
                 <Link href={file}>
-                  <div className="cursor-pointer py-2 px-2">
+                  <div className="cursor-pointer py-2 px-2 relative">
+                    {lastmessage && uploadProgress < 99 && (
+                      <div className="absolute h-[.5rem] w-[.5rem] bottom-6 right-6">
+                        <RingProgress
+                          size={30}
+                          className="w-[1rem]! h-[1rem]!"
+                          sections={[{ value: uploadProgress, color: "green" }]}
+                          thickness={2}
+                          label={
+                            <p className="text-[0.6rem] text-center">
+                              {uploadProgress}
+                            </p>
+                          }
+                        />
+                      </div>
+                    )}
                     <p>{filename || "file message"}</p>
                     <div className=" flex mt-2 items-center">
                       <p>file download</p>
@@ -357,7 +382,7 @@ const ConsultantChatMessage = ({
                 </Link>
               ) : type === "img" ? (
                 <div
-                  className=" cursor-pointer"
+                  className=" cursor-pointer relative"
                   onClick={() => {
                     if (file) {
                       setImgUrl(file);
@@ -365,6 +390,21 @@ const ConsultantChatMessage = ({
                     }
                   }}
                 >
+                  {lastmessage && uploadProgress < 99 && (
+                    <div className="absolute h-[.5rem] w-[.5rem] bottom-6 right-6">
+                      <RingProgress
+                        size={30}
+                        className="w-[1rem]! h-[1rem]!"
+                        sections={[{ value: uploadProgress, color: "green" }]}
+                        thickness={2}
+                        label={
+                          <p className="text-[0.6rem] text-center">
+                            {uploadProgress}
+                          </p>
+                        }
+                      />
+                    </div>
+                  )}
                   <Image
                     src={file}
                     alt="file-name"

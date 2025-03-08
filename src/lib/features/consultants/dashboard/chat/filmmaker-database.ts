@@ -16,6 +16,7 @@ export const filmmakerDatabaseConsultantApi = createApi({
         department?: string;
         fee?: string;
         limit?: number;
+        name?: string
         page?: number;
       }
     >({
@@ -28,6 +29,7 @@ export const filmmakerDatabaseConsultantApi = createApi({
         fee,
         limit,
         page,
+        name
       }) => {
         let query = "";
         if (roles) {
@@ -48,6 +50,9 @@ export const filmmakerDatabaseConsultantApi = createApi({
         }
         if (page) {
           query += `&page=${page}`;
+        }
+        if (name) {
+          query += `&name=${name}`
         }
 
         if (companyType) {

@@ -43,7 +43,7 @@ const ProjectCountdown = (props: Props) => {
               alt="logo"
             />
             <div className="ml-8 lg:ml-0">
-              <CountdownTimer endTime={"2025-03-31T23:59:00+01:00"} label />
+              <CountdownTimer endTime={"2025-04-01T23:59:00+01:00"} label />
             </div>
             <p className="block lg:hidden ml-2 font-medium text-left">DAYS <br /> TO GO</p>
           </div>

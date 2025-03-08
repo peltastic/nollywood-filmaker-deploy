@@ -1,6 +1,7 @@
 import CompanyDatabaseProfile from "@/components/Admin/CompanyDatabaseProfile";
 import CheckboxComponent from "@/components/Checkbox/Checkbox";
 import DeleteModal from "@/components/DeleteModal/DeleteModal";
+import HoverCardComponent from "@/components/HoverCard/HoverCardComponent";
 import MenuComponent from "@/components/Menu/MenuComponent";
 import ModalComponent from "@/components/Modal/Modal";
 import { ICompanyOrCrewData } from "@/interfaces/admin/filmmaker-database/filmmaker-database";
@@ -8,11 +9,13 @@ import {
   useDeleteCrewCompanyMutation,
   useLazyFetchCompanyorCrewQuery,
 } from "@/lib/features/admin/filmmaker-database/filmmaker-database";
+import { truncateStr } from "@/utils/helperFunction";
 import { notify } from "@/utils/notification";
 import { Drawer, Menu } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { nprogress } from "@mantine/nprogress";
 import { ColumnDef } from "@tanstack/react-table";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
@@ -31,6 +34,7 @@ export interface ICompanyFilmmakerDatabaseColumnData {
   admin?: boolean;
   index: number;
   page: number;
+  clientele?: { name: string; link: string; id: string }[];
 }
 
 export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnData>[] =
@@ -38,7 +42,6 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
     {
       id: "select",
       cell: ({ row }) => {
-        const [checked, setChecked] = useState<boolean>(false);
         return (
           <>
             {row.original.consultant ? (
@@ -75,12 +78,21 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
     },
     {
       accessorKey: "category",
-      header: () => <div className=" ">Category</div>,
+      header: ({ table }) => {
+        const hasAdmin = table
+          .getRowModel()
+          .rows.some((row) => row.original.admin);
+        return <>{hasAdmin && <div className="">Category</div>}</>;
+      },
       cell: ({ row }) => {
         return (
-          <div className="py-4 w-[10rem] xl:w-auto">
-            <p>{row.getValue("category")}</p>
-          </div>
+          <>
+            {row.original.admin && (
+              <div className="w-[20rem] xl:w-auto">
+                <p>{row.getValue("category")}</p>
+              </div>
+            )}
+          </>
         );
       },
     },
@@ -98,6 +110,55 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
       },
     },
     {
+      accessorKey: "clientele",
+      header: ({ table }) => {
+        const hasAdmin = table
+          .getRowModel()
+          .rows.some((row) => row.original.clientele);
+        return <>{hasAdmin && <div className="">Clientele</div>}</>;
+      },
+      cell: ({ row }) => {
+        return (
+          <div className="">
+            {row.original.clientele && (
+              <div className="">
+                {row.original.clientele.length > 0 ? (
+                  <>
+                    {row.original.clientele.map((el) => (
+                      <HoverCardComponent
+                        target={
+                          <div>
+                            {el.link ? (
+                              <Link
+                                href={el.link}
+                                key={el.id}
+                                target="_blank"
+                                className="underline"
+                              >
+                                <p className="mb-2">
+                                  {truncateStr(el.name, 20)}
+                                </p>
+                              </Link>
+                            ) : null
+                            // <p className="mb-2">{truncateStr(el.name, 20)}</p>
+                            }
+                          </div>
+                        }
+                      >
+                        <p className="text-xs">{el.name}</p>
+                      </HoverCardComponent>
+                    ))}
+                  </>
+                ) : (
+                  <p>N/A</p>
+                )}
+              </div>
+            )}
+          </div>
+        );
+      },
+    },
+    {
       accessorKey: "fee",
       header: () => <div className="">Fee range</div>,
       cell: ({ row }) => {
@@ -110,12 +171,21 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
     },
     {
       accessorKey: "email",
-      header: () => <div className="">Email</div>,
+      header: ({ table }) => {
+        const hasAdmin = table
+          .getRowModel()
+          .rows.some((row) => row.original.admin);
+        return <>{hasAdmin && <div className="">Email</div>}</>;
+      },
       cell: ({ row }) => {
         return (
-          <div className="w-[20rem] xl:w-auto">
-            <p>{row.getValue("email")}</p>
-          </div>
+          <>
+            {row.original.admin && (
+              <div className="w-[20rem] xl:w-auto">
+                <p>{row.getValue("email")}</p>
+              </div>
+            )}
+          </>
         );
       },
     },
@@ -124,7 +194,7 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
       header: () => <div className="">Phone number</div>,
       cell: ({ row }) => {
         return (
-          <div className="w-[10rem] xl:w-auto">
+          <div className="w-[10rem] xl:w-auto py-4">
             <p>{row.getValue("phone")}</p>
           </div>
         );

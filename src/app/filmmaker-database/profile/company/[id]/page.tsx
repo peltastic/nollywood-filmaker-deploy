@@ -96,7 +96,7 @@ const CompanyProfile = (props: Props) => {
 
       <HomeLayout>
         <div className="">
-          <section className="w-[90%] lg:w-[70%] mx-auto mt-10">
+          <section className="w-[90%] lg:w-[70%] mx-auto mt-10 max-w-[1200px]">
             {isFetching ? (
               <FilmmakerSkeletonProfile />
             ) : (

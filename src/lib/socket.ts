@@ -92,6 +92,7 @@ export function sendFileMessage(
   },
   socket: Socket
 ) {
+  console.log(data)
   socket.emit("sendFile", data);
 }
 
@@ -101,6 +102,7 @@ export function sendFileAsChunk(
     fileName: string;
     chunkIndex: number;
     totalChunks: number;
+    // fileData: { chunkIndex: number; fileData: string | Buffer }[];
     fileData: string | Buffer;
     sender: {
       type: "img" | "file";
@@ -117,7 +119,11 @@ export function sendFileAsChunk(
   },
   socket: Socket
 ) {
-  socket.emit(`sendFileChunk`, data);
+  // setTimeout(() => {
+
+  // }, 10000)
+    socket.emit(`sendFileChunk`, data);
+  console.log(data)
 }
 
 export function emitTypingEvent(room: string, userId: string, socket: Socket) {

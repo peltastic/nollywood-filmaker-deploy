@@ -94,6 +94,7 @@ export interface ICompanyDataResponse {
     document: string;
     idNumber: string;
     cacNumber: string;
+    badgelink: string 
   };
 }
 
@@ -115,6 +116,7 @@ export interface ICrewDataResponse {
     propic: string;
     department: string[];
     role: string[];
+    badgelink: string
     works: {
       title: string;
       role: string;

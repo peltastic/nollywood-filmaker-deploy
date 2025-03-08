@@ -5,7 +5,7 @@ import { FaDownload, FaExternalLinkAlt } from "react-icons/fa";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
-import { AspectRatio, Menu } from "@mantine/core";
+import { AspectRatio, Menu, RingProgress } from "@mantine/core";
 import Lottie from "lottie-react";
 import TypingLottie from "@/components/Lottie/typing.json";
 import Linkify from "../Linkify/Linkify";
@@ -40,6 +40,7 @@ type Props = {
   selectedRepliedToMessageId?: string;
   setSelectedRepliedToMessageId?: (val: string) => void;
   replytochattype?: "text" | "file" | "img" | "typing" | "contacts";
+  uploadProgress: number;
 };
 
 const ChatMessage = React.memo(
@@ -63,6 +64,7 @@ const ChatMessage = React.memo(
     repliedToUser,
     recommendations,
     replytochattype,
+    uploadProgress,
   }: Props) => {
     const [temporarySelectedHighlight, setTemporarySelectedHighlight] =
       useState<string>("transparent");
@@ -382,7 +384,24 @@ const ChatMessage = React.memo(
               <div className="break-words">
                 {type === "file" ? (
                   <Link href={file}>
-                    <div className="cursor-pointer py-2 px-2">
+                    <div className="cursor-pointer py-2 px-2 relative">
+                      {lastmessage && uploadProgress < 99 && (
+                        <div className="absolute h-[.5rem] w-[.5rem] bottom-6 right-6">
+                          <RingProgress
+                            size={30}
+                            className="w-[1rem]! h-[1rem]!"
+                            sections={[
+                              { value: uploadProgress, color: "green" },
+                            ]}
+                            thickness={2}
+                            label={
+                              <p className="text-[0.6rem] text-center">
+                                {uploadProgress}
+                              </p>
+                            }
+                          />
+                        </div>
+                      )}
                       <p>{filename || "file message"}</p>
                       <div className=" flex mt-2 items-center">
                         <p>file download</p>
@@ -393,7 +412,7 @@ const ChatMessage = React.memo(
                 ) : type === "img" ? (
                   <div
                     // ref={imgRef}
-                    className=""
+                    className="cursor-pointer relative"
                     onClick={() => {
                       if (file) {
                         setImgUrl(file);
@@ -401,6 +420,21 @@ const ChatMessage = React.memo(
                       }
                     }}
                   >
+                    {lastmessage && uploadProgress < 99 && (
+                      <div className="absolute h-[.5rem] w-[.5rem] bottom-6 right-6">
+                        <RingProgress
+                          size={30}
+                          className="w-[1rem]! h-[1rem]!"
+                          sections={[{ value: uploadProgress, color: "green" }]}
+                          thickness={2}
+                          label={
+                            <p className="text-[0.6rem] text-center">
+                              {uploadProgress}
+                            </p>
+                          }
+                        />
+                      </div>
+                    )}
                     <Image
                       src={file}
                       alt="file-name"

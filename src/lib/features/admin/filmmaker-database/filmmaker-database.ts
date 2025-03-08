@@ -16,6 +16,7 @@ export const adminFilmakerDatabaseApi = createApi({
         department?: string;
         fee?: string;
         limit?: number;
+        name?: string;
         page?: number;
         verified: boolean;
       }
@@ -30,6 +31,7 @@ export const adminFilmakerDatabaseApi = createApi({
         fee,
         limit,
         page,
+        name,
       }) => {
         let query = ``;
         if (roles) {
@@ -48,6 +50,9 @@ export const adminFilmakerDatabaseApi = createApi({
           query += `&type=${type}`;
         }
 
+        if (name) {
+          query += `&name=${name}`;
+        }
         if (limit) {
           query += `&limit=${limit}`;
         }
