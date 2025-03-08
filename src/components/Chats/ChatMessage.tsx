@@ -14,8 +14,10 @@ import { IReplyDataInfo } from "./ChatRoom";
 import ModalComponent from "../Modal/Modal";
 import { useDisclosure } from "@mantine/hooks";
 import Spinner from "@/app/Spinner/Spinner";
+import { Socket } from "socket.io-client";
 
 type Props = {
+  socket?: Socket | null;
   text: string;
   user: "admin" | "user" | "consultant";
   prevUser: "admin" | "user" | "consultant" | null;
@@ -41,6 +43,7 @@ type Props = {
   setSelectedRepliedToMessageId?: (val: string) => void;
   replytochattype?: "text" | "file" | "img" | "typing" | "contacts";
   uploadProgress: number;
+  userId?: string;
 };
 
 const ChatMessage = React.memo(
@@ -64,6 +67,8 @@ const ChatMessage = React.memo(
     repliedToUser,
     recommendations,
     replytochattype,
+    socket,
+    userId,
     uploadProgress,
   }: Props) => {
     const [temporarySelectedHighlight, setTemporarySelectedHighlight] =
@@ -81,6 +86,7 @@ const ChatMessage = React.memo(
     });
 
     const noPfpRow = prevUser === user;
+    const [progress, setProgress] = useState<number>(0);
     const ref = useRef<HTMLDivElement>(null);
     const imgRef = useRef<HTMLDivElement>(null);
     const contactsReplyData =
@@ -115,6 +121,17 @@ const ChatMessage = React.memo(
     //     });
     //   }
     // }, [lastmessage, type]);
+    useEffect(() => {
+      if (lastmessage && (type === "file" || type === "img") && socket) {
+        socket.on("progress", (data) => {
+          console.log(userId, data.sender.userid);
+          if (userId && data.sender.userid === userId) {
+            console.log(data);
+            setProgress(data.progress);
+          }
+        });
+      }
+    }, [lastmessage, type, socket, userId]);
 
     useEffect(() => {
       let timeout: NodeJS.Timeout;
@@ -384,19 +401,21 @@ const ChatMessage = React.memo(
               <div className="break-words">
                 {type === "file" ? (
                   <Link href={file}>
-                    <div className="cursor-pointer py-2 px-2 relative">
-                      {lastmessage && uploadProgress < 99 && (
+                    <div
+                      className={`cursor-pointer py-2 px-2 relative ${
+                        lastmessage && progress < 99 ? "pr-10" : null
+                      } `}
+                    >
+                      {lastmessage && progress < 99 && progress > 0 && (
                         <div className="absolute h-[.5rem] w-[.5rem] bottom-6 right-6">
                           <RingProgress
                             size={30}
                             className="w-[1rem]! h-[1rem]!"
-                            sections={[
-                              { value: uploadProgress, color: "green" },
-                            ]}
+                            sections={[{ value: progress, color: "green" }]}
                             thickness={2}
                             label={
                               <p className="text-[0.6rem] text-center">
-                                {uploadProgress}
+                                {progress}
                               </p>
                             }
                           />
@@ -420,16 +439,16 @@ const ChatMessage = React.memo(
                       }
                     }}
                   >
-                    {lastmessage && uploadProgress < 99 && (
+                    {lastmessage && progress < 99 && progress > 0 && (
                       <div className="absolute h-[.5rem] w-[.5rem] bottom-6 right-6">
                         <RingProgress
                           size={30}
                           className="w-[1rem]! h-[1rem]!"
-                          sections={[{ value: uploadProgress, color: "green" }]}
+                          sections={[{ value: progress, color: "green" }]}
                           thickness={2}
                           label={
                             <p className="text-[0.6rem] text-center">
-                              {uploadProgress}
+                              {progress}
                             </p>
                           }
                         />

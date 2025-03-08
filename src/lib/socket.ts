@@ -123,7 +123,7 @@ export function sendFileAsChunk(
 
   // }, 10000)
     socket.emit(`sendFileChunk`, data);
-  console.log(data)
+  // console.log(data)
 }
 
 export function emitTypingEvent(room: string, userId: string, socket: Socket) {

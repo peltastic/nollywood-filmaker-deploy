@@ -79,7 +79,7 @@ const ChatRoom = (props: Props) => {
   const mobileTextAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const [missedPongs, setMissedPongs] = useState(0);
   const [fileType, setFileType] = useState<"file" | "img">("file");
-  const [uploadProgress, setUploadProgress] = useState<number>(20);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [istyping, setIsTyping] = useState<boolean>(false);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [replyData, setReplyData] = useState<IReplyDataInfo>({
@@ -141,6 +141,14 @@ const ChatRoom = (props: Props) => {
       return;
     }
   }, [props.isTime, socket]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("disconnect", (reason) => {
+        console.log("Disconnected:", reason);
+      });
+    }
+  }, []);
 
   //send message
 
@@ -767,13 +775,21 @@ const ChatRoom = (props: Props) => {
       for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
         await sendChunk(chunkIndex);
         // Optional: Add small delay between chunks to prevent overwhelming the socket
-        await new Promise((resolve) => setTimeout(resolve, 50));
+        await new Promise((resolve) => setTimeout(resolve, 200));
       }
     } catch (error) {
       console.error("Upload error:", error);
       throw error; // Handle this in your component
     }
   };
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("disconnect", (reason) => {
+        console.log("Disconnected:", reason);
+      });
+    }
+  }, [socket]);
 
   // useEffect(() => {
   //   database.open();
@@ -835,7 +851,9 @@ const ChatRoom = (props: Props) => {
                         setSelectedRepliedToMessageId(val)
                       }
                       repliedToUser={el.replytousertype}
+                      userId={props.userData?.id}
                       recommendations={el.recommendations}
+                      socket={socket}
                     />
                   ) : (
                     <ConsultantChatMessage
@@ -844,6 +862,7 @@ const ChatRoom = (props: Props) => {
                       file={el.file}
                       filename={el.filename}
                       type={el.type}
+                      socket={socket}
                       key={el.text + index.toString()}
                       text={el.text}
                       user={el.user}
@@ -863,6 +882,7 @@ const ChatRoom = (props: Props) => {
                       repliedTextId={el.replyToId}
                       repliedToUser={el.replytousertype}
                       replytochattype={el.replytochattype}
+                      userId={props.userData?.id}
                       selectedRepliedToMessageId={selectedRepliedToMessageId}
                       setSelectedRepliedToMessageId={(val) =>
                         setSelectedRepliedToMessageId(val)
@@ -947,10 +967,10 @@ const ChatRoom = (props: Props) => {
                                 accept=""
                                 setFile={(file) => {
                                   if (file) {
-                                    if (file?.size > 25 * 1024 * 1024) {
+                                    if (file?.size > 20 * 1024 * 1024) {
                                       notify(
                                         "message",
-                                        "Cannot send files more than 25mb"
+                                        "Cannot send files more than 20mb"
                                       );
                                     } else {
                                       if (file.size > 1 * 1024 * 1024) {
@@ -1013,10 +1033,10 @@ const ChatRoom = (props: Props) => {
                             accept="image/*"
                             setFile={(file) => {
                               if (file) {
-                                if (file?.size > 25 * 1024 * 1024) {
+                                if (file?.size > 20 * 1024 * 1024) {
                                   notify(
                                     "message",
-                                    "Cannot send files more than 25mb"
+                                    "Cannot send files more than 20mb"
                                   );
                                 } else {
                                   if (file.size > 1 * 1024 * 1024) {
@@ -1060,10 +1080,10 @@ const ChatRoom = (props: Props) => {
                             accept="image/*"
                             setFile={(file) => {
                               if (file) {
-                                if (file?.size > 25 * 1024 * 1024) {
+                                if (file?.size > 20 * 1024 * 1024) {
                                   notify(
                                     "message",
-                                    "Cannot send files more than 25mb"
+                                    "Cannot send files more than 20mb"
                                   );
                                 } else {
                                   if (file.size > 1 * 1024 * 1024) {

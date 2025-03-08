@@ -15,7 +15,11 @@ const SocketProviders = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const newSocket = io(config.CHAT_API_URL, {
-      transports: ["websocket"], // Helps with connection stability
+      transports: ["websocket"],
+      reconnection: true,
+      reconnectionAttempts: 10,
+      reconnectionDelay: 5000,
+      // Helps with connection stability
     });
 
     setSocket(newSocket);

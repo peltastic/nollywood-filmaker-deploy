@@ -14,8 +14,10 @@ import ModalComponent from "../Modal/Modal";
 import { useDisclosure } from "@mantine/hooks";
 import Spinner from "@/app/Spinner/Spinner";
 import { RingProgress } from "@mantine/core";
+import { Socket } from "socket.io-client";
 
 type Props = {
+  socket?: Socket | null;
   text: string;
   user: "admin" | "user" | "consultant";
   prevUser: "admin" | "user" | "consultant" | null;
@@ -42,6 +44,7 @@ type Props = {
   selectedRepliedToMessageId?: string;
   setSelectedRepliedToMessageId?: (val: string) => void;
   uploadProgress: number;
+  userId?: string;
 };
 
 const ConsultantChatMessage = ({
@@ -66,10 +69,9 @@ const ConsultantChatMessage = ({
   recommendations,
   replytochattype,
   uploadProgress,
+  userId,
+  socket,
 }: Props) => {
-  useEffect(() => {
-console.log(uploadProgress)
-  }, [uploadProgress])
   const [temporarySelectedHighlight, setTemporarySelectedHighlight] =
     useState<string>("transparent");
 
@@ -83,6 +85,8 @@ console.log(uploadProgress)
     x: 0,
     y: 0,
   });
+
+  const [progress, setProgress] = useState<number>(0);
   const noPfpRow = prevUser === user;
   const ref = useRef<HTMLDivElement>(null);
   const [imgUrl, setImgUrl] = useState<string>("");
@@ -103,6 +107,16 @@ console.log(uploadProgress)
     }
   }, [lastmessage]);
 
+  useEffect(() => {
+    if (lastmessage && (type === "file" || type === "img") && socket) {
+      socket.on("progress", (data) => {
+        if (userId && data.sender.userid === userId) {
+          console.log(data);
+          setProgress(data.progress);
+        }
+      });
+    }
+  }, [lastmessage, type, socket, userId]);
   useEffect(() => {
     let timeout: NodeJS.Timeout;
     if (!ref.current) return () => {};
@@ -357,17 +371,21 @@ console.log(uploadProgress)
             <div className="break-words">
               {type === "file" ? (
                 <Link href={file}>
-                  <div className="cursor-pointer py-2 px-2 relative">
-                    {lastmessage && uploadProgress < 99 && (
+                  <div
+                    className={`cursor-pointer py-2 px-2 ${
+                      lastmessage && progress < 99 ? "pr-10" : null
+                    }  relative`}
+                  >
+                    {lastmessage && progress < 99 && progress > 0 && (
                       <div className="absolute h-[.5rem] w-[.5rem] bottom-6 right-6">
                         <RingProgress
                           size={30}
                           className="w-[1rem]! h-[1rem]!"
-                          sections={[{ value: uploadProgress, color: "green" }]}
+                          sections={[{ value: progress, color: "green" }]}
                           thickness={2}
                           label={
                             <p className="text-[0.6rem] text-center">
-                              {uploadProgress}
+                              {progress}
                             </p>
                           }
                         />
@@ -390,16 +408,16 @@ console.log(uploadProgress)
                     }
                   }}
                 >
-                  {lastmessage && uploadProgress < 99 && (
+                  {lastmessage && progress < 99 && progress > 0 && (
                     <div className="absolute h-[.5rem] w-[.5rem] bottom-6 right-6">
                       <RingProgress
                         size={30}
                         className="w-[1rem]! h-[1rem]!"
-                        sections={[{ value: uploadProgress, color: "green" }]}
-                        thickness={2}
+                        sections={[{ value: progress, color: "green" }]}
+                        thickness={3}
                         label={
-                          <p className="text-[0.6rem] text-center">
-                            {uploadProgress}
+                          <p className="text-[0.6rem] font-semibold  text-center">
+                            {progress}
                           </p>
                         }
                       />
