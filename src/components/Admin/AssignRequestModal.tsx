@@ -15,6 +15,7 @@ import { Skeleton } from "@mantine/core";
 import Spinner from "@/app/Spinner/Spinner";
 import { nprogress } from "@mantine/nprogress";
 import { notify } from "@/utils/notification";
+import moment from "moment";
 
 type Props = {
   close: () => void;
@@ -37,7 +38,8 @@ type Props = {
       | "Create a Pitch based on my Script"
       | "Draft Legal documents"
       | "Create a Production budget"
-      | "Create A Pitch Deck" | "Creating A Movie Schedule";
+      | "Create A Pitch Deck"
+      | "Creating A Movie Schedule";
   };
 };
 
@@ -102,7 +104,10 @@ const AssignRequestModal = (props: Props) => {
     if (
       props.chat_appointment_data.nameofservice === "Chat With A Professional"
     ) {
-      fetchConsultantByExpertise(props.expertise);
+      fetchConsultantByExpertise({
+        expertise: props.expertise,
+        date:moment( props.chat_appointment_data.date).format("YYYY-MM-DD"),
+      });
     } else {
       fetchConsultantByTask();
     }

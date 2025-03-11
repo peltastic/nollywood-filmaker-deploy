@@ -40,14 +40,17 @@ export const adminRequestApi = createApi({
         };
       },
     }),
-    fetchConsultantsByExpertise: build.query<IFetchConsultantsResponse, string>(
+    fetchConsultantsByExpertise: build.query<IFetchConsultantsResponse, {expertise: string, date: string}>(
       {
-        query: (expertise) => {
+        query: ({expertise, date}) => {
           let query = "";
           if (expertise) {
             query = `?expertise=${expertise}`;
           }
 
+          if (date) {
+            query += `&date=${date}`
+          }
           return { url: `/api/admin/consultants${query}` };
         },
       }
