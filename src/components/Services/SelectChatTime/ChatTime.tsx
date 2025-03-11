@@ -56,16 +56,30 @@ const ChatTime = (props: Props) => {
           time_slots={data?.availableHoursCount.map((el) => {
             const time_stamp = `${moment(props.dateProps).format(
               "YYYY-MM-DD"
-            )}T${el.time === "9:00" ? "09:00" : el.time}:00+01:00`;
+            )}T${
+              el.time === "9:00"
+                ? "09:00"
+                : el.time === "8:00"
+                ? "08:00"
+                : el.time === "7:00"
+                ? "07:00"
+                : el.time === "6:00"
+                ? "06:00"
+                : el.time
+            }:00+01:00`;
+            console.log(time_stamp);
             const isBeforeNow = isBefore(time_stamp, new Date());
-            const nextDaySixAM = setHours(addDays(new Date(), 1), 6);
+            const nextDaySixAM = setHours(addDays(new Date(), 1), 5);
             const isBeforeNextDaySixAM = isBefore(time_stamp, nextDaySixAM);
-            // const hourfromNow = addHours(new Date(), 24);
-            // const isBeforeHourFromNow = isBefore(time_stamp, hourfromNow);
+            console.log(time_stamp, moment(nextDaySixAM).format());
+            const hourfromNow = addHours(new Date(), 24);
+            const isBeforeHourFromNow = isBefore(time_stamp, hourfromNow);
             return {
               time: moment(el.time, ["HH:mm"]).format("h:mm A"),
               isAvailable:
-                isBeforeNow || isBeforeNextDaySixAM ? false : el.isAvailable,
+              isBeforeNextDaySixAM
+                  ? false
+                  : el.isAvailable,
             };
           })}
         />
