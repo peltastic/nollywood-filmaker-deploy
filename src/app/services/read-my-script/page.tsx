@@ -77,7 +77,7 @@ const ReadMyScriptPage = (props: Props) => {
     if (paymentStatus === "pending") {
       open();
     }
-  }, [paymentStatus]);
+  }, [paymentStatus, isSuccess]);
 
   const setFilesHandler = (
     file: File[],
@@ -98,6 +98,8 @@ const ReadMyScriptPage = (props: Props) => {
       }
     }
   };
+
+  const [bible, setBible] = useState<File | null>(null);
 
   return (
     <>
@@ -156,7 +158,7 @@ const ReadMyScriptPage = (props: Props) => {
                 <ReadMyScriptForm
                   proceed={() => {
                     if (userId) {
-                      readMyScript({
+                      const payload: InitializeReadMyScriptPayload = {
                         genre: scriptData.genre,
                         movie_title: scriptData.movie_title,
                         synopsis: scriptData.logline,
@@ -172,7 +174,11 @@ const ReadMyScriptPage = (props: Props) => {
                             : "Series",
                         episodes: scriptData.episodes,
                         showtype: scriptData.showType,
-                      });
+                      };
+                      if (bible) {
+                        payload.characterbible = bible;
+                      }
+                      readMyScript(payload);
                       initializeTransactionListener(userId);
                       nprogress.start();
                       open();
@@ -186,11 +192,15 @@ const ReadMyScriptPage = (props: Props) => {
                     !scriptData.genre ||
                     !scriptData.platform ||
                     !scriptData.logline ||
-                    !(files.length > 0)
+                    !(files.length > 0) ||
+                    (scriptData.showType === "Yes" &&
+                      Number(scriptData.episodes) < 1)
                   }
                   setFileProps={setFilesHandler}
                   setScriptProps={setScriptDataHandler}
                   data={scriptData}
+                  bible={bible}
+                  setCharacterBible={(val) => setBible(val)}
                   fileName={
                     scriptData.showType === "No" ? files[0]?.name : "Series"
                   }

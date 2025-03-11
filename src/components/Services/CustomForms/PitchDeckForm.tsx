@@ -26,6 +26,9 @@ import UnstyledButton from "@/components/Button/UnstyledButton";
 import { useRouter } from "next/navigation";
 import Spinner from "@/app/Spinner/Spinner";
 import { FaArrowRight } from "react-icons/fa";
+import CheckboxComponent from "@/components/Checkbox/Checkbox";
+import Link from "next/link";
+import FileInput from "@/components/FileInput/FileInput";
 
 type Props = {
   setFilesProps: (
@@ -60,6 +63,8 @@ type Props = {
   ) => void;
   crews: IKeyCrewPayload[];
   files: File[];
+  setSingleFile: (file: File) => void;
+  file: File | null;
 };
 
 const PitchDeckForm = (props: Props) => {
@@ -92,6 +97,7 @@ const PitchDeckForm = (props: Props) => {
   }, [props.members]);
 
   const [checked, setChecked] = useState<boolean>(false);
+  const [terms, setTerms] = useState<boolean>(false);
   return (
     <div className="w-full xl:w-[90%]">
       <form
@@ -108,6 +114,28 @@ const PitchDeckForm = (props: Props) => {
           changed={(val) => props.setScriptProps("movie_title", val)}
           className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
         />
+        <div className="mt-10">
+          <label className="block mb-2 text-black-2 font-medium text-[0.88rem]">
+            Upload script
+          </label>
+          <FileInput
+            accept=""
+            setFile={(file) => {
+              if (file) {
+                props.setSingleFile(file);
+              }
+            }}
+          >
+            <div className="border rounded-md border-stroke-2 py-[0.35rem] px-[0.4rem] flex items-center">
+              <div className=" cursor-pointer py-2 px-3 rounded-[0.25rem] text-white font-medium text-[0.6rem] bg-black-2">
+                Browse
+              </div>
+              <p className="text-gray-6 text-[0.88rem] ml-4">
+                {props.file?.name || "No file chosen"}
+              </p>
+            </div>
+          </FileInput>
+        </div>
         <div className="grid md:grid-cols-2 gap-x-4 mt-10">
           <SelectComponent
             size="md"
@@ -122,7 +150,7 @@ const PitchDeckForm = (props: Props) => {
               size="md"
               value={props.data.platform}
               setValueProps={(val) => props.setScriptProps("platform", val!)}
-              label="Platform for exhibition"
+              label="Primary platform for exhibition"
               data={testExhibitionData}
               placeholder="Select"
             />
@@ -168,8 +196,8 @@ const PitchDeckForm = (props: Props) => {
         {hasKeyArt && (
           <div className="mt-10">
             <div className="mb-2  flex font-medium text-[0.88rem] text-[#A5A5A5]">
-              <p>Upload a copy of your selected ID</p>
-              <p>*</p>
+              <p>Upload key art</p>
+              {/* <p>*</p> */}
             </div>
             <DropZoneComponent
               setFiles={(files) => {
@@ -433,6 +461,28 @@ const PitchDeckForm = (props: Props) => {
             placeholder="Select"
           />
         </div>
+        <div className="mt-4 w-full">
+          <CheckboxComponent
+            setCheckedProps={(val) => setTerms(val)}
+            checked={terms}
+            label={
+              <p className="max-w-[40rem] text-gray-3">
+                By proceeding with this upload, I confirm that I have read,
+                understood, and agree to the{" "}
+                <span className="font-semibold underline">
+                  <Link href={"/terms-and-conditions"}>
+                    Terms and Conditions
+                  </Link>
+                </span>{" "}
+                and{" "}
+                <span className="font-semibold underline">
+                  <Link href={"/privacy-policy"}>privacy policy</Link>
+                </span>{" "}
+                of the service.
+              </p>
+            }
+          />
+        </div>
         <div className="w-full flex mt-14">
           <UnstyledButton
             type="button"
@@ -443,7 +493,7 @@ const PitchDeckForm = (props: Props) => {
           </UnstyledButton>
           <UnstyledButton
             type="submit"
-            disabled={props.disabled || props.isLoading}
+            disabled={props.disabled || props.isLoading || !terms}
             class=" justify-center w-[12rem] flex py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
           >
             {props.isLoading ? (

@@ -37,7 +37,7 @@ type Props = {
       | "Create a Pitch based on my Script"
       | "Draft Legal documents"
       | "Create a Production budget"
-      | "Create A Pitch Deck";
+      | "Create A Pitch Deck" | "Creating A Movie Schedule";
   };
 };
 

@@ -1,9 +1,9 @@
 import Spinner from "@/app/Spinner/Spinner";
 import { IWatchFinalCutState } from "@/app/services/watch-final-cut/page";
 import UnstyledButton from "@/components/Button/UnstyledButton";
+import CheckboxComponent from "@/components/Checkbox/Checkbox";
 import InputComponent from "@/components/Input/Input";
 import SelectComponent from "@/components/Select/SelectComponent";
-import ServiceInfo from "@/components/ServiceInfo/ServiceInfo";
 import TextArea from "@/components/TextArea/TextArea";
 import {
   seriesExhibitionData,
@@ -11,6 +11,7 @@ import {
   testSelectData,
 } from "@/utils/constants/constants";
 import { Switch } from "@mantine/core";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
@@ -23,6 +24,25 @@ type Props = {
   isLoading?: boolean;
 };
 
+const stage = [
+  {
+    label: "First cut minus colour/sound/music/vfx",
+    value: "First cut minus colour/sound/music/vfx",
+  },
+  {
+    label: "First cut plus temp music/sound and vfx",
+    value: "First cut plus temp music/sound and vfx",
+  },
+  {
+    label: "Final cut plus temp/music/sound/vfx",
+    value: "Final cut plus temp/music/sound/vfx",
+  },
+  {
+    label: "Finished  cut if it is the first cut, final cut ",
+    value: "Finished  cut if it is the first cut, final cut ",
+  },
+];
+
 const WatchFinalCutForm = ({
   data,
   setScriptProps,
@@ -32,6 +52,7 @@ const WatchFinalCutForm = ({
 }: Props) => {
   const router = useRouter();
   const [checked, setChecked] = useState<boolean>(false);
+  const [terms, setTerms] = useState<boolean>(false);
   return (
     <div className="w-full xl:w-[90%]">
       <form
@@ -42,7 +63,7 @@ const WatchFinalCutForm = ({
       >
         <InputComponent
           value={data.movie_title}
-          label="Movie title"
+          label="Working title"
           placeholder="Text"
           changed={(val) => setScriptProps("movie_title", val)}
           className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
@@ -69,8 +90,11 @@ const WatchFinalCutForm = ({
             value={data.episodes}
             label="No. of episodes"
             placeholder="Text"
-            
-            changed={(val) => setScriptProps("episodes", val)}
+            changed={(val) => {
+              setScriptProps("episodes", val);
+              // if (Number(val) > 0) {
+              // }
+            }}
             className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
             type="number"
           />
@@ -98,16 +122,28 @@ const WatchFinalCutForm = ({
               size="md"
               value={data.platform}
               setValueProps={(val) => setScriptProps("platform", val!)}
-              label="Platform for exhibition"
-              data={checked ? seriesExhibitionData :testExhibitionData}
+              label="Primary platform for exhibition"
+              data={checked ? seriesExhibitionData : testExhibitionData}
               placeholder="Select"
             />
           </div>
         </div>
-        <div className="mt-8">
+        <div className="mt-10">
+          <SelectComponent
+            size="md"
+            value={data.stage}
+            setValueProps={(val) => setScriptProps("stage", val!)}
+            label={`What stage is your ${
+              data.showType === "Yes" ? "series" : "movie"
+            } currently`}
+            data={stage}
+            placeholder="Select"
+          />
+        </div>
+        <div className="mt-10">
           <InputComponent
             value={data.link}
-            label="Share a link (video must be watermarked)"
+            label="Share a link (Video should be preferably be watermarked)"
             placeholder="Text"
             changed={(val) => setScriptProps("link", val)}
             className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
@@ -123,7 +159,29 @@ const WatchFinalCutForm = ({
             label="Share any particular concerns"
           />
         </div>
-        {/* <ServiceInfo content="Final Cut watch can take between 3-5 days. You will be mailed with calendar dates to choose a chat" /> */}
+
+        <div className="mt-4 w-full">
+          <CheckboxComponent
+            setCheckedProps={(val) => setTerms(val)}
+            checked={terms}
+            label={
+              <p className="max-w-[40rem] text-gray-3">
+                By proceeding with this upload, I confirm that I have read,
+                understood, and agree to the{" "}
+                <span className="font-semibold underline">
+                  <Link href={"/terms-and-conditions"}>
+                    Terms and Conditions
+                  </Link>
+                </span> &nbsp;
+                and &nbsp;
+                <span className="font-semibold underline">
+                  <Link href={"/privacy-policy"}>privacy policy</Link>
+                </span>
+                of the service.
+              </p>
+            }
+          />
+        </div>
         <div className="w-full flex mt-14">
           <UnstyledButton
             type="button"
@@ -134,7 +192,7 @@ const WatchFinalCutForm = ({
           </UnstyledButton>
           <UnstyledButton
             type="submit"
-            disabled={disabled}
+            disabled={disabled || !terms}
             class="flex justify-center w-[12rem] py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
           >
             {isLoading ? (
@@ -143,7 +201,7 @@ const WatchFinalCutForm = ({
               </div>
             ) : (
               <>
-                <p className="mr-2">Procced to payment</p>
+                <p className="mr-2">Proceed to payment</p>
                 <FaArrowRight className="text-[0.7rem]" />
               </>
             )}

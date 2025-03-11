@@ -53,10 +53,9 @@ const CreatePitchDeck = (props: Props) => {
   const userId = useSelector(
     (state: RootState) => state.persistedState.user.user?.id
   );
-  const router = useRouter();
   const searchParam = useSearchParams();
-  const search = searchParam.get("page");
   const [opened, { close, open }] = useDisclosure();
+  const [singleFile, setSingleFile] = useState<File | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [scriptData, setScriptData] = useState<IPitchDeckState>({
     genre: "",
@@ -166,7 +165,7 @@ const CreatePitchDeck = (props: Props) => {
   const { paymentStatus } = useServicePayment(
     isError,
     isSuccess,
-    "/success-page/budget-and-advice",
+    "/success-page/create-pitch",
     close,
     data?.result.authorization_url,
     error
@@ -176,7 +175,7 @@ const CreatePitchDeck = (props: Props) => {
     if (paymentStatus === "pending") {
       open();
     }
-  }, [paymentStatus]);
+  }, [paymentStatus, isSuccess]);
   return (
     <>
       {opened ? (
@@ -245,7 +244,8 @@ const CreatePitchDeck = (props: Props) => {
                 if (userId) {
                   createPitchDeck({
                     estimatedBudget: scriptData.estimatedBudget,
-                     files,
+                    files: singleFile ? [singleFile] : [],
+                    keyart: files,
                     genre: scriptData.genre,
                     info: scriptData.info,
                     keycharacters: keyCharacter.map((el) => {
@@ -278,6 +278,8 @@ const CreatePitchDeck = (props: Props) => {
                   });
                 }
               }}
+              file={singleFile}
+              setSingleFile={(file) => setSingleFile(file)}
               characters={keyCharacter}
               setScriptProps={setScriptDataHandler}
               files={files}

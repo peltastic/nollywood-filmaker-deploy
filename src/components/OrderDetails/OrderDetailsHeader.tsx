@@ -48,7 +48,8 @@ type Props = {
       | "Create a Pitch based on my Script"
       | "Draft Legal documents"
       | "Create a Production budget"
-      | "Create A Pitch Deck";
+      | "Create A Pitch Deck"
+      | "Creating A Movie Schedule";
   };
   nameofservice?:
     | "Chat With A Professional"
@@ -59,7 +60,8 @@ type Props = {
     | "Create a Pitch based on my Script"
     | "Draft Legal documents"
     | "Create a Production budget"
-    | "Create A Pitch Deck";
+    | "Create A Pitch Deck"
+    | "Creating A Movie Schedule";
 };
 
 const OrderDetailsHeader = ({

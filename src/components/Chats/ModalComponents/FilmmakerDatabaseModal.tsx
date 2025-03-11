@@ -238,7 +238,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
                 data={companyTypeList}
                 label=""
                 placeholder="Select company type"
-                value={companyType}
+                value={companyType || null}
                 setValueProps={(val) => {
                   setActivePages(1);
                   if (val) {
@@ -263,7 +263,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
                   label=""
                   placeholder="Select department"
                   size="md"
-                  value={companyDepartmentVal}
+                  value={companyDepartmentVal || null}
                   defaultValue={companyDepartmentVal}
                   setValueProps={(val) => {
                     setActivePages(1);
@@ -276,7 +276,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
                           roleVal?.toLowerCase() === "all"
                             ? ""
                             : roleVal || undefined,
-                        department: val,
+                        department: val.toLowerCase() === "all" ? "" : val,
                         location:
                           location.toLowerCase() === "all" ? "" : location,
                       });

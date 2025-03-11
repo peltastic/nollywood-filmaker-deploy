@@ -10,10 +10,11 @@ interface InitializeReadMyScriptPayload extends GeneralType {
   synopsis: string;
   genre: string;
   platforms: string;
-  files?: File []
+  files?: File[];
   concerns?: string;
   type: "request";
   fileName: string;
+  characterbible?: File;
 }
 interface IServiceResponse {
   result: {
@@ -39,6 +40,7 @@ interface InitialWatchFinalCutPayload extends GeneralType {
   concerns: string;
   genre: string;
   platform: string;
+  stage: string;
 }
 
 interface InitializeBudgetAndAdvicePayload extends GeneralType {
@@ -55,17 +57,17 @@ interface InitializeBudgetAndAdvicePayload extends GeneralType {
 interface InitializeCreateProductionBudgetPayload extends GeneralType {
   title: "Create a Production budget";
   platform: string;
-  crews: string;
-  days: string;
+  // crews: string;
+  shootdays: string;
   budgetrange: string;
-  files: File | null;
+  files: File[];
   actors: string;
   info: string;
   type: "request";
   fileName: string;
 }
 
-interface InitializeCreateMartketingBudgetPayload extends GeneralType {
+interface InitializeCreateMartketingBudgetPayload {
   title: "Create a Marketing budget";
   type: "request";
   movie_title: string;
@@ -74,20 +76,25 @@ interface InitializeCreateMartketingBudgetPayload extends GeneralType {
   social: string;
   ooh: string;
   budgetrange: string;
+  userId: string
 }
 
-interface InitializeCreatePitchPayload extends GeneralType {
+interface InitializeMovieSchedule extends GeneralType {
   title: "Creating A Movie Schedule";
   type: "request";
   platform: string;
   files?: (File | null)[] | File[][];
-  crew: string;
+  // crew: string;
   actors: string;
-  visualStyle: string;
+  // visualStyle: string;
+  days?: string;
+  startpop?: { date: string }[];
   info: string;
   budgetrange: string;
   fileName: string;
-  pageCount?: number[];
+  // pageCount?: number[];
+  characterlockdate: { name: string; date: string[] }[];
+  locationlockeddate: { name: string; date: string[] }[];
 }
 
 interface InitializaeDraftLegalDocument extends GeneralType {
@@ -104,7 +111,7 @@ interface InitializeCreateAPitchDeck {
   movie_title: string;
   platform: string;
   loglines: string;
-  genre: string;
+  genre: string; 
   info: string;
   estimatedBudget: string;
   keycharacters: { character: string; actor: string }[];
@@ -112,5 +119,6 @@ interface InitializeCreateAPitchDeck {
   teamMenber: { name: string; bio: string }[];
   putinfestivals: boolean;
   revprojection: string;
-  files: File[]
+  files: File[];
+  keyart: File[]
 }

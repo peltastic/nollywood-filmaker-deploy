@@ -28,7 +28,9 @@ type Props = {
       | "Create a Marketing budget"
       | "Create a Pitch based on my Script"
       | "Draft Legal documents"
-      | "Create a Production budget" | "Create A Pitch Deck";
+      | "Create a Production budget"
+      | "Create A Pitch Deck"
+      | "Creating A Movie Schedule";
     summary?: string;
     userId: string;
     consultant_id?: string;
@@ -77,7 +79,7 @@ const SetChatDate = ({ close, data }: Props) => {
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [serviceToChat, { isError, isSuccess, isLoading, error }] =
     useChangeServiceToChatMutation();
-    const [slots, setSlots] = useState<
+  const [slots, setSlots] = useState<
     | {
         time: string;
         isAvailable: boolean;

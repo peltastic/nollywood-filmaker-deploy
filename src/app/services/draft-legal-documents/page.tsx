@@ -74,7 +74,7 @@ const DraftLegalDocumentPage = (props: Props) => {
     if (paymentStatus === "pending") {
       open();
     }
-  }, [paymentStatus]);
+  }, [paymentStatus, isSuccess]);
 
   return (
     <>

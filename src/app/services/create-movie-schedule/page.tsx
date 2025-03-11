@@ -1,7 +1,7 @@
 "use client";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import ServiceLeft from "@/components/Services/ServiceLeft";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import CreatePitchImg from "/public/assets/services/create-pitch.svg";
 import Image from "next/image";
@@ -9,7 +9,7 @@ import PaymentWindow from "@/components/PaymentWindow/PaymentWindow";
 import ServiceRight from "@/components/Services/ServiceRight";
 import CreatePitchForm from "@/components/Services/CustomForms/CreatePitchForm";
 import { useProtectRoute } from "@/hooks/useProtectRoute";
-import { useInitializeCreatePitchMutation } from "@/lib/features/users/services/services";
+import { useInitializeMovieScheduleMutation } from "@/lib/features/users/services/services";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { useDisclosure } from "@mantine/hooks";
@@ -18,6 +18,7 @@ import InitializingTransactionModal from "@/components/Services/InitializingTran
 import { initializeTransactionListener } from "@/lib/socket";
 import { nprogress } from "@mantine/nprogress";
 import { numberWithCommas } from "@/utils/helperFunction";
+import moment from "moment";
 
 type Props = {};
 
@@ -25,27 +26,35 @@ export interface ICreatePitchState {
   movie_title: string;
   platform: string;
   actors_in_mind: string;
-  crew_in_mind: string;
-  visual: string;
+  // crew_in_mind: string;
+  // visual: string;
   information: string;
   budget: string;
   showType: string;
   episodes: string;
+  days?: string;
+  startpop?: Date | null;
 }
 
-const CreatePitchPage = (props: Props) => {
+const MovieSchedulePage = (props: Props) => {
   useProtectRoute();
   const [cost, setCost] = useState<number>(150000);
-  const [createPitch, { data, isLoading, isSuccess, isError, error }] =
-    useInitializeCreatePitchMutation();
-  const router = useRouter();
+  const [movieSchedule, { data, isLoading, isSuccess, isError, error }] =
+    useInitializeMovieScheduleMutation();
   const searchParam = useSearchParams();
   const search = searchParam.get("page");
   const [file, setFile] = useState<File | null>(null);
 
-  const [seriesPrices, setSeriesPrices] = useState<number[]>([]);
-  const [seriesFiles, setSeriesFiles] = useState<File[]>([]);
-  const [filesPageCount, setFilesPageCount] = useState<number[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
+
+  const [characterLockedDates, setCharacterLockedDate] = useState<
+    { name: string; date: Date[] }[]
+  >([]);
+
+  const [locationLockedDate, setLocationLockedDate] = useState<
+    { name: string; date: Date[] }[]
+  >([]);
+
   const userId = useSelector(
     (state: RootState) => state.persistedState.user.user?.id
   );
@@ -54,17 +63,19 @@ const CreatePitchPage = (props: Props) => {
     movie_title: "",
     actors_in_mind: "",
     budget: "",
-    crew_in_mind: "",
+    // crew_in_mind: "",
     information: "",
-    visual: "",
+    // visual: "",
     platform: "",
     episodes: "",
     showType: "No",
+    days: "",
+    startpop: null,
   });
   const { paymentStatus } = useServicePayment(
     isError,
     isSuccess,
-    "/success-page/create-pitch",
+    "/success-page/movie-schedule",
     close,
     data?.result.authorization_url,
     error
@@ -76,44 +87,71 @@ const CreatePitchPage = (props: Props) => {
     });
   };
   useEffect(() => {
-    if (!scriptData.movie_title) {
-      router.push("/services/create-pitch");
-    }
-  }, []);
-  useEffect(() => {
     if (paymentStatus === "pending") {
       open();
     }
-  }, [paymentStatus]);
+  }, [paymentStatus, isSuccess]);
 
-  const setSeriesFilesHandler = (files: File[]) => {
-    setSeriesFiles((prev) => [...prev, ...files]);
-  };
-  const setFilesPageCountHandler = (counts: number[]) => {
-    setFilesPageCount((prev) => [...prev, ...counts]);
-  };
-  const setSeriesPricesHandler = (prices: number[]) => {
-    setSeriesPrices(prev => [...prev, ...prices])
-  }
-
-  const removeSeriesFileData = (index: number) => {
-     const filesData = [...seriesFiles]
-     const pricesData = [...seriesPrices]
-     const pageCountData = [...filesPageCount]
-
-     filesData.splice(index, 1)
-     pricesData.splice(index, 1)
-     pageCountData.splice(index, 1)
-
-     setFilesPageCount(pageCountData)
-     setSeriesFiles(filesData)
-     setSeriesPrices(pricesData)
+  const setFilesHandler = (
+    file: File[],
+    index: number,
+    type: "update" | "delete" | "add"
+  ) => {
+    if (files) {
+      if (type === "update") {
+        const copiedVal = [...files];
+        copiedVal.splice(index, 1, file[0]);
+        setFiles(copiedVal);
+      } else if (type === "delete") {
+        const copiedVal = [...files];
+        copiedVal.splice(index, 1);
+        setFiles(copiedVal);
+      } else {
+        setFiles((prev) => [...prev, ...file]);
+      }
     }
+  };
+
+  const updateCharaterLocked = (
+    val: { name: string; date: Date[] },
+    index: number,
+    type: "update" | "delete" | "add"
+  ) => {
+    if (type === "update") {
+      const copiedVal = [...characterLockedDates];
+      copiedVal.splice(index, 1, val);
+      setCharacterLockedDate(copiedVal);
+    } else if (type === "delete") {
+      const copiedVal = [...characterLockedDates];
+      copiedVal.splice(index, 1);
+      setCharacterLockedDate(copiedVal);
+    } else {
+      setCharacterLockedDate((prev) => [...prev, val]);
+    }
+  };
+  const updateLocationLocked = (
+    val: { name: string; date: Date[] },
+    index: number,
+    type: "update" | "delete" | "add"
+  ) => {
+    if (type === "update") {
+      const copiedVal = [...characterLockedDates];
+      copiedVal.splice(index, 1, val);
+      setLocationLockedDate(copiedVal);
+    } else if (type === "delete") {
+      const copiedVal = [...characterLockedDates];
+      copiedVal.splice(index, 1);
+      setLocationLockedDate(copiedVal);
+    } else {
+      setLocationLockedDate((prev) => [...prev, val]);
+    }
+  };
+
   return (
     <>
       {opened ? (
         <InitializingTransactionModal
-          info="Pitch deck Creation  can take between 1-2 weeks. You will be mailed with an editable pitch deck and a calendar to choose a chat date"
+          info=""
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
           close={close}
@@ -124,20 +162,18 @@ const CreatePitchPage = (props: Props) => {
           <ServiceLeft
             title="Create a Movie Schedule"
             cost={
-              seriesPrices.length > 0
-                ? numberWithCommas(
-                    seriesPrices.reduce((acc, num) => acc + num, 0) * 1000
-                  )
-                : "150,000"
+              scriptData.showType === "Yes"
+                ? numberWithCommas(Number(scriptData.episodes) * 80000)
+                : "250,000"
             }
             image={<Image src={CreatePitchImg} alt="create-pitch" />}
             episodes={scriptData.episodes}
-            files={seriesFiles}
-            seriesPageCount={filesPageCount}
+            charactersLocked={characterLockedDates}
+            locationLocked={locationLockedDate}
             series
             body={[
               {
-                title: "Movie title",
+                title: "Working title",
                 content: scriptData.movie_title,
               },
               {
@@ -152,14 +188,14 @@ const CreatePitchPage = (props: Props) => {
                 title: "Key actors in mind",
                 content: scriptData.actors_in_mind,
               },
-              {
-                title: "Key Crew in mind",
-                content: scriptData.crew_in_mind,
-              },
-              {
-                title: "Number of days",
-                content: scriptData.visual,
-              },
+              // {
+              //   title: "Key Crew in mind",
+              //   content: scriptData.crew_in_mind,
+              // },
+              // {
+              //   title: "Number of days",
+              //   content: scriptData.visual,
+              // },
               {
                 title: "Relevant information",
                 content: scriptData.information,
@@ -177,14 +213,15 @@ const CreatePitchPage = (props: Props) => {
           ) : (
             <ServiceRight subtitle="" title="Let’s start with your details">
               <CreatePitchForm
+                file={file}
+                setFilesProps={setFilesHandler}
                 proceed={() => {
                   if (userId) {
-                    createPitch({
+                    movieSchedule({
                       actors: scriptData.actors_in_mind,
                       budgetrange: scriptData.budget,
-                      crew: scriptData.crew_in_mind,
-                      files:
-                        scriptData.showType === "Yes" ? seriesFiles : [file],
+                      // crew: scriptData.crew_in_mind,
+                      files: scriptData.showType === "Yes" ? files : [file],
                       info: scriptData.information,
                       movie_title: scriptData.movie_title,
                       platform: scriptData.platform,
@@ -193,33 +230,57 @@ const CreatePitchPage = (props: Props) => {
                       userId,
                       showtype: scriptData.showType,
                       episodes: scriptData.episodes,
-                      visualStyle: scriptData.visual,
+                      // visualStyle: scriptData.visual,
                       fileName: file?.name || "",
-                      pageCount: filesPageCount,
+                      characterlockdate: characterLockedDates.map((el) => {
+                        return {
+                          date: el.date.map(el => moment(el).format("YYYY-MM-DD")),
+                          name: el.name,
+                        };
+                      }),
+                      locationlockeddate: locationLockedDate.map(el => {
+                        return {
+                          date: el.date.map(el => moment(el).format("YYYY-MM-DD")),
+                          name: el.name
+                        }
+                      }),
+                      days: scriptData.days,
+                      startpop: [
+                        {
+                          date: moment(scriptData.startpop).format(
+                            "YYYY-MM-DD"
+                          ),
+                        },
+                      ],
                     });
                     initializeTransactionListener(userId);
                     nprogress.start();
                     open();
                   }
                 }}
+                setDateHandler={(val) =>
+                  setScriptData({
+                    ...scriptData,
+                    startpop: val,
+                  })
+                }
                 disabled={
                   !scriptData.movie_title ||
                   !scriptData.platform ||
-                  !scriptData.visual ||
-                  (scriptData.showType === "No" ? !file : !seriesFiles.length)
+                  // !scriptData.visual ||
+                  (scriptData.showType === "No" ? !file : !files.length)
                 }
+                characterlocked={characterLockedDates}
+                setChacterLocked={updateCharaterLocked}
                 isLoading={isLoading}
                 setFileProps={(file) => setFile(file)}
                 setScriptProps={setScriptDataHandler}
                 data={scriptData}
+                locationlocked={locationLockedDate}
+                setLocationLocked={updateLocationLocked}
                 fileName={file?.name}
                 setCost={(val) => setCost(val)}
-                files={seriesFiles}
-                seriesPageCount={filesPageCount}
-                setSeriesPrices={setSeriesPricesHandler}
-                setSeriesFilesData={setSeriesFilesHandler}
-                setSeriesCount={setFilesPageCountHandler}
-                removeFileData={removeSeriesFileData}
+                files={files}
               />
             </ServiceRight>
           )}
@@ -229,4 +290,4 @@ const CreatePitchPage = (props: Props) => {
   );
 };
 
-export default CreatePitchPage;
+export default MovieSchedulePage;

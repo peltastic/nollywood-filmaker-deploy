@@ -107,46 +107,7 @@ const OrderDetailsPage = (props: Props) => {
                 order_type={data?.request.nameofservice}
                 isChat={data?.request.type === "Chat"}
               />
-              <OrderDetailsBody
-                chat={
-                  data?.request.nameofservice === "Chat With A Professional"
-                }
-                concerns={data?.request.concerns}
-                consultant_type={data?.request.consultant}
-                genre={data?.request.genre}
-                platform={data?.request.platform}
-                synopsis={data?.request.synopsis}
-                isChat={data?.request.type === "Chat"}
-                summary={data?.request.summary}
-                script={
-                  data?.request.nameofservice === "Read my Script and advice" ||
-                  data?.request.nameofservice ===
-                    "Look at my Budget and advice" ||
-                  data?.request.nameofservice ===
-                    "Create a Production budget" ||
-                  data?.request.nameofservice ===
-                    "Create a Pitch based on my Script"
-                    ? data?.request.filename
-                    : null
-                }
-                fileLink={data?.request.files && data.request.files[0]}
-                title={data?.request.movie_title}
-                link={data?.request.link}
-                chat_title={data?.request.chat_title}
-                actors={data?.request.actors}
-                budget={data?.request.budgetrange}
-                days={data?.request.days}
-                info={data?.request.info}
-                ooh={data?.request.oohTarget}
-                target_social={data?.request.socialTarget}
-                visual={data?.request.visualStyle}
-                company={data?.request.productionCompany}
-                contact_info={data?.request.contactInfo}
-                booktime={data?.request.booktime}
-                episodes={data?.request.episodes}
-                series_files={data?.request.files}
-                showType={data?.request.showtype}
-              />
+              <OrderDetailsBody data={data} />
               {isResolveFileState && (
                 <div className="mt-14" ref={ref}>
                   <DataTable

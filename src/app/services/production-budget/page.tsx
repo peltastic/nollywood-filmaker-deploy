@@ -25,7 +25,7 @@ export interface IProductionBudgetState {
   movie_title: string;
   platform: string;
   actors_in_mind: string;
-  crew_in_mind: string;
+  // crew_in_mind: string;
   number_of_days: string;
   information: string;
   budget: string;
@@ -34,7 +34,7 @@ export interface IProductionBudgetState {
 }
 
 const ProductionBudgetPage = (props: Props) => {
-  const [cost, setCost] = useState<number>(250000)
+  const [cost, setCost] = useState<number>(250000);
   useProtectRoute();
   const [
     createProductionBudget,
@@ -46,18 +46,19 @@ const ProductionBudgetPage = (props: Props) => {
   const router = useRouter();
   const searchParam = useSearchParams();
   const search = searchParam.get("page");
+  const [files, setFiles] = useState<File[]>([]);
   const [file, setFile] = useState<File | null>(null);
   const [opened, { close, open }] = useDisclosure();
   const [scriptData, setScriptData] = useState<IProductionBudgetState>({
     movie_title: "",
     actors_in_mind: "",
     budget: "",
-    crew_in_mind: "",
+    // crew_in_mind: "",
     information: "",
     number_of_days: "",
     platform: "",
     episodes: "",
-    showType: ""
+    showType: "",
   });
   const setScriptDataHandler = (key: string, value: string) => {
     setScriptData({
@@ -82,7 +83,27 @@ const ProductionBudgetPage = (props: Props) => {
     if (paymentStatus === "pending") {
       open();
     }
-  }, [paymentStatus]);
+  }, [paymentStatus, isSuccess]);
+
+  const setFilesHandler = (
+    file: File[],
+    index: number,
+    type: "update" | "delete" | "add"
+  ) => {
+    if (files) {
+      if (type === "update") {
+        const copiedVal = [...files];
+        copiedVal.splice(index, 1, file[0]);
+        setFiles(copiedVal);
+      } else if (type === "delete") {
+        const copiedVal = [...files];
+        copiedVal.splice(index, 1);
+        setFiles(copiedVal);
+      } else {
+        setFiles((prev) => [...prev, ...file]);
+      }
+    }
+  };
   return (
     <>
       {opened ? (
@@ -90,18 +111,40 @@ const ProductionBudgetPage = (props: Props) => {
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
           close={close}
-          info="Budget Creation  can take between 1-2 weeks. You will be mailed a link to a detailed, editable budget and a calendar to choose a chat date"
+          info="Budget Creation can take between 1-2 weeks. you will contacted via email if more info is needed during the course of the budget creation and a final editable budget will be sent to your dashboard"
         />
       ) : null}
       <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft
-            cost={numberWithCommas(cost)}
+            cost={
+              scriptData.showType === "Yes"
+                ? numberWithCommas(
+                    Number(
+                      Number(scriptData.episodes) <= 5
+                        ? "250000"
+                        : Number(scriptData.episodes) > 5 &&
+                          Number(scriptData.episodes) <= 10
+                        ? "350000"
+                        : Number(scriptData.episodes) > 10 &&
+                          Number(scriptData.episodes) <= 15
+                        ? "450000"
+                        : Number(scriptData.episodes) > 15 &&
+                          Number(scriptData.episodes) <= 20
+                        ? "500000"
+                        : Number(scriptData.episodes) > 20 &&
+                          Number(scriptData.episodes) <= 25
+                        ? "550000"
+                        : "600000"
+                    )
+                  )
+                : numberWithCommas(cost)
+            }
             title="Create a production budget"
             image={<Image src={ProductionBudgetImg} alt="production-budget" />}
             body={[
               {
-                title: "Movie title",
+                title: "Working title",
                 content: scriptData.movie_title,
               },
               {
@@ -116,10 +159,10 @@ const ProductionBudgetPage = (props: Props) => {
                 title: "Key actors in mind",
                 content: scriptData.actors_in_mind,
               },
-              {
-                title: "Key Crew in mind",
-                content: scriptData.crew_in_mind,
-              },
+              // {
+              //   title: "Key Crew in mind",
+              //   content: scriptData.crew_in_mind,
+              // },
               {
                 title: "Number of days",
                 content: scriptData.number_of_days,
@@ -139,18 +182,20 @@ const ProductionBudgetPage = (props: Props) => {
               <PaymentWindow successRoute="/success-page/production-budget" />
             </div>
           ) : (
-            <ServiceRight
-              subtitle=""
-              title="Let’s start with your details"
-            >
+            <ServiceRight subtitle="" title="Let’s start with your details">
               <ProductionBudgetForm
                 proceed={() => {
                   if (userId) {
                     createProductionBudget({
                       budgetrange: scriptData.budget,
-                      crews: scriptData.crew_in_mind,
-                      days: scriptData.number_of_days,
-                      files: file,
+                      // crews: scriptData.crew_in_mind,
+                      shootdays: scriptData.number_of_days,
+                      files:
+                        scriptData.showType === "Yes"
+                          ? files
+                          : file
+                          ? [file]
+                          : [],
                       movie_title: scriptData.movie_title,
                       platform: scriptData.platform,
                       title: "Create a Production budget",
@@ -160,7 +205,7 @@ const ProductionBudgetPage = (props: Props) => {
                       type: "request",
                       fileName: file?.name || "",
                       showtype: scriptData.showType,
-                      episodes: scriptData.episodes
+                      episodes: scriptData.episodes,
                     });
                     initializeTransactionListener(userId);
                     nprogress.start();
@@ -171,9 +216,13 @@ const ProductionBudgetPage = (props: Props) => {
                   !scriptData.movie_title ||
                   !scriptData.platform ||
                   !scriptData.number_of_days ||
-                  !scriptData.budget ||
-                  !file
+                  (scriptData.showType === "Yes" && files.length < 1) ||
+                  (scriptData.showType === "No" && !file) ||
+                  (scriptData.showType === "Yes" &&
+                    Number(scriptData.episodes) < 1)
                 }
+                files={files}
+                setFilesProps={setFilesHandler}
                 isLoading={isLoading}
                 setFileProps={(file) => setFile(file)}
                 setScriptProps={setScriptDataHandler}

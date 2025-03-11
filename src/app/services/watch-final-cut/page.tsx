@@ -30,6 +30,7 @@ export interface IWatchFinalCutState {
   concerns: string;
   showType: string;
   episodes: string;
+  stage: string;
 }
 
 const page = (props: Props) => {
@@ -61,6 +62,7 @@ const page = (props: Props) => {
     platform: "",
     episodes: "",
     showType: "",
+    stage: "",
   });
   const setScriptDataHandler = (key: string, value: string) => {
     setScriptData({
@@ -75,9 +77,10 @@ const page = (props: Props) => {
   }, []);
   useEffect(() => {
     if (paymentStatus === "pending") {
+      console.log("open");
       open();
     }
-  }, [paymentStatus]);
+  }, [paymentStatus, isSuccess]);
 
   return (
     <>
@@ -101,7 +104,7 @@ const page = (props: Props) => {
             image={<Image src={WatchFinalCutImage} alt="watch-final-cut" />}
             body={[
               {
-                title: "Movie Title",
+                title: "Working Title",
                 content: scriptData.movie_title,
               },
               {
@@ -147,6 +150,7 @@ const page = (props: Props) => {
                       showtype: scriptData.showType,
                       episodes: scriptData.episodes,
                       userId,
+                      stage: scriptData.stage,
                     });
                     initializeTransactionListener(userId);
                     nprogress.start();
@@ -159,7 +163,9 @@ const page = (props: Props) => {
                   !scriptData.genre ||
                   !scriptData.platform ||
                   !scriptData.logline ||
-                  !scriptData.link
+                  !scriptData.link ||
+                  (scriptData.showType === "Yes" &&
+                    Number(scriptData.episodes) < 1)
                 }
                 setScriptProps={setScriptDataHandler}
                 data={scriptData}

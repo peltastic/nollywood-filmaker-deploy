@@ -5,7 +5,7 @@ import { FaArrowRight } from "react-icons/fa";
 import CustomTime from "@/components/CustomTime/CustomTime";
 import { useLazyGetAvailabilityHoursQuery } from "@/lib/features/users/services/chat/chat";
 import moment from "moment";
-import { addHours, isBefore } from "date-fns";
+import { addDays, addHours, isBefore, setHours } from "date-fns";
 
 type Props = {
   setDateProps: (val: Date) => void;
@@ -58,12 +58,14 @@ const ChatTime = (props: Props) => {
               "YYYY-MM-DD"
             )}T${el.time === "9:00" ? "09:00" : el.time}:00+01:00`;
             const isBeforeNow = isBefore(time_stamp, new Date());
-            const hourfromNow = addHours(new Date(), 1);
-            const isBeforeHourFromNow = isBefore(time_stamp, hourfromNow);
+            const nextDaySixAM = setHours(addDays(new Date(), 1), 6);
+            const isBeforeNextDaySixAM = isBefore(time_stamp, nextDaySixAM);
+            // const hourfromNow = addHours(new Date(), 24);
+            // const isBeforeHourFromNow = isBefore(time_stamp, hourfromNow);
             return {
               time: moment(el.time, ["HH:mm"]).format("h:mm A"),
               isAvailable:
-                isBeforeNow || isBeforeHourFromNow ? false : el.isAvailable,
+                isBeforeNow || isBeforeNextDaySixAM ? false : el.isAvailable,
             };
           })}
         />

@@ -1,11 +1,10 @@
-"use client"
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import SuccessTemplate from "@/components/SuccessTemplate/SuccessTemplate";
 import React from "react";
 
 type Props = {};
 
-const CreatePitchPage = (props: Props) => {
+const MovieScheduleSuccess = (props: Props) => {
   return (
     <ServiceLayout>
       <SuccessTemplate
@@ -16,11 +15,11 @@ const CreatePitchPage = (props: Props) => {
         // subTitle="When a killer shark unleashes chaos on a beach community off Cape Cod, it’s up to a local sheriff, a marine biologist."
         lightButtonContent="Take me home"
         titleLight="Order Confirmed"
-        titleBold="Create a Pitch deck"
-        width="w-[95%] sm:w-[90%] md:w-[35rem]"
+        titleBold="Create a Movie Schedule"
+        width="w-[95%] sm:w-[90%] md:w-[40rem]"
       />
     </ServiceLayout>
   );
 };
 
-export default CreatePitchPage;
+export default MovieScheduleSuccess;

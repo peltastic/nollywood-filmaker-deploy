@@ -9,6 +9,7 @@ import {
   IKeyCrewPayload,
   ITeamMember,
 } from "@/app/services/create-pitch-deck/page";
+import moment from "moment";
 
 type Props = {
   body: {
@@ -26,6 +27,9 @@ type Props = {
   members?: ITeamMember[];
   crew?: IKeyCrewPayload[];
   characters?: IKeyCharacterPayload[];
+  charactersLocked?: { name: string; date: Date[] }[];
+  locationLocked?: { name: string; date: Date[] }[];
+
 };
 
 const ServiceLeft = ({
@@ -40,6 +44,10 @@ const ServiceLeft = ({
   characters,
   crew,
   members,
+  charactersLocked,
+  locationLocked,
+  
+
 }: Props) => {
   const userData = useSelector(
     (state: RootState) => state.persistedState.user.user
@@ -153,6 +161,65 @@ const ServiceLeft = ({
                     <p>
                       <RenderTextAreaInput text={el.bio || ""} />
                     </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>...</p>
+            )}
+          </>
+        )}
+
+        {charactersLocked && (
+          <>
+            <div className="text-[0.88rem] border-t border-t-stroke-4 py-4">
+              <h1 className="text-black-2 font-bold">Character locked dates</h1>
+            </div>
+            {charactersLocked.length > 0 ? (
+              <div className="">
+                {charactersLocked.map((el, index) => (
+                  <div className="" key={el.name + index}>
+                    <h1 className="text-[0.88rem] font-semibold mt-4">
+                      Character
+                    </h1>
+                    <p>{el.name}</p>
+                    <h1 className="text-[0.88rem] font-semibold mt-4">
+                      Locked dates
+                    </h1>
+                    {el.date.map((el, index) => (
+                      <p className="text-[0.88rem] text-black-2" key={el.toDateString() + index}>
+                        {moment(el).format("YYYY-MM-DD")}
+                      </p>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>...</p>
+            )}
+          </>
+        )}
+        {locationLocked && (
+          <>
+            <div className="text-[0.88rem] border-t border-t-stroke-4 py-4">
+              <h1 className="text-black-2 font-bold">Location locked dates</h1>
+            </div>
+            {locationLocked.length > 0 ? (
+              <div className="">
+                {locationLocked.map((el, index) => (
+                  <div className="" key={el.name + index}>
+                    <h1 className="text-[0.88rem] font-semibold mt-4">
+                      Locked
+                    </h1>
+                    <p>{el.name}</p>
+                    <h1 className="text-[0.88rem] font-semibold mt-4">
+                      Locked dates
+                    </h1>
+                    {el.date.map((el, index) => (
+                      <p className="text-[0.88rem] text-black-2" key={el.toDateString() + index}>
+                        {moment(el).format("YYYY-MM-DD")}
+                      </p>
+                    ))}
                   </div>
                 ))}
               </div>

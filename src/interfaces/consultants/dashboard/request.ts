@@ -31,12 +31,14 @@ export interface ICustomerReqDetails {
       | "Create a Pitch based on my Script"
       | "Draft Legal documents"
       | "Create a Production budget"
-      | "Create A Pitch Deck";
+      | "Create A Pitch Deck"
+      | "Creating A Movie Schedule";
     stattusof: "pending" | "ongoing" | "ready" | "completed";
     orderId: string;
     synopsis: string;
     files?: string[];
     concerns: string;
+    characterbible: string;
     genre: string;
     platform: string;
     time?: {
@@ -49,7 +51,9 @@ export interface ICustomerReqDetails {
     date: string;
     summary: string;
     filename?: string;
+    stage?: string;
     chat_title: string;
+    shootdays: string;
     productionCompany: string;
     contactInfo: string;
     movie_title: string;
@@ -65,6 +69,7 @@ export interface ICustomerReqDetails {
     oohTarget: string;
     visualStyle: string;
     episodes: string;
+    keyArtCreated: string[];
     showtype: string;
     estimatedBudget: string;
     putinfestivals: string;
@@ -84,6 +89,9 @@ export interface ICustomerReqDetails {
       bio: string;
       _id: string;
     }[];
+    characterlockdate: { name: string; date: string[] }[];
+    locationlockeddate: { name: string; date: string[] }[];
+    startpop: { date: string }[];
   };
   user: {
     fullName: string;

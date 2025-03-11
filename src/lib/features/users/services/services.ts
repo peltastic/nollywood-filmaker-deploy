@@ -17,6 +17,8 @@ export const servicesApi = createApi({
             for (const el of body[key as keyof typeof body] as File[]) {
               formData.append(key, el);
             }
+          } else if (key === "characterbible") {
+            formData.append(key, body[key as keyof typeof body] as File);
           } else {
             formData.append(key, body[key as keyof typeof body] as string);
           }
@@ -59,11 +61,21 @@ export const servicesApi = createApi({
       InitializeCreateProductionBudgetPayload
     >({
       query: (body) => {
-        const payload = formDataHandler(body);
+        const formData = new FormData();
+        for (const key in body) {
+          if (key === "files") {
+            for (const el of body[key as keyof typeof body] as File[]) {
+              formData.append(key, el);
+            }
+          } else {
+            formData.append(key, body[key as keyof typeof body] as string);
+          }
+        }
+
         return {
           url: "/api/users/transaction/createbudget",
           method: "POST",
-          body: payload,
+          body: formData,
         };
       },
     }),
@@ -77,9 +89,9 @@ export const servicesApi = createApi({
         body,
       }),
     }),
-    initializeCreatePitch: build.mutation<
+    initializeMovieSchedule: build.mutation<
       IServiceResponse,
-      InitializeCreatePitchPayload
+      InitializeMovieSchedule
     >({
       query: (body) => {
         const formData = new FormData();
@@ -88,11 +100,13 @@ export const servicesApi = createApi({
             for (const el of body[key as keyof typeof body] as File[]) {
               formData.append(key, el);
             }
-          } else if (key === "pageCount") {
-            formData.append(
-              key,
-              JSON.stringify(body[key as keyof typeof body] as number[])
-            );
+          } else if (
+            key === "characterlockdate" ||
+            key === "locationlockeddate"
+          ) {
+            formData.append(key, JSON.stringify(body[key]));
+          } else if (key === "startpop") {
+            formData.append(key, JSON.stringify(body[key]));
           } else {
             formData.append(key, body[key as keyof typeof body] as string);
           }
@@ -129,6 +143,11 @@ export const servicesApi = createApi({
               value.forEach((file: File) => {
                 formData.append("files", file);
               });
+            } else if (key === "keyart") {
+              value.forEach((file: File) => {
+                formData.append("keyart", file);
+              });
+              
             } else {
               // Stringify other arrays (keycharacters, keycrew, teamMenber)
               formData.append(key, JSON.stringify(value));
@@ -154,7 +173,7 @@ export const {
   useInitializeBudgetAndAdviceMutation,
   useInitializeCreateProductionBudgetMutation,
   useInitializeCreateMarketingBudgetMutation,
-  useInitializeCreatePitchMutation,
+  useInitializeMovieScheduleMutation,
   useInitializeDraftLegalDocumentMutation,
   useInitializeCreateAPitchDeckMutation,
 } = servicesApi;

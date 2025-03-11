@@ -145,7 +145,7 @@ export function isResolveFile(
     | "Create a Pitch based on my Script"
     | "Draft Legal documents"
     | "Create a Production budget"
-    | "Create A Pitch Deck"
+    | "Create A Pitch Deck" | "Creating A Movie Schedule"
 ): boolean {
   const isTrue = resolve_file_services.find((el) => el === val);
 
@@ -185,7 +185,7 @@ export function generateColorClass(
     | "Create a Marketing budget"
     | "Create a Pitch based on my Script"
     | "Draft Legal documents"
-    | "Create a Production budget"
+    | "Create a Production budget" | "Create A Pitch Deck"
 ) {
   const logoAssignment = [
     {
@@ -221,6 +221,10 @@ export function generateColorClass(
       service: "Create a Production budget",
       class: "glo-create-prod-bud",
     },
+    {
+      service: "Create A Pitch Deck",
+      class: "glo-read-my-script"
+    }
   ];
 
   const colorClass = logoAssignment.find((el) => el.service === service);

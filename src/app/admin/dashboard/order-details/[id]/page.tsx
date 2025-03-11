@@ -3,7 +3,7 @@ import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import OrderDetailsHeader from "@/components/OrderDetails/OrderDetailsHeader";
 import Image from "next/image";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import TestImg from "/public/assets/test-avatar.png";
 import OrderDetailsTop from "@/components/OrderDetails/OrderDetailsTop";
@@ -121,53 +121,7 @@ const CustomerOrderDetailsPage = (props: Props) => {
                     isChat={data?.request.type === "Chat"}
                     // rating="5"
                   />
-                  <OrderDetailsBody
-                    chat={
-                      data?.request.nameofservice === "Chat With A Professional"
-                    }
-                    isChat={data?.request.type === "Chat"}
-                    concerns={data?.request.concerns}
-                    consultant_type={data?.request.consultant}
-                    genre={data?.request.genre}
-                    platform={data?.request.platform}
-                    synopsis={data?.request.synopsis}
-                    summary={data?.request.summary}
-                    script={
-                      data?.request.nameofservice ===
-                        "Read my Script and advice" ||
-                      data?.request.nameofservice ===
-                        "Look at my Budget and advice" ||
-                      data?.request.nameofservice ===
-                        "Create a Production budget" ||
-                      data?.request.nameofservice ===
-                        "Create a Pitch based on my Script"
-                        ? data?.request.movie_title
-                        : null
-                    }
-                    showType={data?.request.showtype}
-                    episodes={data?.request.episodes}
-                    series_files={data?.request.files}
-                    fileLink={data?.request.files && data.request.files[0]}
-                    title={data?.request.movie_title}
-                    link={data?.request.link}
-                    chat_title={data?.request.chat_title}
-                    actors={data?.request.actors}
-                    budget={data?.request.budgetrange}
-                    days={data?.request.days}
-                    info={data?.request.info}
-                    ooh={data?.request.oohTarget}
-                    target_social={data?.request.socialTarget}
-                    visual={data?.request.visualStyle}
-                    company={data?.request.productionCompany}
-                    booktime={data?.request.booktime}
-                    contact_info={data?.request.contactInfo}
-                    keycrew={data?.request.keycrew}
-                    teamMenber={data?.request.teamMenber}
-                    keycharaters={data?.request.keycharacters}
-                    estimatedBudget={data?.request.estimatedBudget}
-                    putinfestivals={data?.request.putinfestivals}
-                    revprojection={data?.request.revprojection}
-                  />
+                  <OrderDetailsBody data={data} />
                   {isResolvedFiles && (
                     <div className="mt-14">
                       <DataTable

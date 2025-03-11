@@ -18,6 +18,8 @@ import { FaArrowRight } from "react-icons/fa";
 import { pdfjs } from "react-pdf";
 import { BsUpload } from "react-icons/bs";
 import EditFiles from "../Edits/EditFiles";
+import CheckboxComponent from "@/components/Checkbox/Checkbox";
+import Link from "next/link";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 type Props = {
@@ -35,6 +37,8 @@ type Props = {
   isLoading?: boolean;
   files: File[];
   setNoOfEpisodes: (val: number) => void;
+  setCharacterBible: (file: File) => void;
+  bible: File | null;
 };
 
 const ReadMyScriptForm = ({
@@ -48,33 +52,12 @@ const ReadMyScriptForm = ({
   files,
   noOfEpisodes,
   setNoOfEpisodes,
+  setCharacterBible,
+  bible,
 }: Props) => {
   const router = useRouter();
   const [checked, setChecked] = useState<boolean>(false);
-
-  const getPdfPageCount = async (file: File): Promise<number> => {
-    const reader = new FileReader();
-
-    return new Promise<number>((resolve, reject) => {
-      reader.onload = async () => {
-        try {
-          const result = reader.result;
-          if (!(result instanceof ArrayBuffer)) {
-            return reject(new Error("Invalid file data"));
-          }
-
-          const pdf = await pdfjs.getDocument({ data: result }).promise;
-          resolve(pdf.numPages);
-        } catch (error) {
-          reject(error);
-        }
-      };
-
-      reader.onerror = () => reject(new Error("Failed to read file"));
-      reader.readAsArrayBuffer(file);
-    });
-  };
-
+  const [terms, setTerms] = useState<boolean>(false);
   return (
     <div className="w-full xl:w-[90%]">
       <form
@@ -166,7 +149,7 @@ const ReadMyScriptForm = ({
         ) : (
           <div className="mt-10">
             <label className="block mb-2 text-black-2 font-medium text-[0.88rem]">
-              Upload
+              Upload script
             </label>
             <FileInput
               accept=""
@@ -202,11 +185,33 @@ const ReadMyScriptForm = ({
               size="md"
               value={data.platform}
               setValueProps={(val) => setScriptProps("platform", val!)}
-              label="Platform for exhibition"
+              label="Primary platform for exhibition"
               data={checked ? seriesExhibitionData : testExhibitionData}
               placeholder="Select"
             />
           </div>
+        </div>
+        <div className="mt-10">
+          <label className="block mb-2 text-black-2 font-medium text-[0.88rem]">
+            Upload character bible (optional)
+          </label>
+          <FileInput
+            accept=""
+            setFile={(file) => {
+              if (file) {
+                setCharacterBible(file);
+              }
+            }}
+          >
+            <div className="border rounded-md border-stroke-2 py-[0.35rem] px-[0.4rem] flex items-center">
+              <div className=" cursor-pointer py-2 px-3 rounded-[0.25rem] text-white font-medium text-[0.6rem] bg-black-2">
+                Browse
+              </div>
+              <p className="text-gray-6 text-[0.88rem] ml-4">
+                {bible?.name || "No file chosen"}
+              </p>
+            </div>
+          </FileInput>
         </div>
         <div className="mt-10">
           <TextArea
@@ -215,6 +220,28 @@ const ReadMyScriptForm = ({
             labelStyle2
             className="h-[4rem] text-gray-6 text-[0.88rem] py-2 px-3"
             label="Share any particular concerns"
+          />
+        </div>
+        <div className="mt-4 w-full">
+          <CheckboxComponent
+            setCheckedProps={(val) => setTerms(val)}
+            checked={terms}
+            label={
+              <p className="max-w-[40rem] text-gray-3">
+                By proceeding with this upload, I confirm that I have read,
+                understood, and agree to the{" "}
+                <span className="font-semibold underline">
+                  <Link href={"/terms-and-conditions"}>
+                    Terms and Conditions
+                  </Link>
+                </span>{" "}
+                and{" "}
+                <span className="font-semibold underline">
+                  <Link href={"/privacy-policy"}>privacy policy</Link>
+                </span>{" "}
+                of the service. 
+              </p>
+            }
           />
         </div>
         <div className="w-full flex mt-14">
@@ -227,7 +254,7 @@ const ReadMyScriptForm = ({
           </UnstyledButton>
           <UnstyledButton
             type="submit"
-            disabled={disabled || isLoading}
+            disabled={disabled || isLoading || !checked}
             class=" justify-center w-[12rem] flex py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
           >
             {isLoading ? (

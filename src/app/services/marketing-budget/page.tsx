@@ -28,8 +28,8 @@ export interface IMarketingBudgetState {
   target_social: string;
   target_ooh: string;
   budget: string;
-  showType: string;
-  episodes: string;
+  // showType: string;
+  // episodes: string;
 }
 
 const MarketingBudget = (props: Props) => {
@@ -42,7 +42,7 @@ const MarketingBudget = (props: Props) => {
     (state: RootState) => state.persistedState.user.user?.id
   );
 
-  const [cost, setCost] = useState<number>(250000)
+  const [cost, setCost] = useState<number>(250000);
   const router = useRouter();
   const searchParam = useSearchParams();
   const search = searchParam.get("page");
@@ -54,8 +54,8 @@ const MarketingBudget = (props: Props) => {
     platform: "",
     target_ooh: "",
     target_social: "",
-    episodes: "",
-    showType: ""
+    // episodes: "",
+    // showType: "",
   });
   const setScriptDataHandler = (key: string, value: string) => {
     setScriptData({
@@ -80,7 +80,31 @@ const MarketingBudget = (props: Props) => {
     if (paymentStatus === "pending") {
       open();
     }
-  }, [paymentStatus]);
+  }, [paymentStatus, isSuccess]);
+  const [socials, setSocials] = useState<string[]>([]);
+  const [ooh, setOoh] = useState<string[]>([]);
+
+  const updateSocials = (value: string, deleteVal?: boolean) => {
+    const copiedVal = [...socials];
+    if (deleteVal) {
+      const index = copiedVal.findIndex((el) => el === value);
+      copiedVal.splice(index, 1);
+    } else {
+      copiedVal.push(value);
+    }
+    setSocials(copiedVal);
+  };
+  const updateOhh = (value: string, deleteVal?: boolean) => {
+    const copiedVal = [...ooh];
+    if (deleteVal) {
+      const index = copiedVal.findIndex((el) => el === value);
+      copiedVal.splice(index, 1);
+    } else {
+      copiedVal.push(value);
+    }
+    setOoh(copiedVal);
+  };
+
   return (
     <>
       {opened ? (
@@ -95,12 +119,12 @@ const MarketingBudget = (props: Props) => {
       <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft
-            cost={numberWithCommas(cost)}
-            title="Create a marketing budget"
+            cost={numberWithCommas(500000)}
+            title="Create a marketing plan and budget"
             image={<Image src={MarketingBudgetImg} alt="production-budget" />}
             body={[
               {
-                title: "Movie title",
+                title: "Working title",
                 content: scriptData.movie_title,
               },
 
@@ -114,11 +138,11 @@ const MarketingBudget = (props: Props) => {
               },
               {
                 title: "Target Social media platforms",
-                content: scriptData.target_social,
+                content: socials.join(", "),
               },
               {
                 title: "Target OOH platforms",
-                content: scriptData.target_ooh,
+                content: ooh.join(", "),
               },
 
               {
@@ -132,10 +156,7 @@ const MarketingBudget = (props: Props) => {
               <PaymentWindow successRoute="/success-page/marketing-budget" />
             </div>
           ) : (
-            <ServiceRight
-              subtitle=""
-              title="Let’s start with your details"
-            >
+            <ServiceRight subtitle="" title="Let’s start with your details">
               <MarketingBudgetForm
                 proceed={() => {
                   if (userId) {
@@ -143,12 +164,12 @@ const MarketingBudget = (props: Props) => {
                       budgetrange: scriptData.budget,
                       link: scriptData.film_link,
                       movie_title: scriptData.movie_title,
-                      ooh: scriptData.target_ooh,
+                      ooh: ooh.join(", "),
                       platform: scriptData.platform,
-                      social: scriptData.target_social,
+                      social: socials.join(", "),
                       title: "Create a Marketing budget",
-                      showtype: scriptData.showType,
-                      episodes: scriptData.episodes,
+                      // showtype: scriptData.showType,
+                      // episodes: scriptData.episodes,
                       type: "request",
                       userId,
                     });
@@ -161,12 +182,20 @@ const MarketingBudget = (props: Props) => {
                   !scriptData.movie_title ||
                   !scriptData.film_link ||
                   !scriptData.platform ||
-                  !scriptData.budget
+                  ooh.length < 1 ||
+                  socials.length < 1 
+                  // ||
+                  // (scriptData.showType === "Yes" &&
+                  //   Number(scriptData.episodes) < 1)
                 }
+                setSocials={updateSocials}
+                socials={socials}
                 isLoading={isLoading}
                 setScriptProps={setScriptDataHandler}
                 data={scriptData}
                 setCost={(value) => setCost(value)}
+                ooh={ooh}
+                setOoh={updateOhh}
               />
             </ServiceRight>
           )}

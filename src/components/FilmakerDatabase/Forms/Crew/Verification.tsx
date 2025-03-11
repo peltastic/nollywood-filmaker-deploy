@@ -7,7 +7,6 @@ import { BsUpload } from "react-icons/bs";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import {
   IJoinCrew,
-  useCreateCrewOrCompanyMutation,
   useJoinCrewMutation,
 } from "@/lib/features/users/filmmaker-database/filmmaker-database";
 import { crewVerificationSchema } from "@/utils/validation/fimmaker";

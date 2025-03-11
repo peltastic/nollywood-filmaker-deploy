@@ -12,10 +12,11 @@ const MarketingSuccessPage = (props: Props) => {
       darkBtnLink="/user/dashboard"
       darkButtonContent='View on Dashboard'
       lightBtnLink="/user/dashboard"
-      subTitle="When a killer shark unleashes chaos on a beach community off Cape Cod, it’s up to a local sheriff, a marine biologist."
+      subTitle=''
+      // subTitle="When a killer shark unleashes chaos on a beach community off Cape Cod, it’s up to a local sheriff, a marine biologist."
       lightButtonContent="Take me home"
       titleLight="Order Confirmed"
-      titleBold="Create a Marketing Budget"
+      titleBold="Create a Marketing Plan and Budget"
       width='w-[95%] sm:w-[90%] md:w-[40rem]'
     />
   </ServiceLayout>

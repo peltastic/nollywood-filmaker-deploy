@@ -4,103 +4,39 @@ import Link from "next/link";
 import React from "react";
 import { IoMdDownload } from "react-icons/io";
 import RenderTextAreaInput from "../RenderTextAreaInput/RenderTextAreaInput";
+import { ICustomerReqDetails } from "@/interfaces/consultants/dashboard/request";
 
 type Props = {
-  chat?: boolean;
-  title?: string;
-  script?: string | null;
-  genre?: string;
-  platform?: string;
-  consultant_type?: string;
-  concerns?: string;
-  synopsis?: string;
-  summary?: string;
-  fileLink?: string;
-  actors?: string;
-  info?: string;
-  budget?: string;
-  days?: string;
-  target_social?: string;
-  ooh?: string;
-  link?: string | null;
-  chat_title?: string;
-  visual?: string;
-  company?: string;
-  contact_info?: string;
-  isChat?: boolean;
-  booktime?: string;
-  episodes?: string;
-  showType?: string;
-  series_files?: string[];
-  keycharaters?: {
-    _id: string;
-    character: string;
-    actor: string;
-  }[];
-  keycrew?: {
-    _id: string;
-    crew: string;
-    role: string;
-  }[];
-  teamMenber?: {
-    name: string;
-    bio: string;
-    _id: string;
-  }[];
-  estimatedBudget?: string;
-  putinfestivals?: string;
-  revprojection?: string;
+  data?: ICustomerReqDetails;
 };
 
-const OrderDetailsBody = ({
-  title,
-  estimatedBudget,
-  putinfestivals,
-  revprojection,
-  script,
-  genre,
-  platform,
-  consultant_type,
-  concerns,
-  synopsis,
-  summary,
-  chat,
-  fileLink,
-  link,
-  chat_title,
-  actors,
-  budget,
-  info,
-  days,
-  target_social,
-  ooh,
-  visual,
-  company,
-  contact_info,
-  isChat,
-  booktime,
-  episodes,
-  showType,
-  series_files,
-  keycharaters,
-  keycrew,
-  teamMenber,
-}: Props) => {
+const OrderDetailsBody = ({ data }: Props) => {
+  const fileLink = data?.request.files && data.request.files[0];
+  const script =
+    data?.request.nameofservice === "Read my Script and advice" ||
+    data?.request.nameofservice === "Look at my Budget and advice" ||
+    data?.request.nameofservice === "Create a Production budget" ||
+    data?.request.nameofservice === "Create a Pitch based on my Script" ||
+    data?.request.nameofservice === "Create A Pitch Deck" ||
+    data?.request.nameofservice === "Creating A Movie Schedule"
+      ? data?.request.movie_title
+      : null;
+
+  const isChat = data?.request.type === "Chat";
+  const chat = data?.request.nameofservice === "Chat With A Professional";
   return (
     <div className="text-black-2 bg-white px-6 py-6 mt-8 rounded-2xl border border-stroke-5 shadow-md shadow-[#1018280F] mb-20">
       {chat ? null : (
         <div className="border-b border-b-stroke-4">
           <div className="mb-4">
-            <h1 className="font-bold mb-1">
-              {showType === "Yes" ? "Series title" : "Movie title"}
-            </h1>
-            <p className="text-[0.88rem]">{title}</p>
+            <h1 className="font-bold mb-1">Working title</h1>
+            <p className="text-[0.88rem]">{data?.request.movie_title}</p>
           </div>
-          {showType === "Yes" && series_files ? (
+          {data?.request.showtype === "Yes" && data?.request.files ? (
             <>
               <h1 className="font-bold mb-4">Series episodes' scripts</h1>
               <div className="">
-                {series_files?.map((el, index) => (
+                {data.request.files?.map((el, index) => (
                   <div className=" mb-4" key={el}>
                     <Link href={el}>
                       <div className="flex rounded-sm w-fit items-center px-2 py-1 font-medium bg-border-gray text-black-3 text-[0.88rem]">
@@ -135,175 +71,212 @@ const OrderDetailsBody = ({
           )}
         </div>
       )}
-      {chat_title && (
+      {data?.request.chat_title && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Conversation Title</h1>
-          <p className="text-[0.88rem]">{chat_title}</p>
+          <p className="text-[0.88rem]">{data.request.chat_title}</p>
         </div>
       )}
       <>
         {isChat && (
           <div className="">
-            {booktime && (
+            {data?.request.booktime && (
               <div className="mt-4 border-b border-b-stroke-4 pb-4">
                 <h1 className="font-bold mb-1">Chat Date</h1>
                 <p className="text-[0.88rem]">
-                  {moment(booktime).format("YYYY-MM-DD")}
+                  {moment(data.request.booktime).format("YYYY-MM-DD")}
                 </p>
               </div>
             )}
-            {booktime && (
+            {data.request.booktime && (
               <div className="mt-4 border-b border-b-stroke-4 pb-4">
                 <h1 className="font-bold mb-1">Chat Time</h1>
                 <p className="text-[0.88rem]">
-                  {moment(booktime).format("LT")}
+                  {moment(data.request.booktime).format("LT")}
                 </p>
               </div>
             )}
           </div>
         )}
       </>
-      {summary && (
+      {data?.request.summary && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Summary</h1>
           <div className="text-[0.88rem]">
-            <RenderTextAreaInput text={summary} />
+            <RenderTextAreaInput text={data.request.summary} />
           </div>
         </div>
       )}
-      {episodes && (
+      {data?.request.episodes && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">No. of episodes</h1>
           <div className="text-[0.88rem]">
-            <p>{episodes}</p>
+            <p>{data.request.episodes}</p>
           </div>
         </div>
       )}
-      {platform && (
+      {data?.request.platform && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
-          <h1 className="font-bold mb-1">Platform For Exhibition</h1>
+          <h1 className="font-bold mb-1">Primary platform For Exhibition</h1>
 
-          <p className="text-[0.88rem]">{platform}</p>
+          <p className="text-[0.88rem]">{data.request.platform}</p>
         </div>
       )}
-      {actors && (
+      {data?.request.actors && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Key actors in mind</h1>
           <div className="text-[0.88rem]">
-            <RenderTextAreaInput text={actors} />
+            <RenderTextAreaInput text={data.request.actors} />
           </div>
         </div>
       )}
-      {days && (
+      {data?.request.days && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Number of days</h1>
-          <p className="text-[0.88rem]">{days}</p>
+          <p className="text-[0.88rem]">{data.request.days}</p>
         </div>
       )}
-      {info && (
+      {data?.request.info && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Relevant information</h1>
           <div className="text-[0.88rem]">
-            <RenderTextAreaInput text={info} />
+            <RenderTextAreaInput text={data.request.info} />
           </div>
         </div>
       )}
-      {target_social && (
+      {data?.request.socialTarget && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Target Social media platforms</h1>
           <div className="text-[0.88rem]">
-            <RenderTextAreaInput text={target_social} />
+            <RenderTextAreaInput text={data.request.socialTarget} />
           </div>
         </div>
       )}
-      {ooh && (
+      {data?.request.oohTarget && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Target OOH platforms</h1>
           <div className="text-[0.88rem]">
-            <RenderTextAreaInput text={ooh} />
+            <RenderTextAreaInput text={data?.request.oohTarget} />
           </div>
         </div>
       )}
-      {visual && (
+      {data?.request.visualStyle && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Visual Style</h1>
-          <p className="text-[0.88rem]">{visual}</p>
+          <p className="text-[0.88rem]">{data.request.visualStyle}</p>
         </div>
       )}
-      {company && (
+      {data?.request.productionCompany && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Production Company</h1>
-          <p className="text-[0.88rem]">{company}</p>
+          <p className="text-[0.88rem]">{data.request.productionCompany}</p>
         </div>
       )}
-      {contact_info && (
+      {data?.request.contactInfo && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Relevant Contract Information</h1>
-          <p className="text-[0.88rem]">{contact_info}</p>
+          <p className="text-[0.88rem]">{data?.request.contactInfo}</p>
         </div>
       )}
-      {budget && (
+      {data?.request.budgetrange && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Budget Range</h1>
-          <p className="text-[0.88rem]">{budget}</p>
+          <p className="text-[0.88rem]">{data.request.budgetrange}</p>
         </div>
       )}
-      {synopsis && (
+      {data?.request.shootdays && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-1">Number of shoot days</h1>
+          <p className="text-[0.88rem]">{data.request.shootdays}</p>
+        </div>
+      )}
+      {data?.request.synopsis && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Logline/Synopsis</h1>
           <div className="text-[0.88rem]">
-            <RenderTextAreaInput text={synopsis} />
+            <RenderTextAreaInput text={data.request.synopsis} />
           </div>
         </div>
       )}
-      {genre && (
+      {data?.request.genre && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Genre</h1>
 
-          <p className="text-[0.88rem]">{genre}</p>
+          <p className="text-[0.88rem]">{data?.request.genre}</p>
         </div>
       )}
-      {revprojection && (
+      {data?.request.revprojection && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Revenue Projection</h1>
 
-          <p className="text-[0.88rem]">{revprojection}</p>
+          <p className="text-[0.88rem]">{data.request.revprojection}</p>
         </div>
       )}
-      {estimatedBudget && (
+      {data?.request.estimatedBudget && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Estimated budget</h1>
 
-          <p className="text-[0.88rem]">{estimatedBudget}</p>
+          <p className="text-[0.88rem]">{data.request.estimatedBudget}</p>
         </div>
       )}
-      {putinfestivals && (
+      {data?.request.putinfestivals && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Put films in festival</h1>
 
-          <p className="text-[0.88rem]">{putinfestivals}</p>
+          <p className="text-[0.88rem]">{data.request.putinfestivals}</p>
         </div>
       )}
 
-      {consultant_type && (
+      {data?.request.consultant && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Consultant Type</h1>
 
-          <p className="text-[0.88rem]">{consultant_type}</p>
+          <p className="text-[0.88rem]">{data.request.consultant}</p>
         </div>
       )}
-      {concerns && (
+      {data?.request.concerns && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Concerns</h1>
           <div className="text-[0.88rem]">
-            <RenderTextAreaInput text={concerns} />
+            <RenderTextAreaInput text={data?.request.concerns} />
           </div>
         </div>
       )}
-      {keycharaters && (
+      {data?.request.startpop && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-1">
+            Start date of principal photography
+          </h1>
+          <div className="text-[0.88rem]">
+            <p>{data?.request.startpop[0]?.date}</p>
+          </div>
+        </div>
+      )}
+      {data?.request.stage && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-1">Concerns</h1>
+          <div className="text-[0.88rem]">
+            <RenderTextAreaInput text={data?.request.stage} />
+          </div>
+        </div>
+      )}
+      {data?.request.characterbible && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-1">Character bible</h1>
+          <div className="text-[0.88rem]">
+            <Link href={data.request.characterbible}>
+              <div className="flex rounded-sm w-fit items-center px-2 py-1 font-medium bg-border-gray text-black-3 text-[0.88rem]">
+                <p className="mr-1">Download character bible</p>
+                <IoMdDownload />
+              </div>
+            </Link>
+          </div>
+        </div>
+      )}
+      {data?.request.keycharacters && data.request.keycharacters.length > 0 && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Key Characters</h1>
-          {keycharaters.map((el) => (
+          {data.request.keycharacters.map((el) => (
             <div className="" key={el._id}>
               <div className="text-[0.88rem] mb-2 flex">
                 <p>{el.character}</p>
@@ -315,10 +288,10 @@ const OrderDetailsBody = ({
         </div>
       )}
 
-      {keycrew && (
+      {data?.request.keycrew && data.request.keycrew.length > 0 && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Key Characters</h1>
-          {keycrew.map((el) => (
+          {data.request.keycrew.map((el) => (
             <div className="" key={el._id}>
               <div className="text-[0.88rem] mb-2 flex">
                 <p>{el.crew}</p>
@@ -329,13 +302,43 @@ const OrderDetailsBody = ({
           ))}
         </div>
       )}
-      {teamMenber && (
+      {data?.request.characterlockdate &&
+        data.request.characterlockdate.length > 0 && (
+          <div className="mt-4 border-b border-b-stroke-4 pb-4">
+            <h1 className="font-bold mb-1">Character locked dates</h1>
+            {data.request.characterlockdate.map((el, index) => (
+              <div className="" key={JSON.stringify(el.date) + index}>
+                <div className="text-[0.88rem] mb-2 flex">
+                  <p>{el.name}</p>
+                  <p className="mx-5">-</p>
+                  <p>{el.date.join(", ")}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      {data?.request.locationlockeddate &&
+        data.request.locationlockeddate.length > 0 && (
+          <div className="mt-4 border-b border-b-stroke-4 pb-4">
+            <h1 className="font-bold mb-1">Character locked dates</h1>
+            {data.request.locationlockeddate.map((el, index) => (
+              <div className="" key={JSON.stringify(el.date) + index}>
+                <div className="text-[0.88rem] mb-2 flex">
+                  <p>{el.name}</p>
+                  <p className="mx-5">-</p>
+                  <p>{el.date.join(", ")}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      {data?.request.teamMenber && data.request.teamMenber.length > 0 && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Key Characters</h1>
-          {teamMenber.map((el) => (
+          {data.request.teamMenber.map((el) => (
             <div className="" key={el._id}>
               <div className="text-[0.88rem] mb-4">
-                <p className="mb-2">{el.name}</p>
+                <p className="mb-2 font-semibold">{el.name}</p>
                 <RenderTextAreaInput text={el.bio} />
               </div>
             </div>
@@ -343,11 +346,25 @@ const OrderDetailsBody = ({
         </div>
       )}
 
-      {link && (
+      {data?.request.keyArtCreated && data.request.keyArtCreated.length > 0 && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-1">Key art created files</h1>
+          {data.request.keyArtCreated.map((el, index) => (
+            <Link href={el} key={el} className="mb-4 block">
+              <div className="flex rounded-sm w-fit items-center px-2 py-1 font-medium bg-border-gray text-black-3 text-[0.88rem]">
+                <p className="mr-1">file {index + 1}</p>
+                <IoMdDownload />
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {data?.request.link && (
         <div className="mt-4">
           <h1 className="font-bold mb-1">Link</h1>
-          <Link className="underline" href={link}>
-            {truncateStr(link, 40)}
+          <Link className="underline" href={data.request.link}>
+            {truncateStr(data.request.link, 40)}
           </Link>
         </div>
       )}

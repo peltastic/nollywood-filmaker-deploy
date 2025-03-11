@@ -167,7 +167,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                   setType("crew");
                   setCompanyType("");
                   setLocation("");
-                  setName("")
+                  setName("");
                   setActivePages(1);
                   fetchCompanyOrCrew({
                     type: "crew",
@@ -177,14 +177,14 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                 className={`${
                   type === "crew" ? "border border-black-2" : "border"
                 }  py-2 px-6 rounded-md mr-2 cursor-pointer`}
-                >
+              >
                 <p>Crew</p>
               </div>
               <div
                 onClick={() => {
                   setRefresh(false);
                   setType("company");
-                  setName("")
+                  setName("");
                   setLocation("");
                   setActivePages(1);
                   fetchCompanyOrCrew({
@@ -201,7 +201,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                 <p>Company</p>
               </div>
             </div>
-            <div className="ml-auto flex flex-wrap items-center w-full lg:w-auto mt-8 lg:mt-0">
+            <div className="ml-auto flex flex-wrap items-center w-full lg:w-auto mt-8 lg:mt-0 gap-y-6">
               <div className="mr-4 mb-6 mid:mb-auto">
                 <SelectComponent
                   defaultValue={verificationType}
@@ -244,7 +244,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                     data={companyTypeList}
                     label=""
                     placeholder="Select company type"
-                    value={companyType}
+                    value={companyType || null}
                     setValueProps={(val) => {
                       if (val) {
                         setRefresh(true);
@@ -277,7 +277,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                       label=""
                       placeholder="Select department"
                       size="md"
-                      value={companyDepartmentVal}
+                      value={companyDepartmentVal || null}
                       defaultValue={companyDepartmentVal}
                       setValueProps={(val) => {
                         setActivePages(1);
@@ -298,10 +298,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                           setRoleVal(null);
                           fetchCompanyOrCrew({
                             type,
-                            department:
-                              companyDepartmentVal?.toLowerCase() === "all"
-                                ? ""
-                                : companyDepartmentVal || undefined,
+                            department: val,
                             location:
                               location.toLowerCase() === "all" ? "" : location,
                             verified:
@@ -329,7 +326,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                         size="md"
                         label=""
                         placeholder="Select role"
-                        value={roleVal}
+                        value={roleVal || null}
                         defaultValue={roleVal}
                         setValueProps={(val) => {
                           setActivePages(1);
@@ -375,7 +372,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                     data={countriesData}
                     placeholder="Search for country"
                     label=""
-                    value={countriesVal}
+                    value={countriesVal || null}
                     defaultValue={countriesVal}
                     setValueProps={(val) => {
                       setActivePages(1);
@@ -443,7 +440,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                   </div>
                 </div>
               ) : null}
-              <div className="ml-4">
+              <div className="ml-4 md:mr-4">
                 <SelectComponent
                   data={[
                     {
@@ -498,7 +495,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                 type="text"
                 placeholder="Search by name"
                 value={name}
-                className="outline-none border focus:border py-2 px-6 rounded-md text-md w-full sm:w-auto md:ml-4"
+                className="outline-none border focus:border py-2 px-6 rounded-md text-md w-full sm:w-auto"
                 onChange={(e) => {
                   if (e.target.value) {
                     setName(e.target.value);
@@ -531,7 +528,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                         setActivePages(1);
                         setCompanyType("");
                         setRoleVal(null);
-                        setName("")
+                        setName("");
                         setRolesList([]);
                         setLocation("");
                         setFeeVal("");

@@ -12,15 +12,17 @@ import {
   testExhibitionData,
 } from "@/utils/constants/constants";
 import { Switch } from "@mantine/core";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { BsUpload } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa";
 import { pdfjs } from "react-pdf";
-
-import FileImg from "/public/assets/dashboard/file.svg";
 import SeriesFiles from "../SeriesFiles";
+import SwitchComponent from "@/components/Switch/SwitchComponent";
+import { DateInput, DatePickerInput } from "@mantine/dates";
+import EditCharacter from "../Edits/EditCharacter";
+import { MdAdd } from "react-icons/md";
+import EditFiles from "../Edits/EditFiles";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -33,12 +35,27 @@ type Props = {
   proceed: () => void;
   isLoading?: boolean;
   setCost: (value: number) => void;
-  setSeriesFilesData: (files: File[]) => void;
-  setSeriesCount: (counts: number[]) => void;
-  files?: File[];
-  seriesPageCount: number[];
-  setSeriesPrices: (value: number[]) => void;
-  removeFileData: (index: number) => void;
+  files: File[];
+  file: File | null;
+  setChacterLocked: (
+    val: { name: string; date: Date[] },
+    index: number,
+    type: "update" | "delete" | "add"
+  ) => void;
+  setLocationLocked: (
+    val: { name: string; date: Date[] },
+    index: number,
+    type: "update" | "delete" | "add"
+  ) => void;
+  characterlocked: { name: string; date: Date[] }[];
+  locationlocked: { name: string; date: Date[] }[];
+
+  setDateHandler: (date: Date | null) => void;
+  setFilesProps: (
+    file: File[],
+    index: number,
+    type: "update" | "delete" | "add"
+  ) => void;
 };
 
 const CreatePitchForm = ({
@@ -50,17 +67,23 @@ const CreatePitchForm = ({
   proceed,
   isLoading,
   setCost,
-  seriesPageCount,
-  setSeriesCount,
-  setSeriesFilesData,
-  setSeriesPrices,
+  file,
   files,
-  removeFileData,
+  setDateHandler,
+  characterlocked,
+  setChacterLocked,
+  setLocationLocked,
+  locationlocked,
+  setFilesProps,
 }: Props) => {
-  
   const router = useRouter();
   const [checked, setChecked] = useState<boolean>(false);
-  
+  const [principal, setPrincipal] = useState<boolean>(false);
+
+  const [characterdDate, setCharacterDate] = useState<Date[]>([]);
+  const [locationDate, setLocationDate] = useState<Date[]>([]);
+  const [character, setCharacter] = useState<string>("");
+  const [location, setLocation] = useState<string>("");
   const getPdfPageCount = async (file: File): Promise<number> => {
     const reader = new FileReader();
 
@@ -84,7 +107,7 @@ const CreatePitchForm = ({
     });
   };
   return (
-    <div className="w-full xl:w-[80%]">
+    <div className="w-full xl:w-[95%]">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -93,7 +116,7 @@ const CreatePitchForm = ({
       >
         <InputComponent
           value={data.movie_title}
-          label="Movie title"
+          label="Working title"
           placeholder="Text"
           changed={(val) => setScriptProps("movie_title", val)}
           className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
@@ -112,9 +135,6 @@ const CreatePitchForm = ({
               } else {
                 setScriptProps("showType", "No");
                 setCost(300000);
-                setSeriesCount([]);
-                setSeriesFilesData([]);
-                setSeriesPrices([]);
               }
               setChecked(val.currentTarget.checked);
             }}
@@ -124,39 +144,21 @@ const CreatePitchForm = ({
           <InputComponent
             value={data.episodes}
             label="No. of episodes"
-            placeholder="Text"
+            placeholder=""
             changed={(val) => setScriptProps("episodes", val)}
             className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
-            type=""
+            type="number"
           />
         )}
+
         {checked ? (
           <div className="mt-10">
             <div className="mb-2  flex font-medium text-[0.88rem] ">
-              <p>Upload scripts (pdf) files for each episodes</p>
+              <p>Upload scripts</p>
             </div>
             <DropZoneComponent
-              accept={{
-                "application/pdf": [".pdf"],
-              }}
-              setFiles={async (files) => {
-                // setSeriesCount([]);
-                // setSeriesPrices(null)
-                setSeriesFilesData(files);
-                const pageCount = [];
-                const prices = [];
-
-                for (const el of files) {
-                  const page = await getPdfPageCount(el);
-                  if (page <= 50) {
-                    prices.push(50);
-                  } else {
-                    prices.push(100);
-                  }
-                  pageCount.push(page);
-                }
-                setSeriesCount(pageCount);
-                setSeriesPrices(prices);
+              setFiles={(files) => {
+                setFilesProps(files, 1, "add");
               }}
             >
               <div
@@ -168,24 +170,14 @@ const CreatePitchForm = ({
                 <p className="text-[0.88rem] mt-6">Or click to browse file</p>
               </div>
             </DropZoneComponent>
-            <ServiceInfo
-              activeColor
-              content="Billing is based on the page count of each documents, documents uploaded must be at least 20 pages."
-            />
-            {files && files.length > 0 && (
-              <p className="font-bold text-[0.88rem] mt-8">Selected files</p>
-            )}
-            {files && files.length > 0 ? (
+            {files.length > 0 ? (
               <div className="max-h-[25rem]  overflow-y-scroll mt-6">
                 {files.map((el, index) => (
-                  <SeriesFiles
+                  <EditFiles
+                    file={el}
                     index={index}
-                    name={el.name}
-                    pageCount={seriesPageCount}
-                    removeFileData={removeFileData}
-                    size={el.size}
-                    key={el.name + index}
-                    id={ `${el.name}${el.size}${index}`}
+                    updateFile={setFilesProps}
+                    key={el.name + el.size + index}
                   />
                 ))}
               </div>
@@ -194,7 +186,7 @@ const CreatePitchForm = ({
         ) : (
           <div className="mt-10">
             <label className="block mb-2 text-black-2 font-medium text-[0.88rem]">
-              Upload
+              Upload script
             </label>
             <FileInput
               accept=""
@@ -220,10 +212,44 @@ const CreatePitchForm = ({
             size="md"
             value={data.platform}
             setValueProps={(val) => setScriptProps("platform", val!)}
-            label="Platform for exhibition"
+            label="Primary platform for exhibition"
             data={checked ? seriesExhibitionData : testExhibitionData}
             placeholder="Select"
           />
+        </div>
+        <div className="mt-10">
+          <SwitchComponent
+            checked={principal}
+            color="#181818"
+            label={
+              <p className="ml-2 ">
+                Do you have a start date for principal photography?
+              </p>
+            }
+            setChecked={(val) => setPrincipal(val)}
+          />
+        </div>
+        <div className="mt-10">
+          {principal ? (
+            <>
+              <p className="font-medium text-[0.88rem] mb-2">
+                Select start date
+              </p>
+              <DateInput
+                value={data.startpop}
+                onChange={(val) => setDateHandler(val)}
+              />
+            </>
+          ) : (
+            <InputComponent
+              value={data.days}
+              label="Number of days"
+              placeholder="Text"
+              changed={(val) => setScriptProps("days", val)}
+              className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
+              type="number"
+            />
+          )}
         </div>
         <div className="mt-8">
           <TextArea
@@ -235,26 +261,7 @@ const CreatePitchForm = ({
             label="Key actors in mind (optional)"
           />
         </div>
-        <div className="mt-8">
-          <TextArea
-            placeholder=""
-            changed={(val) => setScriptProps("crew_in_mind", val)}
-            value={data.crew_in_mind}
-            labelStyle2
-            className="h-[4rem] text-gray-6 text-[0.88rem] py-2 px-3"
-            label="Key crew in mind (optional)"
-          />
-        </div>
-        <div className="mt-8">
-          <InputComponent
-            value={data.visual}
-            label="Visual style references"
-            placeholder="Text"
-            changed={(val) => setScriptProps("visual", val)}
-            className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
-            type=""
-          />
-        </div>
+
         <div className="mt-8">
           <TextArea
             placeholder=""
@@ -268,13 +275,121 @@ const CreatePitchForm = ({
         <div className="mt-8">
           <InputComponent
             value={data.budget}
-            label="Budget Range"
+            label="Budget Range (optional)"
             placeholder="Text"
             changed={(val) => setScriptProps("budget", val)}
             className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
             type=""
           />
         </div>
+
+        <h1 className="font-medium text-md mt-10">Character locked days</h1>
+
+        {characterlocked.map((el, index) => (
+          <EditCharacter
+            index={index}
+            updateCharacter={setChacterLocked}
+            value={el}
+          />
+        ))}
+
+        <div className="grid grid-cols-2 gap-x-4 mt-8">
+          <div className="">
+            <InputComponent
+              value={character}
+              label="Character"
+              placeholder="Text"
+              changed={(val) => setCharacter(val)}
+              className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-[0.62rem] px-3"
+              type=""
+            />
+          </div>
+          <div className="">
+            <p className="font-medium text-[0.88rem] mb-2">
+              Locked dates, (you can select multiple)
+            </p>
+            <DatePickerInput
+              size="md"
+              onChange={setCharacterDate}
+              value={characterdDate}
+              type="multiple"
+            />
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            setChacterLocked(
+              {
+                name: character,
+                date: characterdDate,
+              },
+              1,
+              "add"
+            );
+            setCharacter("");
+            setCharacterDate([]);
+          }}
+          disabled={characterdDate.length < 1 || !character}
+          className="disabled:opacity-50 bg-black-2 text-white py-1 px-2 text-[0.75rem] rounded-sm mt-6 flex items-center"
+        >
+          <MdAdd />
+          <p className="ml-1">Save</p>
+        </button>
+        <h1 className="font-medium text-md mt-10">Location locked days</h1>
+
+        {locationlocked.map((el, index) => (
+          <EditCharacter
+            index={index}
+            updateCharacter={setLocationLocked}
+            value={el}
+            location
+          />
+        ))}
+
+        <div className="grid grid-cols-2 gap-x-4 mt-8">
+          <div className="">
+            <InputComponent
+              value={location}
+              label="Location"
+              placeholder="Text"
+              changed={(val) => setLocation(val)}
+              className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-[0.62rem] px-3"
+              type=""
+            />
+          </div>
+          <div className="">
+            <p className="font-medium text-[0.88rem] mb-2">
+              Locked dates, (you can select multiple)
+            </p>
+            <DatePickerInput
+              size="md"
+              onChange={setLocationDate}
+              value={locationDate}
+              type="multiple"
+            />
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            setLocationLocked(
+              {
+                name: location,
+                date: locationDate,
+              },
+              1,
+              "add"
+            );
+            setLocation("");
+            setLocationDate([]);
+          }}
+          disabled={locationDate.length < 1 || !location}
+          className="disabled:opacity-50 bg-black-2 text-white py-1 px-2 text-[0.75rem] rounded-sm mt-6 flex items-center"
+        >
+          <MdAdd />
+          <p className="ml-1">Save</p>
+        </button>
         {/* <ServiceInfo content="Pitch deck Creation  can take between 1-2 weeks. You will be mailed with an editable pitch deck and a calendar to choose a chat date" /> */}
         <div className="w-full flex mt-14">
           <UnstyledButton
