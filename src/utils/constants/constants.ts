@@ -459,6 +459,7 @@ export const resolve_file_services = [
   "Create a Marketing budget",
   "Create a Pitch based on my Script",
   "Draft Legal documents",
+  "Create A Pitch Deck"
 ];
 
 export const film_crew_values = [
