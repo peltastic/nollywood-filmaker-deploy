@@ -259,7 +259,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
             <div className="">
               <SelectComponent
                 data={countriesData}
-                placeholder="Search for country"
+                placeholder="Search for Country"
                 label=""
                 setValueProps={(val) => {
                   if (val) {
@@ -275,7 +275,7 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
             {countriesVal && (
               <div className="">
                 <p className="mb-2 font-medium mt-8 text-[#A5A5A5]">
-                  Search state
+                  Search of Residence
                 </p>
                 <div className="">
                   <SelectComponent

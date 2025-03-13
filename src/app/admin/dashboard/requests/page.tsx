@@ -6,7 +6,7 @@ import { DataTable } from "@/components/Tables/DataTable";
 import { useProtectAdmin } from "@/hooks/useProtectAdminRoute";
 import { ICustomerRequest } from "@/interfaces/admin/requests/requests";
 import { useLazyFetchCustomerRequestQuery } from "@/lib/features/admin/requests/request";
-import { chat_socket, primary_socket } from "@/lib/socket";
+import { primary_socket } from "@/lib/socket";
 import React, { useEffect, useState } from "react";
 
 type Props = {};

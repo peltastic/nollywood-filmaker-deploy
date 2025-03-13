@@ -215,7 +215,7 @@ const ContactDetails = ({
 
           {roles.length > 0 && (
             <div className="mt-8">
-              <h1 className="font-medium">Jobs done</h1>
+              <h1 className="font-medium">Jobs done (add additional jobs done after clicking the save button)</h1>
               {jobsDoneList.map((el, index) => (
                 <JobsDone
                   key={el.title + el.link}

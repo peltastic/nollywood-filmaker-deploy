@@ -2,8 +2,6 @@ import CheckboxComponent from "@/components/Checkbox/Checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import { GoDotFill } from "react-icons/go";
-import ReadMyScriptDarkImg from "/public/assets/services/read-my-script-dark.svg";
-import TestImage from "/public/assets/dashboard/issues-img-1.png";
 import { useRouter } from "next/navigation";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import { AspectRatio, Rating } from "@mantine/core";
@@ -51,6 +49,30 @@ export const admin_reqs_columns: ColumnDef<ICustomerRequest>[] = [
               {row.original.user.email}
             </p>
           </div>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "assignedConsultant",
+    header: () => <div>Assigned consultant</div>,
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center w-[20rem] xl:w-auto">
+          {row.original.assignedConsultant ? (
+            <div className="flex items-center">
+              <div className="bg-black-3 font-bold text-[0.7rem] mr-4 h-[2.5rem] flex items-center justify-center w-[2.5rem] rounded-full text-white">
+                {row.original.assignedConsultant.fname[0]}
+                {row.original.assignedConsultant.lname[0]}
+              </div>
+              <p>
+                {row.original.assignedConsultant.fname}{" "}
+                {row.original.assignedConsultant.lname}
+              </p>
+            </div>
+          ) : (
+            <p>N/A</p>
+          )}
         </div>
       );
     },

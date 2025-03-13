@@ -30,37 +30,37 @@ const ServicePage = (props: Props) => {
     {
       value: "read-my-script",
       label: "Read my Script and advice",
-      caption: "Requires chat after upload",
+      caption: "A chat session will be sent to discuss your script after review",
     },
     {
       value: "watch-final-cut",
       label: "Watch the Final cut of my film and advice",
-      caption: "Requires chat after upload",
+      caption: "A chat session will be sent to discuss your film after review",
     },
     {
       value: "create-pitch-deck",
       label: "Create a pitch deck",
-      caption: "Requires chat after upload",
+      caption: "You will receive an email when your document is ready for review",
     },
     {
       value: "production-budget",
       label: "Create a Production budget",
-      caption: "Sent via email as download link",
+      caption: "You will receive an email when your document is ready for review",
     },
     {
       value: "marketing-budget",
       label: "Create a Marketing plan and budget",
-      caption: "sent via email as download link",
+      caption: "You will receive an email when your document is ready for review",
     },
     {
       value: "create-movie-schedule",
       label: "Create a Movie Schedule",
-      caption: "sent via email as download link",
+      caption: "You will receive an email when your document is ready for review",
     },
     {
       value: "draft-legal-documents",
       label: "Draft Legal documents",
-      caption: "sent via email as download link",
+      caption: "You will receive an email when your document is ready for review",
     },
   ];
   const setValueHandler = (value: string) => {
@@ -69,8 +69,8 @@ const ServicePage = (props: Props) => {
   };
   return (
     <HomeLayout>
-      <div className="text-black-2 w-[90%] md:w-[50%] mx-auto mt-[10rem] mb-[10rem]">
-        <h1 className=" text-[1.5rem] font-bold">What service do you need?</h1>
+      <div className="text-black-2 w-[90%] md:w-[50%]   mx-auto mt-[10rem] mb-[10rem]">
+        <h1 className=" text-[1.5rem] font-bold">What film related service do you need?</h1>
         <h3 className="font-medium text-[0.88rem] mt-10 mb-2">
           Choose your service
         </h3>
@@ -83,7 +83,7 @@ const ServicePage = (props: Props) => {
               if (value) {
                 const info = serviceData.filter((el) => el.value === value);
                 setMoreInfo(
-                  `${info[0].label} ${info[0].caption.toLowerCase()}`
+                  `${info[0].caption.toLowerCase()}`
                 );
                 setValueHandler(value);
               } else {

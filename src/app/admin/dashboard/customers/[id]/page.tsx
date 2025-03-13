@@ -126,6 +126,7 @@ const CustomerDetailsPage = (props: Props) => {
             service_name: el.movie_title || el.chat_title || "",
             service_type: el.nameofservice,
             status: el.stattusof,
+            assignedConsultant: el.assignedConsultant
           };
         }
       );

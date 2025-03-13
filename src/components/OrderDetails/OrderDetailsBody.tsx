@@ -242,7 +242,7 @@ const OrderDetailsBody = ({ data }: Props) => {
           </div>
         </div>
       )}
-      {data?.request.startpop && (
+      {data?.request.startpop && data.request.startpop.length > 0 && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">
             Start date of principal photography

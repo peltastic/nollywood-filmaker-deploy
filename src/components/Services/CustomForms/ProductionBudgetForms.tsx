@@ -17,6 +17,7 @@ import React, { useState } from "react";
 import { BsUpload } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa";
 import EditFiles from "../Edits/EditFiles";
+import ServiceInfo from "@/components/ServiceInfo/ServiceInfo";
 
 type Props = {
   fileName?: string;
@@ -51,12 +52,23 @@ const ProductionBudgetForm = ({
   const [checked, setChecked] = useState<boolean>(false);
   const [hasBudget, setHasBudget] = useState<boolean>(false);
 
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
   return (
     <div className="w-full xl:w-[80%]">
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          proceed();
+          if (
+            Number(data.episodes) < files.length ||
+            Number(data.episodes) > files.length
+          ) {
+            setErrorMessage(
+              "Your number of scripts uploaded must match your number of episodes"
+            );
+          } else {
+            proceed();
+          }
         }}
       >
         <InputComponent
@@ -74,6 +86,7 @@ const ProductionBudgetForm = ({
             checked={checked}
             size="md"
             onChange={(val) => {
+              setErrorMessage("");
               if (val.currentTarget.checked) {
                 setScriptProps("showType", "Yes");
                 // updateCost(350000);
@@ -99,10 +112,13 @@ const ProductionBudgetForm = ({
         {checked ? (
           <div className="mt-10">
             <div className="mb-2  flex font-medium text-[0.88rem] ">
-              <p>Upload scripts</p>
+              <p>
+                Upload scripts for your {Number(data.episodes) || 0} episodes
+              </p>
             </div>
             <DropZoneComponent
               setFiles={(files) => {
+                setErrorMessage("");
                 setFilesProps(files, 1, "add");
               }}
             >
@@ -164,15 +180,6 @@ const ProductionBudgetForm = ({
             label="Key actors in mind (optional)"
           />
         </div>
-        {/* <div className="mt-8">
-          <TextArea
-            changed={(val) => setScriptProps("crew_in_mind", val)}
-            value={data.crew_in_mind}
-            labelStyle2
-            className="h-[4rem] text-gray-6 text-[0.88rem] py-2 px-3"
-            label="Key crew in mind (optional)"
-          />
-        </div> */}
         <div className="mt-10">
           <InputComponent
             value={data.number_of_days}
@@ -215,6 +222,8 @@ const ProductionBudgetForm = ({
             />
           </div>
         )}
+
+        {errorMessage && <ServiceInfo activeColor content={errorMessage} />}
         {/* <ServiceInfo content="Budget Creation  can take between 1-2 weeks. You will be mailed a link to a detailed, editable budget and a calendar to choose a chat date" /> */}
         <div className="w-full flex mt-14">
           <UnstyledButton
@@ -235,7 +244,7 @@ const ProductionBudgetForm = ({
               </div>
             ) : (
               <>
-                <p className="mr-2">Procced to payment</p>
+                <p className="mr-2">Proceed to payment</p>
                 <FaArrowRight className="text-[0.7rem]" />
               </>
             )}

@@ -20,7 +20,7 @@ const HomeLayout = ({ children, hasFooter, hideLogin }: Props) => {
   return (
     <>
       {authStatus === "LOGGED_IN" ? (
-        <ServiceLayout>
+        <ServiceLayout nonDashboard>
           {children}
         </ServiceLayout>
       ) : (

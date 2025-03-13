@@ -97,7 +97,7 @@ const page = (props: Props) => {
           <ServiceLeft
             cost={
               scriptData.showType === "Yes"
-                ? numberWithCommas(Number(scriptData.episodes) * 50000)
+                ? numberWithCommas((Number(scriptData.episodes || 0) * 50000) + 50000)
                 : "150,000"
             }
             title="Watch the final cut of my film"

@@ -1,10 +1,8 @@
 "use client";
 import LeftSide from "@/components/Auth/LeftSide";
 import LoginAsFilmmakerForm from "@/components/Forms/Auth/LoginAsFilmmakerForm";
-import LoginForm from "@/components/Forms/Auth/LoginForm";
 import HomeLayout from "@/components/Layouts/HomeLayout";
 import { RootState } from "@/lib/store";
-import Link from "next/link";
 import React from "react";
 import { useSelector } from "react-redux";
 
@@ -22,7 +20,7 @@ const LoginPage = (props: Props) => {
           <div className="flex items-center text-black-2">
             <div className="mr-auto">
               <h1 className="text-[1.75rem]  font-bold ">
-                Log in to Filmmaker Database
+                Log in to the Filmmaker Database
               </h1>
               <h2 className=" cursor-pointer">
                 Login to edit and view your filmmaker database profile

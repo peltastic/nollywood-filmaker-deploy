@@ -94,7 +94,7 @@ const CompanyDetails = ({
       </div>
       {type && (
         <div className="mt-8">
-          <h1 className="font-medium ">Clientele details</h1>
+          <h1 className="font-medium ">Clientele details (add additional clientele after clicking the save button)</h1>
           {jobsDoneList.map((el, index) => (
             <JobsDone
               key={el.title + el.link}

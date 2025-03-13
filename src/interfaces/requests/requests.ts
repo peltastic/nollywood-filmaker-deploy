@@ -6,16 +6,16 @@ export interface IActiveRequestData {
   nameofservice: "Chat With A Professional";
   chat_title?: string;
   orderId: string;
-  createdAt: string
-  cid: string
-  booktime?: string
-  endTime?: string
+  createdAt: string;
+  cid: string;
+  booktime?: string;
+  endTime?: string;
 }
 
 export interface IActiveRequestDataResposne {
-  page: number
-  limit: number
-  total: number
+  page: number;
+  limit: number;
+  total: number;
   requests: IActiveRequestData[];
 }
 
@@ -23,7 +23,7 @@ export interface IUserRequestHistoryResponse {
   _id: string;
   orderId: string;
   movie_title: string;
-  createdAt: string
+  createdAt: string;
   nameofservice:
     | "Chat With A Professional"
     | "Read my Script and advice"
@@ -33,17 +33,21 @@ export interface IUserRequestHistoryResponse {
     | "Create a Pitch based on my Script"
     | "Draft Legal documents"
     | "Create a Production budget";
-    date: string
-    stattusof: "pending" | "ongoing" | "ready" | "completed" | "awaiting";
-    chat_title: string   
+  date: string;
+  stattusof: "pending" | "ongoing" | "ready" | "completed" | "awaiting";
+  chat_title: string;
+  assignedConsultant: {
+    fname: string;
+    lname: string;
+  } | null;
 }
 
 export interface IResolveFiles {
-  orderId: string
+  orderId: string;
   files: {
-    filename: string
-    filepath: string
-    size: number
-    createdAt: string
-  }[]
+    filename: string;
+    filepath: string;
+    size: number;
+    createdAt: string;
+  }[];
 }

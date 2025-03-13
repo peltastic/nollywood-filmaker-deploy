@@ -29,7 +29,7 @@ const InitializingTransactionModal = (props: Props) => {
           y: "-50%",
           x: "-50%",
         }}
-        className="w-full md:w-[80%] px-10 xl:w-[50%] h-[100%] md:h-auto z-20 py-[5rem] rounded-md fixed left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2 bg-white"
+        className="w-full md:w-[80%] px-10 xl:w-[50%] h-[100%] max-w-[700px] md:h-auto z-20 py-[5rem] rounded-md fixed left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2 bg-white"
       >
         <div
           className="absolute right-6 top-6 cursor-pointer"

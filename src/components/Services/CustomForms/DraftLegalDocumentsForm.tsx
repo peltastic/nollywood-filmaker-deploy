@@ -108,7 +108,7 @@ const DraftLegalDocumentsForm = ({
               </div>
             ) : (
               <>
-                <p className="mr-2">Procced to payment</p>
+                <p className="mr-2">Proceed to payment</p>
                 <FaArrowRight className="text-[0.7rem]" />
               </>
             )}

@@ -84,34 +84,24 @@ const CreatePitchForm = ({
   const [locationDate, setLocationDate] = useState<Date[]>([]);
   const [character, setCharacter] = useState<string>("");
   const [location, setLocation] = useState<string>("");
-  const getPdfPageCount = async (file: File): Promise<number> => {
-    const reader = new FileReader();
 
-    return new Promise<number>((resolve, reject) => {
-      reader.onload = async () => {
-        try {
-          const result = reader.result;
-          if (!(result instanceof ArrayBuffer)) {
-            return reject(new Error("Invalid file data"));
-          }
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
-          const pdf = await pdfjs.getDocument({ data: result }).promise;
-          resolve(pdf.numPages);
-        } catch (error) {
-          reject(error);
-        }
-      };
-
-      reader.onerror = () => reject(new Error("Failed to read file"));
-      reader.readAsArrayBuffer(file);
-    });
-  };
   return (
     <div className="w-full xl:w-[95%]">
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          proceed();
+          if (
+            Number(data.episodes) < files.length ||
+            Number(data.episodes) > files.length
+          ) {
+            setErrorMessage(
+              "Your number of scripts uploaded must match your number of episodes"
+            );
+          } else {
+            proceed();
+          }
         }}
       >
         <InputComponent
@@ -129,6 +119,7 @@ const CreatePitchForm = ({
             checked={checked}
             size="md"
             onChange={(val) => {
+              setErrorMessage("");
               if (val.currentTarget.checked) {
                 setScriptProps("showType", "Yes");
                 setCost(150000);
@@ -154,10 +145,11 @@ const CreatePitchForm = ({
         {checked ? (
           <div className="mt-10">
             <div className="mb-2  flex font-medium text-[0.88rem] ">
-              <p>Upload scripts</p>
+              <p>Upload scripts for your {Number(data.episodes) || 0} episodes</p>
             </div>
             <DropZoneComponent
               setFiles={(files) => {
+                setErrorMessage("");
                 setFilesProps(files, 1, "add");
               }}
             >
@@ -390,6 +382,7 @@ const CreatePitchForm = ({
           <MdAdd />
           <p className="ml-1">Save</p>
         </button>
+        {errorMessage && <ServiceInfo activeColor content={errorMessage} />}
         {/* <ServiceInfo content="Pitch deck Creation  can take between 1-2 weeks. You will be mailed with an editable pitch deck and a calendar to choose a chat date" /> */}
         <div className="w-full flex mt-14">
           <UnstyledButton
@@ -410,7 +403,7 @@ const CreatePitchForm = ({
               </div>
             ) : (
               <>
-                <p className="mr-2">Procced to payment</p>
+                <p className="mr-2">Proceed to payment</p>
                 <FaArrowRight className="text-[0.7rem]" />
               </>
             )}

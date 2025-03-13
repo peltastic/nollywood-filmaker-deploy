@@ -153,7 +153,7 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
         {({ isValid }) => (
           <Form>
             <p className="mb-2 font-medium mt-8 text-[#A5A5A5]">
-              Search country
+              Search Country
             </p>
             <div className="">
               <SelectComponent
@@ -174,7 +174,7 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
             {countriesVal && (
               <div className="">
                 <p className="mb-2 font-medium mt-8 text-[#A5A5A5]">
-                  Search state
+                  Search of Residence
                 </p>
                 <div className="">
                   <SelectComponent

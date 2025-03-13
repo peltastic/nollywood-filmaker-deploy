@@ -14,8 +14,6 @@ import { notifications } from "@mantine/notifications";
 import { successColor } from "@/utils/constants/constants";
 import classes from "@/app/styles/SuccessNotification.module.css";
 import { useRouter } from "next/navigation";
-import { useProtectRoute } from "@/hooks/useProtectRoute";
-import { useProtectRouteConsultantRoute } from "@/hooks/useProtectConsultantRoute";
 import { setConsultantLogoutType } from "@/lib/slices/consultants/logoutSlice";
 import { RootState } from "@/lib/store";
 import { truncateStr } from "@/utils/helperFunction";

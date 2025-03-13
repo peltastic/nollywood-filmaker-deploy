@@ -10,6 +10,8 @@ import { RootState } from "@/lib/store";
 import { setFallbackRoute } from "@/lib/slices/routeSlice";
 import { notify } from "@/utils/notification";
 import FilmmakerDatabaseHeader from "@/components/FilmakerDatabase/FilmmakerDatabase";
+import ChatWithProfessional from "/public/assets/services/chat-with-professional-yellow.svg";
+import ReadMyScriptDark from "/public/assets/services/read-my-script-yellow.svg";
 
 type Props = {};
 
@@ -52,16 +54,18 @@ const GetStartedPage = (props: Props) => {
               }
             }}
             className=" hover:text-yellow-1 hover:border-2 hover:border-yellow-1  hover:px-3  hover:shadow-2xl  hover:before:absolute hover:before:bottom-0  hover:before:top-0 hover:before:z-[-1] hover:before:h-full  hover:before:bg-black-9 hover:before:transition-all hover:before:duration-400  hover:before:left-0 hover:before:w-full border-stroke-2 before:w-0 before:left-0 text-black-2 rounded-md relative overflow-hiddentransition-all transition-all cursor-pointer border w-[90%] sm:w-[80%] lg:w-[26.6rem] flex items-center justify-center  h-[13.13rem]"
-          >
+          > 
             <div className="text-center">
               {selected === "service" ? (
                 <div className="h-[3rem]"></div>
               ) : (
-                <Image
-                  src={GetStartedIcon}
-                  alt="get-startedIcon"
-                  className="w-[3rem] mx-auto"
-                />
+                <div className="h-[3.5rem] w-[3.5rem] mx-auto rounded-full flex justify-center bg-[#686513]">
+                  <Image
+                    src={ReadMyScriptDark}
+                    alt="get-startedIcon"
+                    className="w-[2rem] mx-auto"
+                  />
+                </div>
               )}
               <p
                 className={`transition-all ${
@@ -94,11 +98,13 @@ const GetStartedPage = (props: Props) => {
               {selected === "chat" ? (
                 <div className="h-[3rem]"></div>
               ) : (
-                <Image
-                  src={GetStartedIcon}
-                  alt="get-startedIcon"
-                  className="w-[3rem] mx-auto"
-                />
+                <div className="h-[3.5rem] w-[3.5rem] mx-auto rounded-full flex justify-center bg-[#686513]">
+                  <Image
+                    src={ChatWithProfessional}
+                    alt="get-startedIcon"
+                    className="w-[2rem] mx-auto"
+                  />
+                </div>
               )}
               <p
                 className={`transition-all ${

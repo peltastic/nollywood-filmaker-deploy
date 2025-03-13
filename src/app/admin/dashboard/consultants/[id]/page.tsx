@@ -159,6 +159,8 @@ const ConsultantDetailsPage = (props: Props) => {
             service_name: el.request.movie_title || el.request.chat_title || "",
             service_type: el.request.nameofservice,
             status: el.request.stattusof,
+            user: el.userInfo,
+            consultant: true,
           };
         });
       setReqHistoryData(refined_data);

@@ -2,7 +2,7 @@ import CheckboxComponent from "@/components/Checkbox/Checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import ReadMyScriptDarkImg from "/public/assets/services/read-my-script-dark.svg";
-import { Progress, Rating } from "@mantine/core";
+import { AspectRatio, Progress, Rating } from "@mantine/core";
 import { GoDotFill } from "react-icons/go";
 import ModalComponent from "@/components/Modal/Modal";
 import MenuComponent from "@/components/Menu/MenuComponent";
@@ -28,6 +28,17 @@ export interface IAdminRequestHistory {
   date_created: string;
   status: "ready" | "ongoing" | "completed" | "pending" | "awaiting";
   orderId: string;
+  assignedConsultant?: {
+    fname: string;
+    lname: string;
+  } | null;
+  consultant?: boolean;
+  user?: {
+    fname: string;
+    lname: string;
+    email: string;
+    profilepics: string;
+  };
 }
 
 export const admin_customer_request_history_column: ColumnDef<IAdminRequestHistory>[] =
@@ -51,6 +62,63 @@ export const admin_customer_request_history_column: ColumnDef<IAdminRequestHisto
               </p>
               <p className="text-gray-1">{row.original.service_type}</p>
             </div>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "assignedConsultant",
+      header: ({ table }) => {
+        const hasConsultant = table
+          .getRowModel()
+          .rows.some((row) => row.original.consultant);
+        return <>{hasConsultant ? <p>Customer</p> : "Assigned consultant"}</>;
+      },
+      cell: ({ row }) => {
+        return (
+          <div className="flex items-center w-[20rem] xl:w-auto">
+            {row.original.consultant ? (
+              <div className="flex items-center">
+                {row.original.user && (
+                  <div className="mr-2 h-[2.5rem] w-[2.5rem]">
+                    <AspectRatio ratio={1800 / 1800}>
+                      <Image
+                        src={row.original.user?.profilepics}
+                        width={100}
+                        height={100}
+                        alt="image"
+                        className="rounded-full h-full w-full"
+                      />
+                    </AspectRatio>
+                  </div>
+                )}
+                <div className="">
+                  <h1 className=" text-black-4 font-medium">
+                    {row.original.user?.fname + " " + row.original.user?.lname}
+                  </h1>
+                  <p className="text-gray-1 text-[0.88rem]">
+                    {row.original.user?.email}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <>
+                {row.original.assignedConsultant ? (
+                  <div className="flex items-center">
+                    <div className="bg-black-3 font-bold text-[0.7rem] mr-4 h-[2.5rem] flex items-center justify-center w-[2.5rem] rounded-full text-white">
+                      {row.original.assignedConsultant.fname[0]}
+                      {row.original.assignedConsultant.lname[0]}
+                    </div>
+                    <p>
+                      {row.original.assignedConsultant.fname}{" "}
+                      {row.original.assignedConsultant.lname}
+                    </p>
+                  </div>
+                ) : (
+                  <p>N/A</p>
+                )}
+              </>
+            )}
           </div>
         );
       },

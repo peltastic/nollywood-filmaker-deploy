@@ -9,6 +9,8 @@ import classes from "../styles/Faq.module.css";
 import FaqContactUs from "@/components/Sections/FaqContactUs";
 import HomeTitleHeader from "@/components/Headers/HomeTitleHeader";
 import Vector1 from "/public/assets/header/vector-1.svg";
+import YoutubeIcon from "/public/assets/youtube-icon.svg";
+import Link from "next/link";
 
 const faqList = [
   {
@@ -186,11 +188,29 @@ const FAQPage = (props: Props) => {
       <div className="absolute top-[10rem] left-[2rem]">
         <Image src={Vector1} alt="vector-1" />
       </div>
+
       <HomeTitleHeader
         subTitle="Everything you need to know about the product and billing."
         title="Frequently asked questions"
       />
       <div className="w-[90%] md:w-[60%] mx-auto mt-[4rem]">
+        <div className=" my-3 mb-11 hover:scale-105 transition-all">
+          <Link
+          className="flex items-center"
+            href={
+              "https://youtube.com/@nollywoodfilmmakersupport?si=OyyVtZEiXZPNjkdY"
+            }
+          >
+            <Image
+              src={YoutubeIcon}
+              alt="youtube-icon"
+              className="w-[2rem] mr-2"
+            />
+            <p className="border-b cursor-pointer">
+              Check out tutorials on out youtube channel
+            </p>
+          </Link>
+        </div>
         <h1 className="text-2xl font-semibold">FAQs General Information</h1>
         <Accordion
           disableChevronRotation

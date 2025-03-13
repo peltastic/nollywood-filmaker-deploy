@@ -20,6 +20,7 @@ import { BsUpload } from "react-icons/bs";
 import EditFiles from "../Edits/EditFiles";
 import CheckboxComponent from "@/components/Checkbox/Checkbox";
 import Link from "next/link";
+import ServiceInfo from "@/components/ServiceInfo/ServiceInfo";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 type Props = {
@@ -39,6 +40,7 @@ type Props = {
   setNoOfEpisodes: (val: number) => void;
   setCharacterBible: (file: File) => void;
   bible: File | null;
+  setSingleFile: (file: File) => void;
 };
 
 const ReadMyScriptForm = ({
@@ -54,17 +56,27 @@ const ReadMyScriptForm = ({
   setNoOfEpisodes,
   setCharacterBible,
   bible,
+  setSingleFile,
 }: Props) => {
   const router = useRouter();
   const [checked, setChecked] = useState<boolean>(false);
   const [terms, setTerms] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   return (
     <div className="w-full xl:w-[90%]">
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          // console.log(numPages);
-          proceed();
+          if (
+            Number(data.episodes) < files.length ||
+            Number(data.episodes) > files.length
+          ) {
+            setErrorMessage(
+              "Your number of scripts uploaded must match your number of episodes"
+            );
+          } else {
+            proceed();
+          }
         }}
       >
         <InputComponent
@@ -82,6 +94,7 @@ const ReadMyScriptForm = ({
             checked={checked}
             size="md"
             onChange={(val) => {
+              setErrorMessage("");
               if (val.currentTarget.checked) {
                 setScriptProps("showType", "Yes");
               } else {
@@ -120,6 +133,8 @@ const ReadMyScriptForm = ({
             </div>
             <DropZoneComponent
               setFiles={(files) => {
+                setErrorMessage("");
+
                 setFileProps(files, 1, "add");
               }}
             >
@@ -155,7 +170,7 @@ const ReadMyScriptForm = ({
               accept=""
               setFile={(file) => {
                 if (file) {
-                  setFileProps([file], 1, "add");
+                  setSingleFile(file);
                 }
               }}
             >
@@ -239,11 +254,12 @@ const ReadMyScriptForm = ({
                 <span className="font-semibold underline">
                   <Link href={"/privacy-policy"}>privacy policy</Link>
                 </span>{" "}
-                of the service. 
+                of the service.
               </p>
             }
           />
         </div>
+        {errorMessage && <ServiceInfo activeColor content={errorMessage} />}
         <div className="w-full flex mt-14">
           <UnstyledButton
             type="button"
@@ -254,7 +270,7 @@ const ReadMyScriptForm = ({
           </UnstyledButton>
           <UnstyledButton
             type="submit"
-            disabled={disabled || isLoading || !checked}
+            disabled={disabled || isLoading || !terms}
             class=" justify-center w-[12rem] flex py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
           >
             {isLoading ? (
@@ -263,7 +279,7 @@ const ReadMyScriptForm = ({
               </div>
             ) : (
               <>
-                <p className="mr-2">Procced to payment</p>
+                <p className="mr-2">Proceed to payment</p>
                 <FaArrowRight className="text-[0.7rem]" />
               </>
             )}

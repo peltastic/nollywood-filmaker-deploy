@@ -50,6 +50,7 @@ const ReadMyScriptPage = (props: Props) => {
   const router = useRouter();
   const searchParam = useSearchParams();
   const search = searchParam.get("page");
+  const [singleFile, setSingleFile] = useState<File | null>(null);
   const [scriptData, setScriptData] = useState<IReadMyScriptState>({
     movie_title: "",
     concerns: "",
@@ -117,7 +118,7 @@ const ReadMyScriptPage = (props: Props) => {
           <ServiceLeft
             cost={
               scriptData.showType === "Yes"
-                ? numberWithCommas(noOfEpisodes * 50000)
+                ? numberWithCommas(noOfEpisodes * 50000 + 50000)
                 : "150,000"
             }
             title="Read my script"
@@ -125,7 +126,7 @@ const ReadMyScriptPage = (props: Props) => {
             episodes={scriptData.episodes}
             series
             body={[
-              { title: "Movie title", content: scriptData.movie_title },
+              { title: "Working title", content: scriptData.movie_title },
               {
                 title: "Logline / Synopsis",
                 content: scriptData.logline,
@@ -167,10 +168,15 @@ const ReadMyScriptPage = (props: Props) => {
                         title: "Read my Script and advice",
                         concerns: scriptData.concerns,
                         type: "request",
-                        files,
+                        files:
+                          scriptData.showType === "No"
+                            ? singleFile
+                              ? [singleFile]
+                              : []
+                            : files,
                         fileName:
                           scriptData.showType === "No"
-                            ? files[0].name
+                            ? singleFile?.name || ""
                             : "Series",
                         episodes: scriptData.episodes,
                         showtype: scriptData.showType,
@@ -186,13 +192,15 @@ const ReadMyScriptPage = (props: Props) => {
                   }}
                   noOfEpisodes={noOfEpisodes}
                   files={files}
+                  setSingleFile={(file) => setSingleFile(file)}
                   setNoOfEpisodes={(val) => setNoOfEpisodes(val)}
                   disabled={
                     !scriptData.movie_title ||
                     !scriptData.genre ||
                     !scriptData.platform ||
                     !scriptData.logline ||
-                    !(files.length > 0) ||
+                    (scriptData.showType === "No" && !singleFile) ||
+                    (scriptData.showType === "Yes" && files.length < 1) ||
                     (scriptData.showType === "Yes" &&
                       Number(scriptData.episodes) < 1)
                   }
@@ -202,7 +210,7 @@ const ReadMyScriptPage = (props: Props) => {
                   bible={bible}
                   setCharacterBible={(val) => setBible(val)}
                   fileName={
-                    scriptData.showType === "No" ? files[0]?.name : "Series"
+                    scriptData.showType === "No" ? singleFile?.name : "Series"
                   }
                   isLoading={isLoading}
                 />

@@ -14,6 +14,10 @@ export interface ICustomerRequest {
     email: string;
     profilepics: string;
   };
+  assignedConsultant: {
+    fname: string
+    lname: string
+  } | null
 }
 
 export interface IFetchCustomerRequestsResponse {

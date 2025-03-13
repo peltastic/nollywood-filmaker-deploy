@@ -21,6 +21,8 @@ import { initializeTransactionListener } from "@/lib/socket";
 import { nprogress } from "@mantine/nprogress";
 import Spinner from "@/app/Spinner/Spinner";
 import { useProtectRoute } from "@/hooks/useProtectRoute";
+import CheckboxComponent from "@/components/Checkbox/Checkbox";
+import Link from "next/link";
 
 type Props = {};
 
@@ -33,9 +35,13 @@ export interface IChatState {
 }
 
 const GetStartedChatPage = (props: Props) => {
-  useProtectRoute()
+  useProtectRoute();
   const router = useRouter();
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow;
+  });
   const [chatData, setChatData] = useState<IChatState>({
     date: "",
     consultant: "",
@@ -48,6 +54,7 @@ const GetStartedChatPage = (props: Props) => {
     useInitializeChatWithAProTransactionMutation();
 
   const searchParam = useSearchParams();
+  const [terms, setTerms] = useState<boolean>(false)
   const [opened, { open, close }] = useDisclosure();
   const userId = useSelector(
     (state: RootState) => state.persistedState.user.user?.id
@@ -187,8 +194,33 @@ const GetStartedChatPage = (props: Props) => {
                   )}
                   {page === "3" && (
                     <div className="hidden lg:block">
+                      <div className="mt-4 w-full mb-8">
+                        <CheckboxComponent
+                          setCheckedProps={(val) => setTerms(val)}
+                          checked={terms}
+                          label={
+                            <p className="max-w-[40rem] text-gray-3">
+                              By proceeding, I confirm that I
+                              have read, understood, and agree to the{" "}
+                              <span className="font-semibold underline">
+                                <Link href={"/terms-and-conditions"} target="_blank">
+                                  terms and conditions
+                                </Link>
+                              </span>{" "}
+                              and{" "}
+                              <span className="font-semibold underline">
+                                <Link href={"/privacy-policy"} target="_blank">
+                                  privacy policy
+                                </Link>
+                              </span>{" "}
+                              of the service.
+                            </p>
+                          }
+                        />
+                      </div>
+
                       <UnstyledButton
-                        disabled={isLoading}
+                        disabled={isLoading || !terms}
                         clicked={() => {
                           if (userId) {
                             chatWithPro({

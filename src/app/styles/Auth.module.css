@@ -1,13 +1,13 @@
 .BgImage {
   background: linear-gradient(#00000004, #0000009a),
-    url("../../../public/assets/consultant/consultant.jpeg");
+    url("../../../public/assets/consultant/consultant.PNG");
   background-size: cover;
   background-position: 80%;
 }
 
 .AdminBgImage {
    background: linear-gradient(#00000004, #0000009a),
-   url("../../../public/assets/admin/admin-auth.jpeg");
+   url("../../../public/assets/admin/admin-auth.PNG");
    background-size: cover;
    background-position: left;
 }
