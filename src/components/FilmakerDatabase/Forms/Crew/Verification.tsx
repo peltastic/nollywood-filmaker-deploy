@@ -174,7 +174,7 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
             {countriesVal && (
               <div className="">
                 <p className="mb-2 font-medium mt-8 text-[#A5A5A5]">
-                  Search of Residence
+                  Staate of Residence
                 </p>
                 <div className="">
                   <SelectComponent
