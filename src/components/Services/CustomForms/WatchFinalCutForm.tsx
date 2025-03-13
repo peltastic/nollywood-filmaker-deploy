@@ -69,7 +69,7 @@ const WatchFinalCutForm = ({
           className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
           type=""
         />
-        <div className="mt-10 mb-10 cursor-pointer">
+        <div className="mt-10 mb-10 cursor-pointer w-fit">
           <Switch
             label="Series"
             color="#181818"
