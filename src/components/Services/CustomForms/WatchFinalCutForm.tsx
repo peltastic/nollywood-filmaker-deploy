@@ -38,8 +38,8 @@ const stage = [
     value: "Final cut plus temp/music/sound/vfx",
   },
   {
-    label: "Finished cut if it is the first cut, finished cut ",
-    value: "Finished cut if it is the first cut, finished cut ",
+    label: "Final cut",
+    value: "Final cut",
   },
 ];
 
