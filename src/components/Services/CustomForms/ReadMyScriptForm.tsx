@@ -246,7 +246,7 @@ const ReadMyScriptForm = ({
                 By proceeding with this upload, I confirm that I have read,
                 understood, and agree to the{" "}
                 <span className="font-semibold underline">
-                  <Link href={"/terms-and-conditions"}>
+                  <Link href={"/terms-and-conditions"} target="_blank">
                     Terms and Conditions
                   </Link>
                 </span>{" "}

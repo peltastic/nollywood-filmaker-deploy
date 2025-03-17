@@ -8,7 +8,7 @@ import { ICustomerReqDetails } from "@/interfaces/consultants/dashboard/request"
 
 type Props = {
   data?: ICustomerReqDetails;
-  consultant?: boolean
+  consultant?: boolean;
 };
 
 const OrderDetailsBody = ({ data }: Props) => {
@@ -339,7 +339,11 @@ const OrderDetailsBody = ({ data }: Props) => {
                 <div className="text-[0.88rem] mb-2 flex">
                   <p>{el.name}</p>
                   <p className="mx-5">-</p>
-                  <p>{el.date.join(", ")}</p>
+                  <div className="flex items-center">
+                    {el.date.map((el) => (
+                      <p>{moment(el).format("ll")},&nbsp;</p>
+                    ))}
+                  </div>
                 </div>
               </div>
             ))}
@@ -348,13 +352,17 @@ const OrderDetailsBody = ({ data }: Props) => {
       {data?.request.locationlockeddate &&
         data.request.locationlockeddate.length > 0 && (
           <div className="mt-4 border-b border-b-stroke-4 pb-4">
-            <h1 className="font-bold mb-1">Character locked dates</h1>
+            <h1 className="font-bold mb-1">Location locked dates</h1>
             {data.request.locationlockeddate.map((el, index) => (
               <div className="" key={JSON.stringify(el.date) + index}>
                 <div className="text-[0.88rem] mb-2 flex">
                   <p>{el.name}</p>
                   <p className="mx-5">-</p>
-                  <p>{el.date.join(", ")}</p>
+                  <div className="flex items-center">
+                    {el.date.map((el) => (
+                      <p>{moment(el).format("ll")},&nbsp;</p>
+                    ))}
+                  </div>
                 </div>
               </div>
             ))}

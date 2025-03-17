@@ -20,11 +20,12 @@ import {
 } from "@/lib/features/users/dashboard/requests/requests";
 import { isResolveFile } from "@/utils/helperFunction";
 import { useProtectRoute } from "@/hooks/useProtectRoute";
+import OrderDetailsServiceChat from "@/components/OrderDetails/OrderDetailsServiceChat";
 
 type Props = {};
 
 const OrderDetailsPage = (props: Props) => {
-  useProtectRoute()
+  useProtectRoute();
   const [resolveFilesData, setResolveFilesData] = useState<
     IResolveFilesColumnData[]
   >([]);
@@ -117,11 +118,30 @@ const OrderDetailsPage = (props: Props) => {
                     data={resolveFilesData}
                     title="Request Resolve Files"
                     faded
+                    emptyHeader="No files yet"
                     isFetching={result.isFetching}
                     loaderLength={5}
                   />
                 </div>
               )}
+            </div>
+
+            <div className="flex">
+              <div className=" w-[90%] lg:w-[82%] mx-auto mt-6">
+                {data && (
+                  <OrderDetailsServiceChat
+                    service={data.request.nameofservice}
+                    type="user"
+                    orderId={data.request.orderId}
+                    refecth={() => {
+                      if (params.id) {
+                        getCustomerReqDetails(params.id as string);
+                        fetchResolveFiles(params.id as string);
+                      }
+                    }}
+                  />
+                )}
+              </div>
             </div>
           </>
         )}

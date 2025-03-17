@@ -70,7 +70,7 @@ function TextEditor({ changed, value }: RichTextEditorProps) {
         </RichTextEditor.ControlsGroup>
       </RichTextEditor.Toolbar>
 
-      <RichTextEditor.Content className="min-h-[15rem] bg-white" />
+      <RichTextEditor.Content className=" bg-white" />
     </RichTextEditor>
   );
 }

@@ -79,6 +79,12 @@ const OrderDetails = (props: Props) => {
                   <OrderDetailsServiceChat
                     service={data.request.nameofservice}
                     type="consultant"
+                    orderId={data.request.orderId}
+                    refecth={() => {
+                      if (params.id) {
+                        getCustomerReqDetails(params.id as string);
+                      }
+                    }}
                   />
                 )}
               </div>

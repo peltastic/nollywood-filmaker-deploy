@@ -27,7 +27,7 @@ export const admin_contact_us: ColumnDef<IAdminContactusData>[] = [
     cell: ({ row }) => {
       return (
         <div className="">
-          <p>{row.getValue("fullname")}</p>
+          <p>{row.getValue("email")}</p>
         </div>
       );
     },

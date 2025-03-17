@@ -110,7 +110,7 @@ export const consultantRequestsApi = createApi({
       unknown,
       {
         orderId: string;
-        uid: string;
+        consultantCid: string;
         message: string;
       }
     >({
@@ -119,6 +119,18 @@ export const consultantRequestsApi = createApi({
         method: "POST",
         body,
       }),
+    }),
+    fetchServiceMessagesConsultant: build.query<
+      {
+        messages: {
+          role: "consultant" | "user";
+          message: string;
+          _id: string
+        }[];
+      },
+      string
+    >({
+      query: (id) => `/api/consultants/servicechat/messages?orderId=${id}`,
     }),
   }),
 });
@@ -135,5 +147,6 @@ export const {
   useLazyFetchReqHistoryQuery,
   useLazyGetSingleConsultantAvailabilityQuery,
   useLazyFetchDashboardStatsQuery,
-  useSendServiceChatMessagesAsConsultantMutation
+  useSendServiceChatMessagesAsConsultantMutation,
+  useLazyFetchServiceMessagesConsultantQuery,
 } = consultantRequestsApi;
