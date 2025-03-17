@@ -115,7 +115,7 @@ const LoginForm = (props: Props) => {
         expires: new Date(Date.now() + 6.5 * 24 * 60 * 60 * 1000),
       });
       setAdminToken(loginAdminRes.data.accessToken);
-      router.push( adminFallbackRoute || "/admin/dashboard");
+      router.push(adminFallbackRoute || "/admin/dashboard");
     }
   }, [loginAdminRes.isError, loginAdminRes.isSuccess]);
 
@@ -144,7 +144,7 @@ const LoginForm = (props: Props) => {
         expires: new Date(Date.now() + 6.5 * 24 * 60 * 60 * 1000),
       });
       setConsultantToken(result.data.accessToken);
-      router.push( consultantFallbackRoute ||"/consultants/dashboard");
+      router.push(consultantFallbackRoute || "/consultants/dashboard");
     }
   }, [result.isError, result.isSuccess]);
 
@@ -214,9 +214,8 @@ const LoginForm = (props: Props) => {
                 </p>
               </div>
             )}
-            {props.loginType === "user" 
-            || props.loginType === "consultant"
-            && (
+            {(props.loginType === "user" ||
+              props.loginType === "consultant") && (
               <div className="flex items-center text-black-5 mt-6">
                 {/* <div className="mr-auto">
                   <CheckboxComponent

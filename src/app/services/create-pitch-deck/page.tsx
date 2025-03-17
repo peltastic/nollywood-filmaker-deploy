@@ -183,14 +183,14 @@ const CreatePitchDeck = (props: Props) => {
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
           close={close}
-          //   info=""
+            info="Pitch deck creation can take up to one to two weeks. A document will be sent for review."
         />
       ) : null}
-      <ServiceLayout>
+      <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap ">
           <ServiceLeft
             cost="500,000"
-            title="Create a pitch deck"
+            title="Create my pitch deck"
             image={<Image src={BudgetAndAdviceImg} alt="budget-and-advice" />}
             crew={keyCrew}
             members={members}

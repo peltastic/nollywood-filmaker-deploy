@@ -58,6 +58,7 @@ export interface ICustomerReqDetails {
     contactInfo: string;
     movie_title: string;
     link: string;
+    links: string[];
     consultant: string;
     userId: string;
     expertise: string;

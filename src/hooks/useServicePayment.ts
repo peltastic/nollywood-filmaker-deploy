@@ -44,6 +44,7 @@ export const useServicePayment = (
             status: "completed";
           };
         }) => {
+          console.log(data)
           if (data.transaction.status === "completed") {
             nprogress.complete();
             dispatch(setFallbackRoute(null));

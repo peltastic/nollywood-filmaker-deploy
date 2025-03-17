@@ -1,7 +1,6 @@
 "use client";
 import HomeLayout from "@/components/Layouts/HomeLayout";
 import React, { useState } from "react";
-import GetStartedIcon from "/public/assets/get-started/get-started-icon.png";
 import Image from "next/image";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import { useRouter } from "next/navigation";

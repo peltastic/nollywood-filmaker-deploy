@@ -42,7 +42,7 @@ export const filmmakerDatabaseConsultantApi = createApi({
           query += `&location=${location}`;
         }
         if (fee) {
-          query += `&fee=${fee}`;
+          query += `&fee=${fee === "5m+" ? "5m%2B" : fee}`;
         }
 
         if (limit) {

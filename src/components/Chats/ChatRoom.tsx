@@ -19,7 +19,7 @@ import { ChatPayload } from "./CustomerChat/CutomerChatMiddle";
 import ConsultantChatMessage from "./ConsultantChatMessage";
 import { IUserInfoData } from "@/interfaces/auth/auth";
 import { useSearchParams } from "next/navigation";
-import { MdInfoOutline } from "react-icons/md";
+import { MdInfoOutline, MdPendingActions } from "react-icons/md";
 import FileButtonComponent from "../FileButton/FileButtonComponent";
 import UnstyledButton from "../Button/UnstyledButton";
 import { FaFile } from "react-icons/fa";
@@ -64,6 +64,7 @@ type Props = {
   refreshChat: () => void;
   status: "ongoing" | "completed" | "pending" | "ready";
   profilepics?: string;
+  isContinuedChat?: number;
 };
 
 export interface IChatMessagesData {
@@ -1113,7 +1114,14 @@ const ChatRoom = (props: Props) => {
                 </div>
               </div>
             ) : (
-              <div className="h-[90vh]"></div>
+              <div className="">
+                {props.isContinuedChat ? (
+                  <div className="absolute bottom-0 w-[90%] xs:w-[93%] sm:w-[95%]   flex items-center text-[0.88rem] bg-gray-bg-7 border mx-4 mt-8 py-2 rounded-md px-4 border-border-gray">
+                    <MdPendingActions className="text-gray-4 mr-4 text-xl " />
+                    <p className="text-gray-4">Session hasn't started yet</p>
+                  </div>
+                ) : null}
+              </div>
             )}
           </div>
         )}

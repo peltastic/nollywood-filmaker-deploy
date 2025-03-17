@@ -8,6 +8,7 @@ import { ICustomerReqDetails } from "@/interfaces/consultants/dashboard/request"
 
 type Props = {
   data?: ICustomerReqDetails;
+  consultant?: boolean
 };
 
 const OrderDetailsBody = ({ data }: Props) => {
@@ -273,6 +274,33 @@ const OrderDetailsBody = ({ data }: Props) => {
           </div>
         </div>
       )}
+      {data?.request.episodes && data.request.links.length > 0 && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-1">Episode links</h1>
+          {data.request.links.map((el, index) => (
+            <div className="mb-2" key={el + index}>
+              <Link href={el} className="underline text-[0.88rem]">
+                Episode {index + 1}
+              </Link>
+            </div>
+          ))}
+        </div>
+      )}
+      {data?.request.links &&
+        data?.request.links.length > 0 &&
+        data?.request.episodes === null && (
+          <div className="mt-4 border-b border-b-stroke-4 pb-4">
+            <h1 className="font-bold mb-1">Link</h1>
+            <div className="mb-2">
+              <Link
+                href={data.request.links[0]}
+                className="underline text-[0.88rem]"
+              >
+                {truncateStr(data.request.links[0], 40)}
+              </Link>
+            </div>
+          </div>
+        )}
       {data?.request.keycharacters && data.request.keycharacters.length > 0 && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Key Characters</h1>

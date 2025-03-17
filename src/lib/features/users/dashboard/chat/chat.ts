@@ -20,8 +20,19 @@ export const dashboardChatApi = createApi({
   reducerPath: "dashboardChatApi",
   baseQuery: baseQueryWithReauth,
   endpoints: (build) => ({
-    fetchUserConversations: build.query<IGetUserConversationsResponse, string>({
-      query: (id) => `/api/users/conversations/${id}`,
+    fetchUserConversations: build.query<
+      IGetUserConversationsResponse,
+      { id: string; search?: string }
+    >({
+      query: ({ id, search }) => {
+        let query = "";
+        if (search) {
+          query += `?search=${search}`;
+        }
+        return {
+          url: `/api/users/conversations/${id}${query}`,
+        };
+      },
     }),
     fetchSingleConversationData: build.query<IGetUserConversations, string>({
       query: (orderId) => `/api/users/conversation/${orderId}`,
@@ -90,6 +101,20 @@ export const dashboardChatApi = createApi({
         method: "POST",
       }),
     }),
+    continueChat: build.mutation<
+      {
+        payment: {
+          authorization_url: string;
+        };
+      },
+      { orderId: string; date: string }
+    >({
+      query: (body) => ({
+        url: `/api/users/continue-chat`,
+        method: "PUT",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -104,5 +129,6 @@ export const {
   useLazyExtentTimeQuery,
   useLazyExportUserChatQuery,
   useSendFeedbackMutation,
-  useReportAnIssueAsCustomerMutation
+  useReportAnIssueAsCustomerMutation,
+  useContinueChatMutation,
 } = dashboardChatApi;

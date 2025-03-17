@@ -175,15 +175,40 @@ const PitchDeckForm = (props: Props) => {
           />
         </div>
         <div className="mt-10">
-          <InputComponent
-            value={props.data.revprojection}
-            label="Revenue Projection (You can put a range)"
-            placeholder="Text"
-            type=""
-            changed={(val) => props.setScriptProps("revprojection", val)}
-            className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
+          <SwitchComponent
+            label={<p className="ml-2">Do you have a budget range?</p>}
+            checked={hasBudget}
+            color="#181818"
+            size="sm"
+            setChecked={(val) => setHasBudget(val)}
           />
         </div>
+        {hasBudget && (
+          <>
+            <div className="mt-10">
+              <InputComponent
+                value={props.data.estimatedBudget}
+                label="Estimated budget (You can put a range)"
+                placeholder="Text"
+                type=""
+                changed={(val) => {
+                  props.setScriptProps("estimatedBudget", val);
+                }}
+                className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
+              />
+            </div>
+            <div className="mt-10">
+              <InputComponent
+                value={props.data.revprojection}
+                label="Revenue Projection (You can put a range)"
+                placeholder="Text"
+                type=""
+                changed={(val) => props.setScriptProps("revprojection", val)}
+                className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
+              />
+            </div>
+          </>
+        )}
 
         <div className="mt-10">
           <SwitchComponent
@@ -283,7 +308,7 @@ const PitchDeckForm = (props: Props) => {
           <p className="ml-1">Save</p>
         </button>
 
-        <h3 className="font-semibold mt-10">Key Crew and Suggestions</h3>
+        <h3 className="font-semibold mt-10">Key Crew and Suggestions <span className="font-medium">(Crew, e.g Producer, director, Writer and DOP)</span> </h3>
         {crews.map((el, index) => (
           <EditKeyCrew
             index={index}
@@ -307,7 +332,7 @@ const PitchDeckForm = (props: Props) => {
           <div className="mt-10 md:mt-0">
             <InputComponent
               value={suggestion}
-              label="Suggestion"
+              label="Suggested Professional"
               placeholder="Text"
               type=""
               changed={(val) => {
@@ -339,7 +364,10 @@ const PitchDeckForm = (props: Props) => {
           <p className="ml-1">Save</p>
         </button>
 
-        <h3 className="font-semibold mt-8">Team members</h3>
+        <h3 className="font-semibold mt-8">
+          Team members{" "}
+          <span className="font-medium">(Include important members of your team and their bio)</span>
+        </h3>
         {members.map((el, index) => (
           <EditMember
             index={index}
@@ -417,29 +445,7 @@ const PitchDeckForm = (props: Props) => {
             placeholder="Select"
           />
         </div>
-        <div className="mt-10">
-          <SwitchComponent
-            label={<p className="ml-2">Do you have a budget range</p>}
-            checked={hasBudget}
-            color="#181818"
-            size="md"
-            setChecked={(val) => setHasBudget(val)}
-          />
-        </div>
-        {hasBudget && (
-          <div className="mt-10">
-            <InputComponent
-              value={props.data.estimatedBudget}
-              label="Estimated budget (You can put a range)"
-              placeholder="Text"
-              type=""
-              changed={(val) => {
-                props.setScriptProps("estimatedBudget", val);
-              }}
-              className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
-            />
-          </div>
-        )}
+
         <div className="mt-10 ">
           <SelectComponent
             size="md"

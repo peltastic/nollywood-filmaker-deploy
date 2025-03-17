@@ -106,6 +106,20 @@ export const consultantRequestsApi = createApi({
     >({
       query: (id) => `/api/consultants/completed-counts/${id}`,
     }),
+    sendServiceChatMessagesAsConsultant: build.mutation<
+      unknown,
+      {
+        orderId: string;
+        uid: string;
+        message: string;
+      }
+    >({
+      query: (body) => ({
+        url: "/api/consultants/servicechat/consultant",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -120,5 +134,6 @@ export const {
   useSetChatAsCompleteMutation,
   useLazyFetchReqHistoryQuery,
   useLazyGetSingleConsultantAvailabilityQuery,
-  useLazyFetchDashboardStatsQuery
+  useLazyFetchDashboardStatsQuery,
+  useSendServiceChatMessagesAsConsultantMutation
 } = consultantRequestsApi;

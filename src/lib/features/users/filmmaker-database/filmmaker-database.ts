@@ -31,7 +31,7 @@ export interface IJoinCrew {
   password?: string;
   confirmPassword?: string;
   username?: string;
-  
+
   // userId?: string;
 }
 
@@ -62,7 +62,7 @@ export interface IJoinCompany {
   confirmPassword?: string;
   username?: string;
   // userId?: string;
-  cacdoc?: File | null
+  cacdoc?: File | null;
 }
 
 export interface ICompanyDataResponse {
@@ -94,7 +94,7 @@ export interface ICompanyDataResponse {
     document: string;
     idNumber: string;
     cacNumber: string;
-    badgelink: string 
+    badgelink: string;
   };
 }
 
@@ -116,7 +116,7 @@ export interface ICrewDataResponse {
     propic: string;
     department: string[];
     role: string[];
-    badgelink: string
+    badgelink: string;
     works: {
       title: string;
       role: string;
@@ -161,7 +161,7 @@ export interface IEditCompanyPayload {
     link: string;
     year: string;
   }[];
-  type?: string
+  type?: string;
   useRateCard?: string;
   rateCard?: File | null;
   fee?: string;
@@ -249,6 +249,27 @@ export const filmmakerDatabaseApi = createApi({
         };
       },
     }),
+    forgotDatabasePassword: build.mutation<unknown, string>({
+      query: (email) => ({
+        url: "/api/join/forgotpassword",
+        method: "POST",
+        body: {
+          email,
+        },
+      }),
+    }),
+    resetDatabasePassword: build.mutation<
+      unknown,
+      { token: string; newPassword: string }
+    >({
+      query: ({ token, newPassword }) => ({
+        url: `/api/join/resetpassword/${token}`,
+        method: "POST",
+        body: {
+          newPassword,
+        },
+      }),
+    }),
   }),
 });
 
@@ -260,4 +281,6 @@ export const {
   useLazyFetchCrewDataQuery,
   useEditCrewMutation,
   useEditCompanyMutation,
+  useResetDatabasePasswordMutation,
+  useForgotDatabasePasswordMutation,
 } = filmmakerDatabaseApi;

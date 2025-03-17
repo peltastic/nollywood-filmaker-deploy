@@ -44,6 +44,8 @@ import { filmmakerDatabaseConsultantApi } from "./features/consultants/dashboard
 import { exportChatApi } from "./features/export";
 import { joinApi } from "./features/join";
 import { waitlistApi } from "./features/admin/waitlist/waitlist";
+import { contactUsApi } from "./features/contact-us";
+import { contactUsResponseApi } from "./features/admin/contact-us/contact-us";
 
 const persistConfig = {
   key: "root",
@@ -99,7 +101,9 @@ export const store = configureStore({
       filmmakerDatabaseConsultantApi.reducer,
     [exportChatApi.reducerPath]: exportChatApi.reducer,
     [joinApi.reducerPath]: joinApi.reducer,
-    [waitlistApi.reducerPath]: waitlistApi.reducer
+    [waitlistApi.reducerPath]: waitlistApi.reducer,
+    [contactUsApi.reducerPath]: contactUsApi.reducer,
+    [contactUsResponseApi.reducerPath]: contactUsResponseApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -134,7 +138,9 @@ export const store = configureStore({
       filmmakerDatabaseConsultantApi.middleware,
       exportChatApi.middleware,
       joinApi.middleware,
-      waitlistApi.middleware
+      waitlistApi.middleware,
+      contactUsApi.middleware,
+      contactUsResponseApi.middleware
     ]),
   devTools: process.env.NODE_ENV !== "production",
 });

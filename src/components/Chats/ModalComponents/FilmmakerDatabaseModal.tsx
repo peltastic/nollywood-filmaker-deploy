@@ -204,8 +204,10 @@ const FilmmakerDatabaseModal = (props: Props) => {
               setRefresh(false);
               setType("crew");
               setCompanyType("");
-              setLocation("");
+              setLocation("Nigeria");
               setActivePages(1);
+              setFeeVal("");
+
               fetchCompanyOrCrew({ type: "crew" });
             }}
             className={`${
@@ -219,7 +221,8 @@ const FilmmakerDatabaseModal = (props: Props) => {
               setRefresh(false);
               setType("company");
               setActivePages(1);
-              setLocation("");
+              setLocation("Nigeria");
+              setFeeVal("");
               fetchCompanyOrCrew({ type: "company" });
               setCompanyDepartmentVal("");
               setRoleVal("");
@@ -259,7 +262,13 @@ const FilmmakerDatabaseModal = (props: Props) => {
             <div className="flex flex-wrap mid:mr-4 items-center w-full mid:w-auto">
               <div className="w-full mid:w-auto mb-6 mid:mb-auto">
                 <SelectComponent
-                  data={departmentList}
+                  data={[
+                    {
+                      label: "All",
+                      value: "all",
+                    },
+                    ...departmentList,
+                  ]}
                   label=""
                   placeholder="Select department"
                   size="md"
@@ -267,16 +276,32 @@ const FilmmakerDatabaseModal = (props: Props) => {
                   defaultValue={companyDepartmentVal}
                   setValueProps={(val) => {
                     setActivePages(1);
-                    if (val) {
-                      setCompanyDepartmentVal(val);
+                    if (val === "all") {
+                      setCompanyDepartmentVal("");
+                      setRoleVal("");
                       setRefresh(true);
                       fetchCompanyOrCrew({
                         type,
+                        fee: feeVal,
                         roles:
                           roleVal?.toLowerCase() === "all"
                             ? ""
                             : roleVal || undefined,
-                        department: val.toLowerCase() === "all" ? "" : val,
+                        location:
+                          location.toLowerCase() === "all" ? "" : location,
+                      });
+                    } else if (val) {
+                      setCompanyDepartmentVal("");
+                      setRoleVal("");
+                      setRefresh(true);
+                      fetchCompanyOrCrew({
+                        type,
+                        fee: feeVal,
+                        department: val,
+                        roles:
+                          roleVal?.toLowerCase() === "all"
+                            ? ""
+                            : roleVal || undefined,
                         location:
                           location.toLowerCase() === "all" ? "" : location,
                       });
@@ -300,16 +325,28 @@ const FilmmakerDatabaseModal = (props: Props) => {
                     defaultValue={roleVal}
                     setValueProps={(val) => {
                       setActivePages(1);
-                      if (val) {
+                      if (val === "all") {
+                        setRoleVal("");
+                        setRefresh(true);
+                        fetchCompanyOrCrew({
+                          type,
+                          department: companyDepartmentVal
+                            ? companyDepartmentVal
+                            : "",
+                          fee: feeVal,
+                          location,
+                        });
+                      } else if (val) {
                         setRoleVal(val);
                         setRefresh(true);
                         fetchCompanyOrCrew({
                           type,
                           roles: val,
+                          fee: feeVal,
                           department:
                             companyDepartmentVal?.toLowerCase() === "all"
                               ? ""
-                              : companyDepartmentVal || undefined,
+                              : companyDepartmentVal,
                           location:
                             location.toLowerCase() === "all" ? "" : location,
                         });
@@ -336,11 +373,21 @@ const FilmmakerDatabaseModal = (props: Props) => {
                       setCountriesVal("");
                       fetchCompanyOrCrew({
                         type,
+
+                        department: companyDepartmentVal,
+                        roles: roleVal,
+
+                        companyType,
                       });
                     } else {
                       setRefresh(true);
                       fetchCompanyOrCrew({
                         type,
+
+                        department: companyDepartmentVal,
+                        roles: roleVal,
+
+                        companyType,
                         location: country_name,
                       });
                       // setFormData((prev) => ({ ...prev, country: country_name }));
@@ -367,6 +414,11 @@ const FilmmakerDatabaseModal = (props: Props) => {
                       const country_name = countriesVal.split(" ")[1];
                       fetchCompanyOrCrew({
                         type,
+
+                        department: companyDepartmentVal,
+                        roles: roleVal,
+
+                        companyType,
                         location: `${country_name}${
                           val.toLowerCase() === "all" ? "" : ","
                         }${val.toLowerCase() === "all" ? "" : val}`,
@@ -417,12 +469,22 @@ const FilmmakerDatabaseModal = (props: Props) => {
                   if (val === "All") {
                     fetchCompanyOrCrew({
                       type,
+
+                      department: companyDepartmentVal,
+                      roles: roleVal,
+                      location,
+                      companyType,
                     });
                   } else {
                     setRefresh(true);
                     fetchCompanyOrCrew({
                       type,
                       fee: val,
+
+                      department: companyDepartmentVal,
+                      roles: roleVal,
+                      location,
+                      companyType,
                     });
                   }
                   setFeeVal(val);
@@ -486,7 +548,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
                     setCompanyType("");
                     setRoleVal("");
                     setRolesList([]);
-                    setLocation("");
+                    setLocation("Nigeria");
                     setRefresh(false);
                     setFeeVal("");
                   }}

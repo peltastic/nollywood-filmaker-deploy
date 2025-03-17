@@ -34,27 +34,27 @@ const ServicePage = (props: Props) => {
     },
     {
       value: "watch-final-cut",
-      label: "Watch the Final cut of my film and advice",
+      label: "Watch a Final cut of my film and advice",
       caption: "A chat session will be sent to discuss your film after review",
     },
     {
       value: "create-pitch-deck",
-      label: "Create a pitch deck",
+      label: "Create my pitch deck",
       caption: "You will receive an email when your document is ready for review",
     },
     {
       value: "production-budget",
-      label: "Create a Production budget",
+      label: "Create my Production budget",
       caption: "You will receive an email when your document is ready for review",
     },
     {
       value: "marketing-budget",
-      label: "Create a Marketing plan and budget",
+      label: "Create my Marketing plan and budget",
       caption: "You will receive an email when your document is ready for review",
     },
     {
       value: "create-movie-schedule",
-      label: "Create a Movie Schedule",
+      label: "Create my Movie Schedule",
       caption: "You will receive an email when your document is ready for review",
     },
     {
@@ -69,7 +69,7 @@ const ServicePage = (props: Props) => {
   };
   return (
     <HomeLayout>
-      <div className="text-black-2 w-[90%] md:w-[50%]   mx-auto mt-[10rem] mb-[10rem]">
+      <div className="text-black-2 w-[90%] md:w-[50%]   mx-auto mt-[10rem] mb-[10rem]  max-w-[45rem]">
         <h1 className=" text-[1.5rem] font-bold">What film related service do you need?</h1>
         <h3 className="font-medium text-[0.88rem] mt-10 mb-2">
           Choose your service

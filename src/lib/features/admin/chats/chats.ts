@@ -17,15 +17,19 @@ export const adminChatsApi = createApi({
       {
         limit?: number;
         page?: number;
+        search?: string;
       }
     >({
-      query: ({ limit, page }) => {
+      query: ({ limit, page, search }) => {
         let query = "";
         if (limit) {
           query += `?limit=${limit}`;
         }
         if (page) {
           query += `&page=${page}`;
+        }
+        if (search) {
+          query += `&search=${search}`;
         }
         return { url: `/api/admin/appointments/conversations${query}` };
       },
@@ -40,8 +44,8 @@ export const adminChatsApi = createApi({
       query: (room_id) => `/api/chat/files/${room_id}`,
     }),
     getCustomerRequestDetailByAdmin: build.query<ICustomerReqDetails, string>({
-        query: (id) => `/api/consultants/orderdetail/${id}`,
-      }),
+      query: (id) => `/api/consultants/orderdetail/${id}`,
+    }),
   }),
 });
 
@@ -50,5 +54,5 @@ export const {
   useLazyFetchChatMessagesByAdminQuery,
   useLazyFetchSingleConversationByAdminQuery,
   useLazyGetChatFilesByAdminQuery,
-  useLazyGetCustomerRequestDetailByAdminQuery
+  useLazyGetCustomerRequestDetailByAdminQuery,
 } = adminChatsApi;

@@ -82,9 +82,9 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
 
   const [companyDepartmentVal, setCompanyDepartmentVal] = useState<string>("");
   const [rolesList, setRolesList] = useState<string[]>([]);
-  const [roleVal, setRoleVal] = useState<string | null>(null);
+  const [roleVal, setRoleVal] = useState<string>("");
 
-  const [location, setLocation] = useState<string>("");
+  const [location, setLocation] = useState<string>("Nigeria");
   const [name, setName] = useState<string>("");
 
   const [type, setType] = useState<"crew" | "company">("crew");
@@ -166,8 +166,9 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                   setRefresh(false);
                   setType("crew");
                   setCompanyType("");
-                  setLocation("");
+                  setLocation("Nigeria");
                   setName("");
+                  setFeeVal("");
                   setActivePages(1);
                   fetchCompanyOrCrew({
                     type: "crew",
@@ -185,14 +186,15 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                   setRefresh(false);
                   setType("company");
                   setName("");
-                  setLocation("");
+                  setLocation("Nigeria");
                   setActivePages(1);
+                  setFeeVal("");
                   fetchCompanyOrCrew({
                     type: "company",
                     verified: verificationType === "verified" ? true : false,
                   });
                   setCompanyDepartmentVal("");
-                  setRoleVal(null);
+                  setRoleVal("");
                 }}
                 className={`${
                   type === "company" ? "border border-black-2" : "border"
@@ -218,6 +220,9 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                             : companyType,
                         location:
                           location.toLowerCase() === "all" ? "" : location,
+                        department: companyDepartmentVal,
+                        roles: roleVal,
+                        fee: feeVal,
                         verified: val === "verified" ? true : false,
                       });
 
@@ -283,10 +288,12 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                         setActivePages(1);
                         if (val === "all") {
                           setCompanyDepartmentVal("");
-                          setRoleVal(null);
+                          setRoleVal("");
                           setRefresh(true);
                           fetchCompanyOrCrew({
                             type,
+
+                            fee: feeVal,
                             location:
                               location.toLowerCase() === "all" ? "" : location,
                             verified:
@@ -295,10 +302,12 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                         } else if (val) {
                           setCompanyDepartmentVal(val);
                           setRefresh(true);
-                          setRoleVal(null);
+                          setRoleVal("");
                           fetchCompanyOrCrew({
                             type,
                             department: val,
+
+                            fee: feeVal,
                             location:
                               location.toLowerCase() === "all" ? "" : location,
                             verified:
@@ -331,13 +340,14 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                         setValueProps={(val) => {
                           setActivePages(1);
                           if (val === "all") {
-                            setRoleVal(null);
+                            setRoleVal("");
                             setRefresh(true);
                             fetchCompanyOrCrew({
                               type,
                               department: companyDepartmentVal
                                 ? companyDepartmentVal
                                 : "",
+                              fee: feeVal,
                               location,
                               verified:
                                 verificationType === "verified" ? true : false,
@@ -348,6 +358,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                             fetchCompanyOrCrew({
                               type,
                               roles: val,
+                              fee: feeVal,
                               department:
                                 companyDepartmentVal?.toLowerCase() === "all"
                                   ? ""
@@ -383,6 +394,10 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                           setLocation("");
                           fetchCompanyOrCrew({
                             type,
+                            department: companyDepartmentVal,
+                            roles: roleVal,
+
+                            companyType,
                             verified:
                               verificationType === "verified" ? true : false,
                           });
@@ -390,6 +405,9 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                           setRefresh(true);
                           fetchCompanyOrCrew({
                             type,
+                            department: companyDepartmentVal,
+                            roles: roleVal,
+                            companyType,
                             location: country_name,
                             verified:
                               verificationType === "verified" ? true : false,
@@ -412,6 +430,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                       data={statesData}
                       placeholder="Search for state"
                       label=""
+                      // value={location.split(",")[0] || null}
                       setValueProps={(val) => {
                         setActivePages(1);
                         if (val) {
@@ -422,6 +441,9 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                             location: `${country_name}${
                               val.toLowerCase() === "all" ? "" : ","
                             }${val.toLowerCase() === "all" ? "" : val}`,
+                            department: companyDepartmentVal,
+                            companyType,
+                            roles: roleVal,
                             verified:
                               verificationType === "verified" ? true : false,
                           });
@@ -461,7 +483,7 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                     },
                     {
                       label: "5m+",
-                      value: "5m+",
+                      value: `5m+`,
                     },
                   ]}
                   label=""
@@ -472,6 +494,10 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                       if (val === "All") {
                         fetchCompanyOrCrew({
                           type,
+                          department: companyDepartmentVal,
+                          roles: roleVal,
+                          location,
+                          companyType,
                           verified:
                             verificationType === "verified" ? true : false,
                         });
@@ -480,6 +506,10 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
                         fetchCompanyOrCrew({
                           type,
                           fee: val,
+                          department: companyDepartmentVal,
+                          companyType,
+                          roles: roleVal,
+                          location,
                           verified:
                             verificationType === "verified" ? true : false,
                         });
@@ -527,10 +557,10 @@ const AdminFilmmakerDatabasePage = (props: Props) => {
 
                         setActivePages(1);
                         setCompanyType("");
-                        setRoleVal(null);
+                        setRoleVal("");
                         setName("");
                         setRolesList([]);
-                        setLocation("");
+                        setLocation("Nigeria");
                         setFeeVal("");
 
                         setRefresh(false);

@@ -61,9 +61,10 @@ const page = (props: Props) => {
     movie_title: "",
     platform: "",
     episodes: "",
-    showType: "",
+    showType: "No",
     stage: "",
   });
+  const [seriesLinks, setSeriesLinks] = useState<string[]>([]);
   const setScriptDataHandler = (key: string, value: string) => {
     setScriptData({
       ...scriptData,
@@ -81,6 +82,19 @@ const page = (props: Props) => {
       open();
     }
   }, [paymentStatus, isSuccess]);
+  const updateSeriesLink = (index: number, link: string) => {
+    setSeriesLinks((prevLinks) => {
+      const updatedLinks = [...prevLinks];
+
+      // Expand array if the index is out of bounds
+      if (index >= updatedLinks.length) {
+        updatedLinks.length = index + 1;
+      }
+
+      updatedLinks[index] = link;
+      return updatedLinks;
+    });
+  };
 
   return (
     <>
@@ -97,10 +111,12 @@ const page = (props: Props) => {
           <ServiceLeft
             cost={
               scriptData.showType === "Yes"
-                ? numberWithCommas((Number(scriptData.episodes || 0) * 50000) + 50000)
+                ? numberWithCommas(
+                    Number(scriptData.episodes || 0) * 50000 + 50000
+                  )
                 : "150,000"
             }
-            title="Watch the final cut of my film"
+            title="Watch a final cut of my film"
             image={<Image src={WatchFinalCutImage} alt="watch-final-cut" />}
             body={[
               {
@@ -136,12 +152,17 @@ const page = (props: Props) => {
           ) : (
             <ServiceRight subtitle="" title="Let’s start with your details">
               <WatchFinalCutForm
+                updateSeriesLinkProps={updateSeriesLink}
+                seriesLinks={seriesLinks}
                 proceed={() => {
                   if (userId) {
                     watchFinalCut({
                       concerns: scriptData.concerns,
                       genre: scriptData.genre,
-                      link: scriptData.link,
+                      link:
+                        scriptData.showType === "No"
+                          ? [scriptData.link]
+                          : seriesLinks,
                       platform: scriptData.platform,
                       synopsis: scriptData.logline,
                       title: "Watch the Final cut of my film and advice",
@@ -163,7 +184,7 @@ const page = (props: Props) => {
                   !scriptData.genre ||
                   !scriptData.platform ||
                   !scriptData.logline ||
-                  !scriptData.link ||
+                  (scriptData.showType === "No" && !scriptData.link) ||
                   (scriptData.showType === "Yes" &&
                     Number(scriptData.episodes) < 1)
                 }

@@ -20,12 +20,11 @@ import { useSelector } from "react-redux";
 
 type Props = {};
 const CustomerChatMiddle = dynamic(
-  () => import ("@/components/Chats/CustomerChat/CutomerChatMiddle"),
+  () => import("@/components/Chats/CustomerChat/CutomerChatMiddle"),
   {
-    ssr: false
+    ssr: false,
   }
-)
-
+);
 
 const ConsultantChastPage = (props: Props) => {
   useProtectRouteConsultantRoute();
@@ -46,7 +45,7 @@ const ConsultantChastPage = (props: Props) => {
 
   useEffect(() => {
     if (consultantId) {
-      fetchConversations(consultantId);
+      fetchConversations({ id: consultantId });
     }
   }, [consultantId]);
   useEffect(() => {
@@ -86,6 +85,9 @@ const ConsultantChastPage = (props: Props) => {
             status: el.stattusof,
             time: el.time,
             booktime: el.booktime,
+            cid: {
+              cid: "",
+            },
             type:
               el.nameofservice === "Chat With A Professional"
                 ? "Chat"
@@ -101,7 +103,7 @@ const ConsultantChastPage = (props: Props) => {
     if (searchVal) {
       fetchConversationData(searchVal);
       if (consultantId) {
-        fetchConversations(consultantId);
+        fetchConversations({ id: consultantId });
       }
     }
   };
@@ -110,13 +112,30 @@ const ConsultantChastPage = (props: Props) => {
   return (
     <ServiceLayout consultant>
       <DashboardBodyLayout>
-        <div ref={ref} className="flex h-screen chatbp1:h-[95vh] max-h-[90rem] bg-white">
+        <div
+          ref={ref}
+          className="flex h-screen chatbp1:h-[95vh] max-h-[90rem] bg-white"
+        >
           <section className="mx-auto w-full h-full  chatbp1:w-[30%]">
             <CustomerChatLeft
               type="consultant"
               data={chatData}
               isFetching={conversationsRes.isFetching}
               orderId={searchVal}
+              searchFunc={(val) => {
+                if (consultantId) {
+                  if (val) {
+                    fetchConversations({
+                      id: consultantId,
+                      search: val,
+                    });
+                  } else {
+                    fetchConversations({
+                      id: consultantId,
+                    });
+                  }
+                }
+              }}
             />
           </section>
           <section

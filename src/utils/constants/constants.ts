@@ -54,8 +54,8 @@ export const testSelectData = [
   },
   {
     label: "Others",
-    value: "Others"
-  }
+    value: "Others",
+  },
 ];
 
 export const testExhibitionData = [
@@ -459,7 +459,8 @@ export const resolve_file_services = [
   "Create a Marketing budget",
   "Create a Pitch based on my Script",
   "Draft Legal documents",
-  "Create A Pitch Deck"
+  "Create A Pitch Deck",
+  "Creating A Movie Schedule",
 ];
 
 export const film_crew_values = [

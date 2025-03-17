@@ -9,11 +9,20 @@ import { truncateStr } from "@/utils/helperFunction";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { useSetChatAsCompleteMutation } from "@/lib/features/consultants/dashboard/request";
+import { useDisclosure } from "@mantine/hooks";
+import ModalComponent from "../Modal/Modal";
+import SetChatDateByUser from "../ModalPages/SetChatDateByUser";
+import { useContinueChatMutation } from "@/lib/features/users/dashboard/chat/chat";
+import { nprogress } from "@mantine/nprogress";
+import { notify } from "@/utils/notification";
+import { useServicePayment } from "@/hooks/useServicePayment";
+import InitializingTransactionModal from "../Services/InitializingTransactionModal";
 
 type Props = {
   data: IChatData;
   index: number;
   selctedIndex: number;
+  continueChat?: boolean;
   orderId?: string | null;
   type?: "consultant" | "admin";
   setIsTimeProps?: (val: boolean) => void;
@@ -22,12 +31,11 @@ type Props = {
 
 const Chat = ({
   data,
-  index,
-  selctedIndex,
   orderId,
   type,
   setIsSessionOverProps,
   setIsTimeProps,
+  continueChat,
 }: Props) => {
   const [status, setStatus] = useState<
     "ready" | "ongoing" | "completed" | "pending"
@@ -35,14 +43,16 @@ const Chat = ({
   const [chatTimeStatus, setChatTimeStatus] = useState<string>("");
 
   const [setAsCompleted, completedRes] = useSetChatAsCompleteMutation();
-  const userData = useSelector(
-    (state: RootState) => state.persistedState.user.user
-  );
-  const consultantData = useSelector(
-    (state: RootState) => state.persistedState.consultant.user
-  );
+  // const userData = useSelector(
+  //   (state: RootState) => state.persistedState.user.user
+  // );
+  // const consultantData = useSelector(
+  //   (state: RootState) => state.persistedState.consultant.user
+  // );
 
   const [newMessage, setnewMessage] = useState<string>("");
+
+  const [continueChatHandler, chat] = useContinueChatMutation();
 
   const router = useRouter();
   const className =
@@ -82,6 +92,39 @@ const Chat = ({
       }
     };
   }, [data]);
+
+  const [opened, { open, close }] = useDisclosure();
+  const [openedPayment, openPayment] = useDisclosure();
+  const { paymentStatus } = useServicePayment(
+    chat.isError,
+    chat.isSuccess,
+    "/user/dashboard/chats",
+    close,
+    chat.data?.payment.authorization_url,
+    chat.error
+  );
+
+  useEffect(() => {
+    if (chat.isError) {
+      nprogress.complete();
+      notify(
+        "error",
+        "",
+        (chat.error as any).data?.message || "An Error Occcured"
+      );
+    }
+    if (chat.isSuccess) {
+      close();
+
+      // notify("success", "Chat date updated successfully");
+    }
+  }, [chat.isError, chat.isSuccess]);
+
+  useEffect(() => {
+    if (paymentStatus === "pending") {
+      openPayment.open();
+    }
+  }, [paymentStatus, chat.isSuccess]);
 
   useEffect(() => {
     const now = new Date();
@@ -142,6 +185,33 @@ const Chat = ({
 
   return (
     <>
+      {openedPayment ? (
+        <InitializingTransactionModal
+          paymentUrl={chat.data?.payment.authorization_url}
+          status={paymentStatus}
+          close={openPayment.close}
+        />
+      ) : null}
+      <ModalComponent
+        opened={opened}
+        centered
+        onClose={close}
+        withCloseButton={false}
+        size="xl"
+      >
+        <SetChatDateByUser
+          time={""}
+          cid={data.cid.cid}
+          close={close}
+          date={moment().format()}
+          orderId={data.orderId}
+          refetch={() => {}}
+          extend
+          title={data.name}
+          continueChat={continueChatHandler}
+          isLoading={chat.isLoading}
+        />
+      </ModalComponent>
       <div
         onClick={() => {
           setnewMessage("");
@@ -176,9 +246,14 @@ const Chat = ({
             </div>
           ) : (
             <div className="flex items-center mt-3">
-              <div className="mr-2 text-black-3 rounded-full py-[0.15rem] border border-black-3 text-[0.75rem] font-medium px-3">
-                <p>Service</p>
-              </div>
+              {status === "completed" && continueChat && (
+                <div
+                  onClick={open}
+                  className="cursor-pointer mr-2 hover:bg-black-2 transition-all hover:text-white text-black-3 rounded-full py-[0.15rem] border border-black-3 text-[0.75rem] font-medium px-3"
+                >
+                  <p>Continue</p>
+                </div>
+              )}
               <div
                 className={`${className} text-[0.75rem] font-semibold py-[0.15rem] px-2 rounded-full`}
               >
@@ -221,9 +296,17 @@ const Chat = ({
             </div>
           ) : (
             <div className="flex items-center mt-3">
-              <div className="mr-2 text-black-3 rounded-full py-[0.15rem] border border-black-3 text-[0.75rem] font-medium px-3">
+              {/* <div className="mr-2 text-black-3 rounded-full py-[0.15rem] border border-black-3 text-[0.75rem] font-medium px-3">
                 <p>Service</p>
-              </div>
+              </div> */}
+              {status === "completed" && continueChat && (
+                <div
+                  onClick={open}
+                  className="cursor-pointer mr-2 hover:bg-black-2 transition-all hover:text-white text-black-3 rounded-full py-[0.15rem] border border-black-3 text-[0.75rem] font-medium px-3"
+                >
+                  <p>Continue</p>
+                </div>
+              )}
               <div
                 className={`${className} text-[0.75rem] font-semibold py-[0.15rem] px-2 rounded-full`}
               >

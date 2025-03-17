@@ -41,6 +41,7 @@ export interface ICompanyOrCrewData {
   apiVetting: boolean
   verified: boolean
   cacdoc: string
+  nfscore?: string
 }
 
 export interface ICompanyOrCrewDataResponse {

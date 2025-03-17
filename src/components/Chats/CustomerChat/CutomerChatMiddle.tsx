@@ -570,7 +570,7 @@ const CustomerChatMiddle = ({
                 </header>
 
                 <div className="h-[100%] chatbp1:h-[87%] bg-white pt-[100px] chatbp1:pt-0 pb-10 chatbp1:pb-0">
-                  {data && (isTime || sessionOver) ? (
+                  {(data && (isTime || sessionOver)) || data?.continueCount ? (
                     <>
                       {chatData.length > 0 && (
                         <ChatRoom
@@ -591,6 +591,7 @@ const CustomerChatMiddle = ({
                           endTime={data.endTime}
                           sessionOver={sessionOver}
                           status={data.stattusof}
+                          isContinuedChat={data.continueCount}
                           profilepics={profilepic}
                         />
                       )}

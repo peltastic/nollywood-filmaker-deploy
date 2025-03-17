@@ -47,7 +47,7 @@ const EditKeyCrew = (props: Props) => {
           <div className=" md:mt-0 w-[45%]">
             <InputComponent
               value={props.value.suggestion}
-              label={"Suggestion" + ` ${props.index + 1}`}
+              label={"Suggested Professional" + ` ${props.index + 1}`}
               placeholder="Text"
               type=""
               changed={(val) => {

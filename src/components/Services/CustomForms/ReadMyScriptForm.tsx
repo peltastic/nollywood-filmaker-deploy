@@ -72,7 +72,7 @@ const ReadMyScriptForm = ({
             Number(data.episodes) > files.length
           ) {
             setErrorMessage(
-              "Your number of scripts uploaded must match your number of episodes"
+              "Your number of scripts uploaded must match the number of episodes"
             );
           } else {
             proceed();

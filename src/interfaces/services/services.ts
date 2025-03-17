@@ -36,7 +36,7 @@ interface InitialWatchFinalCutPayload extends GeneralType {
   title: "Watch the Final cut of my film and advice";
   type: "request";
   synopsis: string;
-  link: string;
+  link: string[];
   concerns: string;
   genre: string;
   platform: string;

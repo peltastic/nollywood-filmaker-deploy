@@ -7,7 +7,7 @@ import {
   useLazyGetSingleConsultantAvailabilityQuery,
   useUpdateReqAndCreateAppointmentMutation,
 } from "@/lib/features/users/dashboard/requests/requests";
-import { isBefore } from "date-fns";
+import { addDays, addHours, isBefore, setHours } from "date-fns";
 import moment from "moment";
 import UnstyledButton from "../Button/UnstyledButton";
 import Spinner from "@/app/Spinner/Spinner";
@@ -15,18 +15,22 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { nprogress } from "@mantine/nprogress";
 import { notify } from "@/utils/notification";
+import { useContinueChatMutation } from "@/lib/features/users/dashboard/chat/chat";
 
 type Props = {
   cid: string;
-  time: string;
+  time?: string;
+  title?: string;
+  extend?: boolean;
   orderId: string;
   date: string;
   close: () => void;
-  refetch: () => void
+  refetch: () => void;
+  continueChat?: (data: { date: string; orderId: string }) => void;
+  isLoading?: boolean;
 };
 
 const SetChatDateByUser = (props: Props) => {
-  console.log(props)
   const [selectedDate, setSelectedDate] = useState<Date>(new Date(props.date));
   const [slots, setSlots] = useState<
     | {
@@ -36,9 +40,11 @@ const SetChatDateByUser = (props: Props) => {
     | undefined
   >(undefined);
   const [selectedTime, setSelectedTime] = useState<string>(
-    moment(props.time === "9:00" ? "09:00" : props.time, ["HH:mm"]).format(
-      "h:mm A"
-    )
+    props.time
+      ? moment(props.time === "9:00" ? "09:00" : props.time, ["HH:mm"]).format(
+          "h:mm A"
+        )
+      : ""
   );
 
   const [getConsultantHours, result] =
@@ -67,8 +73,7 @@ const SetChatDateByUser = (props: Props) => {
     if (isSuccess) {
       nprogress.complete();
       notify("success", "Chat date updated successfully");
-      props.refetch
-      ()
+      props.refetch();
       props.close();
     }
   }, [isError, isSuccess]);
@@ -76,7 +81,7 @@ const SetChatDateByUser = (props: Props) => {
     <div className="px-10">
       <div className="flex items-center mb-6 mt-4">
         <h1 className="font-semibold text-[1.2rem] md:text-[2rem]">
-          Set chat date
+          Set chat date {props.extend ? `for ${props.title} extension` : null}
         </h1>
         <div
           onClick={props.close}
@@ -97,15 +102,33 @@ const SetChatDateByUser = (props: Props) => {
         <div className="w-[20%]">
           <CustomTime
             time_slots={slots?.map((el) => {
-              const isBeforeNow = isBefore(
-                `${moment(selectedDate).format("YYYY-MM-DD")}T${
-                  el.time === "9:00" ? "09:00" : el.time
-                }:00+01:00`,
-                new Date()
-              );
+              const time_stamp = `${moment(selectedDate).format(
+                "YYYY-MM-DD"
+              )}T${
+                el.time === "9:00"
+                  ? "09:00"
+                  : el.time === "8:00"
+                  ? "08:00"
+                  : el.time === "7:00"
+                  ? "07:00"
+                  : el.time === "6:00"
+                  ? "06:00"
+                  : el.time
+              }:00+01:00`;
+              const nextDaySixAM = setHours(addDays(new Date(), 1), 5);
+              const isBeforeNextDaySixAM = isBefore(time_stamp, nextDaySixAM);
+              const hourfromNow = addHours(new Date(), 24);
+              // const isBeforeNow = isBefore(time_stamp, new Date());
+              // const isBeforeHourFromNow = isBefore(time_stamp, hourfromNow);
+              // const isBeforeNow = isBefore(
+              //   `${moment(selectedDate).format("YYYY-MM-DD")}T${
+              //     el.time === "9:00" ? "09:00" : el.time
+              //   }:00+01:00`,
+              //   new Date()
+              // );
               return {
                 time: moment(el.time, ["HH:mm"]).format("h:mm A"),
-                isAvailable: isBeforeNow ? false : el.isAvailable,
+                isAvailable: isBeforeNextDaySixAM ? false : el.isAvailable,
               };
             })}
             selectedTime={selectedTime}
@@ -116,27 +139,40 @@ const SetChatDateByUser = (props: Props) => {
       </div>
       <div className="my-8 flex items-center font-medium text-[0.88rem] px-6">
         <UnstyledButton
-          clicked={close}
+          clicked={props.close}
           class="ml-auto border border-black-3 rounded-md py-2 px-8 mr-3"
         >
           Cancel
         </UnstyledButton>
         <UnstyledButton
-          disabled={!selectedTime || isLoading}
+          disabled={!selectedTime || isLoading || props.isLoading}
           clicked={() => {
-            nprogress.start();
-            createAppointment({
-              body: {
-                date: moment(selectedDate).format("YYYY-MM-DD"),
+            if (props.extend) {
+             props.continueChat && props.continueChat({
+                date: `${moment(selectedDate).format("YYYY-MM-DD")}T${
+                  moment(selectedTime, ["h:mm A"]).format("HH:mm") + ":00"
+                }+01:00`,
                 orderId: props.orderId,
-                time: moment(selectedTime, ["h:mm A"]).format("HH:mm") + ":00",
-              },
-              cid: props.cid,
-            });
-          }} 
+              });
+              // console.log(
+              //   moment(selectedDate).format("YYYY-MM-DD"),
+              //   moment(selectedTime, ["h:mm A"]).format("HH:mm") + ":00"
+              // );
+            } else {
+              createAppointment({
+                body: {
+                  date: moment(selectedDate).format("YYYY-MM-DD"),
+                  orderId: props.orderId,
+                  time:
+                    moment(selectedTime, ["h:mm A"]).format("HH:mm") + ":00",
+                },
+                cid: props.cid,
+              });
+            }
+          }}
           class="w-[8rem] flex items-center justify-center bg-black-3 disabled:opacity-50  text-white py-2 px-2 border border-black-3 rounded-md"
         >
-          {isLoading ? (
+          {isLoading || props.isLoading ? (
             <div className="py-1 w-[1rem]">
               <Spinner />
             </div>

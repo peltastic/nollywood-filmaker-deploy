@@ -19,10 +19,12 @@ import {
   useLazyGetCustomerRequestDetailQuery,
 } from "@/lib/features/users/dashboard/requests/requests";
 import { isResolveFile } from "@/utils/helperFunction";
+import { useProtectRoute } from "@/hooks/useProtectRoute";
 
 type Props = {};
 
 const OrderDetailsPage = (props: Props) => {
+  useProtectRoute()
   const [resolveFilesData, setResolveFilesData] = useState<
     IResolveFilesColumnData[]
   >([]);

@@ -58,7 +58,7 @@ const ProductionBudgetPage = (props: Props) => {
     number_of_days: "",
     platform: "",
     episodes: "",
-    showType: "",
+    showType: "No",
   });
   const setScriptDataHandler = (key: string, value: string) => {
     setScriptData({
@@ -111,7 +111,7 @@ const ProductionBudgetPage = (props: Props) => {
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
           close={close}
-          info="Budget Creation can take between 1-2 weeks. you will contacted via email if more info is needed during the course of the budget creation and a final editable budget will be sent to your dashboard"
+          info="Budget creation can take up to one to two weeks. A document will be sent for review."
         />
       ) : null}
       <ServiceLayout nonDashboard>
@@ -140,7 +140,7 @@ const ProductionBudgetPage = (props: Props) => {
                   )
                 : numberWithCommas(cost)
             }
-            title="Create a production budget"
+            title="Create my production budget"
             image={<Image src={ProductionBudgetImg} alt="production-budget" />}
             body={[
               {

@@ -92,6 +92,23 @@ export const requestsApi = createApi({
         method: "POST",
       }),
     }),
+    replyServiceChatMessageAsUser: build.mutation<
+      unknown,
+      {
+        orderId: string;
+        uid: string;
+        message: string;
+      }
+    >({
+      query: (body) => ({
+        url: "/api/users/servicechat/user",
+        method: "POST",
+        body,
+      }),
+    }),
+    fetchServiceMessages: build.query<unknown, void>({
+      query: () => `/api/users/servicechat/messages`
+    })
   }),
 });
 
@@ -103,4 +120,6 @@ export const {
   useLazyGetSingleConsultantAvailabilityQuery,
   useUpdateReqAndCreateAppointmentMutation,
   useLazyFetchActiveRequestsQuery,
+  useReplyServiceChatMessageAsUserMutation,
+  useLazyFetchServiceMessagesQuery
 } = requestsApi;

@@ -15,9 +15,15 @@ export const consultantDashboardChatApi = createApi({
   endpoints: (build) => ({
     fetchConsultantsConversations: build.query<
       IGetUserConversationsResponse,
-      string
+      { id: string; search?: string }
     >({
-      query: (id) => `/api/consultants/conversations/${id}`,
+      query: ({ id, search }) => {
+        let query = "";
+        if (search) {
+          query += `?search=${search}`;
+        }
+        return { url: `/api/consultants/conversations/${id}${query}` };
+      },
     }),
     fetchSingleConversationData: build.query<IGetUserConversations, string>({
       query: (orderId) => `/api/users/conversation/${orderId}`,
@@ -42,5 +48,5 @@ export const {
   useLazyFetchSingleConversationDataQuery,
   useLazyFetchConsultantChatMessagesQuery,
   useLazyGetConsultantChatFilesQuery,
-  useLazyExportConsultantChatQuery
+  useLazyExportConsultantChatQuery,
 } = consultantDashboardChatApi;

@@ -112,7 +112,7 @@ const MarketingBudget = (props: Props) => {
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
           close={close}
-          info="Budget Creation  can take between 1-2 weeks. You will be mailed a link to a detailed, editable budget and a calendar to choose a chat date"
+          info="Marketing plan and Budget creation can take up to one to two weeks. A document will be sent for review."
         />
       ) : null}
 
@@ -120,7 +120,7 @@ const MarketingBudget = (props: Props) => {
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft
             cost={numberWithCommas(500000)}
-            title="Create a marketing plan and budget"
+            title="Create my marketing plan and budget"
             image={<Image src={MarketingBudgetImg} alt="production-budget" />}
             body={[
               {

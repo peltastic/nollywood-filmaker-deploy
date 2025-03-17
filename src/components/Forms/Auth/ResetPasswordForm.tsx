@@ -1,13 +1,10 @@
 "use client";
 import Spinner from "@/app/Spinner/Spinner";
 import UnstyledButton from "@/components/Button/UnstyledButton";
-import CheckboxComponent from "@/components/Checkbox/Checkbox";
 import Field from "@/components/Field/Field";
 import { secureAccountSchema } from "@/utils/validation/auth";
 import { nprogress } from "@mantine/nprogress";
 import { Form, Formik } from "formik";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import React from "react";
 import { FaArrowRight } from "react-icons/fa";
 

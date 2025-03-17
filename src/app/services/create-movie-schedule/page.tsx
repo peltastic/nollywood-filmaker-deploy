@@ -151,7 +151,7 @@ const MovieSchedulePage = (props: Props) => {
     <>
       {opened ? (
         <InitializingTransactionModal
-          info=""
+          info="Movie schedule can take up to one to two weeks. A document will be sent for review."
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
           close={close}
@@ -160,7 +160,7 @@ const MovieSchedulePage = (props: Props) => {
       <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft
-            title="Create a Movie Schedule"
+            title="Create my Movie Schedule"
             cost={
               scriptData.showType === "Yes"
                 ? numberWithCommas(Number(scriptData.episodes) * 80000)

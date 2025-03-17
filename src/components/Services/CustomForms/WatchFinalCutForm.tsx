@@ -22,6 +22,8 @@ type Props = {
   setScriptProps: (key: string, value: string) => void;
   proceed: () => void;
   isLoading?: boolean;
+  seriesLinks: string[];
+  updateSeriesLinkProps: (index: number, link: string) => void;
 };
 
 const stage = [
@@ -49,6 +51,8 @@ const WatchFinalCutForm = ({
   disabled,
   proceed,
   isLoading,
+  seriesLinks,
+  updateSeriesLinkProps,
 }: Props) => {
   const router = useRouter();
   const [checked, setChecked] = useState<boolean>(false);
@@ -140,16 +144,37 @@ const WatchFinalCutForm = ({
             placeholder="Select"
           />
         </div>
-        <div className="mt-10">
-          <InputComponent
-            value={data.link}
-            label="Share a link (Video should be preferably be watermarked)"
-            placeholder="Text"
-            changed={(val) => setScriptProps("link", val)}
-            className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
-            type=""
-          />
-        </div>
+        {data.showType === "No" ? (
+          <div className="mt-10">
+            <InputComponent
+              value={data.link}
+              label="Share a link (Video should be preferably be watermarked)"
+              placeholder="Text"
+              changed={(val) => setScriptProps("link", val)}
+              className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
+              type=""
+            />
+          </div>
+        ) : (
+          <div className="mt-8">
+            {Array.from({ length: Number(data.episodes) || 0 }).map(
+              (_, index) => (
+                <div className="mt-10" key={index.toString()}>
+                  <InputComponent
+                    value={seriesLinks[index]}
+                    label={`Share a link for episode ${
+                      index + 1
+                    } (Video should be preferably be watermarked)`}
+                    placeholder="Text"
+                    changed={(val) => updateSeriesLinkProps(index, val)}
+                    className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
+                    type=""
+                  />
+                </div>
+              )
+            )}
+          </div>
+        )}
         <div className="mt-8">
           <TextArea
             changed={(val) => setScriptProps("concerns", val)}
@@ -172,8 +197,8 @@ const WatchFinalCutForm = ({
                   <Link href={"/terms-and-conditions"}>
                     Terms and Conditions
                   </Link>
-                </span> &nbsp;
-                and &nbsp;
+                </span>{" "}
+                &nbsp; and &nbsp;
                 <span className="font-semibold underline">
                   <Link href={"/privacy-policy"}>privacy policy</Link>
                 </span>

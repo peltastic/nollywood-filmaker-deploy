@@ -20,16 +20,15 @@ import { useState } from "react";
 
 type Props = {};
 const CustomerChatMiddle = dynamic(
-  () => import ("@/components/Chats/CustomerChat/CutomerChatMiddle"),
+  () => import("@/components/Chats/CustomerChat/CutomerChatMiddle"),
   {
-    ssr: false
+    ssr: false,
   }
-)
-
+);
 
 const AdminChats = (props: Props) => {
-  useProtectAdmin()
-  const router = useRouter()
+  useProtectAdmin();
+  const router = useRouter();
   const [activePage, setActivePage] = useState<number>(1);
   const [fetchSingleConversationDataByAdmin, result] =
     useLazyFetchSingleConversationByAdminQuery();
@@ -69,6 +68,9 @@ const AdminChats = (props: Props) => {
           start_time: el.request.booktime,
           status: el.request.stattusof,
           time: el.request.time,
+          cid: {
+            cid: "",
+          },
           type: "Chat",
         };
       });
@@ -98,6 +100,17 @@ const AdminChats = (props: Props) => {
               isFetching={isFetching}
               orderId={searchVal}
               type="admin"
+              searchFunc={(val) => {
+                if (val) {
+                  fetchConversations({
+                    page: 1,
+                    limit: 10,
+                    search: val,
+                  });
+                } else {
+                  fetchConversations({ limit: 10, page: 1 });
+                }
+              }}
             />
           </section>
           <section
@@ -151,8 +164,8 @@ const AdminChats = (props: Props) => {
                 page: val,
               });
               setActivePage(val);
-              setCloseRight(true)
-              router.push("/admin/dashboard/chats")
+              setCloseRight(true);
+              router.push("/admin/dashboard/chats");
             }}
             mt={"xl"}
           />

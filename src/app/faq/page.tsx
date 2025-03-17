@@ -197,6 +197,7 @@ const FAQPage = (props: Props) => {
         <div className=" my-3 mb-11 hover:scale-105 transition-all">
           <Link
           className="flex items-center"
+          target="_blank"
             href={
               "https://youtube.com/@nollywoodfilmmakersupport?si=OyyVtZEiXZPNjkdY"
             }

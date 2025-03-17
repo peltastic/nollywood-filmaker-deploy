@@ -21,9 +21,17 @@ const ChatForm = (props: Props) => {
   const router = useRouter();
   return (
     <div>
-      <h1 className="font-bold text-[1.5rem]">
-        What do you want to chat about?
-      </h1>
+      <button onClick={() => router.push("/user/dashboard/chats")} className=" hover:bg-blue-1 transition-all flex rounded-md items-center text-white py-2 px-4 bg-black-2  text-[0.88rem]">
+        <p className="mr-2">Continue existing chats</p>
+
+        <FaArrowRight className="text-[0.7rem]" />
+      </button>
+      <div className="flex items-center w-[80%] gap-x-4 my-4">
+        <div className="border-b w-full"></div>
+        <p>or</p>
+        <div className="border-b w-full"></div>
+      </div>
+      <h1 className="font-bold text-[1.5rem]">Start a new chat</h1>
       <h2 className="text-[1.13rem]">
         Give us a quick summary of what you want to chat about
       </h2>

@@ -96,14 +96,25 @@ const LoginAsFilmmakerForm = (props: Props) => {
                 password
               />
             </div>
-
-            <div className="text-sm mt-2">
-              <p>
-                Want to join or know more about filmmaker database?{" "}
-                <span className="underline hover:text-blue-1 cursor-pointer">
-                  <Link href={"/get-started/filmmaker-database"}>click here</Link>
-                </span>{" "}
-              </p>
+            <div className="">
+              <div className="text-sm mt-2">
+                <p>
+                  Want to join or know more about filmmaker database?{" "}
+                  <span className="underline hover:text-blue-1 cursor-pointer">
+                    <Link href={"/get-started/filmmaker-database"}>
+                      click here
+                    </Link>
+                  </span>{" "}
+                </p>
+              </div>
+              <Link
+                  href={"/auth/filmmaker-forgot-password"}
+                  className="mt-8 block w-fit"
+                >
+                  <p className="text-[0.88rem] font-semibold hover:text-blue-1 hover:underline">
+                    Forgot Password?
+                  </p>
+                </Link>
             </div>
             <UnstyledButton
               // clicked={() => router.push("/")}

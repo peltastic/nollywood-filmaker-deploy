@@ -20,11 +20,11 @@ import { useSelector } from "react-redux";
 type Props = {};
 
 const CustomerChatMiddle = dynamic(
-  () => import ("@/components/Chats/CustomerChat/CutomerChatMiddle"),
+  () => import("@/components/Chats/CustomerChat/CutomerChatMiddle"),
   {
-    ssr: false
+    ssr: false,
   }
-)
+);
 
 const ChatsPage = (props: Props) => {
   useProtectRoute();
@@ -48,7 +48,7 @@ const ChatsPage = (props: Props) => {
 
   useEffect(() => {
     if (userId) {
-      fetchConversation(userId);
+      fetchConversation({ id: userId });
     }
   }, []);
   useEffect(() => {
@@ -83,6 +83,7 @@ const ChatsPage = (props: Props) => {
             status: el.stattusof,
             booktime: el.booktime,
             time: el.time,
+            cid: el.cid,
             type:
               el.nameofservice === "Chat With A Professional"
                 ? "Chat"
@@ -98,7 +99,7 @@ const ChatsPage = (props: Props) => {
     if (searchVal) {
       fetchConversationData(searchVal);
       if (userId) {
-        fetchConversation(userId);
+        fetchConversation({ id: userId });
       }
     }
   };
@@ -108,12 +109,30 @@ const ChatsPage = (props: Props) => {
   return (
     <ServiceLayout>
       <DashboardBodyLayout>
-        <div ref={ref} className="flex h-screen chatbp1:h-[95vh]  max-h-[90rem]   bg-white">
+        <div
+          ref={ref}
+          className="flex h-screen chatbp1:h-[95vh]  max-h-[90rem]   bg-white"
+        >
           <section className="mx-auto w-full  h-full chatbp1:w-[30%]">
             <CustomerChatLeft
               data={chatData}
               isFetching={conversationsRes.isFetching}
               orderId={searchVal}
+              continueChat
+              searchFunc={(val) => {
+                if (userId) {
+                  if (val) {
+                    fetchConversation({
+                      id: userId,
+                      search: val,
+                    });
+                  } else {
+                    fetchConversation({
+                      id: userId,
+                    });
+                  }
+                }
+              }}
             />
           </section>
           <section

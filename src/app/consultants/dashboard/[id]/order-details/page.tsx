@@ -3,8 +3,10 @@ import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import OrderDetailsBody from "@/components/OrderDetails/OrderDetailsBody";
 import OrderDetailsHeader from "@/components/OrderDetails/OrderDetailsHeader";
+import OrderDetailsServiceChat from "@/components/OrderDetails/OrderDetailsServiceChat";
 import OrderDetailsTop from "@/components/OrderDetails/OrderDetailsTop";
 import OrderDetailsPageSkeleton from "@/components/Skeletons/OrderDetailsPageSkeleton";
+import { useProtectRouteConsultantRoute } from "@/hooks/useProtectConsultantRoute";
 import { useLazyGetCustomerRequestDetailQuery } from "@/lib/features/consultants/dashboard/request";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -12,14 +14,11 @@ import React, { useEffect, useState } from "react";
 type Props = {};
 
 const OrderDetails = (props: Props) => {
+  useProtectRouteConsultantRoute();
   const params = useParams();
 
   const [getCustomerReqDetails, { isFetching, data, isSuccess }] =
     useLazyGetCustomerRequestDetailQuery();
-
-  const [bodyData, setBodyData] = useState<
-    { title: string; content: string }[]
-  >([]);
 
   useEffect(() => {
     if (params.id) {
@@ -72,6 +71,16 @@ const OrderDetails = (props: Props) => {
                   isChat={data?.request.type === "Chat"}
                 />
                 <OrderDetailsBody data={data} />
+              </div>
+            </div>
+            <div className="flex">
+              <div className=" lg:w-[80%] ml-auto">
+                {data && (
+                  <OrderDetailsServiceChat
+                    service={data.request.nameofservice}
+                    type="consultant"
+                  />
+                )}
               </div>
             </div>
           </>

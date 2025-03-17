@@ -74,22 +74,13 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
       },
     },
     {
-      accessorKey: "category",
-      header: ({ table }) => {
-        const hasAdmin = table
-          .getRowModel()
-          .rows.some((row) => row.original.admin);
-        return <>{hasAdmin && <div className="">Category</div>}</>;
-      },
+      accessorKey: "nfscore",
+      header: () => <div className="">Nf Score</div>,
       cell: ({ row }) => {
         return (
-          <>
-            {row.original.admin && (
-              <div className="py-4 w-[10rem] xl:w-auto">
-                <p>{row.getValue("category")}</p>
-              </div>
-            )}
-          </>
+          <div className="py-4 w-[10rem] xl:w-auto">
+            <p>{row.original.fulldata.nfscore || "N/A"}</p>
+          </div>
         );
       },
     },
@@ -159,21 +150,21 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
                       <HoverCardComponent
                         target={
                           <div>
-                            {el.link ? (
-                              <Link
-                                href={el.link}
-                                key={el.id}
-                                target="_blank"
-                                className="underline"
-                              >
-                                <p className="mb-2">
-                                  {truncateStr(el.name, 20)}
-                                </p>
-                              </Link>
-                            ) : (
-                              null
+                            {
+                              el.link ? (
+                                <Link
+                                  href={el.link}
+                                  key={el.id}
+                                  target="_blank"
+                                  className="underline"
+                                >
+                                  <p className="mb-2">
+                                    {truncateStr(el.name, 20)}
+                                  </p>
+                                </Link>
+                              ) : null
                               // <p className="mb-2">{truncateStr(el.name, 20)}</p>
-                            )}
+                            }
                           </div>
                         }
                       >

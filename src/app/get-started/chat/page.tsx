@@ -142,7 +142,7 @@ const GetStartedChatPage = (props: Props) => {
             >
               <div
                 className={`${
-                  search === "payment" ? "mt-[6rem] " : "my-[6rem]"
+                  search === "payment" ? "mt-[6rem] " : "my-[4rem]"
                 } `}
               >
                 <Stepper

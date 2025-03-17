@@ -101,6 +101,10 @@ export const adminLinks = [
   {
     name: "Waitlist",
     link: "/admin/dashboard/waitlist"
+  },
+  {
+    name: "Contact-us",
+    link: "/admin/dashboard/contact-us"
   }
 ];
 

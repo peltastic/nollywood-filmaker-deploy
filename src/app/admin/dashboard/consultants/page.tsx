@@ -10,7 +10,6 @@ import ModalComponent from "@/components/Modal/Modal";
 import { DataTable } from "@/components/Tables/DataTable";
 import { useProtectAdmin } from "@/hooks/useProtectAdminRoute";
 import {
-  useFetchAllConsultantQuery,
   useLazyFetchAllConsultantQuery,
 } from "@/lib/features/admin/consultants/consultants";
 import { Pagination } from "@mantine/core";
