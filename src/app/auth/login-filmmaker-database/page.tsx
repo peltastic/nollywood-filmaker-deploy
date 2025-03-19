@@ -15,15 +15,15 @@ const LoginPage = (props: Props) => {
   return (
     <HomeLayout>
       <div className="flex items-center py-6 px-3 sm:px-10">
-        <LeftSide />
+        <LeftSide filmmaker />
         <div className="w-full md:w-[95%] mx-auto xl:w-[55%] pl-2 md:pl-[5rem] pr-2 md:pr-[5rem]">
           <div className="flex items-center text-black-2">
             <div className="mr-auto">
               <h1 className="text-[1.75rem]  font-bold ">
-                Log in to the Filmmaker Database
+                Log in to the Nollywood Filmmaker Database
               </h1>
               <h2 className=" cursor-pointer">
-                Login to edit and view your filmmaker database profile
+                Login to edit and view your nollywood filmmaker database profile
               </h2>
             </div>
           </div>

@@ -4,7 +4,7 @@ import CancelImg from "/public/assets/cancel.svg";
 import Image from "next/image";
 import FileImg from "/public/assets/dashboard/file.svg";
 import DownloadImg from "/public/assets/chats/download-icon.svg";
-import AdminProfileImg from "/public/assets/dashboard/admin-profile-img.svg";
+import AdminProfileImg from "/public/assets/admin/logo-black.png";
 import ChatTimer from "../ChatTimer";
 import { IGetUserConversations } from "@/interfaces/dashboard/chat";
 import { IChatFiles } from "@/interfaces/chat/chat";
@@ -323,8 +323,8 @@ const CustomerChatRight = ({
               </div>
             </div>
             <div className="flex items-center py-4 px-2">
-              <div className="w-[2.5rem] mr-3 h-[2.5rem] rounded-full bg-black flex items-center justify-center">
-                <Image src={AdminProfileImg} alt="admin-alt-profile" />
+              <div className="w-[2.5rem] mr-3 h-[2.5rem] rounded-full  flex items-center justify-center">
+                <Image src={AdminProfileImg} alt="admin-alt-profile" className="h-full w-full" />
               </div>
               <div className="">
                 <h1 className="font-semibold text-[0.88remrem]">

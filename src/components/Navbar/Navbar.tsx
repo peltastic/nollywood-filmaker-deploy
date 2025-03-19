@@ -10,7 +10,8 @@ import Advert from "./Advert";
 import NavMobile from "./NavMobile";
 
 type Props = {
-  hideLogin?: boolean
+  hideLogin?: boolean;
+  rmCountdown?: boolean;
 };
 const homeLink = [
   {
@@ -31,12 +32,36 @@ const homeLink = [
   // },
   {
     name: "Filmmaker database",
-    link: "/auth/login-filmmaker-database"
-  }
+    link: "/auth/login-filmmaker-database",
+  },
+];
+
+const fullHomeLink = [
+  {
+    name: "Home",
+    link: "/",
+  },
+  {
+    name: "FAQs",
+    link: "/faq",
+  },
+  {
+    name: "Testimonials",
+    link: "/testimonials",
+  },
+  {
+    name: "Contact us",
+    link: "/contact-us",
+  },
+  {
+    name: "Filmmaker database",
+    link: "/auth/login-filmmaker-database",
+  },
 ];
 
 const Navbar = (props: Props) => {
   const pathname = usePathname();
+  const links = props.rmCountdown ? fullHomeLink : homeLink;
   return (
     <>
       <Advert />
@@ -50,7 +75,7 @@ const Navbar = (props: Props) => {
           <NavMobile links={homeLink} />
         </div>
         <ul className="hidden lg:flex mx-6 gap-2 text-[1rem]  mr-auto ">
-          {homeLink.map((el) => (
+          {links.map((el) => (
             <li
               key={el.name}
               className={`${
@@ -63,20 +88,26 @@ const Navbar = (props: Props) => {
             </li>
           ))}
         </ul>
-       {props.hideLogin ? null : <ul className="hidden lg:flex items-center text-[0.9rem]">
-          {/* <li className="hover:bg-gray-bg-3 py-1 px-3 transition-all rounded-md mr-4">
-            <Link href="/auth/register">
-              <UnstyledButton class="">Sign up</UnstyledButton>
-            </Link>
-          </li>
-          <li>
-            <Link href={"/auth/login"}>
-              <UnstyledButton class="border-stroke-1 border px-3 py-1 rounded-md">
-                Login
-              </UnstyledButton>
-            </Link>
-          </li> */}
-        </ul>}
+        {props.hideLogin ? null : (
+          <ul className="hidden lg:flex items-center text-[0.9rem]">
+            {props.rmCountdown ? (
+              <>
+                <li className="hover:bg-gray-bg-3 py-1 px-3 transition-all rounded-md mr-4">
+                  <Link href="/auth/register">
+                    <UnstyledButton class="">Sign up</UnstyledButton>
+                  </Link>
+                </li>
+                <li>
+                  <Link href={"/auth/login"}>
+                    <UnstyledButton class="border-stroke-1 border px-3 py-1 rounded-md">
+                      Login
+                    </UnstyledButton>
+                  </Link>
+                </li>
+              </>
+            ) : null}
+          </ul>
+        )}
       </nav>
     </>
   );

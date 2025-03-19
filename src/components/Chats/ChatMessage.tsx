@@ -44,6 +44,7 @@ type Props = {
   replytochattype?: "text" | "file" | "img" | "typing" | "contacts";
   uploadProgress: number;
   userId?: string;
+  handleImgUpload: () => void;
 };
 
 const ChatMessage = React.memo(
@@ -70,6 +71,7 @@ const ChatMessage = React.memo(
     socket,
     userId,
     uploadProgress,
+    handleImgUpload,
   }: Props) => {
     const [temporarySelectedHighlight, setTemporarySelectedHighlight] =
       useState<string>("transparent");
@@ -99,17 +101,17 @@ const ChatMessage = React.memo(
       (state: RootState) => state.persistedState.user.user?.profilepics
     );
 
-    useEffect(() => {
-      if (!ref.current || selectedRepliedToMessageId) return;
+    // useEffect(() => {
+    //   if (!ref.current || selectedRepliedToMessageId) return;
 
-      if (lastmessage) {
-        ref.current.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-          inline: "end",
-        });
-      }
-    }, [lastmessage, ref]);
+    //   if (lastmessage) {
+    //     ref.current.scrollIntoView({
+    //       behavior: "smooth",
+    //       block: "nearest",
+    //       inline: "end",
+    //     });
+    //   }
+    // }, [lastmessage, ref]);
     // useEffect(() => {
     //   if (!imgRef.current || selectedRepliedToMessageId) return;
 
@@ -124,9 +126,7 @@ const ChatMessage = React.memo(
     useEffect(() => {
       if (lastmessage && (type === "file" || type === "img") && socket) {
         socket.on("progress", (data) => {
-          console.log(userId, data.sender.userid);
           if (userId && data.sender.userid === userId) {
-            console.log(data);
             setProgress(data.progress);
           }
         });
@@ -246,7 +246,7 @@ const ChatMessage = React.memo(
                       <Image
                         src={AdminProfileImg}
                         alt="admin-alt-profile"
-                        className="w-[60%] h-[60%]"
+                        className="w-full h-full"
                       />
                     }
                   </div>
@@ -459,15 +459,7 @@ const ChatMessage = React.memo(
                       alt="file-name"
                       width={200}
                       height={200}
-                      onLoad={() => {
-                        if (lastmessage && ref.current) {
-                          ref.current.scrollIntoView({
-                            behavior: "smooth",
-                            block: "nearest",
-                            inline: "end",
-                          });
-                        }
-                      }}
+                      onLoad={handleImgUpload}
                       className="w-full"
                     />
                   </div>

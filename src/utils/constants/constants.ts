@@ -138,12 +138,16 @@ export const consultantTypesData = [
     value: "VFX/Animator",
   },
   {
-    label: "Marketing",
-    value: "Marketing",
+    label: "Marketing/Distribution",
+    value: "Marketing/Distribution",
   },
   {
     label: "Lawyer",
     value: "Lawyer",
+  },
+  {
+    label: "Studio Executive",
+    value: "Studio Executive",
   },
 ];
 export const paymentOptions = [

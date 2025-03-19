@@ -75,6 +75,7 @@ export interface IChatMessagesData {
 const ChatRoom = (props: Props) => {
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const spanRef = useRef<HTMLSpanElement | null>(null);
+  const chatRef = useRef<HTMLDivElement | null>(null);
   const { socket } = useSocket();
   const ref = useRef<HTMLTextAreaElement | null>(null);
   const mobileTextAreaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -602,16 +603,16 @@ const ChatRoom = (props: Props) => {
       mobileTextAreaRef.current.focus();
     }
   }, [replyData.reply]);
-  useEffect(() => {
-    if (!spanRef.current) return;
-    if (props.data) {
-      spanRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "end",
-      });
-    }
-  }, [props.data]);
+  // useEffect(() => {
+  //   if (!spanRef.current) return;
+  //   if (props.data) {
+  //     spanRef.current.scrollIntoView({
+  //       behavior: "smooth",
+  //       block: "nearest",
+  //       inline: "end",
+  //     });
+  //   }
+  // }, [props.data]);
 
   const handleTextAreaInputChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -791,6 +792,75 @@ const ChatRoom = (props: Props) => {
       });
     }
   }, [socket]);
+  const [imagesLoaded, setImagesLoaded] = useState(0); // Track loaded images
+  const totalImages = props.data.filter((msg) => msg.type === "img").length;
+  const scrollToBottom = () => {
+    if (spanRef.current) {
+      spanRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "end",
+      });
+    }
+  };
+  const handleImageLoad = () => {
+    setImagesLoaded((prev) => prev + 1); // Increment when an image loads
+  };
+  useEffect(() => {
+    // Scroll when messages change and all images are loaded
+    if (imagesLoaded === totalImages) {
+      scrollToBottom();
+    }
+  }, [props.data, imagesLoaded, totalImages]);
+
+  // useEffect(() => {
+  //   if (!spanRef.current) return;
+  //   if (props.data) {
+  //     spanRef.current.scrollIntoView({
+  //       behavior: "smooth",
+  //       block: "nearest",
+  //       inline: "end",
+  //     });
+  //   }
+  // }, [props.data]);
+  // useEffect(() => {
+  //   const scrollToBottom = () => {
+  //     if (chatRef.current) {
+  //       chatRef.current.scrollTop = chatRef.current.scrollHeight;
+  //     }
+  //   };
+  //   scrollToBottom();
+  // }, [props.data, chatRef]);
+  // useEffect(() => {
+  //   const scrollToBottom = () => {
+  //     spanRef.current?.scrollIntoView({ behavior: "smooth" });
+  //   };
+  //   scrollToBottom()
+  // }, [spanRef]);
+
+  //   // Check if all images are loaded
+  //   const images = document.querySelectorAll('.chat img');
+  //   if (images.length > 0) {
+  //     let loadedCount = 0;
+  //     images.forEach((img) => {
+  //       if (img.complete) {
+  //         loadedCount++;
+  //       } else {
+  //         img.onload = () => {
+  //           loadedCount++;
+  //           if (loadedCount === images.length) {
+  //             scrollToBottom();
+  //           }
+  //         };
+  //       }
+  //     });
+  //     if (loadedCount === images.length) {
+  //       scrollToBottom();
+  //     }
+  //   } else {
+  //     scrollToBottom();
+  //   }
+  // }, [props.data]); // Trigger when messages change
 
   // useEffect(() => {
   //   database.open();
@@ -821,7 +891,10 @@ const ChatRoom = (props: Props) => {
         />
       </ModalComponent>
       <div className=" py-6  h-full  relative bg-white">
-        <div className=" overflow-y-scroll nolly-film-hide-scrollbar w-full h-[90%] pb-8">
+        <div
+          ref={chatRef}
+          className=" overflow-y-scroll nolly-film-hide-scrollbar w-full h-[90%] pb-8"
+        >
           {props.data && (
             <>
               {props.data.map((el, index) => (
@@ -847,6 +920,7 @@ const ChatRoom = (props: Props) => {
                       repliedText={el.replyTo}
                       repliedTextId={el.replyToId}
                       replytochattype={el.replytochattype}
+                      handleImgUpload={handleImageLoad}
                       selectedRepliedToMessageId={selectedRepliedToMessageId}
                       setSelectedRepliedToMessageId={(val) =>
                         setSelectedRepliedToMessageId(val)
@@ -884,6 +958,7 @@ const ChatRoom = (props: Props) => {
                       repliedToUser={el.replytousertype}
                       replytochattype={el.replytochattype}
                       userId={props.userData?.id}
+                      handleImgLoad={handleImageLoad}
                       selectedRepliedToMessageId={selectedRepliedToMessageId}
                       setSelectedRepliedToMessageId={(val) =>
                         setSelectedRepliedToMessageId(val)
@@ -892,7 +967,7 @@ const ChatRoom = (props: Props) => {
                   )}
                 </div>
               ))}
-              {/* <span ref={spanRef}>dshksh</span> */}
+              <span ref={spanRef}></span>
             </>
           )}
           {istyping && (
@@ -906,6 +981,7 @@ const ChatRoom = (props: Props) => {
                   prevUser={"user"}
                   text=""
                   type="typing"
+                  handleImgUpload={handleImageLoad}
                   user={props.type === "user" ? "consultant" : "user"}
                   lastmessage={true}
                 />
@@ -920,6 +996,7 @@ const ChatRoom = (props: Props) => {
                   type="typing"
                   user={props.type === "consultant" ? "user" : "consultant"}
                   lastmessage={true}
+                  handleImgLoad={handleImageLoad}
                 />
               )}
             </>

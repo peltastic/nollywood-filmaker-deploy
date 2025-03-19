@@ -29,12 +29,12 @@ const ServicePage = (props: Props) => {
   const serviceData = [
     {
       value: "read-my-script",
-      label: "Read my Script and advice",
+      label: "Read my Script and advise",
       caption: "A chat session will be sent to discuss your script after review",
     },
     {
       value: "watch-final-cut",
-      label: "Watch a Final cut of my film and advice",
+      label: "Watch a cut of my film and advice",
       caption: "A chat session will be sent to discuss your film after review",
     },
     {

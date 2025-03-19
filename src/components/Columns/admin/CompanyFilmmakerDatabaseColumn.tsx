@@ -81,13 +81,11 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
       header: () => <div className="">Nf score</div>,
       cell: ({ row }) => {
         return (
-          <>
-            {row.original.admin && (
+          
               <div className="w-[20rem] xl:w-auto">
                 <p>{row.original.fulldata.nfscore || "N/A"}</p>
               </div>
-            )}
-          </>
+    
         );
       },
     },

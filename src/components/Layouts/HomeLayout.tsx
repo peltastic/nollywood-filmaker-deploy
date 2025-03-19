@@ -11,9 +11,10 @@ type Props = {
   children: ReactNode;
   hasFooter?: boolean;
   hideLogin?: boolean
+  rm?: boolean
 };
 
-const HomeLayout = ({ children, hasFooter, hideLogin }: Props) => {
+const HomeLayout = ({ children, hasFooter, hideLogin, rm }: Props) => {
   const authStatus = useSelector(
     (state: RootState) => state.persistedState.auth.status
   );
@@ -25,7 +26,7 @@ const HomeLayout = ({ children, hasFooter, hideLogin }: Props) => {
         </ServiceLayout>
       ) : (
         <div className="">
-          <Navbar hideLogin={hideLogin} />
+          <Navbar hideLogin={hideLogin} rmCountdown={rm}   />
           <div className="max-w-[1680px] mx-auto ">{children}</div>
           {hasFooter ? <Footer /> : null}
         </div>

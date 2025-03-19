@@ -74,7 +74,7 @@ const CustomSelect = (props: Props) => {
 
                   setShowDropdown(false);
                 }}
-                className="flex items-center my-6 px-3"
+                className="flex items-center my-2 hover:bg-gray-bg-1 py-3 px-3"
                 key={el.value}
               >
                 {el.image}

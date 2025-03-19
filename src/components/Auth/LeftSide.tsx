@@ -1,9 +1,12 @@
-"use client"
+"use client";
 import React from "react";
 import Image from "next/image";
 import AuthImage from "/public/assets/auth/auth.png";
+import FilmmakerAuthImage from "/public/assets/filmmaker-database/database-login.jpeg";
 
-type Props = {};
+type Props = {
+  filmmaker?: boolean;
+};
 
 const LeftSide = (props: Props) => {
   return (
@@ -11,9 +14,15 @@ const LeftSide = (props: Props) => {
       <div className="z-10 absolute left-0 top-0 bg-[#00000032] w-full h-full rounded-2xl"></div>
       <div className=" z-20 absolute bottom-10 px-[2rem]">
         <h1 className="font-bold text-[1.5rem]">Nollywood Filmmaker</h1>
-        <h2 className="text-[1.13rem]">The one-stop spot for all the film-making help you need</h2>
+        <h2 className="text-[1.13rem]">
+          The one-stop spot for all the film-making help you need
+        </h2>
       </div>
-      <Image src={AuthImage} alt="auth-image" className="w-full rounded-2xl" />
+      <Image
+        src={props.filmmaker ? FilmmakerAuthImage : AuthImage}
+        alt="auth-image"
+        className="w-full rounded-2xl"
+      />
     </div>
   );
 };

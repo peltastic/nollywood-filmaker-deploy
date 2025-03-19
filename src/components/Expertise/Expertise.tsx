@@ -3,8 +3,8 @@ import React from "react";
 type Props = {
   setExpertise: (value: string, type: "add" | "remove") => void;
   data: string[];
-  small?: boolean
-  maximum?: boolean
+  small?: boolean;
+  maximum?: boolean;
 };
 
 const expertise = [
@@ -14,9 +14,10 @@ const expertise = [
   "Editor",
   "Writer",
   "VFX/Animator",
-  "Marketing",
+  "Marketing/Distribution",
   "Music / Sound Designer",
-  "Lawyer"
+  "Lawyer",
+  "Studio Executive",
 ];
 const Expertise = ({ data, setExpertise, small, maximum }: Props) => {
   return (
@@ -27,14 +28,20 @@ const Expertise = ({ data, setExpertise, small, maximum }: Props) => {
             if (data.includes(el)) {
               return setExpertise(el, "remove");
             }
-            if (data.length >= 3 && !maximum) {
+            if (data.length > 3 && !maximum) {
               return;
             }
             setExpertise(el, "add");
           }}
           className={`hover:border-black-2 hover:border-2 ${
-            data.includes(el) ? "border-black-2 border-2" : "border border-stroke-2"
-          } ${small ? "text-sm px-[2rem] h-[3rem]" : "text-[0.9rem] sm:text-[1.13rem] px-[2.5rem] sm:px-[3rem] h-[3rem] sm:h-[3.62rem]"}  transition-all cursor-pointer  font-medium  flex items-center justify-center rounded-md  text-black-2 `}
+            data.includes(el)
+              ? "border-black-2 border-2"
+              : "border border-stroke-2"
+          } ${
+            small
+              ? "text-sm px-[2rem] h-[3rem]"
+              : "text-[0.9rem] sm:text-[1.13rem] px-[2.5rem] sm:px-[3rem] h-[3rem] sm:h-[3.62rem]"
+          }  transition-all cursor-pointer  font-medium  flex items-center justify-center rounded-md  text-black-2 `}
           key={el}
         >
           {el}

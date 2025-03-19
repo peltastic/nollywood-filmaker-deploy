@@ -7,7 +7,6 @@ import UnstyledButton from "../Button/UnstyledButton";
 import {
   useAppointConsultantMutation,
   useAssignServiceToConsultantMutation,
-  useFetchConsultantsByExpertiseQuery,
   useLazyFetchConsultantsByExpertiseQuery,
   useLazyGetConsultantForTaskQuery,
 } from "@/lib/features/admin/requests/request";

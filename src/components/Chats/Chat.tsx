@@ -6,8 +6,6 @@ import { useRouter } from "next/navigation";
 import moment from "moment";
 import { differenceInMilliseconds, isAfter, isBefore } from "date-fns";
 import { truncateStr } from "@/utils/helperFunction";
-import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
 import { useSetChatAsCompleteMutation } from "@/lib/features/consultants/dashboard/request";
 import { useDisclosure } from "@mantine/hooks";
 import ModalComponent from "../Modal/Modal";
@@ -17,6 +15,7 @@ import { nprogress } from "@mantine/nprogress";
 import { notify } from "@/utils/notification";
 import { useServicePayment } from "@/hooks/useServicePayment";
 import InitializingTransactionModal from "../Services/InitializingTransactionModal";
+import { GoDotFill } from "react-icons/go";
 
 type Props = {
   data: IChatData;
@@ -246,17 +245,10 @@ const Chat = ({
             </div>
           ) : (
             <div className="flex items-center mt-3">
-              {status === "completed" && continueChat && (
-                <div
-                  onClick={open}
-                  className="cursor-pointer mr-2 hover:bg-black-2 transition-all hover:text-white text-black-3 rounded-full py-[0.15rem] border border-black-3 text-[0.75rem] font-medium px-3"
-                >
-                  <p>Continue</p>
-                </div>
-              )}
               <div
-                className={`${className} text-[0.75rem] font-semibold py-[0.15rem] px-2 rounded-full`}
+                className={`${className} text-[0.75rem] font-semibold py-[0.15rem] px-2 flex items-center rounded-full mr-auto`}
               >
+                <GoDotFill className="mt-[0.1rem]" />
                 <p>{status}</p>
               </div>
             </div>
@@ -264,6 +256,14 @@ const Chat = ({
         </div>
         <div className="ml-auto font-semibold text-[#00000056] text-[0.88rem] hidden chatbp:block">
           <p>{chatTimeStatus}</p>
+          {status === "completed" && continueChat && (
+            <div
+              onClick={open}
+              className="cursor-pointer float-right text-center max-w-[7.5rem] mr-2 mt-6 bg-black-2 transition-all text-white  rounded-md hover:bg-blue-1 py-[0.15rem] border border-black-3 text-[0.75rem] font-medium px-3"
+            >
+              <p>Continue</p>
+            </div>
+          )}
         </div>
       </div>
       <div
@@ -299,17 +299,11 @@ const Chat = ({
               {/* <div className="mr-2 text-black-3 rounded-full py-[0.15rem] border border-black-3 text-[0.75rem] font-medium px-3">
                 <p>Service</p>
               </div> */}
-              {status === "completed" && continueChat && (
-                <div
-                  onClick={open}
-                  className="cursor-pointer mr-2 hover:bg-black-2 transition-all hover:text-white text-black-3 rounded-full py-[0.15rem] border border-black-3 text-[0.75rem] font-medium px-3"
-                >
-                  <p>Continue</p>
-                </div>
-              )}
+
               <div
-                className={`${className} text-[0.75rem] font-semibold py-[0.15rem] px-2 rounded-full`}
+                className={`${className} text-[0.75rem] font-semibold py-[0.15rem] px-2 flex items-center rounded-full`}
               >
+                <GoDotFill className="mt-[0.1rem]" />
                 <p>{status}</p>
               </div>
             </div>
@@ -317,6 +311,14 @@ const Chat = ({
         </div>
         <div className="ml-auto font-semibold text-[#00000056] text-[0.88rem] hidden xs:block">
           <p>{chatTimeStatus}</p>
+          {status === "completed" && continueChat && (
+            <div
+              onClick={open}
+              className="cursor-pointer mr-2 mt-6 hover:bg-black-2 transition-all hover:text-white text-black-3 rounded-full py-[0.15rem] border border-black-3 text-[0.75rem] font-medium px-3"
+            >
+              <p>Continue</p>
+            </div>
+          )}
         </div>
       </div>
     </>

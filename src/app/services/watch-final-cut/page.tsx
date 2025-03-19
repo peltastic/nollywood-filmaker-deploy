@@ -116,7 +116,7 @@ const page = (props: Props) => {
                   )
                 : "150,000"
             }
-            title="Watch a final cut of my film"
+            title="Watch a cut of my film and advise"
             image={<Image src={WatchFinalCutImage} alt="watch-final-cut" />}
             body={[
               {

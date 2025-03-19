@@ -197,8 +197,8 @@ const FilmmakerDatabaseModal = (props: Props) => {
           <Image src={CancelImg} alt="cancel-img" />
         </div>
       </div>
-      <div className="bg-white py-6 flex items-center flex-wrap ">
-        <div className="flex items-center gap-6 text-sm font-medium">
+      <div className="bg-white py-6  ">
+        <div className="flex items-center mb-6 gap-6 text-sm font-medium">
           <div
             onClick={() => {
               setRefresh(false);
@@ -236,7 +236,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
         </div>
         <div className="ml-auto flex flex-wrap gap-6 items-center w-full lg:w-auto mt-8 lg:mt-0">
           {type === "company" ? (
-            <div className="mid:mr-2 w-full mid:w-auto mb-6 mid:mb-auto">
+            <div className="md:mr-2 w-full md:w-auto mb-6 md:mb-auto">
               <SelectComponent
                 data={companyTypeList}
                 label=""
@@ -259,8 +259,8 @@ const FilmmakerDatabaseModal = (props: Props) => {
               />
             </div>
           ) : (
-            <div className="flex flex-wrap mid:mr-4 items-center w-full mid:w-auto">
-              <div className="w-full mid:w-auto mb-6 mid:mb-auto">
+            <div className="flex flex-wrap md:mr-4 items-center w-full md:w-auto">
+              <div className="w-full md:w-auto mb-6 md:mb-auto">
                 <SelectComponent
                   data={[
                     {
@@ -291,7 +291,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
                           location.toLowerCase() === "all" ? "" : location,
                       });
                     } else if (val) {
-                      setCompanyDepartmentVal("");
+                      setCompanyDepartmentVal(val);
                       setRoleVal("");
                       setRefresh(true);
                       fetchCompanyOrCrew({
@@ -310,14 +310,20 @@ const FilmmakerDatabaseModal = (props: Props) => {
                 />
               </div>
               {rolesList.length > 0 && (
-                <div className=" w-full mid:w-auto mb-6 mid:mb-auto">
+                <div className=" w-full md:w-auto mb-6 md:mb-auto ml-6">
                   <SelectComponent
-                    data={rolesList.map((el) => {
-                      return {
-                        label: el,
-                        value: el,
-                      };
-                    })}
+                    data={[
+                      {
+                        label: "All",
+                        value: "all",
+                      },
+                      ...rolesList.map((el) => {
+                        return {
+                          label: el,
+                          value: el,
+                        };
+                      }),
+                    ]}
                     size="md"
                     label=""
                     placeholder="Select role"
@@ -357,8 +363,8 @@ const FilmmakerDatabaseModal = (props: Props) => {
               )}
             </div>
           )}
-          <div className="mb-6 mid:mb-auto w-full mid:w-auto">
-            <div className=" w-full mid:w-auto">
+          <div className="mb-6 md:mb-auto w-full md:w-auto">
+            <div className=" w-full md:w-auto">
               <SelectComponent
                 data={countriesData}
                 placeholder="Search for country"
@@ -401,8 +407,8 @@ const FilmmakerDatabaseModal = (props: Props) => {
             </div>
           </div>
           {countriesVal && (
-            <div className=" mb-6 mid:mb-auto w-full mid:w-auto">
-              <div className="w-full mid:w-auto">
+            <div className=" mb-6 md:mb-auto w-full md:w-auto">
+              <div className="w-full md:w-auto">
                 <SelectComponent
                   data={statesData}
                   placeholder="Search for state"
@@ -437,7 +443,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
               </div>
             </div>
           )}
-          <div className=" w-full mid:w-auto">
+          <div className=" w-full md:w-auto mb-6 md:mb-auto">
             <SelectComponent
               data={[
                 {
@@ -498,7 +504,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
             type="text"
             placeholder="Search by name"
             value={name}
-            className="outline-none border focus:border py-2 px-6 rounded-md text-md ml-4"
+            className="outline-none border focus:border py-3 px-6 rounded-md text-md md:ml-4 w-full md:w-auto"
             onChange={(e) => {
               if (e.target.value) {
                 setName(e.target.value);
@@ -518,7 +524,7 @@ const FilmmakerDatabaseModal = (props: Props) => {
             type="text"
             placeholder="Search by Location"
             value={location}
-            className="outline-none border focus:border py-2 px-6 rounded-md text-md w-full mid:w-auto"
+            className="outline-none border focus:border py-2 px-6 rounded-md text-md w-full md:w-auto"
             onChange={(e) => {
               if (e.target.value) {
                 setLocation(e.target.value);

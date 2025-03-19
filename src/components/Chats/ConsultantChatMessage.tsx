@@ -45,6 +45,7 @@ type Props = {
   setSelectedRepliedToMessageId?: (val: string) => void;
   uploadProgress: number;
   userId?: string;
+  handleImgLoad: () => void;
 };
 
 const ConsultantChatMessage = ({
@@ -71,6 +72,7 @@ const ConsultantChatMessage = ({
   uploadProgress,
   userId,
   socket,
+  handleImgLoad,
 }: Props) => {
   const [temporarySelectedHighlight, setTemporarySelectedHighlight] =
     useState<string>("transparent");
@@ -96,16 +98,16 @@ const ConsultantChatMessage = ({
     replytochattype === "contacts" && repliedText !== "contacts" && repliedText
       ? JSON.parse(repliedText)
       : null;
-  useEffect(() => {
-    if (!ref.current) return () => {};
-    if (lastmessage) {
-      ref.current.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "end",
-      });
-    }
-  }, [lastmessage]);
+  // useEffect(() => {
+  //   if (!ref.current) return () => {};
+  //   if (lastmessage) {
+  //     ref.current.scrollIntoView({
+  //       behavior: "smooth",
+  //       block: "nearest",
+  //       inline: "end",
+  //     });
+  //   }
+  // }, [lastmessage]);
 
   useEffect(() => {
     if (lastmessage && (type === "file" || type === "img") && socket) {
@@ -429,15 +431,7 @@ const ConsultantChatMessage = ({
                     width={200}
                     height={200}
                     className="w-full"
-                    onLoad={() => {
-                      if (lastmessage && ref.current) {
-                        ref.current.scrollIntoView({
-                          behavior: "smooth",
-                          block: "nearest",
-                          inline: "end",
-                        });
-                      }
-                    }}
+                    onLoad={handleImgLoad}
                   />
                 </div>
               ) : type === "typing" ? (
