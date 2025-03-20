@@ -73,7 +73,7 @@ const HomeHeader = (props: Props) => {
                 className="w-full sm:w-[25rem] block  mt-8 sm:mt-2 order-2 sm:order-3"
               >
                 <UnstyledButton class="font-semibold w-full  sm:mr-7 text-red rounded-md hover:before:bg-redborder-red-500 relative h-[50px]  overflow-hidden border border-yellow-1 bg-yellow-1 px-3 text-black-2 shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-black-3 before:transition-all before:duration-500 hover:text-yellow-1 hover:before:left-0 hover:before:w-full">
-                  <span className="relative z-10">Nollywood filmmaker database</span>
+                  <span className="relative z-10">Nollywood Filmmaker Database</span>
                 </UnstyledButton>
               </Link>
             </div>

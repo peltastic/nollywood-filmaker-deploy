@@ -39,7 +39,7 @@ const ReadMyScriptPage = (props: Props) => {
   const [files, setFiles] = useState<File[]>([]);
   const [opened, { close, open }] = useDisclosure();
 
-  const { paymentStatus } = useServicePayment(
+  const { paymentStatus, resetPaymentInitialization } = useServicePayment(
     isError,
     isSuccess,
     "/success-page/read-my-script",

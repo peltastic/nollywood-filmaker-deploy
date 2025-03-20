@@ -61,8 +61,12 @@ export const useServicePayment = (
       };
     }
   }, [paymentStatus]);
+  const resetPaymentStatus = () => {
+    setPaymentStatus("initialized")
+  }
 
   return {
     paymentStatus,
+    resetPaymentInitialization: resetPaymentStatus
   };
 };
