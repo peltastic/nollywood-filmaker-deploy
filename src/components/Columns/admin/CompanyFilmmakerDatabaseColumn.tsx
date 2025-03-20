@@ -78,12 +78,12 @@ export const company_database_column: ColumnDef<ICompanyFilmmakerDatabaseColumnD
     },
     {
       accessorKey: "nfscore",
-      header: () => <div className="">Nf score</div>,
+      header: () => <div className="">NF score</div>,
       cell: ({ row }) => {
         return (
           
               <div className="w-[20rem] xl:w-auto">
-                <p>{row.original.fulldata.nfscore || "N/A"}</p>
+                <p>{row.original.fulldata.nfscore || "0"}</p>
               </div>
     
         );

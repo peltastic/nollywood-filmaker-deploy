@@ -8,6 +8,7 @@ import ServiceInfo from "../ServiceInfo/ServiceInfo";
 import CancelImg from "/public/assets/cancel.svg";
 import Image from "next/image";
 import { nprogress } from "@mantine/nprogress";
+import { FaCheckSquare } from "react-icons/fa";
 
 type Props = {
   status: "initialized" | "pending" | "completed";
@@ -41,14 +42,21 @@ const InitializingTransactionModal = (props: Props) => {
           <Image src={CancelImg} alt="cancel-img" />
         </div>
         {props.info && <ServiceInfo activeColor content={props.info} />}
-
+        <div className="">
+          {props.status === "initialized" ? null : (
+            <div className="mt-10 flex items-center  font-medium">
+              <FaCheckSquare className="text-green-600 text-2xl" />
+              <p className="ml-2">Files uploaded</p>
+            </div>
+          )}
+        </div>
         <div className="flex mt-10 items-center">
           <div className="w-[1.5rem]">
             <Spinner dark />
           </div>
           <p className="ml-4 font-medium">
             {props.status === "initialized"
-              ? "Generating Payment link...."
+              ? "Uploading file(s) and generating payment link...."
               : "Waiting for payment confirmation...."}
           </p>
         </div>

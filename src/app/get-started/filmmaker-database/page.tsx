@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import SingleStepper from "@/components/Stepper/SingleStepper";
 import GeneralInfo from "@/components/FilmakerDatabase/Forms/Crew/GeneralInfo";
@@ -17,9 +17,8 @@ import {
   IJoinCompany,
   IJoinCrew,
 } from "@/lib/features/users/filmmaker-database/filmmaker-database";
-import Link from "next/link";
 import HomeLayout from "@/components/Layouts/HomeLayout";
-
+import Link from "next/link";
 
 type Props = {};
 
@@ -103,8 +102,15 @@ const FilmakerDatabasePage = (props: Props) => {
           <h1 className="text-3xl mid:text-4xl font-bold text-center">
             Nollywood Filmmaker Database
           </h1>
+          <h2 className="text-center mt-2">
+            Join the largest film crew/company database in Nigeria or access the
+            database through our <span>
+              <Link className="underline" href={"/get-started/chat"}>
+              consultants</Link>
+            </span>
+          </h2>
         </div>
-        <section className="bg-[#FAFAFA] min-h-screen mt-8 py-8">
+        <section className="bg-[#FAFAFA] min-h-screen mt-6 py-8">
           <div className="w-[90%] lg:w-fit mx-auto max-w-[100rem]">
             <div className="">
               <h2 className="text-black-2 text-[1.57rem] font-semibold">

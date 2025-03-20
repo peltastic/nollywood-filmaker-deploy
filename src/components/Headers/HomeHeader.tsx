@@ -7,6 +7,7 @@ import UnstyledButton from "../Button/UnstyledButton";
 import PlayButtonImage from "/public/assets/header/play.svg";
 import Link from "next/link";
 import classes from "@/app/styles/Header.module.css";
+import { Avatar, AvatarGroup } from "@mantine/core";
 
 type Props = {};
 
@@ -35,7 +36,12 @@ const HomeHeader = (props: Props) => {
               </h1>
             </div>
             <div className="mt-8 flex items-center ">
-              <Image src={Profiles} alt="profiles" className="w-[6rem]" />
+              <AvatarGroup>
+                <Avatar src={"https://ideaafricabucket.s3.eu-north-1.amazonaws.com/3.jpg"} />
+                <Avatar src={"https://ideaafricabucket.s3.eu-north-1.amazonaws.com/2.jpg"} />
+                <Avatar src={"https://ideaafricabucket.s3.eu-north-1.amazonaws.com/1.jpg"} />
+              </AvatarGroup>
+              {/* <Image src={Profiles} alt="profiles" className="w-[6rem]" /> */}
               <div className="w-[25rem] ml-4 pr-4">
                 <p className="tracking wider">
                   Consult with verified experts and access their film-related
@@ -67,7 +73,7 @@ const HomeHeader = (props: Props) => {
                 className="w-full sm:w-[25rem] block  mt-8 sm:mt-2 order-2 sm:order-3"
               >
                 <UnstyledButton class="font-semibold w-full  sm:mr-7 text-red rounded-md hover:before:bg-redborder-red-500 relative h-[50px]  overflow-hidden border border-yellow-1 bg-yellow-1 px-3 text-black-2 shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-black-3 before:transition-all before:duration-500 hover:text-yellow-1 hover:before:left-0 hover:before:w-full">
-                  <span className="relative z-10">Nollywood filmmaker</span>
+                  <span className="relative z-10">Nollywood filmmaker database</span>
                 </UnstyledButton>
               </Link>
             </div>

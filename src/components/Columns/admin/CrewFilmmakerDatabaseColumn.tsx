@@ -75,11 +75,11 @@ export const crew_database_column: ColumnDef<ICrewFilmmakerDatabaseColumnData>[]
     },
     {
       accessorKey: "nfscore",
-      header: () => <div className="">Nf Score</div>,
+      header: () => <div className="">NF Score</div>,
       cell: ({ row }) => {
         return (
           <div className="py-4 w-[10rem] xl:w-auto">
-            <p>{row.original.fulldata.nfscore || "N/A"}</p>
+            <p>{row.original.fulldata.nfscore || "0"}</p>
           </div>
         );
       },

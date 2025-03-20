@@ -188,7 +188,6 @@ const CreatePitchDeck = (props: Props) => {
           info="Pitch deck creation can take up to one to two weeks. A document will be sent for review."
         />
       ) : null}
-      shjjhs
       <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap ">
           <ServiceLeft

@@ -76,9 +76,9 @@ const CustomTime = (props: Props) => {
                 el.time === props.selectedTime
                   ? "bg-black-2 text-white"
                   : "text-black-2 bg-white"
-              }  text-[1.13rem] disabled:cursor-not-allowed relative transition-all cursor-pointer font-medium mx-0 md:mx-auto  rounded-md py-3 px-3 mb-2`}
+              }  text-[1.13rem] flex items-end disabled:cursor-not-allowed relative transition-all cursor-pointer font-medium mx-0 md:mx-auto  rounded-md py-3 px-3 mb-2`}
             >
-              {el.time}
+              {el.time} <span className="text-[0.5rem] pl-2 font-semibold">WAT</span>
             </button>
           ))}
         </>

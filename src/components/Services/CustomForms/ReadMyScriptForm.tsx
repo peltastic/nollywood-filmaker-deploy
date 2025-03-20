@@ -21,6 +21,7 @@ import EditFiles from "../Edits/EditFiles";
 import CheckboxComponent from "@/components/Checkbox/Checkbox";
 import Link from "next/link";
 import ServiceInfo from "@/components/ServiceInfo/ServiceInfo";
+import { notify } from "@/utils/notification";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 type Props = {
@@ -129,13 +130,25 @@ const ReadMyScriptForm = ({
         {checked ? (
           <div className="mt-10">
             <div className="mb-2  flex font-medium text-[0.88rem] ">
-              <p>Upload scripts for your {noOfEpisodes} episodes</p>
+              <p>
+                Upload scripts for your {noOfEpisodes} episodes (max 10mb per
+                file)
+              </p>
             </div>
             <DropZoneComponent
               setFiles={(files) => {
                 setErrorMessage("");
+                let isValid = true;
+                for (const el of files) {
+                  if (el?.size > 10 * 1024 * 1024) {
+                    isValid = false;
+                    notify("message", "Upload should not contain a file more than 10mb")
+                  }
+                }
 
-                setFileProps(files, 1, "add");
+                if (isValid) {
+                  setFileProps(files, 1, "add");
+                }
               }}
             >
               <div
@@ -164,13 +177,17 @@ const ReadMyScriptForm = ({
         ) : (
           <div className="mt-10">
             <label className="block mb-2 text-black-2 font-medium text-[0.88rem]">
-              Upload script
+              Upload script (max 10mb)
             </label>
             <FileInput
               accept=""
               setFile={(file) => {
                 if (file) {
-                  setSingleFile(file);
+                  if (file?.size > 10 * 1024 * 1024) {
+                    notify("message", "Cannot upload a file with size more than 10mb");
+                  } else {
+                    setSingleFile(file);
+                  }
                 }
               }}
             >
@@ -208,13 +225,17 @@ const ReadMyScriptForm = ({
         </div>
         <div className="mt-10">
           <label className="block mb-2 text-black-2 font-medium text-[0.88rem]">
-            Upload character bible (optional)
+            Upload character bible (max 10mb) (optional)
           </label>
           <FileInput
             accept=""
             setFile={(file) => {
               if (file) {
-                setCharacterBible(file);
+                if (file?.size > 10 * 1024 * 1024) {
+                  notify("message", "Cannot upload file more than 10mb");
+                } else {
+                  setCharacterBible(file);
+                }
               }
             }}
           >

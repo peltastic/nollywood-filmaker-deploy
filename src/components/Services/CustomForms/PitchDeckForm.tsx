@@ -28,6 +28,7 @@ import { FaArrowRight } from "react-icons/fa";
 import CheckboxComponent from "@/components/Checkbox/Checkbox";
 import Link from "next/link";
 import FileInput from "@/components/FileInput/FileInput";
+import { notify } from "@/utils/notification";
 
 type Props = {
   setFilesProps: (
@@ -114,13 +115,20 @@ const PitchDeckForm = (props: Props) => {
         />
         <div className="mt-10">
           <label className="block mb-2 text-black-2 font-medium text-[0.88rem]">
-            Upload script
+            Upload script (max 10mb)
           </label>
           <FileInput
             accept=""
             setFile={(file) => {
               if (file) {
-                props.setSingleFile(file);
+                if (file?.size > 10 * 1024 * 1024) {
+                  notify(
+                    "message",
+                    "Cannot upload a file with size more than 10mb"
+                  );
+                } else {
+                  props.setSingleFile(file);
+                }
               }
             }}
           >
@@ -183,30 +191,28 @@ const PitchDeckForm = (props: Props) => {
         </div> */}
         {/* {hasBudget && (
           <> */}
-            <div className="mt-10">
-              <InputComponent
-                value={props.data.estimatedBudget}
-                label="Estimated budget"
-                placeholder="Text"
-                type=""
-                changed={(val) => {
-                  props.setScriptProps("estimatedBudget", val);
-                }}
-                className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
-              />
-            </div>
-            <div className="mt-10">
-              <InputComponent
-                value={props.data.revprojection}
-                label="Revenue Projection (You can put a range)"
-                placeholder="Text"
-                type=""
-                changed={(val) => props.setScriptProps("revprojection", val)}
-                className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
-              />
-            </div>
-          {/* </>
-        )} */}
+        <div className="mt-10">
+          <InputComponent
+            value={props.data.estimatedBudget}
+            label="Estimated budget"
+            placeholder="Text"
+            type=""
+            changed={(val) => {
+              props.setScriptProps("estimatedBudget", val);
+            }}
+            className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
+          />
+        </div>
+        <div className="mt-10">
+          <InputComponent
+            value={props.data.revprojection}
+            label="Revenue Projection (You can put a range)"
+            placeholder="Text"
+            type=""
+            changed={(val) => props.setScriptProps("revprojection", val)}
+            className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
+          />
+        </div>
 
         <div className="mt-10">
           <SwitchComponent
@@ -219,12 +225,25 @@ const PitchDeckForm = (props: Props) => {
         {hasKeyArt && (
           <div className="mt-10">
             <div className="mb-2  flex font-medium text-[0.88rem] text-[#A5A5A5]">
-              <p>Upload key art</p>
+              <p>Upload key art (max 10mb per
+                file)</p>
               {/* <p>*</p> */}
             </div>
             <DropZoneComponent
               setFiles={(files) => {
-                props.setFilesProps(files, 1, "add");
+                let isValid = true;
+                for (const el of files) {
+                  if (el?.size > 10 * 1024 * 1024) {
+                    isValid = false;
+                    notify(
+                      "message",
+                      "Upload should not contain a file more than 10mb"
+                    );
+                  }
+                }
+                if (isValid) {
+                  props.setFilesProps(files, 1, "add");
+                }
               }}
             >
               <div
@@ -306,7 +325,12 @@ const PitchDeckForm = (props: Props) => {
           <p className="ml-1">Save</p>
         </button>
 
-        <h3 className="font-semibold mt-10">Key Crew and Suggestions <span className="font-medium">(Crew, e.g Producer, director, Writer and DOP)</span> </h3>
+        <h3 className="font-semibold mt-10">
+          Key Crew and Suggestions{" "}
+          <span className="font-medium">
+            (Crew, e.g Producer, director, Writer and DOP)
+          </span>{" "}
+        </h3>
         {crews.map((el, index) => (
           <EditKeyCrew
             index={index}
@@ -364,7 +388,9 @@ const PitchDeckForm = (props: Props) => {
 
         <h3 className="font-semibold mt-8">
           Team members{" "}
-          <span className="font-medium">(Include important members of your team and their bio)</span>
+          <span className="font-medium">
+            (Include important members of your team and their bio)
+          </span>
         </h3>
         {members.map((el, index) => (
           <EditMember

@@ -92,8 +92,8 @@ const OrderDetailsBody = ({ data }: Props) => {
             {data.request.booktime && (
               <div className="mt-4 border-b border-b-stroke-4 pb-4">
                 <h1 className="font-bold mb-1">Chat Time</h1>
-                <p className="text-[0.88rem]">
-                  {moment(data.request.booktime).format("LT")}
+                <p className="text-[0.88rem] flex items-end">
+                  {moment(data.request.booktime).format("LT")} <span className="pl-1 text-[0.6rem] font-semibold">WAT</span>
                 </p>
               </div>
             )}

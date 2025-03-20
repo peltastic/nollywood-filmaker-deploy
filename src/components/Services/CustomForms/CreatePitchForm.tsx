@@ -22,6 +22,7 @@ import { DateInput, DatePickerInput } from "@mantine/dates";
 import EditCharacter from "../Edits/EditCharacter";
 import { MdAdd } from "react-icons/md";
 import EditFiles from "../Edits/EditFiles";
+import { notify } from "@/utils/notification";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -144,12 +145,28 @@ const CreatePitchForm = ({
         {checked ? (
           <div className="mt-10">
             <div className="mb-2  flex font-medium text-[0.88rem] ">
-              <p>Upload scripts for your {Number(data.episodes) || 0} episodes</p>
+              <p>
+                Upload scripts for your {Number(data.episodes) || 0} episodes (max 10mb per
+                file)
+              </p>
             </div>
             <DropZoneComponent
               setFiles={(files) => {
                 setErrorMessage("");
-                setFilesProps(files, 1, "add");
+                let isValid = true;
+                for (const el of files) {
+                  if (el?.size > 10 * 1024 * 1024) {
+                    isValid = false;
+                    notify(
+                      "message",
+                      "Upload should not contain a file more than 10mb"
+                    );
+                  }
+                }
+
+                if (isValid) {
+                  setFilesProps(files, 1, "add");
+                }
               }}
             >
               <div
@@ -177,13 +194,20 @@ const CreatePitchForm = ({
         ) : (
           <div className="mt-10">
             <label className="block mb-2 text-black-2 font-medium text-[0.88rem]">
-              Upload script
+              Upload script (max 10mb)
             </label>
             <FileInput
               accept=""
               setFile={(file) => {
                 if (file) {
-                  setFileProps(file);
+                  if (file?.size > 10 * 1024 * 1024) {
+                    notify(
+                      "message",
+                      "Cannot upload a file with size more than 10mb"
+                    );
+                  } else {
+                    setFileProps(file);
+                  }
                 }
               }}
             >

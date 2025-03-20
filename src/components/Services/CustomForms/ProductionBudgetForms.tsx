@@ -18,6 +18,7 @@ import { BsUpload } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa";
 import EditFiles from "../Edits/EditFiles";
 import ServiceInfo from "@/components/ServiceInfo/ServiceInfo";
+import { notify } from "@/utils/notification";
 
 type Props = {
   fileName?: string;
@@ -114,12 +115,26 @@ const ProductionBudgetForm = ({
             <div className="mb-2  flex font-medium text-[0.88rem] ">
               <p>
                 Upload scripts for your {Number(data.episodes) || 0} episodes
+                (max 10mb per file)
               </p>
             </div>
             <DropZoneComponent
               setFiles={(files) => {
                 setErrorMessage("");
-                setFilesProps(files, 1, "add");
+                let isValid = true;
+                for (const el of files) {
+                  if (el?.size > 10 * 1024 * 1024) {
+                    isValid = false;
+                    notify(
+                      "message",
+                      "Upload should not contain a file more than 10mb"
+                    );
+                  }
+                }
+
+                if (isValid) {
+                  setFilesProps(files, 1, "add");
+                }
               }}
             >
               <div
@@ -147,9 +162,23 @@ const ProductionBudgetForm = ({
         ) : (
           <div className="mt-10">
             <label className="block mb-2 text-black-2 font-medium text-[0.88rem]">
-              Upload your script
+              Upload your script (max 10mb)
             </label>
-            <FileInput accept="" setFile={(file) => setFileProps(file)}>
+            <FileInput
+              accept=""
+              setFile={(file) => {
+                if (file) {
+                  if (file?.size > 10 * 1024 * 1024) {
+                    notify(
+                      "message",
+                      "Cannot upload a file with size more than 10mb"
+                    );
+                  } else {
+                    setFileProps(file);
+                  }
+                }
+              }}
+            >
               <div className="cursor-pointer border rounded-md border-stroke-2 py-[0.35rem] px-[0.4rem] flex items-center">
                 <div className=" py-2 px-3 rounded-[0.25rem] text-white font-medium text-[0.6rem] bg-black-2">
                   Browse

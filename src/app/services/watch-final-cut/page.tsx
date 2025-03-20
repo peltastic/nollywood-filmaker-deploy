@@ -103,7 +103,7 @@ const page = (props: Props) => {
           close={close}
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
-          info="Final Cut watch can take between 3-5 days. You will be mailed with calendar dates to choose a chat"
+          info="Final Cut watch can take between 3-5 days. You will be mailed with calendar dates to choose a chat session."
         />
       ) : null}
       <ServiceLayout nonDashboard>
