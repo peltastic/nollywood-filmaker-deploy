@@ -10,6 +10,7 @@ import { RootState } from "@/lib/store";
 import Spinner from "@/app/Spinner/Spinner";
 import { nprogress } from "@mantine/nprogress";
 import { notify } from "@/utils/notification";
+import Link from "next/link";
 
 type Props = {
   close: () => void;
@@ -83,7 +84,7 @@ const RateYourExperience = (props: Props) => {
         orderId: props.orderId,
         quality: Number(ratingData.quality),
         reason,
-        speed: Number(ratingData.speed),
+        // speed: Number(ratingData.speed),
         userId,
       });
     }
@@ -104,16 +105,16 @@ const RateYourExperience = (props: Props) => {
         <SelectEmoji
           setEmojiProps={(val) => updateRatingHandler("quality", val)}
           data={quality}
-          title="How do you feel about the quality of our delivery?"
+          title="How would you rate your chat session?"
         />
       </div>
-      <div className="mt-4">
+      {/* <div className="mt-4">
         <SelectEmoji
           setEmojiProps={(val) => updateRatingHandler("speed", val)}
           data={quality}
           title="How do you feel about the speed of our delivery?"
         />
-      </div>
+      </div> */}
       <div className="">
         <h1 className="font-medium text-[0.88rem] text-black-2 my-6">
           What are the main reasons for your rating?
@@ -132,7 +133,11 @@ const RateYourExperience = (props: Props) => {
           color="#181818"
           label={
             <p className="font-medium text-[0.88rem] text-black-5">
-              I may be contacted about this feedback. Privacy policy
+              I may be contacted about this feedback. <span>
+                <Link className="underline" href={"/privacy-policy"}>
+                Privacy policy
+                </Link>
+              </span>
             </p>
           }
         />
@@ -140,7 +145,7 @@ const RateYourExperience = (props: Props) => {
       <div className="my-8 flex">
         <UnstyledButton
           disabled={
-            !ratingData.quality || !ratingData.speed || !checked || isLoading
+            !ratingData.quality || !checked || isLoading
           }
           clicked={sendFeedbackHandler}
           class="w-[13rem] flex justify-center ml-auto py-2 px-4 transition-all rounded-md items-center text-white  bg-black-3 disabled:opacity-50 text-[0.88rem] "

@@ -83,7 +83,7 @@ const LoginAsFilmmakerForm = (props: Props) => {
               <Field
                 name="email"
                 classname="w-full"
-                label="Email"
+                label="Username or email"
                 placeholder=""
               />
             </div>

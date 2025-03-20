@@ -813,58 +813,9 @@ const ChatRoom = (props: Props) => {
     }
   }, [props.data, imagesLoaded, totalImages]);
 
-  // useEffect(() => {
-  //   if (!spanRef.current) return;
-  //   if (props.data) {
-  //     spanRef.current.scrollIntoView({
-  //       behavior: "smooth",
-  //       block: "nearest",
-  //       inline: "end",
-  //     });
-  //   }
-  // }, [props.data]);
-  // useEffect(() => {
-  //   const scrollToBottom = () => {
-  //     if (chatRef.current) {
-  //       chatRef.current.scrollTop = chatRef.current.scrollHeight;
-  //     }
-  //   };
-  //   scrollToBottom();
-  // }, [props.data, chatRef]);
-  // useEffect(() => {
-  //   const scrollToBottom = () => {
-  //     spanRef.current?.scrollIntoView({ behavior: "smooth" });
-  //   };
-  //   scrollToBottom()
-  // }, [spanRef]);
-
-  //   // Check if all images are loaded
-  //   const images = document.querySelectorAll('.chat img');
-  //   if (images.length > 0) {
-  //     let loadedCount = 0;
-  //     images.forEach((img) => {
-  //       if (img.complete) {
-  //         loadedCount++;
-  //       } else {
-  //         img.onload = () => {
-  //           loadedCount++;
-  //           if (loadedCount === images.length) {
-  //             scrollToBottom();
-  //           }
-  //         };
-  //       }
-  //     });
-  //     if (loadedCount === images.length) {
-  //       scrollToBottom();
-  //     }
-  //   } else {
-  //     scrollToBottom();
-  //   }
-  // }, [props.data]); // Trigger when messages change
-
-  // useEffect(() => {
-  //   database.open();
-  // }, []);
+//  useEffect(() => {
+// open()
+//  }, [])
 
   return (
     <>

@@ -75,7 +75,11 @@ const slots = [
 ];
 
 const SetChatDate = ({ close, data }: Props) => {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow;
+  });
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [serviceToChat, { isError, isSuccess, isLoading, error }] =
     useChangeServiceToChatMutation();

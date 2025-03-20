@@ -17,7 +17,6 @@ import React, { useState } from "react";
 import { BsUpload } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa";
 import { pdfjs } from "react-pdf";
-import SeriesFiles from "../SeriesFiles";
 import SwitchComponent from "@/components/Switch/SwitchComponent";
 import { DateInput, DatePickerInput } from "@mantine/dates";
 import EditCharacter from "../Edits/EditCharacter";

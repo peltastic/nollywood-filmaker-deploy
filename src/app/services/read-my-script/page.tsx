@@ -68,11 +68,6 @@ const ReadMyScriptPage = (props: Props) => {
       [key]: value,
     });
   };
-  useEffect(() => {
-    if (!scriptData.movie_title) {
-      router.push("/services/read-my-script");
-    }
-  }, []);
 
   useEffect(() => {
     if (paymentStatus === "pending") {

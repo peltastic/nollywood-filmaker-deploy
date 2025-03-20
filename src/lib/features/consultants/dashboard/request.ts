@@ -6,6 +6,7 @@ import {
   IRequestHistoryResponse,
   IServiceRequest,
 } from "@/interfaces/consultants/dashboard/request";
+import { IResolveFiles } from "@/interfaces/requests/requests";
 import { consultantBaseQueryWithReauth } from "@/lib/baseQuery";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
@@ -132,6 +133,9 @@ export const consultantRequestsApi = createApi({
     >({
       query: (id) => `/api/consultants/servicechat/messages?orderId=${id}`,
     }),
+    fetchResolvedFilesConsultant: build.query<IResolveFiles, string>({
+      query: (id) => `/api/consultants/resolve/${id}`,
+    }),
   }),
 });
 
@@ -149,4 +153,5 @@ export const {
   useLazyFetchDashboardStatsQuery,
   useSendServiceChatMessagesAsConsultantMutation,
   useLazyFetchServiceMessagesConsultantQuery,
+  useLazyFetchResolvedFilesConsultantQuery
 } = consultantRequestsApi;

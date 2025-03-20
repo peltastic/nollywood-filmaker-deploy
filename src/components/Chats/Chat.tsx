@@ -40,7 +40,6 @@ const Chat = ({
     "ready" | "ongoing" | "completed" | "pending"
   >("pending");
   const [chatTimeStatus, setChatTimeStatus] = useState<string>("");
-
   const [setAsCompleted, completedRes] = useSetChatAsCompleteMutation();
   // const userData = useSelector(
   //   (state: RootState) => state.persistedState.user.user
@@ -100,7 +99,8 @@ const Chat = ({
     "/user/dashboard/chats",
     close,
     chat.data?.payment.authorization_url,
-    chat.error
+    chat.error,
+    true
   );
 
   useEffect(() => {

@@ -27,6 +27,7 @@ type Props = {
   admin?: boolean;
   userId?: string;
   user?: boolean;
+  refetch?: () => void;
   customerReqOrderId?: string;
   summary?: string;
   orderId?: string;
@@ -78,6 +79,7 @@ const OrderDetailsHeader = ({
   nameofservice,
   userId,
   user,
+  refetch,
 }: Props) => {
   const [opened, { open, close }] = useDisclosure();
   const router = useRouter();
@@ -207,6 +209,7 @@ const OrderDetailsHeader = ({
               />
             ) : (
               <ResolveRequestModal
+                refetch={refetch}
                 orderId={orderId}
                 showChat={() => setShowChatDate(true)}
                 close={close}

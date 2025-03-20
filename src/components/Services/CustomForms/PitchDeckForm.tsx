@@ -8,7 +8,6 @@ import InputComponent from "@/components/Input/Input";
 import SelectComponent from "@/components/Select/SelectComponent";
 import TextArea from "@/components/TextArea/TextArea";
 import {
-  seriesExhibitionData,
   testExhibitionData,
   testSelectData,
 } from "@/utils/constants/constants";
@@ -96,7 +95,6 @@ const PitchDeckForm = (props: Props) => {
     setMembers(props.members);
   }, [props.members]);
 
-  const [checked, setChecked] = useState<boolean>(false);
   const [terms, setTerms] = useState<boolean>(false);
   return (
     <div className="w-full xl:w-[90%]">
@@ -174,7 +172,7 @@ const PitchDeckForm = (props: Props) => {
             label="More information (optional)"
           />
         </div>
-        <div className="mt-10">
+        {/* <div className="mt-10">
           <SwitchComponent
             label={<p className="ml-2">Do you have a budget range?</p>}
             checked={hasBudget}
@@ -182,13 +180,13 @@ const PitchDeckForm = (props: Props) => {
             size="sm"
             setChecked={(val) => setHasBudget(val)}
           />
-        </div>
-        {hasBudget && (
-          <>
+        </div> */}
+        {/* {hasBudget && (
+          <> */}
             <div className="mt-10">
               <InputComponent
                 value={props.data.estimatedBudget}
-                label="Estimated budget (You can put a range)"
+                label="Estimated budget"
                 placeholder="Text"
                 type=""
                 changed={(val) => {
@@ -207,8 +205,8 @@ const PitchDeckForm = (props: Props) => {
                 className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
               />
             </div>
-          </>
-        )}
+          {/* </>
+        )} */}
 
         <div className="mt-10">
           <SwitchComponent

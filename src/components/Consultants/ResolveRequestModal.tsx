@@ -15,6 +15,7 @@ type Props = {
   close: () => void;
   showChat: () => void;
   orderId?: string;
+  refetch?: () => void;
 };
 
 const ResolveRequestModal = (props: Props) => {
@@ -30,12 +31,10 @@ const ResolveRequestModal = (props: Props) => {
       notify("error", "", (error as any).data?.message || "An Error Occcured");
     }
     if (isSuccess) {
-      notify(
-        "success",
-        "Files uploaded successfully",
-      );
+      notify("success", "Files uploaded successfully");
       nprogress.complete();
-      props.close()
+      props.close();
+      props.refetch && props.refetch();
     }
   }, [isError, isSuccess]);
   return (

@@ -16,7 +16,7 @@ const WatchFinalCutSuccessPage = (props: Props) => {
         subTitle=""
         // subTitle="When a killer shark unleashes chaos on a beach community off Cape Cod, it’s up to a local sheriff, a marine biologist."
         titleLight="Order Confirmed"
-        titleBold="Watch the Final cut of my film"
+        titleBold="Watch a cut of my film and advise"
         width="w-[95%] sm:w-[90%] md:w-[50rem]"
       />
     </ServiceLayout>

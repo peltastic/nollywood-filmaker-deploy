@@ -14,6 +14,8 @@ import { useSelector } from "react-redux";
 import BudgetAndAdviceImg from "/public/assets/services/budget-and-advice.svg";
 import ServiceRight from "@/components/Services/ServiceRight";
 import PitchDeckForm from "@/components/Services/CustomForms/PitchDeckForm";
+import { initializeTransactionListener } from "@/lib/socket";
+import { nprogress } from "@mantine/nprogress";
 type Props = {};
 
 export interface IPitchDeckState {
@@ -183,9 +185,10 @@ const CreatePitchDeck = (props: Props) => {
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
           close={close}
-            info="Pitch deck creation can take up to one to two weeks. A document will be sent for review."
+          info="Pitch deck creation can take up to one to two weeks. A document will be sent for review."
         />
       ) : null}
+      shjjhs
       <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap ">
           <ServiceLeft
@@ -276,6 +279,9 @@ const CreatePitchDeck = (props: Props) => {
                     type: "request",
                     userId,
                   });
+                  initializeTransactionListener(userId);
+                  nprogress.start();
+                  open();
                 }
               }}
               file={singleFile}

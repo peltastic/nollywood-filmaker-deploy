@@ -59,6 +59,10 @@ const AssignRequestModal = (props: Props) => {
   const [assign, assignRes] = useAssignServiceToConsultantMutation();
 
   useEffect(() => {
+ console.log("opened")
+  }, [])
+
+  useEffect(() => {
     if (data) {
       const transformed_data: {
         label: string;

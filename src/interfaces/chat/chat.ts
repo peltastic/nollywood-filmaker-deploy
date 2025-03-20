@@ -92,6 +92,6 @@ export interface ISendFeedbackPayload {
   orderId: string;
   userId: string;
   quality: number;
-  speed: number;
+  // speed: number;
   reason: string;
 }

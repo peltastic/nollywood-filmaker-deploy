@@ -16,7 +16,7 @@ const CreatePitchPage = (props: Props) => {
         // subTitle="When a killer shark unleashes chaos on a beach community off Cape Cod, it’s up to a local sheriff, a marine biologist."
         lightButtonContent="Take me home"
         titleLight="Order Confirmed"
-        titleBold="Create a Pitch deck"
+        titleBold="Create my Pitch deck"
         width="w-[95%] sm:w-[90%] md:w-[35rem]"
       />
     </ServiceLayout>

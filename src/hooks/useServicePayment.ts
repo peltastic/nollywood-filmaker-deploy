@@ -12,7 +12,8 @@ export const useServicePayment = (
   successRoute: string,
   close: () => void,
   url?: string,
-  error?: any
+  error?: any,
+  reloadWindow?: boolean
 ) => {
   const [paymentStatus, setPaymentStatus] = useState<
     "initialized" | "pending" | "completed"
@@ -44,11 +45,14 @@ export const useServicePayment = (
             status: "completed";
           };
         }) => {
-          console.log(data)
           if (data.transaction.status === "completed") {
             nprogress.complete();
             dispatch(setFallbackRoute(null));
-            router.push(successRoute);
+            if (reloadWindow) {
+              window.location.reload();
+            } else {
+              router.push(successRoute);
+            }
           }
         }
       );

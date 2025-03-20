@@ -11,11 +11,11 @@ import { addDays, addHours, isBefore, setHours } from "date-fns";
 import moment from "moment";
 import UnstyledButton from "../Button/UnstyledButton";
 import Spinner from "@/app/Spinner/Spinner";
-import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
 import { nprogress } from "@mantine/nprogress";
 import { notify } from "@/utils/notification";
-import { useContinueChatMutation } from "@/lib/features/users/dashboard/chat/chat";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
+import { initializeTransactionListener } from "@/lib/socket";
 
 type Props = {
   cid: string;
@@ -31,7 +31,14 @@ type Props = {
 };
 
 const SetChatDateByUser = (props: Props) => {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date(props.date));
+  const userId = useSelector(
+    (state: RootState) => state.persistedState.user.user?.id
+  );
+  const [selectedDate, setSelectedDate] = useState<Date>(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow;
+  });
   const [slots, setSlots] = useState<
     | {
         time: string;
@@ -148,16 +155,17 @@ const SetChatDateByUser = (props: Props) => {
           disabled={!selectedTime || isLoading || props.isLoading}
           clicked={() => {
             if (props.extend) {
-             props.continueChat && props.continueChat({
-                date: `${moment(selectedDate).format("YYYY-MM-DD")}T${
-                  moment(selectedTime, ["h:mm A"]).format("HH:mm") + ":00"
-                }+01:00`,
-                orderId: props.orderId,
-              });
-              // console.log(
-              //   moment(selectedDate).format("YYYY-MM-DD"),
-              //   moment(selectedTime, ["h:mm A"]).format("HH:mm") + ":00"
-              // );
+              props.continueChat &&
+                props.continueChat({
+                  date: `${moment(selectedDate).format("YYYY-MM-DD")}T${
+                    moment(selectedTime, ["h:mm A"]).format("HH:mm") + ":00"
+                  }+01:00`,
+                  orderId: props.orderId,
+                });
+              nprogress.start();
+              if (userId) {
+                initializeTransactionListener(userId);
+              }
             } else {
               createAppointment({
                 body: {
