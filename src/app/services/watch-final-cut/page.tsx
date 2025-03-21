@@ -38,7 +38,7 @@ const page = (props: Props) => {
   const [watchFinalCut, { data, isLoading, isSuccess, isError, error }] =
     useInitializeWatchFinalCutMutation();
   const [opened, { close, open }] = useDisclosure();
-  const { paymentStatus } = useServicePayment(
+  const { paymentStatus, resetPaymentInitialization } = useServicePayment(
     isError,
     isSuccess,
     "/success-page/watch-final-cut",
@@ -100,7 +100,10 @@ const page = (props: Props) => {
     <>
       {opened ? (
         <InitializingTransactionModal
-          close={close}
+          close={() => {
+            resetPaymentInitialization();
+            close();
+          }}
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
           info="Final Cut watch can take between 3-5 days. You will be mailed with calendar dates to choose a chat session."

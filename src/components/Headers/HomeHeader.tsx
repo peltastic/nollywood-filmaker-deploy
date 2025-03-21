@@ -56,7 +56,7 @@ const HomeHeader = (props: Props) => {
                 </UnstyledButton>
               </Link>
               <Link
-                href={"https://www.youtube.com/"}
+                href={"https://www.youtube.com/playlist?list=PL9Rc2I3KoJiiNUO3zv9o161C3u-rDd5cp"}
                 target="_blank"
                 className="order-3 sm:order-2 w-full sm:w-auto mt-8 sm:mt-0"
               >

@@ -45,7 +45,7 @@ const DraftLegalDocumentPage = (props: Props) => {
     production_company: "",
     title: "",
     episodes: "",
-    showType: ""
+    showType: "",
   });
 
   const setScriptDataHandler = (key: string, value: string) => {
@@ -55,7 +55,7 @@ const DraftLegalDocumentPage = (props: Props) => {
     });
   };
 
-  const { paymentStatus } = useServicePayment(
+  const { paymentStatus, resetPaymentInitialization } = useServicePayment(
     isError,
     isSuccess,
     "/success-page/draft-legal-documents",
@@ -80,7 +80,10 @@ const DraftLegalDocumentPage = (props: Props) => {
     <>
       {opened ? (
         <InitializingTransactionModal
-        close={close}
+          close={() => {
+            resetPaymentInitialization();
+            close();
+          }}
           info="Pitch deck Creation  can take between 1-2 weeks. You will be mailed with an editable pitch deck and a calendar to choose a chat date"
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}

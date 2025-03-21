@@ -66,7 +66,7 @@ const ProductionBudgetPage = (props: Props) => {
       [key]: value,
     });
   };
-  const { paymentStatus } = useServicePayment(
+  const { paymentStatus, resetPaymentInitialization } = useServicePayment(
     isError,
     isSuccess,
     "/success-page/production-budget",
@@ -110,7 +110,11 @@ const ProductionBudgetPage = (props: Props) => {
         <InitializingTransactionModal
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
-          close={close}
+          close={() => {
+            resetPaymentInitialization();
+            close();
+          }}
+          fileType
           info="Budget creation can take up to one to two weeks. A document will be sent for review."
         />
       ) : null}

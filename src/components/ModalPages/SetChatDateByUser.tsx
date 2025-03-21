@@ -16,6 +16,7 @@ import { notify } from "@/utils/notification";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { initializeTransactionListener } from "@/lib/socket";
+import ServiceInfo from "../ServiceInfo/ServiceInfo";
 
 type Props = {
   cid: string;
@@ -87,7 +88,7 @@ const SetChatDateByUser = (props: Props) => {
   return (
     <div className="px-10">
       <div className="flex items-center mb-6 mt-4">
-        <h1 className="font-semibold text-[1.2rem] md:text-[2rem]">
+        <h1 className="font-semibold text-[1.1rem] md:text-[1.5rem]">
           Set chat date {props.extend ? `for ${props.title} extension` : null}
         </h1>
         <div
@@ -97,7 +98,8 @@ const SetChatDateByUser = (props: Props) => {
           <Image src={CancelImg} alt="cancel-img" />
         </div>
       </div>
-      <div className="flex flex-wrap md:flex-nowrap gap-5">
+      <ServiceInfo activeColor content="Time slots are in West African Time (WAT)" />
+      <div className="flex flex-wrap md:flex-nowrap gap-5 mt-6">
         <div className="w-[70%]">
           {selectedDate && (
             <CustomCalender

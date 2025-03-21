@@ -6,6 +6,7 @@ import CustomTime from "@/components/CustomTime/CustomTime";
 import { useLazyGetAvailabilityHoursQuery } from "@/lib/features/users/services/chat/chat";
 import moment from "moment";
 import { addDays, addHours, isBefore, setHours } from "date-fns";
+import ServiceInfo from "@/components/ServiceInfo/ServiceInfo";
 
 type Props = {
   setDateProps: (val: Date) => void;
@@ -35,7 +36,9 @@ const ChatTime = (props: Props) => {
       <h2 className="text-[1.13rem]">
         Please select a date and time for your chat appointment.
       </h2>
-      <div className="flex flex-wrap xl:flex-nowrap gap-x-4 mt-10">
+      <ServiceInfo activeColor content="Time slots are in West African Time (WAT)" />
+      {/* <p className="mt-6">Time slots are in West African Time (WAT)</p> */}
+      <div className="flex flex-wrap xl:flex-nowrap gap-x-4 mt-6">
         <CustomCalender
           value={props.dateProps}
           onChange={(date) => {

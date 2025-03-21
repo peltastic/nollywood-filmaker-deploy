@@ -15,6 +15,7 @@ type Props = {
   paymentUrl?: string;
   info?: string;
   close: () => void;
+  fileType?: boolean;
 };
 
 const InitializingTransactionModal = (props: Props) => {
@@ -42,21 +43,25 @@ const InitializingTransactionModal = (props: Props) => {
           <Image src={CancelImg} alt="cancel-img" />
         </div>
         {props.info && <ServiceInfo activeColor content={props.info} />}
-        <div className="">
-          {props.status === "initialized" ? null : (
-            <div className="mt-10 flex items-center  font-medium">
-              <FaCheckSquare className="text-green-600 text-2xl" />
-              <p className="ml-2">Files uploaded</p>
-            </div>
-          )}
-        </div>
+        {props.fileType && (
+          <div className="">
+            {props.status === "initialized" ? null : (
+              <div className="mt-10 flex items-center  font-medium">
+                <FaCheckSquare className="text-green-600 text-2xl" />
+                <p className="ml-2">Files uploaded</p>
+              </div>
+            )}
+          </div>
+        )}
         <div className="flex mt-10 items-center">
           <div className="w-[1.5rem]">
             <Spinner dark />
           </div>
           <p className="ml-4 font-medium">
-            {props.status === "initialized"
+            {props.status === "initialized" && props.fileType
               ? "Uploading file(s) and generating payment link...."
+              : props.status === "initialized"
+              ? "generating payment link...."
               : "Waiting for payment confirmation...."}
           </p>
         </div>

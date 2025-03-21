@@ -29,7 +29,7 @@ const ContactUsForm = (props: Props) => {
     }
   }, [isError, isSuccess]);
   return (
-    <div className="mt-16 mb-28 w-[95%] md:w-[70%] lg:w-[40%] xxl:w-[50%] mx-auto">
+    <div className="mt-10 mb-28 w-[95%] md:w-[70%] lg:w-[40%] xxl:w-[50%] mx-auto">
       <Formik
         initialValues={{
           firstName: "",

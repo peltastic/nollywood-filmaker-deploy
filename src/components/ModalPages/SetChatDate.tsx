@@ -14,6 +14,7 @@ import { nprogress } from "@mantine/nprogress";
 import Spinner from "@/app/Spinner/Spinner";
 import { useLazyGetSingleConsultantAvailabilityQuery } from "@/lib/features/consultants/dashboard/request";
 import { isBefore } from "date-fns";
+import ServiceInfo from "../ServiceInfo/ServiceInfo";
 
 type Props = {
   close: () => void;
@@ -143,7 +144,8 @@ const SetChatDate = ({ close, data }: Props) => {
           <Image src={CancelImg} alt="cancel-img" />
         </div>
       </div>
-      <div className="flex flex-wrap md:flex-nowrap gap-5">
+      <ServiceInfo activeColor content="Time slots are in West African Time (WAT)" />
+      <div className="flex flex-wrap md:flex-nowrap gap-5 mt-6">
         <div className="w-[70%]">
           <CustomCalender
             value={selectedDate}

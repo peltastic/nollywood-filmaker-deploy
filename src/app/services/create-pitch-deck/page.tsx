@@ -164,7 +164,7 @@ const CreatePitchDeck = (props: Props) => {
     });
   };
 
-  const { paymentStatus } = useServicePayment(
+  const { paymentStatus, resetPaymentInitialization } = useServicePayment(
     isError,
     isSuccess,
     "/success-page/create-pitch",
@@ -184,7 +184,11 @@ const CreatePitchDeck = (props: Props) => {
         <InitializingTransactionModal
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
-          close={close}
+          close={() => {
+            resetPaymentInitialization()
+            close();
+          }}
+          fileType
           info="Pitch deck creation can take up to one to two weeks. A document will be sent for review."
         />
       ) : null}

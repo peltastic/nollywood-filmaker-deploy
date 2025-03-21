@@ -19,6 +19,8 @@ import { FaArrowRight } from "react-icons/fa";
 import EditFiles from "../Edits/EditFiles";
 import ServiceInfo from "@/components/ServiceInfo/ServiceInfo";
 import { notify } from "@/utils/notification";
+import CheckboxComponent from "@/components/Checkbox/Checkbox";
+import Link from "next/link";
 
 type Props = {
   fileName?: string;
@@ -52,6 +54,7 @@ const ProductionBudgetForm = ({
   const router = useRouter();
   const [checked, setChecked] = useState<boolean>(false);
   const [hasBudget, setHasBudget] = useState<boolean>(false);
+  const [terms, setTerms] = useState<boolean>(false);
 
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -254,6 +257,28 @@ const ProductionBudgetForm = ({
 
         {errorMessage && <ServiceInfo activeColor content={errorMessage} />}
         {/* <ServiceInfo content="Budget Creation  can take between 1-2 weeks. You will be mailed a link to a detailed, editable budget and a calendar to choose a chat date" /> */}
+        <div className="mt-8 w-full">
+          <CheckboxComponent
+            setCheckedProps={(val) => setTerms(val)}
+            checked={terms}
+            label={
+              <p className="max-w-[40rem] text-gray-3">
+                By proceeding with this upload, I confirm that I have read,
+                understood, and agree to the{" "}
+                <span className="font-semibold underline">
+                  <Link href={"/terms-and-conditions"} target="_blank">
+                    Terms and Conditions
+                  </Link>
+                </span>{" "}
+                and{" "}
+                <span className="font-semibold underline">
+                  <Link href={"/privacy-policy"}>privacy policy</Link>
+                </span>{" "}
+                of the service.
+              </p>
+            }
+          />
+        </div>
         <div className="w-full flex mt-14">
           <UnstyledButton
             type="button"
@@ -264,7 +289,7 @@ const ProductionBudgetForm = ({
           </UnstyledButton>
           <UnstyledButton
             type="submit"
-            disabled={disabled}
+            disabled={disabled || !terms}
             class="flex justify-center w-[12rem] py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
           >
             {isLoading ? (

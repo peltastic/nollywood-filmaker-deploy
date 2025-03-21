@@ -93,7 +93,7 @@ const Chat = ({
 
   const [opened, { open, close }] = useDisclosure();
   const [openedPayment, openPayment] = useDisclosure();
-  const { paymentStatus } = useServicePayment(
+  const { paymentStatus, resetPaymentInitialization } = useServicePayment(
     chat.isError,
     chat.isSuccess,
     "/user/dashboard/chats",
@@ -188,7 +188,10 @@ const Chat = ({
         <InitializingTransactionModal
           paymentUrl={chat.data?.payment.authorization_url}
           status={paymentStatus}
-          close={openPayment.close}
+          close={() => {
+            resetPaymentInitialization();
+            openPayment.close();
+          }}
         />
       ) : null}
       <ModalComponent

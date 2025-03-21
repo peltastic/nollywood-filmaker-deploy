@@ -103,7 +103,11 @@ const ReadMyScriptPage = (props: Props) => {
         <InitializingTransactionModal
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
-          close={close}
+          fileType
+          close={() => {
+            resetPaymentInitialization()
+            close();
+          }}
           info="Script reading can take between 1-2 weeks. You will be mailed with
           calendar dates to choose a chat session"
         />

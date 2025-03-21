@@ -63,7 +63,7 @@ const MarketingBudget = (props: Props) => {
       [key]: value,
     });
   };
-  const { paymentStatus } = useServicePayment(
+  const { paymentStatus, resetPaymentInitialization } = useServicePayment(
     isError,
     isSuccess,
     "/success-page/marketing-budget",
@@ -111,7 +111,10 @@ const MarketingBudget = (props: Props) => {
         <InitializingTransactionModal
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
-          close={close}
+          close={() => {
+            resetPaymentInitialization();
+            close();
+          }}
           info="Marketing plan and Budget creation can take up to one to two weeks. A document will be sent for review."
         />
       ) : null}
@@ -183,7 +186,7 @@ const MarketingBudget = (props: Props) => {
                   !scriptData.film_link ||
                   !scriptData.platform ||
                   ooh.length < 1 ||
-                  socials.length < 1 
+                  socials.length < 1
                   // ||
                   // (scriptData.showType === "Yes" &&
                   //   Number(scriptData.episodes) < 1)

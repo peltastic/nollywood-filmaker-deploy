@@ -29,8 +29,8 @@ const CustomTime = (props: Props) => {
     <div
       className={` ${
         props.serviceSelection
-          ? "w-full xl:w-[14rem] mt-6 xl:mt-0"
-          : "w-full md:w-[12rem]"
+          ? "w-full xl:w-[15rem] mt-6 xl:mt-0"
+          : "w-full md:w-[15rem]"
       } grid xl:block sm:grid-cols-2 mid:grid-cols-2 gap-4 lg:gap-4 rounded-xl border-r border-b border-l mid:h-[28rem] overflow-y-scroll  bg-calender-bg px-4 py-6 `}
     >
       {props.isFetching ? (
@@ -76,9 +76,9 @@ const CustomTime = (props: Props) => {
                 el.time === props.selectedTime
                   ? "bg-black-2 text-white"
                   : "text-black-2 bg-white"
-              }  text-[1.13rem] flex items-end disabled:cursor-not-allowed relative transition-all cursor-pointer font-medium mx-0 md:mx-auto  rounded-md py-3 px-3 mb-2`}
+              }  text-[0.90rem] flex items-center disabled:cursor-not-allowed relative transition-all cursor-pointer font-medium mx-0 md:mx-auto  rounded-md py-3 px-3 mb-2`}
             >
-              {el.time} <span className="text-[0.5rem] pl-2 font-semibold">WAT</span>
+              {el.time} <span className="pl-2 ml-auto ">WAT</span>
             </button>
           ))}
         </>

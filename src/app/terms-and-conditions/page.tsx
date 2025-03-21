@@ -10,7 +10,7 @@ const TermsAndConditions = (props: Props) => {
         <h1 className="text-3xl font-bold mb-6">
           Nollywood Filmmaker Terms of Service
         </h1>
-        <div className="max-h-[500px] overflow-y-auto p-4 border border-gray-300 rounded-lg">
+        <div className=" p-4 border border-gray-300 rounded-lg">
           <h2 className="text-xl font-semibold mt-4">Introduction</h2>
           <p>
             Welcome to Nollywood Filmmaker (the "Platform"), owned and operated

@@ -72,7 +72,7 @@ const MovieSchedulePage = (props: Props) => {
     days: "",
     startpop: null,
   });
-  const { paymentStatus } = useServicePayment(
+  const { paymentStatus, resetPaymentInitialization } = useServicePayment(
     isError,
     isSuccess,
     "/success-page/movie-schedule",
@@ -154,7 +154,11 @@ const MovieSchedulePage = (props: Props) => {
           info="Movie schedule can take up to one to two weeks. A document will be sent for review."
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
-          close={close}
+          fileType
+          close={() => {
+            resetPaymentInitialization();
+            close();
+          }}
         />
       ) : null}
       <ServiceLayout nonDashboard>
@@ -234,15 +238,19 @@ const MovieSchedulePage = (props: Props) => {
                       fileName: file?.name || "",
                       characterlockdate: characterLockedDates.map((el) => {
                         return {
-                          date: el.date.map(el => moment(el).format("YYYY-MM-DD")),
+                          date: el.date.map((el) =>
+                            moment(el).format("YYYY-MM-DD")
+                          ),
                           name: el.name,
                         };
                       }),
-                      locationlockeddate: locationLockedDate.map(el => {
+                      locationlockeddate: locationLockedDate.map((el) => {
                         return {
-                          date: el.date.map(el => moment(el).format("YYYY-MM-DD")),
-                          name: el.name
-                        }
+                          date: el.date.map((el) =>
+                            moment(el).format("YYYY-MM-DD")
+                          ),
+                          name: el.name,
+                        };
                       }),
                       days: scriptData.days,
                       startpop: [
