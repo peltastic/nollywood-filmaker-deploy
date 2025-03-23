@@ -19,7 +19,6 @@ const ContactUsResponsesPage = (props: Props) => {
   const [contactUsData, setContactUsData] = useState<IAdminContactusData[]>([]);
   const [getContactResponse, { data, isError, isFetching, isSuccess }] =
     useLazyFetchContactUsResponsesQuery();
-
   useEffect(() => {
     if (data) {
       const val: IAdminContactusData[] = data.submissions.map((el) => {

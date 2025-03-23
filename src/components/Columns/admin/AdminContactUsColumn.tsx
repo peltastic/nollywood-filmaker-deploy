@@ -1,4 +1,6 @@
+import UnstyledButton from "@/components/Button/UnstyledButton";
 import { ColumnDef } from "@tanstack/react-table";
+import { useRouter } from "next/navigation";
 
 export interface IAdminContactusData {
   fullname: string;
@@ -6,7 +8,7 @@ export interface IAdminContactusData {
   phone: string;
   date: string;
   message: string;
-  id: string
+  id: string;
 }
 
 export const admin_contact_us: ColumnDef<IAdminContactusData>[] = [
@@ -62,6 +64,22 @@ export const admin_contact_us: ColumnDef<IAdminContactusData>[] = [
         <div className="">
           <p>{row.getValue("message")}</p>
         </div>
+      );
+    },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const router = useRouter();
+      return (
+        <UnstyledButton
+          clicked={() =>
+            router.push(`/admin/dashboard/contact-us/${row.original.id}`)
+          }
+          class="px-4 hover:bg-blue-1 transition-all py-2 rounded-md items-center bg-black-3 text-white flex"
+        >
+          <p className="mr-1 font-medium text-[0.88rem]">View</p>
+        </UnstyledButton>
       );
     },
   },

@@ -14,6 +14,7 @@ import consultantReducer from "./slices/consultants/consultantSlice";
 import consultantRouteReducer from "./slices/consultants/routeSlice";
 import adminLogoutReducer from "./slices/admin/logoutSlice";
 import persistReducer from "redux-persist/lib/persistReducer";
+import notificationReducer from "./slices/notificationSlice";
 import { authApi } from "./features/users/auth/auth";
 import { servicesApi } from "./features/users/services/services";
 import { profileApi } from "./features/users/profile/profile";
@@ -46,6 +47,7 @@ import { joinApi } from "./features/join";
 import { waitlistApi } from "./features/admin/waitlist/waitlist";
 import { contactUsApi } from "./features/contact-us";
 import { contactUsResponseApi } from "./features/admin/contact-us/contact-us";
+import { notificationsApi } from "./features/users/notifications/notifications";
 
 const persistConfig = {
   key: "root",
@@ -62,6 +64,7 @@ const combinedReducer = combineReducers({
   adminAuth: adminAuthReducer,
   adminuser: adminReducer,
   adminLogout: adminLogoutReducer,
+  notification: notificationReducer,
 });
 const persistedReducer = persistReducer(persistConfig, combinedReducer);
 export const store = configureStore({
@@ -103,7 +106,8 @@ export const store = configureStore({
     [joinApi.reducerPath]: joinApi.reducer,
     [waitlistApi.reducerPath]: waitlistApi.reducer,
     [contactUsApi.reducerPath]: contactUsApi.reducer,
-    [contactUsResponseApi.reducerPath]: contactUsResponseApi.reducer
+    [contactUsResponseApi.reducerPath]: contactUsResponseApi.reducer,
+    [notificationsApi.reducerPath]: notificationsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -140,7 +144,8 @@ export const store = configureStore({
       joinApi.middleware,
       waitlistApi.middleware,
       contactUsApi.middleware,
-      contactUsResponseApi.middleware
+      contactUsResponseApi.middleware,
+      notificationsApi.middleware,
     ]),
   devTools: process.env.NODE_ENV !== "production",
 });

@@ -6,3 +6,7 @@ export const contactUsSchema = Yup.object({
   lastName: Yup.string().required("First name is required"),
   phone: Yup.string().required("Phone number is required"),
 });
+
+export const contactUsReply = Yup.object({
+  subject: Yup.string().required("Subject is required")
+})

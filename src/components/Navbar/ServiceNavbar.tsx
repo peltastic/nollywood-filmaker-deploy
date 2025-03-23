@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 
 import Logo from "/public/assets/nf-logo-black.png";
 import Link from "next/link";
@@ -13,9 +13,12 @@ import Advert from "./Advert";
 import UserprofileMenu from "../ProfileMenu/UserprofileMenu";
 import ConsultantsProfileMenu from "../ProfileMenu/ConsultantsProfileMenu";
 import AdminProfileMenu from "../ProfileMenu/AdminProfileMenu";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import ProfileTarget from "../ProfileMenu/ProfileTarget";
+import { useSocket } from "../Providers/SocketProviders";
+import { setNotificationState } from "@/lib/slices/notificationSlice";
+import { GoDotFill } from "react-icons/go";
 
 type Props = {
   removeOptions?: boolean;
@@ -100,12 +103,12 @@ export const adminLinks = [
   },
   {
     name: "Waitlist",
-    link: "/admin/dashboard/waitlist"
+    link: "/admin/dashboard/waitlist",
   },
   {
     name: "Contact-us",
-    link: "/admin/dashboard/contact-us"
-  }
+    link: "/admin/dashboard/contact-us",
+  },
 ];
 
 const navLinkMobile = [
@@ -133,6 +136,23 @@ const ServiceNavbar = (props: Props) => {
   const adminData = useSelector(
     (state: RootState) => state.persistedState.adminuser.user
   );
+
+  const { socket } = useSocket();
+  const dispatch = useDispatch();
+  const notificationState = useSelector(
+    (state: RootState) => state.persistedState.notification.newNotification
+  );
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("newNotification", (data) => {
+      console.log("new notification received!")
+      dispatch(setNotificationState(true));
+    });
+    return () => {
+      socket.off("newNotification")
+    }
+
+  }, [socket]);
 
   return (
     <>
@@ -190,7 +210,16 @@ const ServiceNavbar = (props: Props) => {
 
             <div className="flex text-gray-5 gap-4 text-[1.6rem] ml-auto items-center">
               <div className="gap-4 hidden lg:flex items-center">
-                <HiBell />
+                <Link href={"/user/dashboard/notifications"}>
+                  <div className="relative cursor-pointer">
+                    {notificationState && (
+                      <div className="absolute -right-2 -top-2">
+                        <GoDotFill className="text-red-600 text-xl" />
+                      </div>
+                    )}
+                    <HiBell />
+                  </div>
+                </Link>
                 <Link href={"/faq"}>
                   <BsFillQuestionCircleFill className="text-[1.4rem]" />
                 </Link>

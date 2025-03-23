@@ -211,29 +211,29 @@ const ChatMessage = React.memo(
           }}
         >
           <motion.div
-            drag="x"
-            dragConstraints={{ left: 0, right: 100 }}
-            onDrag={(event, info) => {
-              if (info.offset.x < 120) {
-                setDragX(info.offset.x);
-              }
-            }} // Track drag position
-            onDragEnd={(event, info) => {
-              if (info.offset.x > 100) {
-                setReplyDataProps &&
-                  id &&
-                  setReplyDataProps({
-                    reply: type === "img" ? file : text,
-                    user,
-                    id,
-                    type: type === "text" || type === "file" ? "text" : type,
-                  });
-                // onReply(text);
-              }
-              setDragX(0); // Reset position after swipe
-            }}
-            animate={{ x: dragX }} // Smoothly animate back
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            // drag="x"
+            // dragConstraints={{ left: 0, right: 100 }}
+            // onDrag={(event, info) => {
+            //   if (info.offset.x < 120) {
+            //     setDragX(info.offset.x);
+            //   }
+            // }} // Track drag position
+            // onDragEnd={(event, info) => {
+            //   if (info.offset.x > 100) {
+            //     setReplyDataProps &&
+            //       id &&
+            //       setReplyDataProps({
+            //         reply: type === "img" ? file : text,
+            //         user,
+            //         id,
+            //         type: type === "text" || type === "file" ? "text" : type,
+            //       });
+            //     // onReply(text);
+            //   }
+            //   setDragX(0); // Reset position after swipe
+            // }}
+            // animate={{ x: dragX }} // Smoothly animate back
+            // transition={{ type: "spring", stiffness: 300, damping: 20 }}
             className={`${
               user === "user" ? "flex-row-reverse ml-auto" : ""
             } flex items-start`}
@@ -269,6 +269,10 @@ const ChatMessage = React.memo(
             )}
             <div
               onContextMenu={(e) => {
+                if (window.getSelection()?.toString()) {
+                  // If text is selected, do not prevent the default action
+                  return;
+                }
                 if (setActiveId) {
                   setIsRightClicked(true);
                   setTimeout(() => setIsRightClicked(false), 1000);

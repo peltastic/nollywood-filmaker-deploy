@@ -16,6 +16,18 @@ export interface IContactUsResponses {
   }[];
 }
 
+export interface ISingleContactResponse {
+  submission: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    message: string;
+    submittedAt: string;
+  };
+}
+
 export const contactUsResponseApi = createApi({
   reducerPath: "contactUsResponseApi",
   baseQuery: adminBaseQueryWithReauth,
@@ -34,7 +46,27 @@ export const contactUsResponseApi = createApi({
         };
       },
     }),
+    fetchSingleContactResponse: build.query<ISingleContactResponse, string>({
+      query: (id) => `/api/admin/contact-submissions/${id}`,
+    }),
+    postContactResponse: build.mutation<
+      unknown,
+      { subject: string; replyMessage: string; id: string }
+    >({
+      query: ({ id, replyMessage, subject }) => ({
+        url: `/api/admin//contact-submissions/${id}/reply`,
+        method: "POST",
+        body: {
+          replyMessage,
+          subject,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useLazyFetchContactUsResponsesQuery } = contactUsResponseApi;
+export const {
+  useLazyFetchContactUsResponsesQuery,
+  useLazyFetchSingleContactResponseQuery,
+  usePostContactResponseMutation,
+} = contactUsResponseApi;
