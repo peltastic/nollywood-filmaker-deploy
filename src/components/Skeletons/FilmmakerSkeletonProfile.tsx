@@ -9,23 +9,23 @@ const FilmmakerSkeletonProfile = (props: Props) => {
         <div className="w-full">
             <Skeleton h={200} radius={"20px"} />
         </div>
-        <div className="flex px-16 mt-4">
-            <div className="w-[9rem] -mt-14 border border-white h-[9rem] rounded-full">
+        <div className="flex px-2 lg:px-16 mt-4">
+            <div className="w-[9rem] -mt-14 border border-white h-[9rem] rounded-full hidden lg:block">
                 <Skeleton h={144} radius={"100%"} />
             </div>
-            <div className="ml-10 mr-auto">
-                <div className="w-[14rem]">
+            <div className="lg:ml-10 mr-auto">
+                <div className="w-[10rem] sm:w-[14rem]">
                     <Skeleton h={30} />
                 </div>
-                <div className="w-[18rem] mt-4">
+                <div className="w-[13rem] sm:w-[18rem] mt-4">
                     <Skeleton h={30} />
                 </div>
-                <div className="w-[10rem] mt-4">
+                <div className="w-[8rem] sm:w-[10rem] mt-4">
                     <Skeleton h={30} />
                 </div>
             </div>
             <div className="">
-                <div className="w-[7rem]">
+                <div className="w-[4rem] xs:w-[7rem]">
                     <Skeleton h={40} />
                 </div>
             </div>
@@ -34,7 +34,7 @@ const FilmmakerSkeletonProfile = (props: Props) => {
             <div className="">
                 <Skeleton h={10} />
             </div>
-            <div className="px-16">
+            <div className="px-2 lg:px-16">
                 <div className="w-[4rem] mt-8">
                     <Skeleton h={20} />
                 </div>
@@ -48,7 +48,7 @@ const FilmmakerSkeletonProfile = (props: Props) => {
                     <Skeleton h={20} />
                 </div>
             </div>
-            <div className="px-16 mt-10">
+            <div className="px-2 lg:px-16 mt-10">
                 <div className="w-[4rem] mt-8">
                     <Skeleton h={20} />
                 </div>
@@ -62,7 +62,7 @@ const FilmmakerSkeletonProfile = (props: Props) => {
                     <Skeleton h={20} />
                 </div>
             </div>
-            <div className="px-16 mt-10">
+            <div className="px-2 lg:px-16 mt-10">
                 <div className="w-[4rem] mt-8">
                     <Skeleton h={20} />
                 </div>

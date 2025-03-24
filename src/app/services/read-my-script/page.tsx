@@ -105,7 +105,7 @@ const ReadMyScriptPage = (props: Props) => {
           status={paymentStatus}
           fileType
           close={() => {
-            resetPaymentInitialization()
+            resetPaymentInitialization();
             close();
           }}
           info="Script reading can take between 1-2 weeks. You will be mailed with

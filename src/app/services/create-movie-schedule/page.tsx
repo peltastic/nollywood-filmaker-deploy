@@ -188,10 +188,10 @@ const MovieSchedulePage = (props: Props) => {
                 title: "Platform for exhibition",
                 content: scriptData.platform,
               },
-              {
-                title: "Key actors in mind",
-                content: scriptData.actors_in_mind,
-              },
+              // {
+              //   title: "Key actors in mind",
+              //   content: scriptData.actors_in_mind,
+              // },
               // {
               //   title: "Key Crew in mind",
               //   content: scriptData.crew_in_mind,
@@ -204,10 +204,10 @@ const MovieSchedulePage = (props: Props) => {
                 title: "Relevant information",
                 content: scriptData.information,
               },
-              {
-                title: "Budget Range",
-                content: scriptData.budget,
-              },
+              // {
+              //   title: "Budget Range",
+              //   content: scriptData.budget,
+              // },
             ]}
           />
           {search === "payment" ? (
@@ -222,8 +222,8 @@ const MovieSchedulePage = (props: Props) => {
                 proceed={() => {
                   if (userId) {
                     movieSchedule({
-                      actors: scriptData.actors_in_mind,
-                      budgetrange: scriptData.budget,
+                      actors: "",
+                      budgetrange: "",
                       // crew: scriptData.crew_in_mind,
                       files: scriptData.showType === "Yes" ? files : [file],
                       info: scriptData.information,

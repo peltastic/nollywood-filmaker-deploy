@@ -16,9 +16,9 @@ import AdminProfileMenu from "../ProfileMenu/AdminProfileMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import ProfileTarget from "../ProfileMenu/ProfileTarget";
-import { useSocket } from "../Providers/SocketProviders";
 import { setNotificationState } from "@/lib/slices/notificationSlice";
 import { GoDotFill } from "react-icons/go";
+import { primary_socket } from "@/lib/socket";
 
 type Props = {
   removeOptions?: boolean;
@@ -137,22 +137,21 @@ const ServiceNavbar = (props: Props) => {
     (state: RootState) => state.persistedState.adminuser.user
   );
 
-  const { socket } = useSocket();
+  // const { socket } = usePrimarySocket();
   const dispatch = useDispatch();
   const notificationState = useSelector(
     (state: RootState) => state.persistedState.notification.newNotification
   );
   useEffect(() => {
-    if (!socket) return;
-    socket.on("newNotification", (data) => {
-      console.log("new notification received!")
+    // if (!socket) return;
+    primary_socket.on("newNotification", (data) => {
+      console.log("new notification received!");
       dispatch(setNotificationState(true));
     });
     return () => {
-      socket.off("newNotification")
-    }
-
-  }, [socket]);
+      primary_socket.off("newNotification");
+    };
+  }, []);
 
   return (
     <>
@@ -209,7 +208,7 @@ const ServiceNavbar = (props: Props) => {
             </ul>
 
             <div className="flex text-gray-5 gap-4 text-[1.6rem] ml-auto items-center">
-              <div className="gap-4 hidden lg:flex items-center">
+              <div className="gap-4 flex items-center">
                 <Link href={"/user/dashboard/notifications"}>
                   <div className="relative cursor-pointer">
                     {notificationState && (
@@ -220,10 +219,11 @@ const ServiceNavbar = (props: Props) => {
                     <HiBell />
                   </div>
                 </Link>
-                <Link href={"/faq"}>
+                <Link href={"/faq"} className="hidden lg:flex">
                   <BsFillQuestionCircleFill className="text-[1.4rem]" />
                 </Link>
                 <Link
+                className="hidden lg:flex"
                   href={
                     props.admin
                       ? "/admin/dashboard/settings"

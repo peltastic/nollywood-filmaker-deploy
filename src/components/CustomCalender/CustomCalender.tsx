@@ -167,11 +167,11 @@ const Calendar: React.FC<Props> = ({ value, onChange }) => {
         </div>
       )}
       {openMonthSelection && (
-        <div className="grid grid-cols-3 gap-6  mt-10">
+        <div className="grid grid-cols-3 gap-4 xs:gap-6  mt-10">
           {months_data.map((el) => (
             <div
               onClick={() => updateCalenderMonth(el.value)}
-              className="hover:bg-gray-bg-5 transition-all text-black-3 py-3 rounded-md cursor-pointer bg-white font-semibold flex justify-center"
+              className="hover:bg-gray-bg-5 transition-all text-black-3 py-3 text-sm sm:text-base rounded-md cursor-pointer bg-white font-semibold flex justify-center"
               key={el.value}
             >
               {el.name}

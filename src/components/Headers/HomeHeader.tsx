@@ -26,7 +26,7 @@ const HomeHeader = (props: Props) => {
               <h2 className="tracking-wider font-thin mb-6 ">
                 Nollywood Filmmaker
               </h2>
-              <div className="absolute right-[1rem] sm:right-[3rem] -top-[1rem]">
+              <div className="absolute right-0 xs:right-[1rem] sm:right-[3rem] -top-[1rem] w-[10rem] xs:w-auto">
                 <Image src={YellowArrow} alt="yellow-arrow" />
               </div>
             </div>
@@ -35,14 +35,14 @@ const HomeHeader = (props: Props) => {
                 The one-stop spot for all the film-making help you need
               </h1>
             </div>
-            <div className="mt-8 flex items-center ">
+            <div className="mt-8 flex flex-wrap sm:flex-nowrap items-center ">
               <AvatarGroup>
                 <Avatar src={"https://ideaafricabucket.s3.eu-north-1.amazonaws.com/3.jpg"} />
                 <Avatar src={"https://ideaafricabucket.s3.eu-north-1.amazonaws.com/2.jpg"} />
                 <Avatar src={"https://ideaafricabucket.s3.eu-north-1.amazonaws.com/1.jpg"} />
               </AvatarGroup>
               {/* <Image src={Profiles} alt="profiles" className="w-[6rem]" /> */}
-              <div className="w-[25rem] ml-4 pr-4">
+              <div className="w-[25rem] sm:ml-4 pr-4 mt-4 md:mt-0">
                 <p className="tracking wider">
                   Consult with verified experts and access their film-related
                   services to ensure the success of your next film

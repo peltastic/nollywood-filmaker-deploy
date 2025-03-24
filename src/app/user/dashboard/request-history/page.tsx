@@ -53,7 +53,7 @@ const RequestHistoryPage = (props: Props) => {
   return (
     <ServiceLayout>
       <DashboardBodyLayout>
-        <div className="mt-8">
+        <div className="mt-8 px-3 lg:px-0">
           <DataTable
             title="Request History"
             subtitle="Keep track of all your past requests"
@@ -65,7 +65,7 @@ const RequestHistoryPage = (props: Props) => {
             emptyBody="Any requests you made will show up here."
           />
         </div>
-        {data && (
+        {data && data.totalItems > 10 && (
           <Pagination
             total={
               data.totalItems % 10

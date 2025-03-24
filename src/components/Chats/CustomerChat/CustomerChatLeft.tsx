@@ -2,8 +2,11 @@
 import React, { useState } from "react";
 import ChatSearch from "../ChatSearch";
 import Chat from "../Chat";
-import { Skeleton } from "@mantine/core";
 import ConversationsSkeleton from "@/components/Skeletons/ConversationsSkeleton";
+import Image from "next/image";
+import Logo from "/public/assets/chats/logo-grey.png";
+import Link from "next/link";
+
 
 type Props = {
   isFetching?: boolean;
@@ -73,19 +76,35 @@ const CustomerChatLeft = (props: Props) => {
           </div>
         ) : (
           <div className="my-4 h-[90%] overflow-y-scroll nolly-film-hide-scrollbar">
-            {props.data?.map((el, index) => (
-              <Chat
-                index={index}
-                selctedIndex={selected}
-                data={el}
-                key={el.name + el.orderId}
-                orderId={props.orderId}
-                continueChat={props.continueChat}
-                type={props.type}
-                setIsSessionOverProps={props.setIsSessionOverProps}
-                setIsTimeProps={props.setIsTimeProps}
-              />
-            ))}
+            {props.data.length < 1 ? (
+              <div className="my-auto mt-20">
+                <Image
+                  src={Logo}
+                  alt="logo image"
+                  className="w-[10rem] opacity-50 mx-auto mb-6"
+                />
+                <p className="text-center text-black-2 px-8">
+
+                No conversation yet, to chat with our consultants, create a chat <Link target="_blank" href={"/get-started/chat"} className="underline ">here</Link>
+                </p>
+              </div>
+            ) : (
+              <>
+                {props.data?.map((el, index) => (
+                  <Chat
+                    index={index}
+                    selctedIndex={selected}
+                    data={el}
+                    key={el.name + el.orderId}
+                    orderId={props.orderId}
+                    continueChat={props.continueChat}
+                    type={props.type}
+                    setIsSessionOverProps={props.setIsSessionOverProps}
+                    setIsTimeProps={props.setIsTimeProps}
+                  />
+                ))}
+              </>
+            )}
           </div>
         )}
       </div>

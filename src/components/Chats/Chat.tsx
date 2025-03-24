@@ -289,7 +289,7 @@ const Chat = ({
             {truncateStr(data.name, 15)}
           </h1>
           <p className="text-black-3 text-[0.75rem]">{data.service}</p>
-          <div className="ml-auto font-semibold text-[#00000056] text-[0.88rem] block chatbp:hidden">
+          <div className="ml-auto font-semibold text-[#00000056] text-[0.88rem] block xs:hidden">
             <p>{chatTimeStatus}</p>
           </div>
           {newMessage ? (
@@ -316,8 +316,24 @@ const Chat = ({
           <p>{chatTimeStatus}</p>
           {status === "completed" && continueChat && (
             <div
-              onClick={open}
-              className="cursor-pointer mr-2 mt-6 hover:bg-black-2 transition-all hover:text-white text-black-3 rounded-full py-[0.15rem] border border-black-3 text-[0.75rem] font-medium px-3"
+              onClick={(e) => {
+                e.stopPropagation();
+                open();
+              }}
+              className="cursor-pointer float-right text-center max-w-[7.5rem] mt-6 bg-black-2 transition-all text-white  rounded-md hover:bg-blue-1 py-[0.15rem] border border-black-3 text-[0.75rem] font-medium px-3"
+            >
+              <p>Continue</p>
+            </div>
+          )}
+        </div>
+        <div className="ml-auto font-semibold text-[#00000056] text-[0.88rem] block xs:hidden">
+          {status === "completed" && continueChat && (
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                open();
+              }}
+              className="cursor-pointer float-right text-center max-w-[7.5rem] mt-6 bg-black-2 transition-all text-white  rounded-md hover:bg-blue-1 py-[0.15rem] border border-black-3 text-[0.75rem] font-medium px-3"
             >
               <p>Continue</p>
             </div>

@@ -31,7 +31,7 @@ const InitializingTransactionModal = (props: Props) => {
           y: "-50%",
           x: "-50%",
         }}
-        className="w-full md:w-[80%] px-10 xl:w-[50%] h-[100%] max-w-[700px] md:h-auto z-20 py-[5rem] rounded-md fixed left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2 bg-white"
+        className="w-full md:w-[80%] px-4 sm:px-10 xl:w-[50%] h-[100%] max-w-[700px] md:h-auto z-20 py-[5rem] rounded-md fixed left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2 bg-white"
       >
         <div
           className="absolute right-6 top-6 cursor-pointer"
@@ -53,18 +53,20 @@ const InitializingTransactionModal = (props: Props) => {
             )}
           </div>
         )}
-        <div className="flex mt-10 items-center">
-          <div className="w-[1.5rem]">
-            <Spinner dark />
+        {props.paymentUrl ? null : (
+          <div className="flex mt-10 items-center">
+            <div className="w-[1.5rem]">
+              <Spinner dark />
+            </div>
+            <p className="ml-4 font-medium">
+              {props.status === "initialized" && props.fileType
+                ? "Uploading file(s) and generating payment link...."
+                : props.status === "initialized"
+                ? "generating payment link...."
+                : "Waiting for payment confirmation...."}
+            </p>
           </div>
-          <p className="ml-4 font-medium">
-            {props.status === "initialized" && props.fileType
-              ? "Uploading file(s) and generating payment link...."
-              : props.status === "initialized"
-              ? "generating payment link...."
-              : "Waiting for payment confirmation...."}
-          </p>
-        </div>
+        )}
         {props.paymentUrl && (
           <Link
             className="mt-10 bg-black-2 flex disabled:opacity-50 justify-center hover:bg-blue-1 transition-all text-white w-full py-4 rounded-md"

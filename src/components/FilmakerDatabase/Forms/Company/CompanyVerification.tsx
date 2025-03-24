@@ -340,6 +340,12 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
                     <p>*</p>
                   </div>
                   <DropZoneComponent
+                   accept={{
+                    'image/*': [],
+                    'application/pdf': [".pdf"],
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+                    'application/msword': ['.doc']
+                  }}
                     setFiles={(files) => {}}
                     setSingleFile={(file) => {
                       if (file) {
@@ -405,6 +411,12 @@ const CompanyVerification = ({ data, prevStep, updateCompany }: Props) => {
                     <p>*</p>
                   </div>
                   <DropZoneComponent
+                   accept={{
+                    'image/*': [],
+                    'application/pdf': [".pdf"],
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+                    'application/msword': ['.doc']
+                  }}
                     setFiles={(files) => {}}
                     setSingleFile={(file) => {
                       if (file) {

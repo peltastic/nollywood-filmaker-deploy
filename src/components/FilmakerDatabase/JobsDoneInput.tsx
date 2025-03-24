@@ -89,7 +89,7 @@ const JobsDoneInput = ({
               labelColor="text-[#A5A5A5]"
               classname="w-full"
               name="link"
-              placeholder="Link"
+              placeholder="https://www.my_work_url.com"
               // required
             />
             <div className="">

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import SingleStepper from "@/components/Stepper/SingleStepper";
 import GeneralInfo from "@/components/FilmakerDatabase/Forms/Crew/GeneralInfo";
@@ -94,19 +94,24 @@ const FilmakerDatabasePage = (props: Props) => {
       return { ...prev, ...val };
     });
   };
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [active]);
 
   return (
     <div className="">
       <HomeLayout>
         <div className="px-8 mt-10">
-          <h1 className="text-3xl mid:text-4xl font-bold text-center">
+          <h1 className="text-3xl mid:text-4xl font-bold text-left sm:text-center">
             Nollywood Filmmaker Database
           </h1>
-          <h2 className="text-center mt-2">
+          <h2 className="text-left sm:text-center mt-2">
             Join the largest film crew/company database in Nigeria or access the
-            database through our <span>
+            database through our{" "}
+            <span>
               <Link className="underline" href={"/get-started/chat"}>
-              consultants</Link>
+                consultants
+              </Link>
             </span>
           </h2>
         </div>

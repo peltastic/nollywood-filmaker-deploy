@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import CustomCalender from "@/components/CustomCalender/CustomCalender";
 import UnstyledButton from "@/components/Button/UnstyledButton";
 import { FaArrowRight } from "react-icons/fa";
@@ -19,6 +19,7 @@ type Props = {
 };
 
 const ChatTime = (props: Props) => {
+  const ref = useRef<HTMLDivElement | null>(null);
   const [getAvailableHours, { data, isFetching }] =
     useLazyGetAvailabilityHoursQuery();
 
@@ -30,13 +31,25 @@ const ChatTime = (props: Props) => {
       });
     }
   }, []);
+  useEffect(() => {
+    if (props.selectedTime && ref.current) {
+      ref.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "start",
+      });
+    }
+  }, [props.selectedTime, ref]);
   return (
     <div className="">
       <h1 className="font-bold text-[1.5rem]">Let’s start with your details</h1>
       <h2 className="text-[1.13rem]">
         Please select a date and time for your chat appointment.
       </h2>
-      <ServiceInfo activeColor content="Time slots are in West African Time (WAT)" />
+      <ServiceInfo
+        activeColor
+        content="Time slots are in West African Time (WAT)"
+      />
       {/* <p className="mt-6">Time slots are in West African Time (WAT)</p> */}
       <div className="flex flex-wrap xl:flex-nowrap gap-x-4 mt-6">
         <CustomCalender
@@ -69,7 +82,7 @@ const ChatTime = (props: Props) => {
                 : el.time === "6:00"
                 ? "06:00"
                 : el.time
-              }:00+01:00`;
+            }:00+01:00`;
             const nextDaySixAM = setHours(addDays(new Date(), 1), 5);
             const isBeforeNextDaySixAM = isBefore(time_stamp, nextDaySixAM);
             const hourfromNow = addHours(new Date(), 24);
@@ -77,15 +90,12 @@ const ChatTime = (props: Props) => {
             // const isBeforeHourFromNow = isBefore(time_stamp, hourfromNow);
             return {
               time: moment(el.time, ["HH:mm"]).format("h:mm A"),
-              isAvailable:
-              isBeforeNextDaySixAM
-                  ? false
-                  : el.isAvailable,
+              isAvailable: isBeforeNextDaySixAM ? false : el.isAvailable,
             };
           })}
         />
       </div>
-      <div className="w-full flex mt-20 mb-14">
+      <div className="w-full flex mt-20 mb-14" ref={ref}>
         <UnstyledButton
           type="button"
           clicked={() => props.setPageProps("1")}

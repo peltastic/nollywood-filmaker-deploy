@@ -86,7 +86,7 @@ const SetChatDateByUser = (props: Props) => {
     }
   }, [isError, isSuccess]);
   return (
-    <div className="px-10">
+    <div className="px-2 sm:px-10">
       <div className="flex items-center mb-6 mt-4">
         <h1 className="font-semibold text-[1.1rem] md:text-[1.5rem]">
           Set chat date {props.extend ? `for ${props.title} extension` : null}
@@ -99,8 +99,8 @@ const SetChatDateByUser = (props: Props) => {
         </div>
       </div>
       <ServiceInfo activeColor content="Time slots are in West African Time (WAT)" />
-      <div className="flex flex-wrap md:flex-nowrap gap-5 mt-6">
-        <div className="w-[70%]">
+      <div className="flex flex-wrap xl:flex-nowrap gap-5 mt-6  ">
+        <div className="w-full lg:w-[70%] mx-auto ">
           {selectedDate && (
             <CustomCalender
               value={selectedDate}
@@ -108,7 +108,7 @@ const SetChatDateByUser = (props: Props) => {
             />
           )}
         </div>
-        <div className="w-[20%]">
+        <div className="w-full lg:w-[70%] xl:w-[30%] mx-auto">
           <CustomTime
             time_slots={slots?.map((el) => {
               const time_stamp = `${moment(selectedDate).format(
@@ -146,10 +146,10 @@ const SetChatDateByUser = (props: Props) => {
           />
         </div>
       </div>
-      <div className="my-8 flex items-center font-medium text-[0.88rem] px-6">
+      <div className="my-8 flex flex-wrap items-center font-medium text-[0.88rem]">
         <UnstyledButton
           clicked={props.close}
-          class="ml-auto border border-black-3 rounded-md py-2 px-8 mr-3"
+          class="ml-auto border border-black-3 rounded-md py-2 px-8 sm:mr-3 mb-6 sm:mb-0 w-full sm:w-auto"
         >
           Cancel
         </UnstyledButton>
@@ -180,7 +180,7 @@ const SetChatDateByUser = (props: Props) => {
               });
             }
           }}
-          class="w-[8rem] flex items-center justify-center bg-black-3 disabled:opacity-50  text-white py-2 px-2 border border-black-3 rounded-md"
+          class="w-full sm:w-[8rem]   flex items-center justify-center bg-black-3 disabled:opacity-50  text-white py-2 px-2 border border-black-3 rounded-md"
         >
           {isLoading || props.isLoading ? (
             <div className="py-1 w-[1rem]">

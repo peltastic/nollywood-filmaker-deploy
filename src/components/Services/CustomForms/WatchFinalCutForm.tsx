@@ -148,7 +148,7 @@ const WatchFinalCutForm = ({
           <div className="mt-10">
             <InputComponent
               value={data.link}
-              label="Share a link (Video should be preferably be watermarked)"
+              label="Share a link (Video should be watermarked with “Nollywood Filmmaker”)"
               placeholder="Text"
               changed={(val) => setScriptProps("link", val)}
               className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"

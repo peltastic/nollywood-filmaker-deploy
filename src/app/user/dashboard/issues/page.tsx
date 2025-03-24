@@ -44,15 +44,17 @@ const DashboardIssues = (props: Props) => {
   return (
     <ServiceLayout>
       <DashboardBodyLayout>
-        <DataTable
-          columns={issues_columns}
-          isFetching={isFetching}
-          loaderLength={10}
-          data={issuesData}
-          title="My Issues"
-          emptyHeader="No Issues"
-          emptyBody="Reported issues will show up here"
-        />
+        <div className="mt-8 px-3 lg:px-0">
+          <DataTable
+            columns={issues_columns}
+            isFetching={isFetching}
+            loaderLength={10}
+            data={issuesData}
+            title="My Issues"
+            emptyHeader="No Issues"
+            emptyBody="Reported issues will show up here"
+          />
+        </div>
       </DashboardBodyLayout>
     </ServiceLayout>
   );

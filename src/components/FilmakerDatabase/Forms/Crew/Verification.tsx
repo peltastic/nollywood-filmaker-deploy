@@ -243,6 +243,12 @@ const Verification = ({ prevStep, data, updateCrew }: Props) => {
                       }
                     }}
                     single
+                    accept={{
+                      'image/*': [],
+                      'application/pdf': [".pdf"],
+                      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+                      'application/msword': ['.doc']
+                    }}
                   >
                     <div
                       className={` text-center text-[#4B5563]  mt-6 rounded-2xl border-black-2 w-full py-10`}

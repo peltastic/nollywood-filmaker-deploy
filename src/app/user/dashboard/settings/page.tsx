@@ -13,14 +13,14 @@ import { useSelector } from "react-redux";
 
 type Props = {};
 
-const tabs = ["Profile", "Security", "Preferences"];
+const tabs = ["Profile", "Security"];
 const SettingsPage = (props: Props) => {
   const userId = useSelector(
     (state: RootState) => state.persistedState.user.user?.id
   );
-  const preferencesQuery = useFetchUserPreferencesQuery(userId!, {
-    refetchOnMountOrArgChange: true,
-  });
+  // const preferencesQuery = useFetchUserPreferencesQuery(userId!, {
+  //   refetchOnMountOrArgChange: true,
+  // });
 
   // const [activeTab, setActiveTab] = useState<string> ('first');
   return (
@@ -41,7 +41,7 @@ const SettingsPage = (props: Props) => {
               <Tabs.Panel value="security">
                 <SecuritySettings />
               </Tabs.Panel>
-              <Tabs.Panel value="preferences">
+              {/* <Tabs.Panel value="preferences">
                 {preferencesQuery.isFetching ? (
                   <div className="w-[5rem] mt-10 mx-auto">
                     <Spinner dark />
@@ -49,7 +49,7 @@ const SettingsPage = (props: Props) => {
                 ) : (
                   <PeferencesSettings data={preferencesQuery.data} />
                 )}
-              </Tabs.Panel>
+              </Tabs.Panel> */}
             </Tabs>
           </div>
         </div>

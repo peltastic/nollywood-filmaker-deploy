@@ -96,6 +96,16 @@ const UserprofileMenu = (props: Props) => {
             <p>Request History</p>
           </Link>
         </li>
+        <li className="px-3 active:bg-gray-bg-9 cursor-pointer hover:bg-gray-bg-9 py-2 rounded-md transition-all">
+          <Link href={"/faq"}>
+            <p>Faq</p>
+          </Link>
+        </li>
+        <li className="px-3 active:bg-gray-bg-9 cursor-pointer hover:bg-gray-bg-9 py-2 rounded-md transition-all">
+          <Link href={"/auth/login-filmmaker-database"}>
+            <p>Filmmaker database</p>
+          </Link>
+        </li>
       </ul>
       <div
         onClick={() => {

@@ -15,7 +15,7 @@ const EmailVerification = (props: Props) => {
           <IoMailOutline className="text-[10rem] mx-auto" />
           <div className="text-center text-black-1">
             <h1 className="text-2xl font-medium">Email Confirmation</h1>
-            <p className="text-sm mt-5 w-[80%] mx-auto">
+            <p className="text-sm mt-5 w-[92%] sm:w-[80%] mx-auto">
               We have sent an email to you to confirm the validity of your email
               address. After receiving the email, please click on the link
               provided to complete the verification process.

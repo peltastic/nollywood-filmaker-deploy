@@ -7,7 +7,7 @@ import HomeLayout from "@/components/Layouts/HomeLayout";
 import Stepper from "@/components/Stepper/Stepper";
 import { IRegisterdata } from "@/interfaces/auth/auth";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type Props = {};
 
@@ -45,6 +45,9 @@ const RegisterPage = (props: Props) => {
       ...data,
     });
   };
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page]);
 
   return (
     <HomeLayout>

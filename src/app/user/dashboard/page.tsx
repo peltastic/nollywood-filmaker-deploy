@@ -25,6 +25,7 @@ import { useDisclosure } from "@mantine/hooks";
 import ModalComponent from "@/components/Modal/Modal";
 import SetChatDateByUser from "@/components/ModalPages/SetChatDateByUser";
 import { Pagination } from "@mantine/core";
+import Link from "next/link";
 
 type Props = {};
 

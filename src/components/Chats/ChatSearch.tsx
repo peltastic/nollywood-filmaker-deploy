@@ -14,7 +14,7 @@ const ChatSearch = (props: Props) => {
         onChange={(e) => props.change(e.target.value)}
         type="text"
         className="bg-transparent outline-none w-full placeholder:text-[#00000064] placeholder:text-[0.88rem]"
-        placeholder="Search chat"
+        placeholder="Search conversation"
       />
     </div>
   );

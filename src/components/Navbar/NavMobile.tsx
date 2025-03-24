@@ -2,9 +2,8 @@ import { Burger } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import Link from "next/link";
 import React from "react";
-import UnstyledButton from "../Button/UnstyledButton";
 import Image from "next/image";
-import Logo from "/public/assets/nav/logo.svg";
+import Logo from "/public/assets/admin/logo-black.png";
 
 type Props = {
   links: { name: string; link: string }[];
@@ -51,7 +50,7 @@ const NavMobile = (props: Props) => {
           </ul>
         )}
       </div>
-      <div className="block lg:hidden">
+      <div className={`${opened ? "fixed right-4 top-20" : ""} block lg:hidden`}>
         <Burger lineSize={3} color="#181818" onClick={toggle} opened={opened} />
       </div>
     </>

@@ -231,7 +231,7 @@ const CustomerChatMiddle = ({
 
       setChatData([
         {
-          text: `Welcome to Nollywood Filmmaker!  🎥\nHow can we make your experience amazing today?\n\nQuick Tips for an Easy Chat:\n\n✨ Replying Made Simple: Just right-click on any message and hit “Reply.”\n\n✨ Keep the Conversation Flowing: You can export chats or flag any issues for review.\n\n✨ File Access: Need to check out shared files? You’ll find them conveniently on the right-hand side.\n\n⏳ Time Reminder: We’ll remind you when you’re 10 minutes away from the end of your session, and a timer will pop up to help ...`,
+          text: `Quick Tips for chatting \n\n1.⁠ ⁠You can reply a particular message by right clicking or swiping.\n\n2.⁠ ⁠⁠You can share photos directly via the icon beside the send button.\n\n3.⁠ ⁠⁠You can attach files (docs, music, audio, video etc not more than 20mb) click the attachment icon on the bottom left \n\n4.⁠ ⁠⁠Access our database by requesting for a film crew/company from your consultant \n\n5.⁠ ⁠⁠You will get a reminder once it’s ten minutes to the end of your chat. You can request for more time or continue...`,
           user: "consultant",
           id: "nollywood-filmaker",
           type: "text",

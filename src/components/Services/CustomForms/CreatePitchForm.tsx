@@ -269,7 +269,7 @@ const CreatePitchForm = ({
             />
           )}
         </div>
-        <div className="mt-8">
+        {/* <div className="mt-8">
           <TextArea
             placeholder=""
             changed={(val) => setScriptProps("actors_in_mind", val)}
@@ -278,19 +278,10 @@ const CreatePitchForm = ({
             className="h-[4rem] text-gray-6 text-[0.88rem] py-2 px-3"
             label="Key actors in mind (optional)"
           />
-        </div>
+        </div> */}
 
-        <div className="mt-8">
-          <TextArea
-            placeholder=""
-            changed={(val) => setScriptProps("information", val)}
-            value={data.information}
-            labelStyle2
-            className="h-[4rem] text-gray-6 text-[0.88rem] py-2 px-3"
-            label="Share any relevant information (location, equipment etc)"
-          />
-        </div>
-        <div className="mt-8">
+
+        {/* <div className="mt-8">
           <InputComponent
             value={data.budget}
             label="Budget Range (optional)"
@@ -299,7 +290,7 @@ const CreatePitchForm = ({
             className="w-full text-[0.88rem] text-gray-6 placeholder:text-gray-6 placeholder:text-[0.88rem] py-2 px-3"
             type=""
           />
-        </div>
+        </div> */}
 
         <h1 className="font-medium text-md mt-10">Character locked days</h1>
 
@@ -410,6 +401,17 @@ const CreatePitchForm = ({
         </button>
         {errorMessage && <ServiceInfo activeColor content={errorMessage} />}
         {/* <ServiceInfo content="Pitch deck Creation  can take between 1-2 weeks. You will be mailed with an editable pitch deck and a calendar to choose a chat date" /> */}
+
+        <div className="mt-8">
+          <TextArea
+            placeholder=""
+            changed={(val) => setScriptProps("information", val)}
+            value={data.information}
+            labelStyle2
+            className="h-[4rem] text-gray-6 text-[0.88rem] py-2 px-3"
+            label="Share any relevant information (location, equipment etc)"
+          />
+        </div>
         <div className="mt-8 w-full">
           <CheckboxComponent
             setCheckedProps={(val) => setTerms(val)}

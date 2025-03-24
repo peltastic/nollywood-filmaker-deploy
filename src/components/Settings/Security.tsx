@@ -45,7 +45,7 @@ const SecuritySettings = (props: Props) => {
           });
         }}
       >
-        <Form className="flex flex-wrap w-full">
+        <Form className="w-full">
           <div className="w-full md:w-[60%]">
             <div className="w-full md:w-[80%]">
               <div className="mt-6">
@@ -68,7 +68,7 @@ const SecuritySettings = (props: Props) => {
               </div>
             </div>
           </div>
-          <div className="mt-10 md:mt-2 w-full md:w-[40%] my-10 md:my-0">
+          {/* <div className="mt-10 md:mt-2 w-full md:w-[40%] my-10 md:my-0">
             <h1 className="text-[17px] font-medium text-black-3">
               Two-factor Authentication
             </h1>
@@ -83,7 +83,7 @@ const SecuritySettings = (props: Props) => {
                 }
               />
             </div>
-          </div>
+          </div> */}
           <UnstyledButton
             type="submit"
             disabled={isLoading}

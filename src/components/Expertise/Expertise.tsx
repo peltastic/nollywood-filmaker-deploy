@@ -20,21 +20,22 @@ const expertise = [
   "Studio Executive",
 ];
 const Expertise = ({ data, setExpertise, small, maximum }: Props) => {
+  const selectedSet = new Set(data);
   return (
     <div className="flex flex-wrap gap-y-6 gap-x-3">
       {expertise.map((el) => (
         <div
           onClick={() => {
-            if (data.includes(el)) {
+            if (selectedSet.has(el)) {
               return setExpertise(el, "remove");
             }
-            if (data.length > 3 && !maximum) {
+            if (data.length >= 3 && !maximum) {
               return;
             }
             setExpertise(el, "add");
           }}
-          className={`hover:border-black-2 hover:border-2 ${
-            data.includes(el)
+          className={`xl:hover:border-black-2 xl:hover:border-2 ${
+            selectedSet.has(el)
               ? "border-black-2 border-2"
               : "border border-stroke-2"
           } ${

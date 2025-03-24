@@ -93,6 +93,10 @@ const GetStartedChatPage = (props: Props) => {
       open();
     }
   }, [paymentStatus]);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page]);
+
 
   return (
     <>
