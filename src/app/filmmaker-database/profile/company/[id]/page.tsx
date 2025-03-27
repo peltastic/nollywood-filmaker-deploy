@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect } from "react";
-import Logo from "/public/assets/logo22.png";
 import Image from "next/image";
 import ProfileBanner from "/public/assets/filmmaker-database/filmmaker-profile-banner.png";
 import { FaUser } from "react-icons/fa";
@@ -150,8 +149,8 @@ const CompanyProfile = (props: Props) => {
                       Share profile
                     </UnstyledButton>
                     <div className="mt-4 nolly-notes text-center">
-                      <h1 className="text-[0.88rem] ">NF SCORE</h1>
-                      <p className="text-2xl">{data?.company.nfscore || "0"}</p>
+                      <h1 className="text-[0.88rem] font-medium">NF SCORE</h1>
+                      <p className="text-5xl">{data?.company.nfscore || "0"}</p>
                     </div>
                   </div>
                 </div>

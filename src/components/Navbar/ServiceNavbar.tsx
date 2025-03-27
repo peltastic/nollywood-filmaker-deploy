@@ -19,6 +19,7 @@ import ProfileTarget from "../ProfileMenu/ProfileTarget";
 import { setNotificationState } from "@/lib/slices/notificationSlice";
 import { GoDotFill } from "react-icons/go";
 import { primary_socket } from "@/lib/socket";
+import { setConsultantNotificationState } from "@/lib/slices/consultants/notificationSlice";
 
 type Props = {
   removeOptions?: boolean;
@@ -142,11 +143,18 @@ const ServiceNavbar = (props: Props) => {
   const notificationState = useSelector(
     (state: RootState) => state.persistedState.notification.newNotification
   );
+  const consultantNotificationState = useSelector(
+    (state: RootState) =>
+      state.persistedState.consultantNotification.newNotification
+  );
   useEffect(() => {
     // if (!socket) return;
     primary_socket.on("newNotification", (data) => {
-      console.log("new notification received!");
-      dispatch(setNotificationState(true));
+      if (props.consultant) {
+        dispatch(setConsultantNotificationState(true));
+      } else {
+        dispatch(setNotificationState(true));
+      }
     });
     return () => {
       primary_socket.off("newNotification");
@@ -212,7 +220,7 @@ const ServiceNavbar = (props: Props) => {
                 {props.consultant ? (
                   <Link href={"/consultants/dashboard/notifications"}>
                     <div className="relative cursor-pointer">
-                      {notificationState && (
+                      {consultantNotificationState && (
                         <div className="absolute -right-2 -top-2">
                           <GoDotFill className="text-red-600 text-xl" />
                         </div>

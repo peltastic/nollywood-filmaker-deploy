@@ -163,8 +163,8 @@ const CrewProfileView = (props: Props) => {
                       Share profile
                     </UnstyledButton>
                     <div className="mt-4 nolly-notes text-center">
-                      <h1 className="text-[0.88rem] ">NF SCORE</h1>
-                      <p className="text-2xl">{data?.crew.nfscore || "0"}</p>
+                      <h1 className="text-[0.88rem] font-medium">NF SCORE</h1>
+                      <p className="text-5xl">{data?.crew.nfscore || "0"}</p>
                     </div>
                   </div>
                   <div
