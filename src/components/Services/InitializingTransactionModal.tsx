@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Backdrop from "../Backdrop/Backdrop";
 import { motion } from "framer-motion";
 import Spinner from "@/app/Spinner/Spinner";
@@ -19,6 +19,11 @@ type Props = {
 };
 
 const InitializingTransactionModal = (props: Props) => {
+  useEffect(() => {
+    if (props.paymentUrl) {
+      nprogress.complete();
+    }
+  }, [props.paymentUrl]);
   return (
     <>
       <Backdrop />

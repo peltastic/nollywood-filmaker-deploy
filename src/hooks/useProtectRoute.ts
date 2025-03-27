@@ -34,6 +34,7 @@ export const useProtectRoute = () => {
       notify("message", "Your session has expired", "Please Log In");
       nprogress.complete();
       router.push("/auth/login");
+    } else {
     }
   }, []);
 

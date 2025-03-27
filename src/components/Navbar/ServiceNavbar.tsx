@@ -18,7 +18,7 @@ import { RootState } from "@/lib/store";
 import ProfileTarget from "../ProfileMenu/ProfileTarget";
 import { setNotificationState } from "@/lib/slices/notificationSlice";
 import { GoDotFill } from "react-icons/go";
-import { primary_socket } from "@/lib/socket";
+import { initializeTransactionListener, primary_socket } from "@/lib/socket";
 import { setConsultantNotificationState } from "@/lib/slices/consultants/notificationSlice";
 
 type Props = {
@@ -148,9 +148,12 @@ const ServiceNavbar = (props: Props) => {
       state.persistedState.consultantNotification.newNotification
   );
   useEffect(() => {
-    // if (!socket) return;
+    if (props.admin) return;
+    initializeTransactionListener(
+      props.consultant ? consultantData?.id || "" : userData?.id || ""
+    );
     primary_socket.on("newNotification", (data) => {
-      console.log("received")
+      console.log("received");
       if (props.consultant) {
         dispatch(setConsultantNotificationState(true));
       } else {

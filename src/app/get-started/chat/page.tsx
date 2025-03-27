@@ -84,11 +84,6 @@ const GetStartedChatPage = (props: Props) => {
   };
 
   useEffect(() => {
-    if (!chatData.title) {
-      router.push("/get-started/chat");
-    }
-  }, []);
-  useEffect(() => {
     if (paymentStatus === "pending") {
       open();
     }
