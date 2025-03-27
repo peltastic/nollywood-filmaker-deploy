@@ -54,7 +54,7 @@ const GetStartedChatPage = (props: Props) => {
     useInitializeChatWithAProTransactionMutation();
 
   const searchParam = useSearchParams();
-  const [terms, setTerms] = useState<boolean>(false)
+  const [terms, setTerms] = useState<boolean>(false);
   const [opened, { open, close }] = useDisclosure();
   const userId = useSelector(
     (state: RootState) => state.persistedState.user.user?.id
@@ -67,7 +67,7 @@ const GetStartedChatPage = (props: Props) => {
     setCurrentDate(val);
   };
 
-  const { paymentStatus } = useServicePayment(
+  const { paymentStatus, resetPaymentInitialization } = useServicePayment(
     isError,
     isSuccess,
     "/success-page/chat",
@@ -97,14 +97,16 @@ const GetStartedChatPage = (props: Props) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page]);
 
-
   return (
     <>
       {opened ? (
         <InitializingTransactionModal
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
-          close={close}
+          close={() => {
+            resetPaymentInitialization()
+            close();
+          }}
         />
       ) : null}
       <ServiceLayout nonDashboard>
@@ -204,10 +206,13 @@ const GetStartedChatPage = (props: Props) => {
                           checked={terms}
                           label={
                             <p className="max-w-[40rem] text-gray-3">
-                              By proceeding, I confirm that I
-                              have read, understood, and agree to the{" "}
+                              By proceeding, I confirm that I have read,
+                              understood, and agree to the{" "}
                               <span className="font-semibold underline">
-                                <Link href={"/terms-and-conditions"} target="_blank">
+                                <Link
+                                  href={"/terms-and-conditions"}
+                                  target="_blank"
+                                >
                                   terms and conditions
                                 </Link>
                               </span>{" "}

@@ -150,6 +150,7 @@ const ServiceNavbar = (props: Props) => {
   useEffect(() => {
     // if (!socket) return;
     primary_socket.on("newNotification", (data) => {
+      console.log("received")
       if (props.consultant) {
         dispatch(setConsultantNotificationState(true));
       } else {

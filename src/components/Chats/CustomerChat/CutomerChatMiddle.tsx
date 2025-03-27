@@ -437,7 +437,10 @@ const CustomerChatMiddle = ({
         <InitializingTransactionModal
           paymentUrl={extensionAuthUrl}
           status={paymentStatus}
-          close={transFunc.close}
+          close={() => {
+            transFunc.close();
+            setPaymentStatus("initialized");
+          }}
         />
       ) : null}
 
@@ -605,7 +608,9 @@ const CustomerChatMiddle = ({
                           className="w-[10rem] opacity-50 mx-auto mb-6"
                         />
                         <p className="text-center font-semibold text-gray-4">
-                          Session with {type === "consultant" ? "customer" : "consultant"} hasn't started yet
+                          Session with{" "}
+                          {type === "consultant" ? "customer" : "consultant"}{" "}
+                          hasn't started yet
                         </p>
                       </div>
                     </div>
