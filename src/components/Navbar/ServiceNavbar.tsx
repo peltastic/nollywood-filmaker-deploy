@@ -209,21 +209,34 @@ const ServiceNavbar = (props: Props) => {
 
             <div className="flex text-gray-5 gap-4 text-[1.6rem] ml-auto items-center">
               <div className="gap-4 flex items-center">
-                <Link href={"/user/dashboard/notifications"}>
-                  <div className="relative cursor-pointer">
-                    {notificationState && (
-                      <div className="absolute -right-2 -top-2">
-                        <GoDotFill className="text-red-600 text-xl" />
-                      </div>
-                    )}
-                    <HiBell />
-                  </div>
-                </Link>
+                {props.consultant ? (
+                  <Link href={"/consultants/dashboard/notifications"}>
+                    <div className="relative cursor-pointer">
+                      {notificationState && (
+                        <div className="absolute -right-2 -top-2">
+                          <GoDotFill className="text-red-600 text-xl" />
+                        </div>
+                      )}
+                      <HiBell />
+                    </div>
+                  </Link>
+                ) : (
+                  <Link href={"/user/dashboard/notifications"}>
+                    <div className="relative cursor-pointer">
+                      {notificationState && (
+                        <div className="absolute -right-2 -top-2">
+                          <GoDotFill className="text-red-600 text-xl" />
+                        </div>
+                      )}
+                      <HiBell />
+                    </div>
+                  </Link>
+                )}
                 <Link href={"/faq"} className="hidden lg:flex">
                   <BsFillQuestionCircleFill className="text-[1.4rem]" />
                 </Link>
                 <Link
-                className="hidden lg:flex"
+                  className="hidden lg:flex"
                   href={
                     props.admin
                       ? "/admin/dashboard/settings"

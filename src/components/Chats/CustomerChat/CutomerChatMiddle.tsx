@@ -231,7 +231,7 @@ const CustomerChatMiddle = ({
 
       setChatData([
         {
-          text: `Quick Tips for chatting \n\n1.⁠ ⁠You can reply a particular message by right clicking or swiping.\n\n2.⁠ ⁠⁠You can share photos directly via the icon beside the send button.\n\n3.⁠ ⁠⁠You can attach files (docs, music, audio, video etc not more than 20mb) click the attachment icon on the bottom left \n\n4.⁠ ⁠⁠Access our database by requesting for a film crew/company from your consultant \n\n5.⁠ ⁠⁠You will get a reminder once it’s ten minutes to the end of your chat. You can request for more time or continue...`,
+          text: `Quick Tips for chatting \n\n1.⁠ ⁠You can reply a particular message by right clicking or swiping.\n\n2.⁠ ⁠⁠You can share photos directly via the icon beside the send button.\n\n3.⁠ ⁠⁠You can attach files (docs, music, audio, video etc not more than 20mb) click the attachment icon on the bottom left, if your file is more than 20 MB send as a Wetransfer or Google Drive link. \n\n4.⁠ ⁠⁠Access our database by requesting for a film crew/company from your consultant \n\n5.⁠ ⁠⁠You will get a reminder once it’s ten minutes to the end of your chat. You can request for more time or continue chatting with the same consultant another day.`,
           user: "consultant",
           id: "nollywood-filmaker",
           type: "text",
@@ -281,7 +281,7 @@ const CustomerChatMiddle = ({
       );
       setChatData([
         {
-          text: `Quick Tips for chatting \n\n1.⁠ ⁠You can reply a particular message by right clicking or swiping.\n\n2.⁠ ⁠⁠You can share photos directly via the icon beside the send button.\n\n3.⁠ ⁠⁠You can attach files (docs, music, audio, video etc not more than 20mb) click the attachment icon on the bottom left \n\n4.⁠ ⁠⁠Access our database by requesting for a film crew/company from your consultant \n\n5.⁠ ⁠⁠You will get a reminder once it’s ten minutes to the end of your chat. You can request for more time or continue...`,
+          text: `Quick Tips for chatting \n\n1.⁠ ⁠You can reply a particular message by right clicking or swiping.\n\n2.⁠ ⁠⁠You can share photos directly via the icon beside the send button.\n\n3.⁠ ⁠⁠You can attach files (docs, music, audio, video etc not more than 20mb) click the attachment icon on the bottom left, if your file is more than 20 MB send as a Wetransfer or Google Drive link. \n\n4.⁠ ⁠⁠Access our database by requesting for a film crew/company from your consultant \n\n5.⁠ ⁠⁠You will get a reminder once it’s ten minutes to the end of your chat. You can request for more time or continue chatting with the same consultant another day.`,
           user: "consultant",
           id: "nollywood-filmaker",
           type: "text",
@@ -330,7 +330,7 @@ const CustomerChatMiddle = ({
 
       setChatData([
         {
-          text: `Quick Tips for chatting \n\n1.⁠ ⁠You can reply a particular message by right clicking or swiping.\n\n2.⁠ ⁠⁠You can share photos directly via the icon beside the send button.\n\n3.⁠ ⁠⁠You can attach files (docs, music, audio, video etc not more than 20mb) click the attachment icon on the bottom left \n\n4.⁠ ⁠⁠Access our database by requesting for a film crew/company from your consultant \n\n5.⁠ ⁠⁠You will get a reminder once it’s ten minutes to the end of your chat. You can request for more time or continu...`,
+          text: `Quick Tips for chatting \n\n1.⁠ ⁠You can reply a particular message by right clicking or swiping.\n\n2.⁠ ⁠⁠You can share photos directly via the icon beside the send button.\n\n3.⁠ ⁠⁠You can attach files (docs, music, audio, video etc not more than 20mb) click the attachment icon on the bottom left, if your file is more than 20 MB send as a Wetransfer or Google Drive link. \n\n4.⁠ ⁠⁠Access our database by requesting for a film crew/company from your consultant \n\n5.⁠ ⁠⁠You will get a reminder once it’s ten minutes to the end of your chat. You can request for more time or continue chatting with the same consultant another day.`,
           user: "consultant",
           id: "nollywood-filmaker",
           type: "text",

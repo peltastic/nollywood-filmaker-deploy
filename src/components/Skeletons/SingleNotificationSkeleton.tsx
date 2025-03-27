@@ -5,11 +5,11 @@ type Props = {};
 
 const SingleNotificationSkeleton = (props: Props) => {
   return (
-    <div className="flex items-center mb-6 pb-6 pt-8">
+    <div className="flex flex-wrap items-center mb-6 pb-6 pt-8">
       <div className="w-[50px]">
         <Skeleton h={50} radius={"50%"} />
       </div>
-      <div className=" ml-8 mr-auto">
+      <div className=" my-8 sm:my-0 sm:ml-8 mr-auto w-full sm:w-auto">
         <div className="w-[7rem]">
           <Skeleton h={10} />
         </div>

@@ -798,8 +798,8 @@ const ChatRoom = (props: Props) => {
     if (spanRef.current) {
       spanRef.current.scrollIntoView({
         behavior: "smooth",
-        block: "nearest",
-        inline: "end",
+        block: "start", // Scrolls so the top of the element is at the top of the viewport
+        inline: "nearest" // Adjusts horizontally to the nearest edge
       });
     }
   };
@@ -918,7 +918,7 @@ const ChatRoom = (props: Props) => {
                   )}
                 </div>
               ))}
-              <span ref={spanRef}></span>
+              <span className="border" ref={spanRef}></span>
             </>
           )}
           {istyping && (

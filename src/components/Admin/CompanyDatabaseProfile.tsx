@@ -44,13 +44,13 @@ const CompanyDatabaseProfile = ({ data, refetch, admin, verfied }: Props) => {
 
   const [opened, { open, close }] = useDisclosure();
   const [verificationOpened, verfiecation] = useDisclosure();
-  const origin = 
-  window.origin +
-  "/filmmaker-database" +
-  "/profile" +
-  "/company" +
-  "/" +
-  data.userId;
+  const origin =
+    window.origin +
+    "/filmmaker-database" +
+    "/profile" +
+    "/company" +
+    "/" +
+    data.userId;
   return (
     <>
       <ModalComponent
@@ -153,12 +153,18 @@ const CompanyDatabaseProfile = ({ data, refetch, admin, verfied }: Props) => {
                 </div>
               </div>
             </div>
-            <UnstyledButton
-              clicked={open}
-              class="bg-black-2 text-sm hover:bg-blue-1 transition-all text-white py-2 px-4 mt-6 rounded-md"
-            >
-              Share profile
-            </UnstyledButton>
+            <div className="">
+              <UnstyledButton
+                clicked={open}
+                class="bg-black-2 text-sm hover:bg-blue-1 transition-all text-white py-2 px-4 mt-6 rounded-md"
+              >
+                Share profile
+              </UnstyledButton>
+              <div className="mt-4 nolly-notes text-center">
+                <h1 className="text-[0.88rem] ">NF SCORE</h1>
+                <p className="text-2xl">{data?.nfscore || "0"}</p>
+              </div>
+            </div>
           </div>
           {!verfied && (
             <>

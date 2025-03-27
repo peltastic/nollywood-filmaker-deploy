@@ -20,7 +20,7 @@ const ReplyBox = (props: Props) => {
   const contactsReplyData = props.replyData.contacts;
   return (
     <div
-      className={` text-black pl-12 pr-7 absolute bottom-20 right-0 w-[98%] z-10  `}
+      className={` text-black pl-12 pr-7 fixed chatbp1:absolute bottom-20 right-0 w-[98%] z-10  `}
     >
       <div
         className={`flex items-center border-l-4 ${
@@ -75,7 +75,7 @@ const ReplyBox = (props: Props) => {
           )}
         </div>
         <div
-          className="cursor-pointer relative z-10"
+          className="cursor-pointer relative z-10 w-[2rem]"
           onClick={props.cancelReplyBox}
         >
           <Image src={CancelImg} alt="cancel-img" />

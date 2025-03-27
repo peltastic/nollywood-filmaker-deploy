@@ -15,6 +15,7 @@ import consultantRouteReducer from "./slices/consultants/routeSlice";
 import adminLogoutReducer from "./slices/admin/logoutSlice";
 import persistReducer from "redux-persist/lib/persistReducer";
 import notificationReducer from "./slices/notificationSlice";
+import consultantNotificationReducer from "./slices/consultants/notificationSlice";
 import { authApi } from "./features/users/auth/auth";
 import { servicesApi } from "./features/users/services/services";
 import { profileApi } from "./features/users/profile/profile";
@@ -48,6 +49,7 @@ import { waitlistApi } from "./features/admin/waitlist/waitlist";
 import { contactUsApi } from "./features/contact-us";
 import { contactUsResponseApi } from "./features/admin/contact-us/contact-us";
 import { notificationsApi } from "./features/users/notifications/notifications";
+import { consultantsNotificationsApi } from "./features/consultants/notifications/notifications";
 
 const persistConfig = {
   key: "root",
@@ -65,6 +67,7 @@ const combinedReducer = combineReducers({
   adminuser: adminReducer,
   adminLogout: adminLogoutReducer,
   notification: notificationReducer,
+  consultantNotification: consultantNotificationReducer,
 });
 const persistedReducer = persistReducer(persistConfig, combinedReducer);
 export const store = configureStore({
@@ -108,6 +111,8 @@ export const store = configureStore({
     [contactUsApi.reducerPath]: contactUsApi.reducer,
     [contactUsResponseApi.reducerPath]: contactUsResponseApi.reducer,
     [notificationsApi.reducerPath]: notificationsApi.reducer,
+    [consultantsNotificationsApi.reducerPath]:
+      consultantsNotificationsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -146,6 +151,7 @@ export const store = configureStore({
       contactUsApi.middleware,
       contactUsResponseApi.middleware,
       notificationsApi.middleware,
+      consultantsNotificationsApi.middleware,
     ]),
   devTools: process.env.NODE_ENV !== "production",
 });

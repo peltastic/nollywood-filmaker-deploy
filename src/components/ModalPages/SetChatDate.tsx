@@ -145,14 +145,14 @@ const SetChatDate = ({ close, data }: Props) => {
         </div>
       </div>
       <ServiceInfo activeColor content="Time slots are in West African Time (WAT)" />
-      <div className="flex flex-wrap md:flex-nowrap gap-5 mt-6">
-        <div className="w-[70%]">
+      <div className="flex flex-wrap xl:flex-nowrap gap-5 mt-6">
+        <div className="w-full lg:w-[70%] mx-auto ">
           <CustomCalender
             value={selectedDate}
             onChange={(date) => setSelectedDate(date)}
           />
         </div>
-        <div className="w-[20%]">
+        <div className="w-full lg:w-[70%] xl:w-[30%] mx-auto">
           <CustomTime
             time_slots={slots?.map((el) => {
               const isBeforeNow = isBefore(
@@ -172,10 +172,10 @@ const SetChatDate = ({ close, data }: Props) => {
           />
         </div>
       </div>
-      <div className="my-8 flex items-center font-medium text-[0.88rem] px-6">
+      <div className=" my-8 flex flex-wrap items-center font-medium text-[0.88rem] px-6">
         <UnstyledButton
           clicked={close}
-          class="ml-auto border border-black-3 rounded-md py-2 px-2 mr-3"
+          class="ml-auto w-full sm:w-[8rem] border border-black-3 rounded-md py-2 px-2 sm:mr-3 mb-8 sm:mb-0"
         >
           Cancel
         </UnstyledButton>
@@ -201,7 +201,7 @@ const SetChatDate = ({ close, data }: Props) => {
               });
             }
           }}
-          class="w-[8rem] flex items-center justify-center bg-black-3 disabled:opacity-50  text-white py-2 px-2 border border-black-3 rounded-md"
+          class="w-full sm:w-[8rem]   flex items-center justify-center bg-black-3 disabled:opacity-50  text-white py-2 px-2 border border-black-3 rounded-md"
         >
           {isLoading ? (
             <div className="py-1 w-[1rem]">

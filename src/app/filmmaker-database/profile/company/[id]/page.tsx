@@ -96,7 +96,7 @@ const CompanyProfile = (props: Props) => {
 
       <HomeLayout>
         <div className="">
-          <section className="w-[90%] lg:w-[70%] mx-auto mt-10 max-w-[1200px]">
+          <section className="w-[90%] xl:w-[70%] mx-auto mt-10 max-w-[1200px]">
             {isFetching ? (
               <FilmmakerSkeletonProfile />
             ) : (
@@ -142,12 +142,18 @@ const CompanyProfile = (props: Props) => {
                       </div>
                     </div>
                   </div>
-                  <UnstyledButton
-                    clicked={open}
-                    class="bg-black-2 hover:bg-blue-1 transition-all text-white py-2 px-4 mt-14 sm:mt-6 rounded-md"
-                  >
-                    Share profile
-                  </UnstyledButton>
+                  <div className="">
+                    <UnstyledButton
+                      clicked={open}
+                      class="bg-black-2 hover:bg-blue-1 transition-all text-white py-2 px-4 mt-14 sm:mt-6 rounded-md"
+                    >
+                      Share profile
+                    </UnstyledButton>
+                    <div className="mt-4 nolly-notes text-center">
+                      <h1 className="text-[0.88rem] ">NF SCORE</h1>
+                      <p className="text-2xl">{data?.company.nfscore || "0"}</p>
+                    </div>
+                  </div>
                 </div>
                 <section className="mt-16 mb-20 h-[50rem] md:h-auto">
                   <Tabs color="#181818" defaultValue={"about"}>

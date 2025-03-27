@@ -93,6 +93,7 @@ export interface ICompanyDataResponse {
     verificationDocType: string;
     document: string;
     idNumber: string;
+    nfscore?: string;
     cacNumber: string;
     badgelink: string;
   };
@@ -117,6 +118,7 @@ export interface ICrewDataResponse {
     department: string[];
     role: string[];
     badgelink: string;
+    nfscore: string;
     works: {
       title: string;
       role: string;

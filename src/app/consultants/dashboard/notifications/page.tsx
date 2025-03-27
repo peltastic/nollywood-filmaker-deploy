@@ -1,10 +1,10 @@
-"use client";
+"use client"
 import DashboardBodyLayout from "@/components/Layouts/DashboardBodyLayout";
 import ServiceLayout from "@/components/Layouts/ServiceLayout";
 import SingleNotis from "@/components/Notification/SingleNotis";
 import SingleNotificationSkeleton from "@/components/Skeletons/SingleNotificationSkeleton";
-import { useLazyFetchUserNotificationsQuery } from "@/lib/features/users/notifications/notifications";
-import { setNotificationState } from "@/lib/slices/notificationSlice";
+import { useLazyFetchConsultantsNotificationsQuery } from "@/lib/features/consultants/notifications/notifications";
+import { setConsultantNotificationState } from "@/lib/slices/consultants/notificationSlice";
 import { RootState } from "@/lib/store";
 import { Pagination } from "@mantine/core";
 import React, { useEffect, useState } from "react";
@@ -12,27 +12,31 @@ import { useDispatch, useSelector } from "react-redux";
 
 type Props = {};
 
-const UserNotificationsPage = (props: Props) => {
+const ConsultantsNotificationPage = (props: Props) => {
   const [activePage, setActivePage] = useState<number>(1);
-  const userId = useSelector(
-    (state: RootState) => state.persistedState.user.user?.id
+  const consultantId = useSelector(
+    (state: RootState) => state.persistedState.consultant.user?.id
   );
   const dispatch = useDispatch();
   const [getNotifications, { data, isSuccess, isFetching }] =
-    useLazyFetchUserNotificationsQuery();
+    useLazyFetchConsultantsNotificationsQuery();
+
   useEffect(() => {
-    if (userId) {
-      getNotifications({ id: userId, limit: 10 });
+    if (consultantId) {
+      getNotifications({
+        id: consultantId,
+        limit: 10,
+      });
     }
   }, []);
 
   useEffect(() => {
     if (isSuccess) {
-      dispatch(setNotificationState(false));
+      dispatch(setConsultantNotificationState(false));
     }
   }, [isSuccess]);
   return (
-    <ServiceLayout>
+    <ServiceLayout consultant>
       <DashboardBodyLayout>
         <section className="py-10 chatbp:py-0">
           <div className="bg-white py-10 px-10 min-h-screen w-[95%] md:w-[60%] max-w-[60rem] mx-auto rounded-2xl ">
@@ -53,7 +57,7 @@ const UserNotificationsPage = (props: Props) => {
             ) : (
               <>
                 {data?.notifications.map((el) => (
-                  <SingleNotis consultant key={el._id} data={el} />
+                  <SingleNotis key={el._id} data={el} />
                 ))}
               </>
             )}
@@ -66,11 +70,11 @@ const UserNotificationsPage = (props: Props) => {
                 value={activePage}
                 color="#333333"
                 onChange={(val) => {
-                  if (userId) {
+                  if (consultantId) {
                     getNotifications({
                       limit: 10,
                       page: val,
-                      id: userId,
+                      id: consultantId,
                     });
                   }
                   setActivePage(val);
@@ -84,4 +88,4 @@ const UserNotificationsPage = (props: Props) => {
   );
 };
 
-export default UserNotificationsPage;
+export default ConsultantsNotificationPage;

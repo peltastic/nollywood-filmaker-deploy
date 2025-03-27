@@ -302,7 +302,7 @@ const CreatePitchForm = ({
           />
         ))}
 
-        <div className="grid grid-cols-2 gap-x-4 mt-8">
+        <div className="grid md:grid-cols-2 gap-x-4 mt-8">
           <div className="">
             <InputComponent
               value={character}
@@ -313,7 +313,7 @@ const CreatePitchForm = ({
               type=""
             />
           </div>
-          <div className="">
+          <div className="mt-8 md:mt-0">
             <p className="font-medium text-[0.88rem] mb-2">
               Locked dates, (you can select multiple)
             </p>
@@ -356,7 +356,7 @@ const CreatePitchForm = ({
           />
         ))}
 
-        <div className="grid grid-cols-2 gap-x-4 mt-8">
+        <div className="grid md:grid-cols-2 gap-x-4 mt-8">
           <div className="">
             <InputComponent
               value={location}
@@ -367,7 +367,7 @@ const CreatePitchForm = ({
               type=""
             />
           </div>
-          <div className="">
+          <div className="mt-8 md:mt-0">
             <p className="font-medium text-[0.88rem] mb-2">
               Locked dates, (you can select multiple)
             </p>

@@ -42,7 +42,7 @@ const ConsultantSingleChat = (props: Props) => {
   }, []);
   return (
     <ServiceLayout noNav>
-      <DashboardBodyLayout>
+      <DashboardBodyLayout allWhite>
         <div
           ref={ref}
           className={`h-full max-h-[90rem] bg-white w-full  `}

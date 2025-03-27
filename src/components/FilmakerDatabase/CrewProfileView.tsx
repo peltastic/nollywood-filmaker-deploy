@@ -154,13 +154,19 @@ const CrewProfileView = (props: Props) => {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center mt-14 sm:mt-6">
-                  <UnstyledButton
-                    clicked={open}
-                    class="bg-black-2 transition-all hover:bg-blue-1 text-white py-2 px-4 mr-1  rounded-md"
-                  >
-                    Share profile
-                  </UnstyledButton>
+                <div className="flex items-start mt-14 sm:mt-6">
+                  <div className="">
+                    <UnstyledButton
+                      clicked={open}
+                      class="bg-black-2 transition-all hover:bg-blue-1 text-white py-2 px-4 mr-1  rounded-md"
+                    >
+                      Share profile
+                    </UnstyledButton>
+                    <div className="mt-4 nolly-notes text-center">
+                      <h1 className="text-[0.88rem] ">NF SCORE</h1>
+                      <p className="text-2xl">{data?.crew.nfscore || "0"}</p>
+                    </div>
+                  </div>
                   <div
                     onClick={() =>
                       router.push(
@@ -170,7 +176,7 @@ const CrewProfileView = (props: Props) => {
                     className="flex ml-4 items-center hover:bg-gray-bg-9 py-2 px-4 rounded-md transition-all cursor-pointer"
                   >
                     <p className="mr-2">Edit</p>
-                    <TbEdit className="text-3xl" />
+                    <TbEdit className="text-2xl" />
                   </div>
                 </div>
               </div>

@@ -405,7 +405,7 @@ const DashboardPage = (props: Props) => {
                   />
                 ))}
               </div>
-              <div className="w-full mt-8 lg:mt-0 lg:w-[70%] border border-stroke-10 px-6 py-10 flex items-center rounded-lg">
+              {/* <div className="w-full mt-8 lg:mt-0 lg:w-[70%] border border-stroke-10 px-6 py-10 flex items-center rounded-lg">
                 <Bar
                   chart_data={bar_chart_data}
                   chart_series={[
@@ -415,7 +415,7 @@ const DashboardPage = (props: Props) => {
                     },
                   ]}
                 />
-              </div>
+              </div> */}
             </section>
           </DashboardPlate>
         </div>

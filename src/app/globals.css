@@ -139,3 +139,22 @@ body {
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none;
 }
+
+
+.nolly-notes {
+  width: 100%;
+  position: relative;
+  color: black;
+  padding: 1.5rem 1.5rem;
+  background: #f9e78b;
+}
+
+.nolly-notes:before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border-width: 20px 20px 0 0;
+  border-style: solid;
+  border-color: #FDE047 #fff;
+}

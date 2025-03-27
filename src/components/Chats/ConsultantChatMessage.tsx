@@ -155,6 +155,30 @@ const ConsultantChatMessage = ({
     };
   }, [contextMenu.visible]);
   const [opened, { close, open }] = useDisclosure();
+  const handleDoubleTap = () => {
+    if (id && setReplyDataProps) {
+      if (type === "contacts") {
+        setReplyDataProps({
+          reply: text,
+          user,
+          id,
+          type: "contacts",
+          contacts: {
+            name: recommendations?.name,
+            photourl: recommendations?.propic,
+            type: recommendations?.type,
+          },
+        });
+      } else {
+        setReplyDataProps({
+          reply: type === "img" ? file : type === "file" ? filename : text,
+          user,
+          id,
+          type: type === "text" || type === "file" ? "text" : type,
+        });
+      }
+    }
+  };
   return (
     <>
       <ModalComponent opened={opened} size="xl" centered onClose={close}>
@@ -187,6 +211,7 @@ const ConsultantChatMessage = ({
       <div
         className="flex mb-3 px-4 w-full"
         ref={ref}
+        onDoubleClick={handleDoubleTap}
         style={{
           backgroundColor: temporarySelectedHighlight,
           transition: "all",
@@ -221,76 +246,6 @@ const ConsultantChatMessage = ({
             </>
           )}
           <motion.div
-          // drag="x"
-          // onDragStart={(event) => {
-          //   // Only prevent dragging if there's selected text
-          //   const selection = window.getSelection();
-          //   if (selection?.toString()) {
-          //     event.preventDefault(); // Changed from stopPropagation
-          //     return;
-          //   }
-          // }}
-          // dragConstraints={{ left: 0, right: 100 }}
-          // onDrag={(event, info) => {
-          //   // Check if there's a selection during drag
-          //   const selection = window.getSelection();
-          //   if (selection?.toString()) {
-          //     return; // Don't update drag position if text is selected
-          //   }
-          //   if (info.offset.x >= 0 && info.offset.x <= 120) {
-          //     setDragX(info.offset.x);
-          //   }
-          // }}
-          // onDragEnd={(event, info) => {
-          //   const selection = window.getSelection();
-          //   if (selection?.toString()) {
-          //     selection.removeAllRanges(); // Clear selection after drag ends
-          //     return;
-          //   }
-          //   if (info.offset.x > 100) {
-          //     setReplyDataProps &&
-          //       id &&
-          //       setReplyDataProps({
-          //         reply: type === "img" ? file : text,
-          //         user,
-          //         id,
-          //         type: type === "text" || type === "file" ? "text" : type,
-          //       });
-          //   }
-          //   setDragX(0);
-          // }}
-          // animate={{ x: dragX }}
-          // transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            // drag="x"
-            // onDragStart={(event) => {
-            //   if (window.getSelection()?.toString()) {
-            //     event.stopPropagation();
-            //   }
-            // }}
-            // dragConstraints={{ left: 0, right: 100 }}
-            // onDrag={(event, info) => {
-            //   if (info.offset.x >= 0 && info.offset.x <= 120) { 
-            //     // Only track movement to the right
-            //     setDragX(info.offset.x);
-            //   }
-            // }} // Track drag position
-            // onDragEnd={(event, info) => {
-            //   if (info.offset.x > 100) {
-            //     setReplyDataProps &&
-            //       id &&
-            //       setReplyDataProps({
-            //         reply: type === "img" ? file : text,
-            //         user,
-            //         id,
-
-            //         type: type === "text" || type === "file" ? "text" : type,
-            //       });
-            //     // onReply(text);
-            //   }
-            //   setDragX(0); // Reset position after swipe
-            // }}
-            // animate={{ x: dragX }} // Smoothly animate back
-            // transition={{ type: "spring", stiffness: 300, damping: 20 }}
             onContextMenu={(e) => {
               if (window.getSelection()?.toString()) {
                 // If text is selected, do not prevent the default action
@@ -343,7 +298,12 @@ const ConsultantChatMessage = ({
                           });
                         } else {
                           setReplyDataProps({
-                            reply: type === "img" ? file : text,
+                            reply:
+                              type === "img"
+                                ? file
+                                : type === "file"
+                                ? filename
+                                : text,
                             user,
                             id,
                             type:

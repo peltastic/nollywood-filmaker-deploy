@@ -1,11 +1,11 @@
-import { baseQueryWithReauth } from "@/lib/baseQuery";
+import { baseQueryWithReauth, consultantBaseQueryWithReauth } from "@/lib/baseQuery";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
 export interface ISingleNotification {
   _id: string;
   userId: string;
   senderId: string;
-  role: "user" | "consultant";
+  role: "user";
   type: "Files" | "Request" | "Chat" | "Reply";
   relatedId: string;
   title: string;
@@ -22,11 +22,11 @@ export interface IUserNotifications {
   notifications: ISingleNotification[];
 }
 
-export const notificationsApi = createApi({
-  reducerPath: "notificationsApi",
-  baseQuery: baseQueryWithReauth,
+export const consultantsNotificationsApi = createApi({
+  reducerPath: "consultantsNotificationsApi",
+  baseQuery: consultantBaseQueryWithReauth,
   endpoints: (build) => ({
-    fetchUserNotifications: build.query<
+    fetchConsultantsNotifications: build.query<
       IUserNotifications,
       { id: string; page?: number; limit: number }
     >({
@@ -38,10 +38,10 @@ export const notificationsApi = createApi({
         if (page) {
           query += `&page=${page}`;
         }
-        return { url: `/api/users/fetchnotifications/${id}${query}` };
+        return { url: `/api/consultants/fetchnotifications/${id}${query}` };
       },
     }),
   }),
 });
 
-export const { useLazyFetchUserNotificationsQuery } = notificationsApi;
+export const { useLazyFetchConsultantsNotificationsQuery } = consultantsNotificationsApi;

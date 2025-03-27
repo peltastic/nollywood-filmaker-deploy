@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 
 type Props = {
   data: ISingleNotification;
+  consultant?: boolean;
 };
 
 const SingleNotis = (props: Props) => {
@@ -18,6 +19,11 @@ const SingleNotis = (props: Props) => {
       : props.data.type === "Reply"
       ? `/user/dashboard/issues/details/${props.data.relatedId}`
       : `/user/dashboard/order-details/${props.data.relatedId}`;
+
+  const consultant_link =
+    props.data.type === "Chat"
+      ? `/consultants/dashboard/${props.data.relatedId}/order-details`
+      : `/consultants/dashboard/${props.data.relatedId}/order-details`;
   return (
     <div className="mb-6 flex flex-wrap xl:flex-nowrap items-center border-b pb-6 pt-8">
       <div className="w-full xl:w-auto mb-4 xl:mb-0">
@@ -40,7 +46,7 @@ const SingleNotis = (props: Props) => {
       </div>
       <div className="">
         <UnstyledButton
-          clicked={() => router.push(link)}
+          clicked={() => router.push(props.consultant ? consultant_link : link)}
           class="bg-black-2 text-white  py-1 px-4 transition-all hover:bg-blue-1 rounded-md text-[0.88rem]"
         >
           View
