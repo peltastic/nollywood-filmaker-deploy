@@ -17,6 +17,7 @@ import { capitalizeFirstLetter, isResolveFile } from "@/utils/helperFunction";
 import ConsultantMenuContent from "../Menu/MenuContent/ConsultantMenuContent";
 import SetChatDate from "../ModalPages/SetChatDate";
 import SetAsCompletedModal from "../Consultants/SetAsCompletedModal";
+import { ServiceNames } from "@/interfaces/consultants/dashboard/request";
 
 type Props = {
   isChat?: boolean;
@@ -40,29 +41,9 @@ type Props = {
     };
     userId: string;
     date: string;
-    nameofservice:
-      | "Chat With A Professional"
-      | "Read my Script and advice"
-      | "Watch the Final cut of my film and advice"
-      | "Look at my Budget and advice"
-      | "Create a Marketing budget"
-      | "Create a Pitch based on my Script"
-      | "Draft Legal documents"
-      | "Create a Production budget"
-      | "Create A Pitch Deck"
-      | "Creating A Movie Schedule";
+    nameofservice: ServiceNames
   };
-  nameofservice?:
-    | "Chat With A Professional"
-    | "Read my Script and advice"
-    | "Watch the Final cut of my film and advice"
-    | "Look at my Budget and advice"
-    | "Create a Marketing budget"
-    | "Create a Pitch based on my Script"
-    | "Draft Legal documents"
-    | "Create a Production budget"
-    | "Create A Pitch Deck"
-    | "Creating A Movie Schedule";
+  nameofservice?: ServiceNames
 };
 
 const OrderDetailsHeader = ({

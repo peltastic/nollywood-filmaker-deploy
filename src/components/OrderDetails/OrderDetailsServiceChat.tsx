@@ -16,19 +16,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { notify } from "@/utils/notification";
 import IssuesThread from "./IssuesThread";
+import { ServiceNames } from "@/interfaces/consultants/dashboard/request";
 
 type Props = {
-  service:
-    | "Chat With A Professional"
-    | "Read my Script and advice"
-    | "Watch the Final cut of my film and advice"
-    | "Look at my Budget and advice"
-    | "Create a Marketing budget"
-    | "Create a Pitch based on my Script"
-    | "Draft Legal documents"
-    | "Create a Production budget"
-    | "Create A Pitch Deck"
-    | "Creating A Movie Schedule";
+  service: ServiceNames
   type: "consultant" | "user";
   orderId: string;
   refecth: () => void;

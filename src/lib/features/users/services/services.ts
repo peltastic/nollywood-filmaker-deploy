@@ -129,6 +129,13 @@ export const servicesApi = createApi({
         body,
       }),
     }),
+    initializeCreateTeaser: build.mutation<IServiceResponse, InitializeCreateTeasers>({
+      query: (body) => ({
+        url: "/api/users/film-trailer",
+        method: "POST",
+        body
+      })
+    }),
     initializeCreateAPitchDeck: build.mutation<
       IServiceResponse,
       InitializeCreateAPitchDeck
@@ -176,4 +183,5 @@ export const {
   useInitializeMovieScheduleMutation,
   useInitializeDraftLegalDocumentMutation,
   useInitializeCreateAPitchDeckMutation,
+  useInitializeCreateTeaserMutation
 } = servicesApi;

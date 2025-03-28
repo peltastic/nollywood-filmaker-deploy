@@ -15,23 +15,14 @@ import Spinner from "@/app/Spinner/Spinner";
 import { useLazyGetSingleConsultantAvailabilityQuery } from "@/lib/features/consultants/dashboard/request";
 import { isBefore } from "date-fns";
 import ServiceInfo from "../ServiceInfo/ServiceInfo";
+import { ServiceNames } from "@/interfaces/consultants/dashboard/request";
 
 type Props = {
   close: () => void;
   data: {
     chat_title: string;
     expertise: string;
-    nameofservice:
-      | "Chat With A Professional"
-      | "Read my Script and advice"
-      | "Watch the Final cut of my film and advice"
-      | "Look at my Budget and advice"
-      | "Create a Marketing budget"
-      | "Create a Pitch based on my Script"
-      | "Draft Legal documents"
-      | "Create a Production budget"
-      | "Create A Pitch Deck"
-      | "Creating A Movie Schedule";
+    nameofservice: ServiceNames
     summary?: string;
     userId: string;
     consultant_id?: string;

@@ -8,17 +8,10 @@ import ProductionBudgetDark from "/public/assets/services/production-budget-dark
 import BudgetAndAdviceDark from "/public/assets/services/budget-and-advice-dark.svg";
 import MarketingBudgetDark from "/public/assets/services/marketing-budget-dark.svg";
 import Image from "next/image";
+import { ServiceNames } from "@/interfaces/consultants/dashboard/request";
 
 type Props = {
-  service:
-    | "Chat With A Professional"
-    | "Read my Script and advice"
-    | "Watch the Final cut of my film and advice"
-    | "Look at my Budget and advice"
-    | "Create a Marketing budget"
-    | "Create a Pitch based on my Script"
-    | "Draft Legal documents"
-    | "Create a Production budget";
+  service: ServiceNames
 };
 
 const logoAssignment = [

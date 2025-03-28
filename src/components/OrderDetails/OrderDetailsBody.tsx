@@ -5,6 +5,7 @@ import React from "react";
 import { IoMdDownload } from "react-icons/io";
 import RenderTextAreaInput from "../RenderTextAreaInput/RenderTextAreaInput";
 import { ICustomerReqDetails } from "@/interfaces/consultants/dashboard/request";
+import { FaArrowRight } from "react-icons/fa";
 
 type Props = {
   data?: ICustomerReqDetails;
@@ -93,7 +94,8 @@ const OrderDetailsBody = ({ data }: Props) => {
               <div className="mt-4 border-b border-b-stroke-4 pb-4">
                 <h1 className="font-bold mb-1">Chat Time</h1>
                 <p className="text-[0.88rem] flex items-end">
-                  {moment(data.request.booktime).format("LT")} <span className="pl-1 text-[0.6rem] font-semibold">WAT</span>
+                  {moment(data.request.booktime).format("LT")}{" "}
+                  <span className="pl-1 text-[0.6rem] font-semibold">WAT</span>
                 </p>
               </div>
             )}
@@ -235,14 +237,7 @@ const OrderDetailsBody = ({ data }: Props) => {
           <p className="text-[0.88rem]">{data.request.consultant}</p>
         </div>
       )}
-      {data?.request.concerns && (
-        <div className="mt-4 border-b border-b-stroke-4 pb-4">
-          <h1 className="font-bold mb-1">Concerns</h1>
-          <div className="text-[0.88rem]">
-            <RenderTextAreaInput text={data?.request.concerns} />
-          </div>
-        </div>
-      )}
+
       {data?.request.startpop && data.request.startpop.length > 0 && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">
@@ -255,21 +250,91 @@ const OrderDetailsBody = ({ data }: Props) => {
       )}
       {data?.request.stage && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
-          <h1 className="font-bold mb-1">Concerns</h1>
+          <h1 className="font-bold mb-1">Stage</h1>
           <div className="text-[0.88rem]">
             <RenderTextAreaInput text={data?.request.stage} />
           </div>
         </div>
       )}
+      {data?.request.wantsOriginalScore &&
+        data.request.wantsOriginalScore === "Yes" && (
+          <div className="mt-4 border-b border-b-stroke-4 pb-4">
+            <h1 className="font-bold mb-1">I want original (score) music)</h1>
+            <div className="text-[0.88rem]">
+              <RenderTextAreaInput text={data?.request.wantsOriginalScore} />
+            </div>
+          </div>
+        )}
+      {data?.request.wantsVerticalFormat &&
+        data.request.wantsVerticalFormat === "Yes" && (
+          <div className="mt-4 border-b border-b-stroke-4 pb-4">
+            <h1 className="font-bold mb-1">Vertical format for Tikok / Reels</h1>
+            <div className="text-[0.88rem]">
+              <RenderTextAreaInput text={data?.request.wantsVerticalFormat} />
+            </div>
+          </div>
+        )}
       {data?.request.characterbible && (
         <div className="mt-4 border-b border-b-stroke-4 pb-4">
           <h1 className="font-bold mb-1">Character bible</h1>
           <div className="text-[0.88rem]">
-            <Link href={data.request.characterbible}>
+            <Link href={data.request.characterbible} target="_blank">
               <div className="flex rounded-sm w-fit items-center px-2 py-1 font-medium bg-border-gray text-black-3 text-[0.88rem]">
                 <p className="mr-1">Download character bible</p>
                 <IoMdDownload />
               </div>
+            </Link>
+          </div>
+        </div>
+      )}
+      {data?.request.releaseDate && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-1">Release date</h1>
+          <div className="text-[0.88rem]">
+            <RenderTextAreaInput text={data?.request.releaseDate} />
+          </div>
+        </div>
+      )}
+      {data?.request.directorName && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-1">Director's name</h1>
+          <div className="text-[0.88rem]">
+            <RenderTextAreaInput text={data?.request.directorName} />
+          </div>
+        </div>
+      )}
+      {data?.request.fromTheMakersOf && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-1">From makers of</h1>
+          <div className="text-[0.88rem]">
+            <RenderTextAreaInput text={data?.request.fromTheMakersOf} />
+          </div>
+        </div>
+      )}
+      {data?.request.filmUpload && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-2">Film</h1>
+          <div className="">
+            <Link
+              href={data.request.filmUpload}
+              target="_blank"
+              className="underline"
+            >
+              <p className="mr-1">View</p>
+            </Link>
+          </div>
+        </div>
+      )}
+      {data?.request.dialogueTrack && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-2">Dialogue track</h1>
+          <div className="">
+            <Link
+              href={data.request.dialogueTrack}
+              target="_blank"
+              className="underline"
+            >
+              <p className="mr-1">View</p>
             </Link>
           </div>
         </div>
@@ -279,7 +344,11 @@ const OrderDetailsBody = ({ data }: Props) => {
           <h1 className="font-bold mb-1">Episode links</h1>
           {data.request.links.map((el, index) => (
             <div className="mb-2" key={el + index}>
-              <Link href={el} className="underline text-[0.88rem]">
+              <Link
+                href={el}
+                target="_blank"
+                className="underline text-[0.88rem]"
+              >
                 Episode {index + 1}
               </Link>
             </div>
@@ -396,12 +465,34 @@ const OrderDetailsBody = ({ data }: Props) => {
         </div>
       )}
 
+      {data?.request.keyCastNames && data.request.keyCastNames.length > 0 && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-1">Key cast names</h1>
+          <div className="">
+            {data.request.keyCastNames.map((el, index) => (
+              <p key={el._id} className="mb-1">
+                {el.name}
+                &nbsp;
+              </p>
+            ))}
+          </div>
+        </div>
+      )}
+
       {data?.request.link && (
         <div className="mt-4">
           <h1 className="font-bold mb-1">Link</h1>
           <Link className="underline" href={data.request.link}>
             {truncateStr(data.request.link, 40)}
           </Link>
+        </div>
+      )}
+      {data?.request.concerns && (
+        <div className="mt-4 border-b border-b-stroke-4 pb-4">
+          <h1 className="font-bold mb-1">Concerns</h1>
+          <div className="text-[0.88rem]">
+            <RenderTextAreaInput text={data?.request.concerns} />
+          </div>
         </div>
       )}
     </div>

@@ -1,3 +1,4 @@
+import { ServiceNames } from "@/interfaces/consultants/dashboard/request";
 import { monthNames, resolve_file_services } from "./constants/constants";
 import moment from "moment";
 
@@ -136,16 +137,7 @@ export function truncateStr(word: string, length: number) {
 }
 
 export function isResolveFile(
-  val:
-    | "Chat With A Professional"
-    | "Read my Script and advice"
-    | "Watch the Final cut of my film and advice"
-    | "Look at my Budget and advice"
-    | "Create a Marketing budget"
-    | "Create a Pitch based on my Script"
-    | "Draft Legal documents"
-    | "Create a Production budget"
-    | "Create A Pitch Deck" | "Creating A Movie Schedule"
+  val: ServiceNames
 ): boolean {
   const isTrue = resolve_file_services.find((el) => el === val);
 
@@ -177,15 +169,7 @@ export function numberWithCommas(value: number) {
 }
 
 export function generateColorClass(
-  service:
-    | "Chat With A Professional"
-    | "Read my Script and advice"
-    | "Watch the Final cut of my film and advice"
-    | "Look at my Budget and advice"
-    | "Create a Marketing budget"
-    | "Create a Pitch based on my Script"
-    | "Draft Legal documents"
-    | "Create a Production budget" | "Create A Pitch Deck"
+  service: ServiceNames
 ) {
   const logoAssignment = [
     {

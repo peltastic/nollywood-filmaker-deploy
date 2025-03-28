@@ -29,38 +29,49 @@ const ServicePage = (props: Props) => {
   const serviceData = [
     {
       value: "read-my-script",
-      label: "Read my Script and advise",
-      caption: "A chat session will be sent to discuss your script after review",
+      label: "Read my Script and Advise",
+      caption:
+        "A chat session will be sent to discuss your script after review",
     },
     {
       value: "watch-final-cut",
-      label: "Watch a cut of my film and advice",
+      label: "Watch a cut of my Film and Advice",
       caption: "A chat session will be sent to discuss your film after review",
     },
     {
       value: "create-pitch-deck",
-      label: "Create my pitch deck",
-      caption: "You will receive an email when your document is ready for review",
+      label: "Create my Pitch Deck",
+      caption:
+        "You will receive an email when your document is ready for review",
     },
     {
       value: "production-budget",
-      label: "Create my Production budget",
-      caption: "You will receive an email when your document is ready for review",
+      label: "Create my Production Budget",
+      caption:
+        "You will receive an email when your document is ready for review",
     },
+    // {
+    //   value: "marketing-budget",
+    //   label: "Create my Marketing plan and budget",
+    //   caption: "You will receive an email when your document is ready for review",
+    // },
     {
-      value: "marketing-budget",
-      label: "Create my Marketing plan and budget",
-      caption: "You will receive an email when your document is ready for review",
+      value: "create-teaser",
+      label: "Create my Films Teaser/Trailer",
+      caption:
+        "You will receive an email when your document is ready for review",
     },
     {
       value: "create-movie-schedule",
       label: "Create my Movie Schedule",
-      caption: "You will receive an email when your document is ready for review",
+      caption:
+        "You will receive an email when your document is ready for review",
     },
     {
       value: "draft-legal-documents",
       label: "Draft Legal documents",
-      caption: "You will receive an email when your document is ready for review",
+      caption:
+        "You will receive an email when your document is ready for review",
     },
   ];
   const setValueHandler = (value: string) => {
@@ -70,7 +81,9 @@ const ServicePage = (props: Props) => {
   return (
     <HomeLayout>
       <div className="text-black-2 w-[90%] md:w-[50%]   mx-auto mt-[10rem] mb-[10rem]  max-w-[45rem]">
-        <h1 className=" text-[1.5rem] font-bold">What film related service do you need?</h1>
+        <h1 className=" text-[1.5rem] font-bold">
+          What film related service do you need?
+        </h1>
         <h3 className="font-medium text-[0.88rem] mt-10 mb-2">
           Choose your service
         </h3>
@@ -82,12 +95,10 @@ const ServicePage = (props: Props) => {
             setValueProps={(value) => {
               if (value) {
                 const info = serviceData.filter((el) => el.value === value);
-                setMoreInfo(
-                  `${info[0].caption.toLowerCase()}`
-                );
+                setMoreInfo(`${info[0].caption.toLowerCase()}`);
                 setValueHandler(value);
               } else {
-                setMoreInfo("")
+                setMoreInfo("");
               }
             }}
             data={serviceData.map((el) => {

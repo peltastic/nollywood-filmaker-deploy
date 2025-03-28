@@ -15,18 +15,11 @@ import CustomCalender from "@/components/CustomCalender/CustomCalender";
 import CustomTime from "../CustomTime/CustomTime";
 import GenerateDarkServiceLogo from "../Generate/GenerateDarkServiceLogo";
 import { generateColorClass } from "@/utils/helperFunction";
+import { ServiceNames } from "@/interfaces/consultants/dashboard/request";
 
 export interface ReqHistoryColumnData {
   name: string;
-  service_type:
-    | "Chat With A Professional"
-    | "Read my Script and advice"
-    | "Watch the Final cut of my film and advice"
-    | "Look at my Budget and advice"
-    | "Create a Marketing budget"
-    | "Create a Pitch based on my Script"
-    | "Draft Legal documents"
-    | "Create a Production budget";
+  service_type: ServiceNames
   progress: number;
   rating: number;
   date: string;

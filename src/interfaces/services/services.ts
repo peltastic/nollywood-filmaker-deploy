@@ -5,6 +5,29 @@ interface GeneralType {
   episodes?: string;
 }
 
+interface InitializeCreateTeasers {
+  type: "request";
+  userId: string;
+  title: "Create My Movie Trailer";
+  workingTitle: string;
+  filmUpload: string;
+  dialogueTrack: string;
+  hasMusic: "Yes" | "No";
+  musicLink: string;
+  wantsOriginalScore: "Yes" | "No";
+  hasTitleGraphic: "Yes" | "No";
+  titleGraphicUpload: string;
+  posterUpload: string;
+  wantsVerticalFormat: "Yes" | "No";
+  productionCompanyLogos: string;
+  keyCastNames: string[];
+  directorName: string;
+  originalScoreLink: string;
+  fromTheMakersOf: string;
+  releaseDate: string;
+  concerns: string;
+}
+
 interface InitializeReadMyScriptPayload extends GeneralType {
   title: "Read my Script and advice";
   synopsis: string;
@@ -76,7 +99,7 @@ interface InitializeCreateMartketingBudgetPayload {
   social: string;
   ooh: string;
   budgetrange: string;
-  userId: string
+  userId: string;
 }
 
 interface InitializeMovieSchedule extends GeneralType {
@@ -111,7 +134,7 @@ interface InitializeCreateAPitchDeck {
   movie_title: string;
   platform: string;
   loglines: string;
-  genre: string; 
+  genre: string;
   info: string;
   estimatedBudget: string;
   keycharacters: { character: string; actor: string }[];
@@ -120,5 +143,5 @@ interface InitializeCreateAPitchDeck {
   putinfestivals: boolean;
   revprojection: string;
   files: File[];
-  keyart: File[]
+  keyart: File[];
 }

@@ -19,20 +19,23 @@ export interface ICustomerRequestData {
   };
 }
 
+export type ServiceNames =
+  | "Chat With A Professional"
+  | "Read my Script and advice"
+  | "Watch the Final cut of my film and advice"
+  | "Look at my Budget and advice"
+  | "Create a Marketing budget"
+  | "Create a Pitch based on my Script"
+  | "Draft Legal documents"
+  | "Create a Production budget"
+  | "Create A Pitch Deck"
+  | "Creating A Movie Schedule"
+  | "Create My Movie Trailer";
+
 export interface ICustomerReqDetails {
   request: {
     _id: string;
-    nameofservice:
-      | "Chat With A Professional"
-      | "Read my Script and advice"
-      | "Watch the Final cut of my film and advice"
-      | "Look at my Budget and advice"
-      | "Create a Marketing budget"
-      | "Create a Pitch based on my Script"
-      | "Draft Legal documents"
-      | "Create a Production budget"
-      | "Create A Pitch Deck"
-      | "Creating A Movie Schedule";
+    nameofservice: ServiceNames;
     stattusof: "pending" | "ongoing" | "ready" | "completed";
     orderId: string;
     synopsis: string;
@@ -80,6 +83,7 @@ export interface ICustomerReqDetails {
       character: string;
       actor: string;
     }[];
+    wantsOriginalScore: string;
     keycrew: {
       _id: string;
       crew: string;
@@ -93,6 +97,17 @@ export interface ICustomerReqDetails {
     characterlockdate: { name: string; date: string[] }[];
     locationlockeddate: { name: string; date: string[] }[];
     startpop: { date: string }[];
+    filmUpload: string;
+    wantsVerticalFormat: string;
+    dialogueTrack: string;
+    productionCompanyLogos: string[];
+    fromTheMakersOf: string;
+    directorName: string;
+    releaseDate: string;
+    keyCastNames: {
+      name: string;
+      _id: string;
+    }[];
   };
   user: {
     fullName: string;

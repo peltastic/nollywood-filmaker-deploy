@@ -465,6 +465,7 @@ export const resolve_file_services = [
   "Draft Legal documents",
   "Create A Pitch Deck",
   "Creating A Movie Schedule",
+  "Create My Movie Trailer",
 ];
 
 export const film_crew_values = [

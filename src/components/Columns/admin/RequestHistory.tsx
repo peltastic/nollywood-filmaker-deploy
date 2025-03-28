@@ -11,18 +11,11 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { generateColorClass } from "@/utils/helperFunction";
 import GenerateDarkServiceLogo from "@/components/Generate/GenerateDarkServiceLogo";
+import { ServiceNames } from "@/interfaces/consultants/dashboard/request";
 
 export interface IAdminRequestHistory {
   service_name: string;
-  service_type:
-    | "Chat With A Professional"
-    | "Read my Script and advice"
-    | "Watch the Final cut of my film and advice"
-    | "Look at my Budget and advice"
-    | "Create a Marketing budget"
-    | "Create a Pitch based on my Script"
-    | "Draft Legal documents"
-    | "Create a Production budget";
+  service_type: ServiceNames
   progress: number;
   rating: number;
   date_created: string;

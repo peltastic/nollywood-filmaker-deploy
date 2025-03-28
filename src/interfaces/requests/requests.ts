@@ -1,3 +1,5 @@
+import { ServiceNames } from "../consultants/dashboard/request";
+
 export interface IActiveRequestData {
   _id: string;
   movie_title: string;
@@ -24,15 +26,7 @@ export interface IUserRequestHistoryResponse {
   orderId: string;
   movie_title: string;
   createdAt: string;
-  nameofservice:
-    | "Chat With A Professional"
-    | "Read my Script and advice"
-    | "Watch the Final cut of my film and advice"
-    | "Look at my Budget and advice"
-    | "Create a Marketing budget"
-    | "Create a Pitch based on my Script"
-    | "Draft Legal documents"
-    | "Create a Production budget";
+  nameofservice: ServiceNames
   date: string;
   stattusof: "pending" | "ongoing" | "ready" | "completed" | "awaiting";
   chat_title: string;
