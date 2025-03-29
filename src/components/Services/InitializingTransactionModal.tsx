@@ -22,6 +22,7 @@ const InitializingTransactionModal = (props: Props) => {
   useEffect(() => {
     if (props.paymentUrl) {
       nprogress.complete();
+      props.close()
     }
   }, [props.paymentUrl]);
   return (
@@ -65,7 +66,7 @@ const InitializingTransactionModal = (props: Props) => {
             </div>
             <p className="ml-4 font-medium">
               {props.status === "initialized" && props.fileType
-                ? "Uploading file(s) and generating payment link...."
+                ? "Uploading file(s)...."
                 : props.status === "initialized"
                 ? "generating payment link...."
                 : "Waiting for payment confirmation...."}

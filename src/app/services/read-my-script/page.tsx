@@ -104,7 +104,7 @@ const ReadMyScriptPage = (props: Props) => {
 
   return (
     <>
-      {/* {opened ? (
+      {opened ? (
         <InitializingTransactionModal
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
@@ -116,7 +116,7 @@ const ReadMyScriptPage = (props: Props) => {
           info="Script reading can take between 1-2 weeks. You will be mailed with
           calendar dates to choose a chat session"
         />
-      ) : null} */}
+      ) : null}
       <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft
