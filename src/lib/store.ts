@@ -50,6 +50,7 @@ import { contactUsApi } from "./features/contact-us";
 import { contactUsResponseApi } from "./features/admin/contact-us/contact-us";
 import { notificationsApi } from "./features/users/notifications/notifications";
 import { consultantsNotificationsApi } from "./features/consultants/notifications/notifications";
+import { socketApi } from "./features/socketInstance";
 
 const persistConfig = {
   key: "root",
@@ -113,6 +114,7 @@ export const store = configureStore({
     [notificationsApi.reducerPath]: notificationsApi.reducer,
     [consultantsNotificationsApi.reducerPath]:
       consultantsNotificationsApi.reducer,
+    [socketApi.reducerPath]: socketApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -152,6 +154,7 @@ export const store = configureStore({
       contactUsResponseApi.middleware,
       notificationsApi.middleware,
       consultantsNotificationsApi.middleware,
+      socketApi.middleware
     ]),
   devTools: process.env.NODE_ENV !== "production",
 });

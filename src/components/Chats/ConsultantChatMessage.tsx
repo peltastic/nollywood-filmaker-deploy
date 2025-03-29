@@ -46,6 +46,8 @@ type Props = {
   uploadProgress: number;
   userId?: string;
   handleImgLoad: () => void;
+  isLastMessageAConsultantFileOrImage?: boolean;
+  setProgressIsComplete: () => void;
 };
 
 const ConsultantChatMessage = ({
@@ -73,6 +75,8 @@ const ConsultantChatMessage = ({
   userId,
   socket,
   handleImgLoad,
+  isLastMessageAConsultantFileOrImage,
+  setProgressIsComplete,
 }: Props) => {
   const [temporarySelectedHighlight, setTemporarySelectedHighlight] =
     useState<string>("transparent");
@@ -110,15 +114,26 @@ const ConsultantChatMessage = ({
   // }, [lastmessage]);
 
   useEffect(() => {
-    if (lastmessage && (type === "file" || type === "img") && socket) {
-      socket.on("progress", (data) => {
-        if (userId && data.sender.userid === userId) {
-          console.log(data);
-          setProgress(data.progress);
+    if (!isLastMessageAConsultantFileOrImage) return;
+    if (!socket) return;
+    if (!(type === "file" || type === "img")) return;
+
+    socket.on("progress", (data) => {
+      if (
+        userId &&
+        data.sender.userid === userId &&
+        isLastMessageAConsultantFileOrImage
+      ) {
+        if (data.progress > 99) {
+          setProgressIsComplete();
         }
-      });
-    }
-  }, [lastmessage, type, socket, userId]);
+        setProgress(data.progress);
+      }
+    });
+    return () => {
+      socket.off("progress");
+    };
+  }, [type, socket, userId, isLastMessageAConsultantFileOrImage]);
   useEffect(() => {
     let timeout: NodeJS.Timeout;
     if (!ref.current) return () => {};
@@ -385,24 +400,28 @@ const ConsultantChatMessage = ({
                 <Link href={file}>
                   <div
                     className={`cursor-pointer py-2 px-2 ${
-                      lastmessage && progress < 99 ? "pr-10" : null
+                      isLastMessageAConsultantFileOrImage && progress < 99
+                        ? "pr-10"
+                        : null
                     }  relative`}
                   >
-                    {lastmessage && progress < 99 && progress > 0 && (
-                      <div className="absolute h-[.5rem] w-[.5rem] bottom-6 right-6">
-                        <RingProgress
-                          size={30}
-                          className="w-[1rem]! h-[1rem]!"
-                          sections={[{ value: progress, color: "green" }]}
-                          thickness={2}
-                          label={
-                            <p className="text-[0.6rem] text-center">
-                              {progress}
-                            </p>
-                          }
-                        />
-                      </div>
-                    )}
+                    {isLastMessageAConsultantFileOrImage &&
+                      progress < 99 &&
+                      progress > 0 && (
+                        <div className="absolute h-[.5rem] w-[.5rem] bottom-6 right-6">
+                          <RingProgress
+                            size={30}
+                            className="w-[1rem]! h-[1rem]!"
+                            sections={[{ value: progress, color: "green" }]}
+                            thickness={2}
+                            label={
+                              <p className="text-[0.6rem] text-center">
+                                {progress}
+                              </p>
+                            }
+                          />
+                        </div>
+                      )}
                     <p>{filename || "file message"}</p>
                     <div className=" flex mt-2 items-center">
                       <p>file download</p>
@@ -420,21 +439,23 @@ const ConsultantChatMessage = ({
                     }
                   }}
                 >
-                  {lastmessage && progress < 99 && progress > 0 && (
-                    <div className="absolute h-[.5rem] w-[.5rem] bottom-6 right-6">
-                      <RingProgress
-                        size={30}
-                        className="w-[1rem]! h-[1rem]!"
-                        sections={[{ value: progress, color: "green" }]}
-                        thickness={3}
-                        label={
-                          <p className="text-[0.6rem] font-semibold  text-center">
-                            {progress}
-                          </p>
-                        }
-                      />
-                    </div>
-                  )}
+                  {isLastMessageAConsultantFileOrImage &&
+                    progress < 99 &&
+                    progress > 0 && (
+                      <div className="absolute h-[.5rem] w-[.5rem] bottom-6 right-6">
+                        <RingProgress
+                          size={30}
+                          className="w-[1rem]! h-[1rem]!"
+                          sections={[{ value: progress, color: "green" }]}
+                          thickness={3}
+                          label={
+                            <p className="text-[0.6rem] font-semibold  text-center">
+                              {progress}
+                            </p>
+                          }
+                        />
+                      </div>
+                    )}
                   <Image
                     src={file}
                     alt="file-name"

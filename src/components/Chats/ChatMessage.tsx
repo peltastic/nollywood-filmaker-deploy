@@ -28,6 +28,7 @@ type Props = {
   file: string;
   id?: string;
   setActiveId?: (id?: string) => void;
+  isLastUserFileOrImage?: boolean;
   activeId?: string | null;
   setReplyDataProps?: (data: IReplyDataInfo) => void;
   repliedText?: string;
@@ -45,6 +46,7 @@ type Props = {
   uploadProgress: number;
   userId?: string;
   handleImgUpload: () => void;
+  setProgressIsComplete: () => void;
 };
 
 const ChatMessage = React.memo(
@@ -72,6 +74,8 @@ const ChatMessage = React.memo(
     userId,
     uploadProgress,
     handleImgUpload,
+    isLastUserFileOrImage,
+    setProgressIsComplete,
   }: Props) => {
     const [temporarySelectedHighlight, setTemporarySelectedHighlight] =
       useState<string>("transparent");
@@ -100,14 +104,18 @@ const ChatMessage = React.memo(
 
     // Handle socket progress updates
     React.useEffect(() => {
-      if (lastmessage && (type === "file" || type === "img") && socket) {
-        socket.on("progress", (data) => {
-          if (userId && data.sender.userid === userId) {
-            setProgress(data.progress);
+      if (!isLastUserFileOrImage) return;
+      if (!socket) return;
+      if (!(type === "file" || type === "img")) return;
+      socket.on("progress", (data) => {
+        if (userId && data.sender.userid === userId) {
+          if (data.progress > 99) {
+            setProgressIsComplete();
           }
-        });
-      }
-    }, [lastmessage, type, socket, userId]);
+          setProgress(data.progress);
+        }
+      });
+    }, [isLastUserFileOrImage, type, socket, userId]);
 
     // Scroll to message when selected
     React.useEffect(() => {
@@ -343,10 +351,18 @@ const ChatMessage = React.memo(
                               });
                             } else {
                               setReplyDataProps({
-                                reply: type === "img" ? file : type === "file" ? filename : text,
+                                reply:
+                                  type === "img"
+                                    ? file
+                                    : type === "file"
+                                    ? filename
+                                    : text,
                                 user,
                                 id,
-                                type: type === "text" || type === "file" ? "text" : type,
+                                type:
+                                  type === "text" || type === "file"
+                                    ? "text"
+                                    : type,
                               });
                             }
                           }
@@ -422,24 +438,28 @@ const ChatMessage = React.memo(
                     <Link href={file}>
                       <div
                         className={`cursor-pointer py-2 px-2 relative ${
-                          lastmessage && progress < 99 ? "pr-10" : null
+                          isLastUserFileOrImage && progress < 99
+                            ? "pr-10"
+                            : null
                         }`}
                       >
-                        {lastmessage && progress < 99 && progress > 0 && (
-                          <div className="absolute h-[.5rem] w-[.5rem] bottom-6 right-6">
-                            <RingProgress
-                              size={30}
-                              className="w-[1rem]! h-[1rem]!"
-                              sections={[{ value: progress, color: "green" }]}
-                              thickness={2}
-                              label={
-                                <p className="text-[0.6rem] text-center">
-                                  {progress}
-                                </p>
-                              }
-                            />
-                          </div>
-                        )}
+                        {isLastUserFileOrImage &&
+                          progress < 99 &&
+                          progress > 0 && (
+                            <div className="absolute h-[.5rem] w-[.5rem] bottom-6 right-6">
+                              <RingProgress
+                                size={30}
+                                className="w-[1rem]! h-[1rem]!"
+                                sections={[{ value: progress, color: "green" }]}
+                                thickness={2}
+                                label={
+                                  <p className="text-[0.6rem] text-center">
+                                    {progress}
+                                  </p>
+                                }
+                              />
+                            </div>
+                          )}
                         <p>{filename || "file message"}</p>
                         <div className="flex mt-2 items-center">
                           <p>file download</p>
@@ -457,21 +477,23 @@ const ChatMessage = React.memo(
                         }
                       }}
                     >
-                      {lastmessage && progress < 99 && progress > 0 && (
-                        <div className="absolute h-[.5rem] w-[.5rem] bottom-6 right-6">
-                          <RingProgress
-                            size={30}
-                            className="w-[1rem]! h-[1rem]!"
-                            sections={[{ value: progress, color: "green" }]}
-                            thickness={2}
-                            label={
-                              <p className="text-[0.6rem] text-center">
-                                {progress}
-                              </p>
-                            }
-                          />
-                        </div>
-                      )}
+                      {isLastUserFileOrImage &&
+                        progress < 99 &&
+                        progress > 0 && (
+                          <div className="absolute h-[.5rem] w-[.5rem] bottom-6 right-6">
+                            <RingProgress
+                              size={30}
+                              className="w-[1rem]! h-[1rem]!"
+                              sections={[{ value: progress, color: "green" }]}
+                              thickness={2}
+                              label={
+                                <p className="text-[0.6rem] text-center">
+                                  {progress}
+                                </p>
+                              }
+                            />
+                          </div>
+                        )}
                       <Image
                         src={file}
                         alt="file-name"

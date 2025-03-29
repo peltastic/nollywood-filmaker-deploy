@@ -20,6 +20,7 @@ import { setNotificationState } from "@/lib/slices/notificationSlice";
 import { GoDotFill } from "react-icons/go";
 import { initializeTransactionListener, primary_socket } from "@/lib/socket";
 import { setConsultantNotificationState } from "@/lib/slices/consultants/notificationSlice";
+import { useLazyGetPrimarySocketQuery } from "@/lib/features/socketInstance";
 
 type Props = {
   removeOptions?: boolean;
@@ -147,13 +148,19 @@ const ServiceNavbar = (props: Props) => {
     (state: RootState) =>
       state.persistedState.consultantNotification.newNotification
   );
+
+  const [getPrimarySocket, socket] = useLazyGetPrimarySocketQuery();
+  
+  useEffect(() => {
+    getPrimarySocket();
+  }, []);
   useEffect(() => {
     if (props.admin) return;
-    initializeTransactionListener(
-      props.consultant ? consultantData?.id || "" : userData?.id || ""
-    );
-    primary_socket.on("newNotification", (data) => {
-      console.log("received");
+    if (!socket.data) return;
+    const id = props.consultant ? consultantData?.id || "" : userData?.id || "";
+    socket.data.emit("register", id);
+
+    socket.data.on("newNotification", (data) => {
       if (props.consultant) {
         dispatch(setConsultantNotificationState(true));
       } else {
@@ -161,9 +168,9 @@ const ServiceNavbar = (props: Props) => {
       }
     });
     return () => {
-      primary_socket.off("newNotification");
+      socket.data?.off("newNotification");
     };
-  }, []);
+  }, [socket.data, props.admin, props.consultant]);
 
   return (
     <>

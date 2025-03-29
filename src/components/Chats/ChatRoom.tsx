@@ -38,6 +38,11 @@ import { ICompanyFilmmakerDatabaseColumnData } from "../Columns/admin/CompanyFil
 import { notify } from "@/utils/notification";
 import { useSocket } from "../Providers/SocketProviders";
 import { FaImage } from "react-icons/fa6";
+import {
+  socketApi,
+  useLazyGetChatFileSocketQuery,
+} from "@/lib/features/socketInstance";
+import Spinner from "@/app/Spinner/Spinner";
 
 export interface IReplyDataInfo {
   user: "admin" | "user" | "consultant" | null;
@@ -73,6 +78,7 @@ export interface IChatMessagesData {
 }
 
 const ChatRoom = (props: Props) => {
+  const [getFileChatSocket, fileSocket] = useLazyGetChatFileSocketQuery();
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const spanRef = useRef<HTMLSpanElement | null>(null);
   const chatRef = useRef<HTMLDivElement | null>(null);
@@ -81,6 +87,7 @@ const ChatRoom = (props: Props) => {
   const mobileTextAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const [missedPongs, setMissedPongs] = useState(0);
   const [fileType, setFileType] = useState<"file" | "img">("file");
+  const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [istyping, setIsTyping] = useState<boolean>(false);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -491,7 +498,7 @@ const ChatRoom = (props: Props) => {
           replytochattype: "text" | "file" | "img" | "typing" | "contacts";
         };
       }) => {
-        props.refetch();
+        setIsUploading(false);
         if (props.userData?.id === data.sender.userid) {
         } else {
           if (props.orderId === data.sender.chatRoomId) {
@@ -603,16 +610,9 @@ const ChatRoom = (props: Props) => {
       mobileTextAreaRef.current.focus();
     }
   }, [replyData.reply]);
-  // useEffect(() => {
-  //   if (!spanRef.current) return;
-  //   if (props.data) {
-  //     spanRef.current.scrollIntoView({
-  //       behavior: "smooth",
-  //       block: "nearest",
-  //       inline: "end",
-  //     });
-  //   }
-  // }, [props.data]);
+  useEffect(() => {
+    getFileChatSocket();
+  }, []);
 
   const handleTextAreaInputChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -696,6 +696,7 @@ const ChatRoom = (props: Props) => {
   const sendFileAsChunkMessage = async (file: File, type: "img" | "file") => {
     setUploadProgress(0);
     const id = uuidv4();
+    const socketInstance = fileSocket.data;
     getBase64(file).then((res) => {
       props.updateChatHandlerProps({
         text: file.name,
@@ -714,7 +715,7 @@ const ChatRoom = (props: Props) => {
     });
     const CHUNK_SIZE = 300 * 1024; // 300KB chunks
     const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
-    const uploadId = uuidv4();
+    // const uploadId = uuidv4();
 
     const sendChunk = async (chunkIndex: number): Promise<void> => {
       if (chunkIndex >= totalChunks) {
@@ -735,9 +736,9 @@ const ChatRoom = (props: Props) => {
 
           const fileData = (e.target.result as string).split(",")[1];
 
-          if (props.userData && socket) {
+          if (props.userData && socketInstance) {
             const chunkData = {
-              uploadId,
+              uploadId: id,
               fileName: file.name,
               totalChunks,
               chunkIndex,
@@ -748,7 +749,7 @@ const ChatRoom = (props: Props) => {
                 role: props.type,
                 userid: props.userData.id,
                 chatRoomId: props.orderId,
-                mid: uploadId,
+                mid: id,
                 replyto: replyData.contacts
                   ? JSON.stringify(replyData.contacts)
                   : replyData.reply,
@@ -758,8 +759,9 @@ const ChatRoom = (props: Props) => {
               },
               room: props.orderId,
             };
-
-            sendFileAsChunk(chunkData, socket);
+            socketInstance.emit("sendFileChunk", chunkData);
+            // console.log(chunkData);
+            // sendFileAsChunk(chunkData, socket);
             setUploadProgress(
               Math.ceil(((chunkIndex + 1) / totalChunks) * 100)
             );
@@ -769,6 +771,11 @@ const ChatRoom = (props: Props) => {
 
         reader.onerror = () => reject(new Error("Error reading file chunk"));
         reader.readAsDataURL(chunk);
+        // socketInstance.on("uploadComplete", (data) => {
+        //   console.log("transfer-complete", data, id);
+        //   socketApi.endpoints.closeChatSocket.initiate(id);
+        //   resolve();
+        // });
       });
     };
 
@@ -799,7 +806,7 @@ const ChatRoom = (props: Props) => {
       spanRef.current.scrollIntoView({
         behavior: "smooth",
         block: "start", // Scrolls so the top of the element is at the top of the viewport
-        inline: "nearest" // Adjusts horizontally to the nearest edge
+        inline: "nearest", // Adjusts horizontally to the nearest edge
       });
     }
   };
@@ -812,11 +819,47 @@ const ChatRoom = (props: Props) => {
       scrollToBottom();
     }
   }, [props.data, imagesLoaded, totalImages]);
+  const isLastConsultantFileOrImage = (message: ChatPayload): boolean => {
+    const messages: ChatPayload[] = props.data;
+    if (messages.length === 0) return false;
 
-//  useEffect(() => {
-// open()
-//  }, [])
+    let lastConsultantFileOrImage: ChatPayload | null = null;
 
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (
+        (messages[i].type === "file" || messages[i].type === "img") &&
+        messages[i].user === "consultant"
+      ) {
+        lastConsultantFileOrImage = messages[i];
+        break;
+      }
+    }
+
+    return (
+      lastConsultantFileOrImage !== null &&
+      lastConsultantFileOrImage.id === message.id
+    );
+  };
+  const isLastUserFileOrImage = (message: ChatPayload): boolean => {
+    const messages: ChatPayload[] = props.data;
+    if (messages.length === 0) return false;
+
+    let lastUserFileOrImage: ChatPayload | null = null;
+
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (
+        (messages[i].type === "file" || messages[i].type === "img") &&
+        messages[i].user === "user"
+      ) {
+        lastUserFileOrImage = messages[i];
+        break;
+      }
+    }
+
+    return (
+      lastUserFileOrImage !== null && lastUserFileOrImage.id === message.id
+    );
+  };
   return (
     <>
       <ModalComponent
@@ -852,6 +895,7 @@ const ChatRoom = (props: Props) => {
                 <div key={el.id + index.toString()}>
                   {props.type === "user" ? (
                     <ChatMessage
+                      setProgressIsComplete={() => setIsUploading(false)}
                       uploadProgress={uploadProgress}
                       file={el.file}
                       filename={el.filename}
@@ -880,9 +924,11 @@ const ChatRoom = (props: Props) => {
                       userId={props.userData?.id}
                       recommendations={el.recommendations}
                       socket={socket}
+                      isLastUserFileOrImage={isLastUserFileOrImage(el)}
                     />
                   ) : (
                     <ConsultantChatMessage
+                      setProgressIsComplete={() => setIsUploading(false)}
                       uploadProgress={uploadProgress}
                       recommendations={el.recommendations}
                       file={el.file}
@@ -890,6 +936,9 @@ const ChatRoom = (props: Props) => {
                       type={el.type}
                       socket={socket}
                       key={el.text + index.toString()}
+                      isLastMessageAConsultantFileOrImage={isLastConsultantFileOrImage(
+                        el
+                      )}
                       text={el.text}
                       user={el.user}
                       prevUser={index ? props.data[index - 1].user : null}
@@ -925,6 +974,7 @@ const ChatRoom = (props: Props) => {
             <>
               {props.type === "user" ? (
                 <ChatMessage
+                  setProgressIsComplete={() => {}}
                   uploadProgress={uploadProgress}
                   file=""
                   filename=""
@@ -938,6 +988,7 @@ const ChatRoom = (props: Props) => {
                 />
               ) : (
                 <ConsultantChatMessage
+                  setProgressIsComplete={() => {}}
                   file=""
                   filename=""
                   index={props.data.length}
@@ -991,7 +1042,10 @@ const ChatRoom = (props: Props) => {
                       <div className="">
                         <ul className=" text-black-2 py-2 px-2">
                           <li className="">
-                            <UnstyledButton class="hover:bg-gray-bg-9 transition-all py-1 rounded-md px-3 w-full">
+                            <UnstyledButton
+                              disabled={isUploading}
+                              class="hover:bg-gray-bg-9 transition-all py-1 rounded-md px-3 w-full disabled:cursor-not-allowed"
+                            >
                               <FileButtonComponent
                                 accept=""
                                 setFile={(file) => {
@@ -1003,20 +1057,26 @@ const ChatRoom = (props: Props) => {
                                       );
                                     } else {
                                       if (file.size > 1 * 1024 * 1024) {
+                                        setIsUploading(true);
                                         sendFileAsChunkMessage(file, "file");
                                       } else {
+                                        setIsUploading(true);
                                         sendFileMessageHandler(file, "file");
                                       }
                                     }
                                   }
                                 }}
                               >
-                                <div className="flex items-center">
-                                  <div className="h-[2rem] mr-2 flex items-center justify-center w-[2rem] rounded-full bg-gray-300">
-                                    <FaFile className="text-md" />
+                                {isUploading ? (
+                                  <p className="italics">Uploading...</p>
+                                ) : (
+                                  <div className="flex items-center">
+                                    <div className="h-[2rem] mr-2 flex items-center justify-center w-[2rem] rounded-full bg-gray-300">
+                                      <FaFile className="text-md" />
+                                    </div>
+                                    <p>File</p>
                                   </div>
-                                  <p>File</p>
-                                </div>
+                                )}
                               </FileButtonComponent>
                             </UnstyledButton>
                           </li>
@@ -1057,7 +1117,10 @@ const ChatRoom = (props: Props) => {
                             input: classes.input,
                           }}
                         />
-                        <div className=" flex items-center absolute right-6 -translate-y-1/2 top-1/2">
+                        <button
+                          disabled={isUploading}
+                          className=" flex items-center absolute right-6 -translate-y-1/2 top-1/2"
+                        >
                           <FileButtonComponent
                             accept="image/*"
                             setFile={(file) => {
@@ -1069,18 +1132,25 @@ const ChatRoom = (props: Props) => {
                                   );
                                 } else {
                                   if (file.size > 1 * 1024 * 1024) {
-                                    console.log("yeahh");
+                                    setIsUploading(true);
                                     sendFileAsChunkMessage(file, "img");
                                   } else {
+                                    setIsUploading(true);
                                     sendFileMessageHandler(file, "img");
                                   }
                                 }
                               }
                             }}
                           >
-                            <button className="mr-4 text-xl">
-                              <FaImage />
-                            </button>
+                            {isUploading ? (
+                              <div className="mr-4 w-[1rem]">
+                                <Spinner dark />
+                              </div>
+                            ) : (
+                              <button className="mr-4 text-xl">
+                                <FaImage />
+                              </button>
+                            )}
                           </FileButtonComponent>
                           <button
                             onClick={sendMessageHandler}
@@ -1089,7 +1159,7 @@ const ChatRoom = (props: Props) => {
                           >
                             <Image src={SendImg} alt="send-img" />
                           </button>
-                        </div>
+                        </button>
                       </div>
                       <div className="w-full relative block lg:hidden">
                         <Textarea
@@ -1104,7 +1174,10 @@ const ChatRoom = (props: Props) => {
                             input: classes.input,
                           }}
                         />
-                        <div className=" flex items-center absolute right-6 -translate-y-1/2 top-1/2">
+                        <button
+                          disabled={isUploading}
+                          className=" flex items-center absolute right-6 -translate-y-1/2 top-1/2"
+                        >
                           <FileButtonComponent
                             accept="image/*"
                             setFile={(file) => {
@@ -1116,17 +1189,25 @@ const ChatRoom = (props: Props) => {
                                   );
                                 } else {
                                   if (file.size > 1 * 1024 * 1024) {
+                                    setIsUploading(true);
                                     sendFileAsChunkMessage(file, "img");
                                   } else {
+                                    setIsUploading(true);
                                     sendFileMessageHandler(file, "img");
                                   }
                                 }
                               }
                             }}
                           >
-                            <button className="mr-4 text-xl mt-1">
-                              <FaImage />
-                            </button>
+                            {isUploading ? (
+                              <div className="mr-4 w-[1rem]">
+                                <Spinner dark />
+                              </div>
+                            ) : (
+                              <button className="mr-4 text-xl mt-1">
+                                <FaImage />
+                              </button>
+                            )}
                           </FileButtonComponent>
                           <button
                             onClick={sendMessageHandler}
@@ -1135,7 +1216,7 @@ const ChatRoom = (props: Props) => {
                           >
                             <Image src={SendImg} alt="send-img" />
                           </button>
-                        </div>
+                        </button>
                       </div>
                     </form>
                   </div>

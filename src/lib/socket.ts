@@ -69,6 +69,7 @@ export function sendChatMessageEvent(
 }
 
 export function sendContactData(data: IContactMessagePayload, socket: Socket) {
+  console.log("sent-chat-message")
   socket.emit("chatMessage", data);
 }
 
@@ -92,7 +93,6 @@ export function sendFileMessage(
   },
   socket: Socket
 ) {
-  console.log(data)
   socket.emit("sendFile", data);
 }
 
@@ -122,11 +122,12 @@ export function sendFileAsChunk(
   // setTimeout(() => {
 
   // }, 10000)
-    socket.emit(`sendFileChunk`, data);
+    chat_socket.emit(`sendFileChunk`, data);
   // console.log(data)
 }
 
 export function emitTypingEvent(room: string, userId: string, socket: Socket) {
+  console.log("emit-typed")
   socket.emit("typing", {
     room,
     sender: {
@@ -136,6 +137,7 @@ export function emitTypingEvent(room: string, userId: string, socket: Socket) {
 }
 
 export function stopTypingEmit(room: string, userId: string, socket: Socket) {
+  console.log("emit-stopped")
   socket.emit("stopped", {
     room,
     sender: {

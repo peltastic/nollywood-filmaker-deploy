@@ -24,6 +24,7 @@ type Props = {
     type: "add" | "delete" | "update",
     index: number
   ) => void;
+  disabled?: boolean;
   crewNames: string[];
   setDateHandler: (date: Date | null) => void;
   updateCost: (value: number, type: "add" | "remove") => void;
@@ -48,6 +49,7 @@ const CreateTeaserForm = ({
   updateCastNameProps,
   crewNames,
   setDateHandler,
+  disabled,
   updateCost,
 }: Props) => {
   const router = useRouter();
@@ -115,7 +117,9 @@ const CreateTeaserForm = ({
         )}
         {data.hasMusic === "No" && (
           <div className="mt-10">
-            <p className="mb-4">Would you like original (score) music?</p>
+            <p className="mb-4">
+              Would you like us to create original (score) music?
+            </p>
             <RadioGroupComponent
               changed={(value) => {
                 setScriptProps("wantsOriginalScore", value);
@@ -268,7 +272,7 @@ const CreateTeaserForm = ({
           </UnstyledButton>
           <UnstyledButton
             type="submit"
-            disabled={isLoading || !terms}
+            disabled={isLoading || !terms || disabled}
             class=" justify-center w-[12rem] flex py-2 px-4 hover:bg-blue-1 transition-all rounded-md items-center text-white ml-auto bg-black-2 disabled:opacity-50 text-[0.88rem] disabled:bg-black-2"
           >
             {isLoading ? (

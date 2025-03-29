@@ -70,7 +70,7 @@ const CreateTeaser = (props: Props) => {
     releaseDate: null,
     titleGraphicUpload: "",
     wantsOriginalScore: "No",
-    wantsVerticalFormat: "No",
+    wantsVerticalFormat: "Yes",
     workingTitle: "",
     originalScoreLink: "",
   });
@@ -197,7 +197,7 @@ const CreateTeaser = (props: Props) => {
               },
             ]}
             image={<Image src={MarketingBudgetImg} alt="marketing-budget" />}
-            title="Create my Films Teaser/Trailer"
+            title="Create my Film's Teaser/Trailer"
             cost={numberWithCommas(cost)}
           />
           <ServiceRight subtitle="" title="Let's start with your details">
@@ -207,6 +207,14 @@ const CreateTeaser = (props: Props) => {
               data={scriptData}
               updateCastNameProps={updateCastNamesHandler}
               updateCost={updateCost}
+              disabled={
+                !scriptData.workingTitle ||
+                !scriptData.filmUpload ||
+                !scriptData.dialogueTrack ||
+                (scriptData.hasTitleGraphic === "Yes" &&
+                  !scriptData.titleGraphicUpload) ||
+                (scriptData.hasMusic === "Yes" && !scriptData.musicLink) || !scriptData.productionCompanyLogos
+              }
               proceed={() => {
                 if (userId) {
                   createTeaser({
