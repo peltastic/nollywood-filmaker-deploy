@@ -39,14 +39,14 @@ const ReadMyScriptPage = (props: Props) => {
   const [files, setFiles] = useState<File[]>([]);
   const [opened, { close, open }] = useDisclosure();
 
-  // const { paymentStatus, resetPaymentInitialization } = useServicePayment(
-  //   isError,
-  //   isSuccess,
-  //   "/success-page/read-my-script",
-  //   close,
-  //   data?.result.authorization_url,
-  //   error
-  // );
+  const { paymentStatus, resetPaymentInitialization } = useServicePayment(
+    isError,
+    isSuccess,
+    "/success-page/read-my-script",
+    close,
+    data?.result.authorization_url,
+    error
+  );
   // const router = useRouter();
   const searchParam = useSearchParams();
   const search = searchParam.get("page");
@@ -125,7 +125,7 @@ const ReadMyScriptPage = (props: Props) => {
                 ? numberWithCommas(noOfEpisodes * 50000 + 50000)
                 : "150,000"
             }
-            title="Read my script"
+            title="Read my script and advise"
             image={<Image src={ReadMyScriptImg} alt="read-my-script" />}
             episodes={scriptData.episodes}
             series
