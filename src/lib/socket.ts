@@ -69,7 +69,6 @@ export function sendChatMessageEvent(
 }
 
 export function sendContactData(data: IContactMessagePayload, socket: Socket) {
-  console.log("sent-chat-message")
   socket.emit("chatMessage", data);
 }
 

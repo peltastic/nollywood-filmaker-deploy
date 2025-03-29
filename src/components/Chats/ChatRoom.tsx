@@ -41,6 +41,7 @@ import { FaImage } from "react-icons/fa6";
 import {
   socketApi,
   useLazyGetChatFileSocketQuery,
+  useLazyGetContactsChatSocketQuery,
 } from "@/lib/features/socketInstance";
 import Spinner from "@/app/Spinner/Spinner";
 
@@ -79,6 +80,7 @@ export interface IChatMessagesData {
 
 const ChatRoom = (props: Props) => {
   const [getFileChatSocket, fileSocket] = useLazyGetChatFileSocketQuery();
+  const [getContactSocket, contactSocket] = useLazyGetContactsChatSocketQuery();
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const spanRef = useRef<HTMLSpanElement | null>(null);
   const chatRef = useRef<HTMLDivElement | null>(null);
@@ -179,7 +181,7 @@ const ChatRoom = (props: Props) => {
           replytoId: replyData.id,
           mid: id,
           replytousertype: replyData.user,
-          chatRoomId: searchVal as string,
+          chatRoomId: props.orderId,
           role: props.type,
           type: "contacts",
           userid: props.userData.id,
@@ -195,8 +197,8 @@ const ChatRoom = (props: Props) => {
           }),
         },
       };
-      if (socket) {
-        sendContactData(payload, socket);
+      if (contactSocket.data) {
+        contactSocket.data.emit("chatMessage", payload);
       }
       for (const el of payload.sender.recommendations) {
         props.updateChatHandlerProps({
@@ -243,7 +245,7 @@ const ChatRoom = (props: Props) => {
           replytoId: replyData.id,
           mid: id,
           replytousertype: replyData.user,
-          chatRoomId: searchVal as string,
+          chatRoomId: props.orderId,
           role: props.type,
           type: "contacts",
           userid: props.userData.id,
@@ -259,8 +261,8 @@ const ChatRoom = (props: Props) => {
           }),
         },
       };
-      if (socket) {
-        sendContactData(payload, socket);
+      if (contactSocket.data) {
+        contactSocket.data.emit("chatMessage", payload);
       }
       for (const el of payload.sender.recommendations) {
         props.updateChatHandlerProps({
@@ -415,6 +417,7 @@ const ChatRoom = (props: Props) => {
         };
         message: string;
       }) => {
+        console.log(data);
         if (
           props.userData?.id === data.sender.userid ||
           props.userData?.id === data.sender.userid
@@ -612,6 +615,7 @@ const ChatRoom = (props: Props) => {
   }, [replyData.reply]);
   useEffect(() => {
     getFileChatSocket();
+    getContactSocket();
   }, []);
 
   const handleTextAreaInputChange = useCallback(
@@ -810,6 +814,9 @@ const ChatRoom = (props: Props) => {
       });
     }
   };
+  useEffect(() => {
+    scrollToBottom();
+  }, [spanRef.current, istyping]);
   const handleImageLoad = () => {
     setImagesLoaded((prev) => prev + 1); // Increment when an image loads
   };
@@ -1117,41 +1124,40 @@ const ChatRoom = (props: Props) => {
                             input: classes.input,
                           }}
                         />
-                        <button
-                          disabled={isUploading}
-                          className=" flex items-center absolute right-6 -translate-y-1/2 top-1/2"
-                        >
-                          <FileButtonComponent
-                            accept="image/*"
-                            setFile={(file) => {
-                              if (file) {
-                                if (file?.size > 20 * 1024 * 1024) {
-                                  notify(
-                                    "message",
-                                    "Cannot send files more than 20mb"
-                                  );
-                                } else {
-                                  if (file.size > 1 * 1024 * 1024) {
-                                    setIsUploading(true);
-                                    sendFileAsChunkMessage(file, "img");
+                        <div className=" flex items-center absolute right-6 -translate-y-1/2 top-1/2">
+                          <button disabled={isUploading}>
+                            <FileButtonComponent
+                              accept="image/*"
+                              setFile={(file) => {
+                                if (file) {
+                                  if (file?.size > 20 * 1024 * 1024) {
+                                    notify(
+                                      "message",
+                                      "Cannot send files more than 20mb"
+                                    );
                                   } else {
-                                    setIsUploading(true);
-                                    sendFileMessageHandler(file, "img");
+                                    if (file.size > 1 * 1024 * 1024) {
+                                      setIsUploading(true);
+                                      sendFileAsChunkMessage(file, "img");
+                                    } else {
+                                      setIsUploading(true);
+                                      sendFileMessageHandler(file, "img");
+                                    }
                                   }
                                 }
-                              }
-                            }}
-                          >
-                            {isUploading ? (
-                              <div className="mr-4 w-[1rem]">
-                                <Spinner dark />
-                              </div>
-                            ) : (
-                              <button className="mr-4 text-xl">
-                                <FaImage />
-                              </button>
-                            )}
-                          </FileButtonComponent>
+                              }}
+                            >
+                              {isUploading ? (
+                                <div className="mr-4 w-[1rem]">
+                                  <Spinner dark />
+                                </div>
+                              ) : (
+                                <button className="mr-4 text-xl">
+                                  <FaImage />
+                                </button>
+                              )}
+                            </FileButtonComponent>
+                          </button>
                           <button
                             onClick={sendMessageHandler}
                             disabled={!inputValue}
@@ -1159,7 +1165,7 @@ const ChatRoom = (props: Props) => {
                           >
                             <Image src={SendImg} alt="send-img" />
                           </button>
-                        </button>
+                        </div>
                       </div>
                       <div className="w-full relative block lg:hidden">
                         <Textarea
@@ -1174,41 +1180,40 @@ const ChatRoom = (props: Props) => {
                             input: classes.input,
                           }}
                         />
-                        <button
-                          disabled={isUploading}
-                          className=" flex items-center absolute right-6 -translate-y-1/2 top-1/2"
-                        >
-                          <FileButtonComponent
-                            accept="image/*"
-                            setFile={(file) => {
-                              if (file) {
-                                if (file?.size > 20 * 1024 * 1024) {
-                                  notify(
-                                    "message",
-                                    "Cannot send files more than 20mb"
-                                  );
-                                } else {
-                                  if (file.size > 1 * 1024 * 1024) {
-                                    setIsUploading(true);
-                                    sendFileAsChunkMessage(file, "img");
+                        <div className=" flex items-center absolute right-6 -translate-y-1/2 top-1/2">
+                          <button disabled={isUploading}>
+                            <FileButtonComponent
+                              accept="image/*"
+                              setFile={(file) => {
+                                if (file) {
+                                  if (file?.size > 20 * 1024 * 1024) {
+                                    notify(
+                                      "message",
+                                      "Cannot send files more than 20mb"
+                                    );
                                   } else {
-                                    setIsUploading(true);
-                                    sendFileMessageHandler(file, "img");
+                                    if (file.size > 1 * 1024 * 1024) {
+                                      setIsUploading(true);
+                                      sendFileAsChunkMessage(file, "img");
+                                    } else {
+                                      setIsUploading(true);
+                                      sendFileMessageHandler(file, "img");
+                                    }
                                   }
                                 }
-                              }
-                            }}
-                          >
-                            {isUploading ? (
-                              <div className="mr-4 w-[1rem]">
-                                <Spinner dark />
-                              </div>
-                            ) : (
-                              <button className="mr-4 text-xl mt-1">
-                                <FaImage />
-                              </button>
-                            )}
-                          </FileButtonComponent>
+                              }}
+                            >
+                              {isUploading ? (
+                                <div className="mr-4 w-[1rem]">
+                                  <Spinner dark />
+                                </div>
+                              ) : (
+                                <button className="mr-4 text-xl mt-1">
+                                  <FaImage />
+                                </button>
+                              )}
+                            </FileButtonComponent>
+                          </button>
                           <button
                             onClick={sendMessageHandler}
                             disabled={!inputValue}
@@ -1216,7 +1221,7 @@ const ChatRoom = (props: Props) => {
                           >
                             <Image src={SendImg} alt="send-img" />
                           </button>
-                        </button>
+                        </div>
                       </div>
                     </form>
                   </div>

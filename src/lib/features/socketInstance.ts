@@ -5,6 +5,7 @@ import { string } from "yup";
 let primarySocket: Socket | null = null;
 let chatSocket: Socket | null = null;
 let fileChatSocket: Socket | null = null;
+let contactsChatSocket: Socket | null = null
 // let chatFileMessageInstances: Map<string, Socket> = new Map();
 
 interface SocketInstance {
@@ -40,6 +41,14 @@ export const socketApi = createApi({
         return { data: fileChatSocket };
       },
     }),
+    getContactsChatSocket: builder.query<Socket, void>({
+        queryFn: () => {
+          if (!contactsChatSocket) {
+            contactsChatSocket = io(config.CHAT_API_URL);
+          }
+          return { data: contactsChatSocket };
+        },
+      })
   }),
 });
 
@@ -47,5 +56,6 @@ export const {
   useLazyGetChatSocketQuery,
   useLazyGetPrimarySocketQuery,
   useLazyGetChatFileSocketQuery,
+  useLazyGetContactsChatSocketQuery,
   endpoints,
 } = socketApi;

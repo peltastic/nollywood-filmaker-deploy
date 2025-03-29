@@ -45,6 +45,10 @@ const navLink = [
     name: "Filmmaker database",
     link: "/auth/login-filmmaker-database",
   },
+  {
+    name: "Contact us",
+    link: "/contact-us",
+  },
 ];
 
 const consultantLink = [
@@ -63,6 +67,10 @@ const consultantLink = [
   {
     name: "Calendar",
     link: "/consultants/dashboard/calendar",
+  },
+  {
+    name: "Contact us",
+    link: "/contact-us",
   },
 ];
 
@@ -150,7 +158,7 @@ const ServiceNavbar = (props: Props) => {
   );
 
   const [getPrimarySocket, socket] = useLazyGetPrimarySocketQuery();
-  
+
   useEffect(() => {
     getPrimarySocket();
   }, []);
