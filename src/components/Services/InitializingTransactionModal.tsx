@@ -22,7 +22,7 @@ const InitializingTransactionModal = (props: Props) => {
   useEffect(() => {
     if (props.paymentUrl) {
       nprogress.complete();
-      props.close()
+      // props.close()
     }
   }, [props.paymentUrl]);
   return (
@@ -73,7 +73,7 @@ const InitializingTransactionModal = (props: Props) => {
             </p>
           </div>
         )}
-        {props.paymentUrl && (
+        {props.paymentUrl && !props.fileType &&  (
           <Link
             className="mt-10 bg-black-2 flex disabled:opacity-50 justify-center hover:bg-blue-1 transition-all text-white w-full py-4 rounded-md"
             href={props.paymentUrl}
