@@ -173,6 +173,13 @@ const CreatePitchDeck = (props: Props) => {
     error
   );
 
+
+  useEffect(() => {
+    if (data?.result.authorization_url) {
+      window.location.href = data.result.authorization_url;
+    }
+  }, [data?.result.authorization_url]);
+
   useEffect(() => {
     if (paymentStatus === "pending") {
       open();
