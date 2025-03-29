@@ -92,9 +92,16 @@ const GetStartedChatPage = (props: Props) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page]);
 
+
+  useEffect(() => {
+    if (data?.result.authorization_url) {
+      window.location.href = data.result.authorization_url;
+    }
+  }, [data?.result.authorization_url]);
+
   return (
     <>
-      {opened ? (
+      {/* {opened ? (
         <InitializingTransactionModal
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
@@ -103,7 +110,7 @@ const GetStartedChatPage = (props: Props) => {
             close();
           }}
         />
-      ) : null}
+      ) : null} */}
       <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start ">
           <ServiceLeft

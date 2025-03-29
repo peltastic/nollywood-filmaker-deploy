@@ -39,15 +39,15 @@ const ReadMyScriptPage = (props: Props) => {
   const [files, setFiles] = useState<File[]>([]);
   const [opened, { close, open }] = useDisclosure();
 
-  const { paymentStatus, resetPaymentInitialization } = useServicePayment(
-    isError,
-    isSuccess,
-    "/success-page/read-my-script",
-    close,
-    data?.result.authorization_url,
-    error
-  );
-  const router = useRouter();
+  // const { paymentStatus, resetPaymentInitialization } = useServicePayment(
+  //   isError,
+  //   isSuccess,
+  //   "/success-page/read-my-script",
+  //   close,
+  //   data?.result.authorization_url,
+  //   error
+  // );
+  // const router = useRouter();
   const searchParam = useSearchParams();
   const search = searchParam.get("page");
   const [singleFile, setSingleFile] = useState<File | null>(null);
@@ -69,11 +69,16 @@ const ReadMyScriptPage = (props: Props) => {
     });
   };
 
+  // useEffect(() => {
+  //   if (paymentStatus === "pending") {
+  //     open();
+  //   }
+  // }, [paymentStatus, isSuccess]);
   useEffect(() => {
-    if (paymentStatus === "pending") {
-      open();
+    if (data?.result.authorization_url) {
+      window.location.href = data.result.authorization_url;
     }
-  }, [paymentStatus, isSuccess]);
+  }, [data?.result.authorization_url]);
 
   const setFilesHandler = (
     file: File[],
@@ -99,7 +104,7 @@ const ReadMyScriptPage = (props: Props) => {
 
   return (
     <>
-      {opened ? (
+      {/* {opened ? (
         <InitializingTransactionModal
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
@@ -111,7 +116,7 @@ const ReadMyScriptPage = (props: Props) => {
           info="Script reading can take between 1-2 weeks. You will be mailed with
           calendar dates to choose a chat session"
         />
-      ) : null}
+      ) : null} */}
       <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft

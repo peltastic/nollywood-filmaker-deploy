@@ -180,7 +180,7 @@ const CreatePitchDeck = (props: Props) => {
   }, [paymentStatus, isSuccess]);
   return (
     <>
-      {opened ? (
+      {/* {opened ? (
         <InitializingTransactionModal
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
@@ -191,7 +191,7 @@ const CreatePitchDeck = (props: Props) => {
           fileType
           info="Pitch deck creation can take up to one to two weeks. A document will be sent for review."
         />
-      ) : null}
+      ) : null} */}
       <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap ">
           <ServiceLeft

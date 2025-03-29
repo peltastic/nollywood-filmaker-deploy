@@ -147,9 +147,16 @@ const MovieSchedulePage = (props: Props) => {
     }
   };
 
+
+  useEffect(() => {
+    if (data?.result.authorization_url) {
+      window.location.href = data.result.authorization_url;
+    }
+  }, [data?.result.authorization_url]);
+
   return (
     <>
-      {opened ? (
+      {/* {opened ? (
         <InitializingTransactionModal
           info="Movie schedule can take up to one to two weeks. A document will be sent for review."
           paymentUrl={data?.result.authorization_url}
@@ -160,7 +167,7 @@ const MovieSchedulePage = (props: Props) => {
             close();
           }}
         />
-      ) : null}
+      ) : null} */}
       <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft

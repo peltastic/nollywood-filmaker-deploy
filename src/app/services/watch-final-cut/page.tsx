@@ -96,9 +96,16 @@ const page = (props: Props) => {
     });
   };
 
+
+  useEffect(() => {
+    if (data?.result.authorization_url) {
+      window.location.href = data.result.authorization_url;
+    }
+  }, [data?.result.authorization_url]);
+
   return (
     <>
-      {opened ? (
+      {/* {opened ? (
         <InitializingTransactionModal
           close={() => {
             resetPaymentInitialization();
@@ -108,7 +115,7 @@ const page = (props: Props) => {
           status={paymentStatus}
           info="Final Cut watch can take between 3-5 days. You will be mailed with calendar dates to choose a chat session."
         />
-      ) : null}
+      ) : null} */}
       <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft

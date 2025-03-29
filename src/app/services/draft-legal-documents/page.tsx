@@ -71,14 +71,20 @@ const DraftLegalDocumentPage = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    if (paymentStatus === "pending") {
-      open();
+    if (data?.result.authorization_url) {
+      window.location.href = data.result.authorization_url;
     }
-  }, [paymentStatus, isSuccess]);
+  }, [data?.result.authorization_url]);
+
+  // useEffect(() => {
+  //   if (paymentStatus === "pending") {
+  //     open();
+  //   }
+  // }, [paymentStatus, isSuccess]);
 
   return (
     <>
-      {opened ? (
+      {/* {opened ? (
         <InitializingTransactionModal
           close={() => {
             resetPaymentInitialization();
@@ -88,7 +94,7 @@ const DraftLegalDocumentPage = (props: Props) => {
           paymentUrl={data?.result.authorization_url}
           status={paymentStatus}
         />
-      ) : null}
+      ) : null} */}
       <ServiceLayout nonDashboard>
         <div className="flex flex-row-reverse lg:flex-row flex-wrap-reverse lg:flex-wrap items-start">
           <ServiceLeft
